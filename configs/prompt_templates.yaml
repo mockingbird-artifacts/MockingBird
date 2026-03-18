@@ -1,0 +1,277 @@
+templates:    
+  type_resolution_description_instance: |-
+    Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in {{ target_language }} by looking into "{{ source_language.upper() }} TYPE", "{{ source_language.upper() }} TYPE DESCRIPTION" and "{{ source_language.upper() }} CODE" as context.
+
+    {{ source_language.upper() }} TYPE:
+    ```
+    {{ source_type }}
+    ```
+
+    {{ source_language.upper() }} TYPE DESCRIPTION:
+    {{ source_type_description }}
+
+    {{ source_language.upper() }} CODE:
+    ```
+    {{ context_code_snippet }}
+    ```
+  type_resolution_description_response_format: |-
+    RESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other {{ target_language.upper() }} code syntax (e.g., assignments, definitions, expressions).
+
+    {{ target_language.upper() }} IMPORTS:
+    ```
+    <{{ target_language.lower() }}_imports_if_any>
+    ```
+
+    {{ target_language.upper() }} TRANSLATION:
+    ```
+    <{{ target_language.lower() }}_type_translation>
+    ```
+
+    REASONING:
+    <natural_language_reasoning>
+  type_resolution_description_feedback: |-
+    FEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.
+    {{ feedback }}
+  fragment_translation_field_static_icl: |-
+    JAVA CODE:
+    ```
+    public class Calculator {
+        public int x;
+    }
+    ```
+
+    PARTIAL PYTHON TRANSLATION:
+    ```
+    class Calculator:
+        x: int = 
+    ```
+
+    PYTHON FIELD TRANSLATION:
+    ```
+        x: int = 0
+    ```
+  fragment_translation_method_static_icl: |-
+    JAVA CODE:
+    ```
+    public class Calculator {
+        public int add(int a, int b) {
+            return a + b;
+        }
+    }
+    ```
+
+    PARTIAL PYTHON TRANSLATION:
+    ```
+    class Calculator:
+        def add(self, a: int, b: int) -> int:
+            pass
+    ```
+
+    PYTHON METHOD TRANSLATION:
+    ```
+        def add(self, a: int, b: int) -> int:
+            return a + b
+    ```
+  fragment_translation_feedback_static_icl: |-
+    JAVA CODE:
+    ```
+    public class Calculator {
+        public int add(int a, int b) {
+            return a + b;
+        }
+    }
+    ```
+    
+    INCORRECT PYTHON TRANSLATION:
+    ```
+    class Calculator:
+        def add(self, a: int, b: int) -> int:
+            return a + c
+    ```
+    
+    EXECUTION FEEDBACK:
+    ```  
+    File "script.py", line 5, in add
+        return a + c
+    NameError: name 'c' is not defined
+    ```
+    
+    PARTIAL PYTHON TRANSLATION:
+    ```
+    class Calculator:
+        def add(self, a: int, b: int) -> int:
+            pass
+    ```
+    
+    PYTHON METHOD TRANSLATION:
+    ```
+        def add(self, a: int, b: int) -> int:
+            return a + b
+    ```
+  fragment_translation_test_static_icl: |-
+    JAVA CODE:
+    ```
+    public class TestClass {
+        @Test
+        public void testMethod(self) {
+            {{ source_statements }}
+        }
+    }
+    ```
+    
+    PARTIAL PYTHON TRANSLATION:
+    ```
+    import unittest
+
+    class TestClass(unittest.TestCase):
+        def testMethod(self) -> None:
+            pass
+    ```
+    
+    PYTHON METHOD TRANSLATION:
+    ```
+        def testMethod(self) -> None:
+            {{ target_statements }}
+    ```
+  fragment_translation_feedback_test_static_icl: |-
+    JAVA CODE:
+    ```
+    public class TestClass {
+        @Test
+        public void testMethod(self) {
+            List<String> inputList = Arrays.asList("apple", "banana", "cherry");
+            assertEquals("inputList size does not match expected size = 3", 3, inputList.size());
+        }
+    }
+    ```
+    
+    INCORRECT PYTHON TRANSLATION:
+    ```
+    class TestClass(unittest.TestCase):
+        def testMethod(self) -> None:
+            inputList = ["apple", "banana", "cherry"]
+            self.assertEqual("inputList size does not match expected size = 3", 3, len(inputList))
+    ```
+    
+    EXECUTION FEEDBACK:
+    ```
+    File "TestClass.py", line 4, in testMethod
+        self.assertEqual("inputList size does not match expected size = 3", 3, len(inputList))
+    AssertionError: 'inputList size does not match expected size = 3' != 3 : 3
+    ```
+    
+    PARTIAL PYTHON TRANSLATION:
+    ```
+    import unittest
+
+    class TestClass(unittest.TestCase):
+        def testMethod(self) -> None:
+            pass
+    ```
+    
+    PYTHON METHOD TRANSLATION:
+    ```
+        def testMethod(self) -> None:
+            inputList = ["apple", "banana", "cherry"]
+            self.assertEqual(3, len(inputList), "inputList size does not match expected size = 3")
+    ```  
+  fragment_translation_instruction: |-
+    INSTRUCTION:
+    Translate the following JAVA {{ fragment_type }} to PYTHON 3.11 like the example above. You only need to translate the "{{ fragment_actual_name }}" {{ fragment_type }}. All necessary dependencies are available in PARTIAL PYTHON TRANSLATION.
+  fragment_translation_feedback_instruction: |-
+    INSTRUCTION:
+    Based on the feedback provided, identify the error in the following Python translation of the {{ fragment_type }} and correct it. You only need to correct the "{{ fragment_actual_name }}" {{ fragment_type }}. All necessary dependencies are available in PARTIAL PYTHON TRANSLATION. Only generate the given "{{ fragment_actual_name }}" method like the example above and do not add anything else in your response.
+  fragment_translation_partial_translation: |-
+    PARTIAL PYTHON TRANSLATION:
+    ```
+    {{ partial_translation }}
+    ```
+  target_translation: |-
+    {{ target_translation_heading }}:
+    ```
+    {{ partial_target_translation }}
+  fragment_translation_response_format: |-
+    RESPONSE FORMAT: You must provide your response in the following format by enclosing {{ target_translation_heading }} inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated {{ fragment_type }} without any other {{ target_language.upper() }} code syntax (e.g., assignments, definitions, expressions).
+
+    {{ target_translation_heading }}:
+    ```
+    <{{ target_language.lower() }}_translation>
+    ```
+  fragment_translation_notes: |-
+    GENERAL NOTES:
+      1) If you are translating a test method, make sure the order of arguments in the assert functions is correct as given in the sample example. Specifically, the "message" argument is the first argument in Java, but the last argument in Python. For example, in Java, assertEquals("message", expected, actual) and in Python, self.assertEqual(actual, expected, "message").
+      2) You have to make sure your translation correctly calls dependent methods given in PARTIAL PYTHON TRANSLATION. For example, if a method's name is "__methodName" in class "ClassName" in PARTIAL PYTHON TRANSLATION, you have to call the method as "ClassName().__methodName()" in your translation.
+      3) If you are referencing private and protected fields of a class in your translation, you have to use the correct syntax. For example, if a field's name is "__fieldName" in class "ClassName" in PARTIAL PYTHON TRANSLATION, you have to reference the field as "_ClassName__fieldName" in your translation.
+      4) The model response should not change the method signature. Please generate the signature exactly given in PARTIAL PYTHON TRANSLATION.
+  type_translation_details: |-
+    TYPE TRANSLATION DETAILS:
+    ```
+    {{ type_translation_details }}
+    ```
+  api_call_description: |-
+    API CALL DESCRIPTION:
+    ```
+    {{ api_call_description }}
+    ```
+  advanced_llm_prompt_base: |-
+    INSTRUCTION:
+    1. Below is the EXECUTION TRACE and STACK TRACE of a failed test case, along with all executed methods ordered in reverse-execution order.
+    2. Your task is to analyze the STACK TRACE and each pair of JAVA SOURCE CODE and PYTHON TRANSLATION of the methods in the EXECUTION TRACE.
+    3. You need to identify the root cause of the failure and provide fixed PYTHON TRANSLATION for the methods that are causing the failure. Please make sure your generated Python translation is syntactically correct and can be executed without any errors.
+    4. There could be multiple buggy methods in the EXECUTION TRACE. You need to provide fixed PYTHON TRANSLATION for all of them.
+    5. The bugs can also exist in test methods. You need to provide fixed PYTHON TRANSLATION for test methods as well.
+    6. The fixed PYTHON TRANSLATION (with proper indentation and parseable by Python grammar) of each method should be provided as a LIST of JSON objects like below.
+    7. Make sure the "id" field exactly matches the "id" field in the EXECUTION TRACE with proper line numbers.
+    8. Make sure your generated code has EXACTLY the same INDENTATION as the original code. Do NOT add or remove any indentation from your generated code.
+    9. Make sure you DO NOT change the signature of the methods. It's important to keep the method signature intact for parsing purposes.
+    ```
+    [
+        {
+            "id": "<schema_name>|<class_name>|<fragment_name>",
+            "fixed_python_translation": "<fixed_python_translation>",
+        },
+        {
+            "id": "<schema_name>|<class_name>|<fragment_name>",
+            "fixed_python_translation": "<fixed_python_translation>",
+        },
+        ...
+        {
+            "id": "<schema_name>|<class_name>|<fragment_name>",
+            "fixed_python_translation": "<fixed_python_translation>",
+        }
+    ]
+    ```
+
+    EXECUTION TRACE:
+    ```
+    {{ execution_trace }}
+    ```
+
+    STACK TRACE:
+    ```
+    {{ stack_trace }}
+    ```
+  advanced_llm_prompt_instance: |-
+    IDENTIFIER:
+    ```
+    {{ identifier }}
+    ```
+
+    API DESCRIPTION (if any):
+    ```
+    {{ api_description }}
+    ```
+
+    JAVA SOURCE CODE:
+    ```
+    {{ java_source_code }}
+    ```
+
+    PYTHON TRANSLATION:
+    ```
+    {{ python_translation }}
+    ```
+  advanced_llm_prompt_dependencies: |-
+    DEPENDENCIES:
+    Below are the dependencies used in the JAVA SOURCE CODE which are not available in the EXECUTION TRACE. You need to consider them while generating the fixed PYTHON TRANSLATION.
+    {{ test_dependencies }}

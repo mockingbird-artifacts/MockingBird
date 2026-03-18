@@ -1,0 +1,1003 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-exec/src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java",
+  "imports": {
+    "20-20:import java.io.File;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.io.File;"
+    },
+    "21-21:import java.io.IOException;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.io.IOException;"
+    },
+    "22-22:import java.io.PrintWriter;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.PrintWriter;"
+    },
+    "23-23:import java.nio.charset.Charset;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.nio.charset.Charset;"
+    },
+    "24-24:import java.nio.file.Files;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.nio.file.Files;"
+    },
+    "25-25:import java.nio.file.Path;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.nio.file.Path;"
+    },
+    "26-26:import java.util.Map;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.Map;"
+    },
+    "27-27:import java.util.Map.Entry;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.util.Map.Entry;"
+    },
+    "28-28:import java.util.Set;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.util.Set;"
+    },
+    "30-30:import org.apache.commons.exec.CommandLine;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.exec.CommandLine;"
+    },
+    "31-31:import org.apache.commons.exec.util.StringUtils;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.exec.util.StringUtils;"
+    }
+  },
+  "classes": {
+    "37-125:VmsCommandLauncher": {
+      "start": 37,
+      "end": 125,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "Java13CommandLauncher"
+      ],
+      "methods": {
+        "42-100:createCommandFile": {
+          "start": 42,
+          "end": 100,
+          "body": [
+            "private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {",
+            "        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");",
+            "        final File script = path.toFile();",
+            "        script.deleteOnExit();",
+            "        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {",
+            "            // add the environment as global symbols for the DCL script",
+            "            if (env != null) {",
+            "                final Set<Entry<String, String>> entries = env.entrySet();",
+            "                for (final Entry<String, String> entry : entries) {",
+            "                    writer.print(\"$ \");",
+            "                    writer.print(entry.getKey());",
+            "                    writer.print(\" == \"); // define as global symbol",
+            "                    writer.println('\\\"');",
+            "                    String value = entry.getValue();",
+            "                    // Any embedded \" values need to be doubled",
+            "                    if (value.indexOf('\\\"') > 0) {",
+            "                        final StringBuilder sb = new StringBuilder();",
+            "                        for (int i = 0; i < value.length(); i++) {",
+            "                            final char c = value.charAt(i);",
+            "                            if (c == '\\\"') {",
+            "                                sb.append('\\\"');",
+            "                            }",
+            "                            sb.append(c);",
+            "                        }",
+            "                        value = sb.toString();",
+            "                    }",
+            "                    writer.print(value);",
+            "                    writer.println('\\\"');",
+            "                }",
+            "            }",
+            "",
+            "            final String command = cmd.getExecutable();",
+            "            if (cmd.isFile()) {// We assume it is it a script file",
+            "                writer.print(\"$ @\");",
+            "                // This is a bit crude, but seems to work",
+            "                final String[] parts = StringUtils.split(command, \"/\");",
+            "                writer.print(parts[0]); // device",
+            "                writer.print(\":[\");",
+            "                writer.print(parts[1]); // top level directory",
+            "                final int lastPart = parts.length - 1;",
+            "                for (int i = 2; i < lastPart; i++) {",
+            "                    writer.print(\".\");",
+            "                    writer.print(parts[i]);",
+            "                }",
+            "                writer.print(\"]\");",
+            "                writer.print(parts[lastPart]);",
+            "            } else {",
+            "                writer.print(\"$ \");",
+            "                writer.print(command);",
+            "            }",
+            "            final String[] args = cmd.getArguments();",
+            "            for (final String arg : args) {",
+            "                writer.println(\" -\");",
+            "                writer.print(arg);",
+            "            }",
+            "            writer.println();",
+            "        }",
+            "        return script;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "File"
+          ],
+          "body_types": [
+            "Path",
+            "File",
+            "PrintWriter",
+            "Set<Entry<String, String>>",
+            "Entry<String, String>",
+            "String",
+            "StringBuilder",
+            "int",
+            "char",
+            "String[]"
+          ],
+          "signature": "createCommandFile(final CommandLine cmd, final Map<String, String> env)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "CommandLine",
+              "name": "cmd"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<String, String>",
+              "name": "env"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.nio.file.Files",
+              "createTempFile(java.lang.String,java.lang.String,java.nio.file.attribute.FileAttribute[])"
+            ],
+            [
+              "library",
+              "java.nio.file.Path",
+              "toFile()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "deleteOnExit()"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "defaultCharset()"
+            ],
+            [
+              "library",
+              "java.nio.file.Files",
+              "newBufferedWriter(java.nio.file.Path,java.nio.charset.Charset,java.nio.file.OpenOption[])"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "<init>(java.io.Writer)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "entrySet()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "print(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getKey()"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "println(char)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getValue()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "charAt(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(char)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "356-361:getExecutable"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "377-379:isFile"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.util.StringUtils",
+              "32-234:StringUtils",
+              "108-115:split"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "336-349:getArguments"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "println()"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Path": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `Path` is provided by the `pathlib` module. This module offers classes representing filesystem paths with semantics appropriate for different operating systems. The `Path` class in this module can be used to locate a file in a file system and it will typically represent a system-dependent file path.",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              },
+              "PrintWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the equivalent type to Java's PrintWriter is StringIO from the io module. This class provides a convenient means of working with text data in memory using file-like objects. It can be used as an alternative to writing directly to a file or printing to console for testing purposes. The StringIO object behaves like a file, allowing you to write and read strings just like you would with files.",
+                "prompt": ""
+              },
+              "Set<Entry<String, String>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Set<Entry<String, String>> has been translated to \"object\"",
+                "prompt": ""
+              },
+              "Entry<String, String>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Entry<String, String> has been translated to \"object\"",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "StringBuilder": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the equivalent of Java's `StringBuilder` is the `StringIO` class from the `io` module. This class provides a mutable string buffer that can be used as an alternative to `str` in places where string concatenation or modification operations are performed frequently. It also supports various methods similar to those available for StringBuffer in Java, such as appending and inserting characters at specific positions.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type for a Java String array is a list of strings. The 'typing' module in Python provides support for type hints as specified by PEP 484. Here, we use List from typing to denote that it is a list and str inside the square brackets denotes that each element in the list is a string.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|CommandLine|cmd": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Map<String, String>|env": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __createCommandFile(self, cmd: object, env: object) -> Path:",
+            "        from pathlib import Path",
+            "        from io import StringIO",
+            "        import subprocess",
+            "        import os",
+            "",
+            "        path = Path.cwd() / \"EXEC.TMP\"",
+            "        script = path.to_file()",
+            "        try:",
+            "            with open(path, 'w') as writer:",
+            "                if env is not None:",
+            "                    for key, value in env.items():",
+            "                        writer.write(\"$ {} == \".format(key))",
+            "                        if value.find('\"') > -1:",
+            "                            value = value.replace('\"', '\"\"')",
+            "                        writer.write('\"{}\"\\n'.format(value))",
+            "                for line in cmd:",
+            "                    writer.write(line + \"\\n\")",
+            "        except Exception as e:",
+            "            print(\"Error writing to file: \", str(e))",
+            "        ",
+            "        return script"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.018046855926513672,
+          "generation_timestamp": "2026-03-17T05:54:08.006785",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __createCommandFile(self, cmd: object, env: object) -> Path:\n",
+            "        pass\n\n"
+          ]
+        },
+        "106-108:exec0": {
+          "start": 106,
+          "end": 108,
+          "body": [
+            "public Process exec0(final CommandLine cmd, final Map<String, String> env) throws IOException {",
+            "        return super.exec0(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Process"
+          ],
+          "body_types": [
+            "CommandLine"
+          ],
+          "signature": "exec0(final CommandLine cmd, final Map<String, String> env)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "CommandLine",
+              "name": "cmd"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<String, String>",
+              "name": "env"
+            }
+          ],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+              "37-125:VmsCommandLauncher",
+              "42-100:createCommandFile"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getPath()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "192-208:CommandLine"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.CommandLauncherImpl",
+              "31-47:CommandLauncherImpl",
+              "34-36:exec0"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Process": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "In Python, the equivalent of Java's `Process` class is provided by the `subprocess` module in Python. The `subprocess.Popen` class provides methods for controlling and interacting with subprocesses, which is similar to what a `Process` object can do in Java. It allows you to execute commands, read their output, wait for them to finish, check their exit status, and terminate them if necessary.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "CommandLine": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|CommandLine|cmd": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Map<String, String>|env": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def exec0(self, cmd: object, env: object) -> subprocess.Popen:",
+            "        from src.main.org.apache.commons.exec.CommandLine import CommandLine",
+            "        from src.main.org.apache.commons.exec.launcher import CommandLine",
+            "        return super().exec0(CommandLine(2, None, None, self.__createCommandFile(cmd, env).getPath()), env)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.09923672676086426,
+          "generation_timestamp": "2026-03-17T05:55:27.678582",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def exec0(self, cmd: object, env: object) -> subprocess.Popen:\n",
+            "        pass\n\n"
+          ]
+        },
+        "115-117:exec1": {
+          "start": 115,
+          "end": 117,
+          "body": [
+            "public Process exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir) throws IOException {",
+            "        return super.exec1(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env, workingDir);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Process"
+          ],
+          "body_types": [
+            "CommandLine"
+          ],
+          "signature": "exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "CommandLine",
+              "name": "cmd"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<String, String>",
+              "name": "env"
+            },
+            {
+              "modifier": "final",
+              "type": "File",
+              "name": "workingDir"
+            }
+          ],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+              "37-125:VmsCommandLauncher",
+              "42-100:createCommandFile"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getPath()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "192-208:CommandLine"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+              "30-50:Java13CommandLauncher",
+              "46-49:exec1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Process": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "In Python, the equivalent of Java's `Process` class is provided by the `subprocess` module in Python. The `subprocess.Popen` class provides methods for controlling and interacting with subprocesses, which is similar to what a `Process` object can do in Java. It allows you to execute commands, read their output, wait for them to finish, check their exit status, and terminate them if necessary.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "CommandLine": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|CommandLine|cmd": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Map<String, String>|env": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|File|workingDir": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def exec1(self, cmd: object, env: object, workingDir: object) -> subprocess.Popen:",
+            "        from src.main.org.apache.commons.exec.CommandLine import CommandLine",
+            "        from pathlib import Path",
+            "        return super().exec1(CommandLine(2, None, None, self.__createCommandFile(cmd, env).as_posix()), env, Path(workingDir))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.04578447341918945,
+          "generation_timestamp": "2026-03-17T06:02:18.948870",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def exec1(self, cmd: object, env: object, workingDir: object) -> subprocess.Popen:\n",
+            "        pass\n\n"
+          ]
+        },
+        "120-124:isFailure": {
+          "start": 120,
+          "end": 124,
+          "body": [
+            "@Override",
+            "    public boolean isFailure(final int exitValue) {",
+            "        // even exit value signals failure",
+            "        return exitValue % 2 == 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isFailure(final int exitValue)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "exitValue"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|int|exitValue": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def isFailure(self, exitValue: int) -> bool:",
+            "        return exitValue % 2 == 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest_test0_decomposed_mocker_3_VmsCommandLauncher_isFailure.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-exec/src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest_test0_decomposed_mocker_3_VmsCommandLauncher_isFailure.py\", line 41, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":1057322059,\\\"type\\\":\\\"java.lang.Boolean\\\",\\\"value\\\":\\\"false\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest.py::VmsCommandLauncher_ESTest::test0": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+                  "class_name": "30-50:Java13CommandLauncher",
+                  "fragment_name": "35-36:Java13CommandLauncher"
+                },
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+                  "class_name": "37-125:VmsCommandLauncher",
+                  "fragment_name": "120-124:isFailure"
+                },
+                {
+                  "schema_name": "commons-exec.src.test.org.apache.commons.exec.launcher.VmsCommandLauncher_ESTest",
+                  "class_name": "20-44:VmsCommandLauncher_ESTest",
+                  "fragment_name": "22-27:test0"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest.py::VmsCommandLauncher_ESTest::test1": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+                  "class_name": "30-50:Java13CommandLauncher",
+                  "fragment_name": "35-36:Java13CommandLauncher"
+                },
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+                  "class_name": "37-125:VmsCommandLauncher",
+                  "fragment_name": "120-124:isFailure"
+                },
+                {
+                  "schema_name": "commons-exec.src.test.org.apache.commons.exec.launcher.VmsCommandLauncher_ESTest",
+                  "class_name": "20-44:VmsCommandLauncher_ESTest",
+                  "fragment_name": "29-34:test1"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest.py::VmsCommandLauncher_ESTest::test2": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+                  "class_name": "30-50:Java13CommandLauncher",
+                  "fragment_name": "35-36:Java13CommandLauncher"
+                },
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+                  "class_name": "37-125:VmsCommandLauncher",
+                  "fragment_name": "120-124:isFailure"
+                },
+                {
+                  "schema_name": "commons-exec.src.test.org.apache.commons.exec.launcher.VmsCommandLauncher_ESTest",
+                  "class_name": "20-44:VmsCommandLauncher_ESTest",
+                  "fragment_name": "36-41:test2"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 2.3840365409851074,
+          "generation_timestamp": "2026-03-17T05:47:27.275781",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isFailure(self, exitValue: object) -> bool:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class VmsCommandLauncher(Java13CommandLauncher):\n\n"
+    }
+  },
+  "import_map": {
+    "File": "java.io.File",
+    "IOException": "java.io.IOException",
+    "PrintWriter": "java.io.PrintWriter",
+    "Charset": "java.nio.charset.Charset",
+    "Files": "java.nio.file.Files",
+    "Path": "java.nio.file.Path",
+    "Map": "java.util.Map",
+    "Entry": "java.util.Map.Entry",
+    "Set": "java.util.Set",
+    "CommandLine": "org.apache.commons.exec.CommandLine",
+    "StringUtils": "org.apache.commons.exec.util.StringUtils"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import StringIO",
+    "from pathlib import Path",
+    "from src.main.org.apache.commons.exec.launcher.Java13CommandLauncher import Java13CommandLauncher",
+    "from typing import List",
+    "import subprocess"
+  ]
+}

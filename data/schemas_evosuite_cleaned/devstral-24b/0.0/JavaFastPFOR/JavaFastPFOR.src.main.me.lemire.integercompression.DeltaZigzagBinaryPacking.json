@@ -1,0 +1,1985 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/main/java/me/lemire/integercompression/DeltaZigzagBinaryPacking.java",
+  "imports": {},
+  "classes": {
+    "20-105:DeltaZigzagBinaryPacking": {
+      "start": 20,
+      "end": 105,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [
+        "IntegerCODEC"
+      ],
+      "extends": [],
+      "methods": {
+        "24-57:compress0": {
+          "start": 24,
+          "end": 57,
+          "body": [
+            "@Override",
+            "        public void compress0(int[] inBuf, IntWrapper inPos, int inLen,",
+            "                              int[] outBuf, IntWrapper outPos) {",
+            "                inLen = inLen - inLen % BLOCK_LENGTH;",
+            "                if (inLen == 0) {",
+            "                        return;",
+            "                }",
+            "",
+            "                outBuf[outPos.get()] = inLen;",
+            "                outPos.increment();",
+            "",
+            "                DeltaZigzagEncoding.Encoder ctx = new DeltaZigzagEncoding.Encoder(0);",
+            "                int[] work = new int[BLOCK_LENGTH];",
+            "",
+            "                int op = outPos.get();",
+            "                int ip = inPos.get();",
+            "                final int inPosLast = ip + inLen;",
+            "                for (; ip < inPosLast; ip += BLOCK_LENGTH) {",
+            "                        ctx.encodeArray1(inBuf, ip, BLOCK_LENGTH, work);",
+            "                        final int bits1 = Util.maxbits32(work, 0);",
+            "                        final int bits2 = Util.maxbits32(work, 32);",
+            "                        final int bits3 = Util.maxbits32(work, 64);",
+            "                        final int bits4 = Util.maxbits32(work, 96);",
+            "                        outBuf[op++] = (bits1 << 24) | (bits2 << 16)",
+            "                                | (bits3 << 8) | (bits4 << 0);",
+            "                        op += pack(work, 0, outBuf, op, bits1);",
+            "                        op += pack(work, 32, outBuf, op, bits2);",
+            "                        op += pack(work, 64, outBuf, op, bits3);",
+            "                        op += pack(work, 96, outBuf, op, bits4);",
+            "                }",
+            "",
+            "                inPos.add(inLen);",
+            "                outPos.set(op);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DeltaZigzagEncoding.Encoder",
+            "DeltaZigzagEncoding",
+            "Encoder",
+            "int[]",
+            "int"
+          ],
+          "signature": "compress0( int[] inBuf,  IntWrapper inPos,  int inLen,  int[] outBuf,  IntWrapper outPos)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "inPos"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inLen"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "outPos"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "69-71:increment"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "30-63:Encoder",
+              "31-33:Encoder"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "30-63:Encoder",
+              "49-52:encodeArray1"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.Util",
+              "15-210:Util",
+              "43-77:maxbits32"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+              "20-105:DeltaZigzagBinaryPacking",
+              "88-93:pack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "45-47:add"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "89-91:set"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-11-01 05:03:42",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DeltaZigzagEncoding.Encoder": {
+                "identifier": "DeltaZigzagEncoding.Encoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:46",
+                "source_type": "DeltaZigzagEncoding.Encoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding.Encoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DeltaZigzagEncoding": {
+                "identifier": "DeltaZigzagEncoding",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:46",
+                "source_type": "DeltaZigzagEncoding",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Encoder": {
+                "identifier": "Encoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:46",
+                "source_type": "Encoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Encoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:46",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is widely used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "imports": "import numpy as np",
+                "translated_target_type": "np.ndarray",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is widely used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void compress0(int[] inBuf, IntWrapper inPos, int inLen,\n                              int[] outBuf, IntWrapper outPos) {\n                inLen = inLen - inLen % BLOCK_LENGTH;\n                if (inLen == 0) {\n                        return;\n                }\n\n                outBuf[outPos.get()] = inLen;\n                outPos.increment();\n\n                DeltaZigzagEncoding.Encoder ctx = new DeltaZigzagEncoding.Encoder(0);\n                int[] work = new int[BLOCK_LENGTH];\n\n                int op = outPos.get();\n                int ip = inPos.get();\n                final int inPosLast = ip + inLen;\n                for (; ip < inPosLast; ip += BLOCK_LENGTH) {\n                        ctx.encodeArray1(inBuf, ip, BLOCK_LENGTH, work);\n                        final int bits1 = Util.maxbits32(work, 0);\n                        final int bits2 = Util.maxbits32(work, 32);\n                        final int bits3 = Util.maxbits32(work, 64);\n                        final int bits4 = Util.maxbits32(work, 96);\n                        outBuf[op++] = (bits1 << 24) | (bits2 << 16)\n                                | (bits3 << 8) | (bits4 << 0);\n                        op += pack(work, 0, outBuf, op, bits1);\n                        op += pack(work, 32, outBuf, op, bits2);\n                        op += pack(work, 64, outBuf, op, bits3);\n                        op += pack(work, 96, outBuf, op, bits4);\n                }\n\n                inPos.add(inLen);\n                outPos.set(op);\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:49",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:42",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is widely used for numerical computations in Python.",
+                "imports": "import numpy as np",
+                "translated_target_type": "np.ndarray",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is widely used for numerical computations in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void compress0(int[] inBuf, IntWrapper inPos, int inLen,\n                              int[] outBuf, IntWrapper outPos) {\n                inLen = inLen - inLen % BLOCK_LENGTH;\n                if (inLen == 0) {\n                        return;\n                }\n\n                outBuf[outPos.get()] = inLen;\n                outPos.increment();\n\n                DeltaZigzagEncoding.Encoder ctx = new DeltaZigzagEncoding.Encoder(0);\n                int[] work = new int[BLOCK_LENGTH];\n\n                int op = outPos.get();\n                int ip = inPos.get();\n                final int inPosLast = ip + inLen;\n                for (; ip < inPosLast; ip += BLOCK_LENGTH) {\n                        ctx.encodeArray1(inBuf, ip, BLOCK_LENGTH, work);\n                        final int bits1 = Util.maxbits32(work, 0);\n                        final int bits2 = Util.maxbits32(work, 32);\n                        final int bits3 = Util.maxbits32(work, 64);\n                        final int bits4 = Util.maxbits32(work, 96);\n                        outBuf[op++] = (bits1 << 24) | (bits2 << 16)\n                                | (bits3 << 8) | (bits4 << 0);\n                        op += pack(work, 0, outBuf, op, bits1);\n                        op += pack(work, 32, outBuf, op, bits2);\n                        op += pack(work, 64, outBuf, op, bits3);\n                        op += pack(work, 96, outBuf, op, bits4);\n                }\n\n                inPos.add(inLen);\n                outPos.set(op);\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|IntWrapper|inPos": {
+                "identifier": "|IntWrapper|inPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:44",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|inLen": {
+                "identifier": "|int|inLen",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:44",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:44",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is widely used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "imports": "import numpy as np",
+                "translated_target_type": "np.ndarray",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is widely used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void compress0(int[] inBuf, IntWrapper inPos, int inLen,\n                              int[] outBuf, IntWrapper outPos) {\n                inLen = inLen - inLen % BLOCK_LENGTH;\n                if (inLen == 0) {\n                        return;\n                }\n\n                outBuf[outPos.get()] = inLen;\n                outPos.increment();\n\n                DeltaZigzagEncoding.Encoder ctx = new DeltaZigzagEncoding.Encoder(0);\n                int[] work = new int[BLOCK_LENGTH];\n\n                int op = outPos.get();\n                int ip = inPos.get();\n                final int inPosLast = ip + inLen;\n                for (; ip < inPosLast; ip += BLOCK_LENGTH) {\n                        ctx.encodeArray1(inBuf, ip, BLOCK_LENGTH, work);\n                        final int bits1 = Util.maxbits32(work, 0);\n                        final int bits2 = Util.maxbits32(work, 32);\n                        final int bits3 = Util.maxbits32(work, 64);\n                        final int bits4 = Util.maxbits32(work, 96);\n                        outBuf[op++] = (bits1 << 24) | (bits2 << 16)\n                                | (bits3 << 8) | (bits4 << 0);\n                        op += pack(work, 0, outBuf, op, bits1);\n                        op += pack(work, 32, outBuf, op, bits2);\n                        op += pack(work, 64, outBuf, op, bits3);\n                        op += pack(work, 96, outBuf, op, bits4);\n                }\n\n                inPos.add(inLen);\n                outPos.set(op);\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|IntWrapper|outPos": {
+                "identifier": "|IntWrapper|outPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:46",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def compress0(self, inBuf: np.ndarray, inPos: \"IntWrapper\", inLen: int, outBuf: np.ndarray, outPos: \"IntWrapper\") -> None:",
+            "        from src.main.me.lemire.integercompression.DeltaZigzagEncoding import Encoder",
+            "        from src.main.me.lemire.integercompression.Util import Util",
+            "        inLen = inLen - inLen % self.__BLOCK_LENGTH",
+            "        if inLen == 0:",
+            "            return",
+            "",
+            "        outBuf[outPos.get()] = inLen",
+            "        outPos.increment()",
+            "",
+            "        ctx = Encoder(0)",
+            "        work = np.zeros(self.__BLOCK_LENGTH, dtype=int)",
+            "",
+            "        op = outPos.get()",
+            "        ip = inPos.get()",
+            "        final_inPosLast = ip + inLen",
+            "        for _ in range(0, final_inPosLast, self.__BLOCK_LENGTH):",
+            "            ctx.encodeArray1(inBuf, ip, self.__BLOCK_LENGTH, work)",
+            "            bits1 = Util._maxbits32(work, 0)",
+            "            bits2 = Util._maxbits32(work, 32)",
+            "            bits3 = Util._maxbits32(work, 64)",
+            "            bits4 = Util._maxbits32(work, 96)",
+            "            outBuf[op] = (bits1 << 24) | (bits2 << 16) | (bits3 << 8) | (bits4 << 0)",
+            "            op += self.__pack(work, 0, outBuf, op, bits1)",
+            "            op += self.__pack(work, 32, outBuf, op, bits2)",
+            "            op += self.__pack(work, 64, outBuf, op, bits3)",
+            "            op += self.__pack(work, 96, outBuf, op, bits4)",
+            "            ip += self.__BLOCK_LENGTH",
+            "",
+            "        inPos.add(inLen)",
+            "        outPos.set_(op)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest_test03_decomposed_mocker_2_DeltaZigzagBinaryPacking_compress0.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1375, in patched\n    with self.decoration_helper(patched,\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/contextlib.py\", line 137, in __enter__\n    return next(self.gen)\n           ^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1357, in decoration_helper\n    arg = exit_stack.enter_context(patching)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/contextlib.py\", line 517, in enter_context\n    result = _enter(cm)\n             ^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1446, in __enter__\n    original, local = self.get_original()\n                      ^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1419, in get_original\n    raise AttributeError(\nAttributeError: <class 'src.main.me.lemire.integercompression.IntWrapper.IntWrapper'> does not have the attribute 'set'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test07": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "31-33:Encoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "35-39:encodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "41-47:encodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "49-52:encodeArray1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "24-57:compress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test09": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "31-33:Encoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "35-39:encodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "41-47:encodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "30-63:Encoder",
+                  "fragment_name": "49-52:encodeArray1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "24-57:compress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/BasicTest.py::BasicTest::testcheckDeltaZigzagPacking": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/BasicTest.py\", line 179, in testcheckDeltaZigzagPacking\n    self.testUnsorted(compo)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/BasicTest.py\", line 390, in testUnsorted\n    codec.compress0(data, inputoffset, data.length, compressed, outputoffset)\n                                       ^^^^^^^^^^^\nAttributeError: 'numpy.ndarray' object has no attribute 'length'",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.OptPFDS16",
+                  "class_name": "35-200:OptPFDS16",
+                  "fragment_name": "42-43:OptPFDS16"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+                  "class_name": "41-355:FastPFOR",
+                  "fragment_name": "81-89:FastPFOR"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+                  "class_name": "41-355:FastPFOR",
+                  "fragment_name": "90-92:FastPFOR1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+                  "class_name": "41-355:FastPFOR",
+                  "fragment_name": "352-354:makeBuffer"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.NewPFDS16",
+                  "class_name": "36-184:NewPFDS16",
+                  "fragment_name": "44-45:NewPFDS16"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.Composition",
+                  "class_name": "14-69:Composition",
+                  "fragment_name": "31-34:Composition"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.Composition",
+                  "class_name": "14-69:Composition",
+                  "fragment_name": "36-51:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.Composition",
+                  "class_name": "14-69:Composition",
+                  "fragment_name": "53-62:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "73-76:intValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+                  "class_name": "24-336:FastPFOR128",
+                  "fragment_name": "62-70:FastPFOR128"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+                  "class_name": "24-336:FastPFOR128",
+                  "fragment_name": "71-73:FastPFOR1281"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+                  "class_name": "24-336:FastPFOR128",
+                  "fragment_name": "333-335:makeBuffer"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.OptPFDS9",
+                  "class_name": "35-200:OptPFDS9",
+                  "fragment_name": "42-43:OptPFDS9"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "24-57:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.NewPFD",
+                  "class_name": "37-185:NewPFD",
+                  "fragment_name": "45-46:NewPFD"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedComposition",
+                  "class_name": "16-73:IntegratedComposition",
+                  "fragment_name": "33-37:IntegratedComposition"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 187.84791016578674,
+          "generation_timestamp": "2025-11-02T13:39:47.077099",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def compress0(self, inBuf: np.ndarray, inPos: \"IntWrapper\", inLen: int, outBuf: np.ndarray, outPos: \"IntWrapper\") -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "59-86:uncompress0": {
+          "start": 59,
+          "end": 86,
+          "body": [
+            "@Override",
+            "        public void uncompress0(int[] inBuf, IntWrapper inPos, int inLen,",
+            "                                int[] outBuf, IntWrapper outPos) {",
+            "                if (inLen == 0) {",
+            "                        return;",
+            "                }",
+            "",
+            "                final int outLen = inBuf[inPos.get()];",
+            "                inPos.increment();",
+            "",
+            "                DeltaZigzagEncoding.Decoder ctx = new DeltaZigzagEncoding.Decoder(0);",
+            "                int[] work = new int[BLOCK_LENGTH];",
+            "",
+            "                int ip = inPos.get();",
+            "                int op = outPos.get();",
+            "                final int outPosLast = op + outLen;",
+            "                for (; op < outPosLast; op += BLOCK_LENGTH) {",
+            "                        int n = inBuf[ip++];",
+            "                        ip += unpack(inBuf, ip, work, 0, (n >> 24) & 0x3F);",
+            "                        ip += unpack(inBuf, ip, work, 32, (n >> 16) & 0x3F);",
+            "                        ip += unpack(inBuf, ip, work, 64, (n >> 8) & 0x3F);",
+            "                        ip += unpack(inBuf, ip, work, 96, (n >> 0) & 0x3F);",
+            "                        ctx.decodeArray0(work, 0, BLOCK_LENGTH, outBuf, op);",
+            "                }",
+            "",
+            "                outPos.add(outLen);",
+            "                inPos.set(ip);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "DeltaZigzagEncoding.Decoder",
+            "DeltaZigzagEncoding",
+            "Decoder",
+            "int[]"
+          ],
+          "signature": "uncompress0( int[] inBuf,  IntWrapper inPos,  int inLen,  int[] outBuf,  IntWrapper outPos)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "inPos"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inLen"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "outPos"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "69-71:increment"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "65-93:Decoder",
+              "66-68:Decoder"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+              "20-105:DeltaZigzagBinaryPacking",
+              "95-99:unpack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "65-93:Decoder",
+              "77-83:decodeArray0"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "45-47:add"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "89-91:set"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-11-01 05:03:49",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:52",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DeltaZigzagEncoding.Decoder": {
+                "identifier": "DeltaZigzagEncoding.Decoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:52",
+                "source_type": "DeltaZigzagEncoding.Decoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding.Decoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DeltaZigzagEncoding": {
+                "identifier": "DeltaZigzagEncoding",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:52",
+                "source_type": "DeltaZigzagEncoding",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Decoder": {
+                "identifier": "Decoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:52",
+                "source_type": "Decoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Decoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 05:03:52",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nNone\n```\n\nPYTHON TRANSLATION:\n```\nlist[int]\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` is a list of integers, which is represented as `list[int]`.",
+                "imports": "None",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` is a list of integers, which is represented as `list[int]`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void uncompress0(int[] inBuf, IntWrapper inPos, int inLen,\n                                int[] outBuf, IntWrapper outPos) {\n                if (inLen == 0) {\n                        return;\n                }\n\n                final int outLen = inBuf[inPos.get()];\n                inPos.increment();\n\n                DeltaZigzagEncoding.Decoder ctx = new DeltaZigzagEncoding.Decoder(0);\n                int[] work = new int[BLOCK_LENGTH];\n\n                int ip = inPos.get();\n                int op = outPos.get();\n                final int outPosLast = op + outLen;\n                for (; op < outPosLast; op += BLOCK_LENGTH) {\n                        int n = inBuf[ip++];\n                        ip += unpack(inBuf, ip, work, 0, (n >> 24) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 32, (n >> 16) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 64, (n >> 8) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 96, (n >> 0) & 0x3F);\n                        ctx.decodeArray0(work, 0, BLOCK_LENGTH, outBuf, op);\n                }\n\n                outPos.add(outLen);\n                inPos.set(ip);\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:49",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nNone\n```\n\nPYTHON TRANSLATION:\n```\nlist[int]\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` is `list[int]`. This maintains the same functionality as a Java array of integers.",
+                "imports": "None",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` is `list[int]`. This maintains the same functionality as a Java array of integers.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void uncompress0(int[] inBuf, IntWrapper inPos, int inLen,\n                                int[] outBuf, IntWrapper outPos) {\n                if (inLen == 0) {\n                        return;\n                }\n\n                final int outLen = inBuf[inPos.get()];\n                inPos.increment();\n\n                DeltaZigzagEncoding.Decoder ctx = new DeltaZigzagEncoding.Decoder(0);\n                int[] work = new int[BLOCK_LENGTH];\n\n                int ip = inPos.get();\n                int op = outPos.get();\n                final int outPosLast = op + outLen;\n                for (; op < outPosLast; op += BLOCK_LENGTH) {\n                        int n = inBuf[ip++];\n                        ip += unpack(inBuf, ip, work, 0, (n >> 24) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 32, (n >> 16) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 64, (n >> 8) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 96, (n >> 0) & 0x3F);\n                        ctx.decodeArray0(work, 0, BLOCK_LENGTH, outBuf, op);\n                }\n\n                outPos.add(outLen);\n                inPos.set(ip);\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|IntWrapper|inPos": {
+                "identifier": "|IntWrapper|inPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:50",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|inLen": {
+                "identifier": "|int|inLen",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:50",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:50",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nNone\n```\n\nPYTHON TRANSLATION:\n```\nlist[int]\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` is a list of integers, which is represented as `list[int]`.",
+                "imports": "None",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` is a list of integers, which is represented as `list[int]`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void uncompress0(int[] inBuf, IntWrapper inPos, int inLen,\n                                int[] outBuf, IntWrapper outPos) {\n                if (inLen == 0) {\n                        return;\n                }\n\n                final int outLen = inBuf[inPos.get()];\n                inPos.increment();\n\n                DeltaZigzagEncoding.Decoder ctx = new DeltaZigzagEncoding.Decoder(0);\n                int[] work = new int[BLOCK_LENGTH];\n\n                int ip = inPos.get();\n                int op = outPos.get();\n                final int outPosLast = op + outLen;\n                for (; op < outPosLast; op += BLOCK_LENGTH) {\n                        int n = inBuf[ip++];\n                        ip += unpack(inBuf, ip, work, 0, (n >> 24) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 32, (n >> 16) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 64, (n >> 8) & 0x3F);\n                        ip += unpack(inBuf, ip, work, 96, (n >> 0) & 0x3F);\n                        ctx.decodeArray0(work, 0, BLOCK_LENGTH, outBuf, op);\n                }\n\n                outPos.add(outLen);\n                inPos.set(ip);\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|IntWrapper|outPos": {
+                "identifier": "|IntWrapper|outPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:52",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def uncompress0(self, inBuf: list[int], inPos: \"IntWrapper\", inLen: int, outBuf: list[int], outPos: \"IntWrapper\") -> None:",
+            "        from src.main.me.lemire.integercompression.DeltaZigzagEncoding import Decoder",
+            "        if inLen == 0:",
+            "            return",
+            "",
+            "        outLen = inBuf[inPos.get()]",
+            "        inPos.increment()",
+            "",
+            "        ctx = Decoder(0)",
+            "        work = [0] * self.__BLOCK_LENGTH",
+            "",
+            "        ip = inPos.get()",
+            "        op = outPos.get()",
+            "        outPosLast = op + outLen",
+            "        for _ in range(0, outPosLast - op, self.__BLOCK_LENGTH):",
+            "            n = inBuf[ip]",
+            "            ip += 1",
+            "            ip += self.__unpack(inBuf, ip, work, 0, (n >> 24) & 0x3F)",
+            "            ip += self.__unpack(inBuf, ip, work, 32, (n >> 16) & 0x3F)",
+            "            ip += self.__unpack(inBuf, ip, work, 64, (n >> 8) & 0x3F)",
+            "            ip += self.__unpack(inBuf, ip, work, 96, (n >> 0) & 0x3F)",
+            "            ctx.decodeArray0(work, 0, self.__BLOCK_LENGTH, outBuf, op)",
+            "            op += self.__BLOCK_LENGTH",
+            "",
+            "        outPos.add(outLen)",
+            "        inPos.set_(ip)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest_test06_decomposed_mocker_2_DeltaZigzagBinaryPacking_uncompress0.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1375, in patched\n    with self.decoration_helper(patched,\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/contextlib.py\", line 137, in __enter__\n    return next(self.gen)\n           ^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1357, in decoration_helper\n    arg = exit_stack.enter_context(patching)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/contextlib.py\", line 517, in enter_context\n    result = _enter(cm)\n             ^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1446, in __enter__\n    original, local = self.get_original()\n                      ^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1419, in get_original\n    raise AttributeError(\nAttributeError: <class 'src.main.me.lemire.integercompression.IntWrapper.IntWrapper'> does not have the attribute 'set'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test01": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "45-47:add"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test04": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test05": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py\", line 126, in test05\n    deltaZigzagBinaryPacking0.uncompress0(\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/DeltaZigzagBinaryPacking.py\", line 85, in uncompress0\n    ctx.decodeArray0(work, 0, self.__BLOCK_LENGTH, outBuf, op)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/DeltaZigzagEncoding.py\", line 68, in decodeArray0\n    dst[dstoff + i] = self.decodeInt(src[srcoff + i])\n    ~~~^^^^^^^^^^^^\nTypeError: 'NoneType' object does not support item assignment",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test06": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py\", line 147, in test06\n    self.assertEqual(1, intWrapper0.byteValue())\n                        ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'IntWrapper' object has no attribute 'byteValue'",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "45-47:add"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "73-76:intValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test10": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/BasicTest.py::BasicTest::testcheckDeltaZigzagPacking": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/BasicTest.py\", line 179, in testcheckDeltaZigzagPacking\n    self.testUnsorted(compo)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/BasicTest.py\", line 390, in testUnsorted\n    codec.compress0(data, inputoffset, data.length, compressed, outputoffset)\n                                       ^^^^^^^^^^^\nAttributeError: 'numpy.ndarray' object has no attribute 'length'",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.OptPFDS16",
+                  "class_name": "35-200:OptPFDS16",
+                  "fragment_name": "42-43:OptPFDS16"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+                  "class_name": "41-355:FastPFOR",
+                  "fragment_name": "81-89:FastPFOR"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+                  "class_name": "41-355:FastPFOR",
+                  "fragment_name": "90-92:FastPFOR1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+                  "class_name": "41-355:FastPFOR",
+                  "fragment_name": "352-354:makeBuffer"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.NewPFDS16",
+                  "class_name": "36-184:NewPFDS16",
+                  "fragment_name": "44-45:NewPFDS16"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.Composition",
+                  "class_name": "14-69:Composition",
+                  "fragment_name": "31-34:Composition"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.Composition",
+                  "class_name": "14-69:Composition",
+                  "fragment_name": "36-51:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.Composition",
+                  "class_name": "14-69:Composition",
+                  "fragment_name": "53-62:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "73-76:intValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+                  "class_name": "24-336:FastPFOR128",
+                  "fragment_name": "62-70:FastPFOR128"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+                  "class_name": "24-336:FastPFOR128",
+                  "fragment_name": "71-73:FastPFOR1281"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+                  "class_name": "24-336:FastPFOR128",
+                  "fragment_name": "333-335:makeBuffer"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.OptPFDS9",
+                  "class_name": "35-200:OptPFDS9",
+                  "fragment_name": "42-43:OptPFDS9"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "24-57:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.NewPFD",
+                  "class_name": "37-185:NewPFD",
+                  "fragment_name": "45-46:NewPFD"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedComposition",
+                  "class_name": "16-73:IntegratedComposition",
+                  "fragment_name": "33-37:IntegratedComposition"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 178.73200631141663,
+          "generation_timestamp": "2025-11-02T13:49:48.109771",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def uncompress0(self, inBuf: list[int], inPos: \"IntWrapper\", inLen: int, outBuf: list[int], outPos: \"IntWrapper\") -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "88-93:pack": {
+          "start": 88,
+          "end": 93,
+          "body": [
+            "private static int pack(int[] inBuf, int inOff, int[] outBuf,",
+            "                int outOff, int validBits) {",
+            "                BitPacking.fastpackwithoutmask(inBuf, inOff, outBuf, outOff,",
+            "                        validBits);",
+            "                return validBits;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "pack( int[] inBuf,  int inOff,  int[] outBuf,  int outOff,  int validBits)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inOff"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "outOff"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "validBits"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "1706-1812:fastpackwithoutmask"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-11-01 05:03:53",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:53",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is commonly used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "imports": "import numpy as np",
+                "translated_target_type": "np.ndarray",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is commonly used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static int pack(int[] inBuf, int inOff, int[] outBuf,\n                int outOff, int validBits) {\n                BitPacking.fastpackwithoutmask(inBuf, inOff, outBuf, outOff,\n                        validBits);\n                return validBits;\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|int|inOff": {
+                "identifier": "|int|inOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:56",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:56",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is commonly used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "imports": "import numpy as np",
+                "translated_target_type": "np.ndarray",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` array is a NumPy `ndarray` of integers. NumPy provides efficient array operations and is commonly used for numerical computations, making it a suitable replacement for Java's primitive arrays.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static int pack(int[] inBuf, int inOff, int[] outBuf,\n                int outOff, int validBits) {\n                BitPacking.fastpackwithoutmask(inBuf, inOff, outBuf, outOff,\n                        validBits);\n                return validBits;\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|int|outOff": {
+                "identifier": "|int|outOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:58",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|validBits": {
+                "identifier": "|int|validBits",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:58",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __pack(inBuf: np.ndarray, inOff: int, outBuf: np.ndarray, outOff: int, validBits: int) -> int:",
+            "        from src.main.me.lemire.integercompression.BitPacking import BitPacking",
+            "        BitPacking.fastpackwithoutmask(inBuf, inOff, outBuf, outOff, validBits)",
+            "        return validBits"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 36.224034786224365,
+          "generation_timestamp": "2025-11-02T13:36:39.025796",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __pack(inBuf: np.ndarray, inOff: int, outBuf: np.ndarray, outOff: int, validBits: int) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "95-99:unpack": {
+          "start": 95,
+          "end": 99,
+          "body": [
+            "private static int unpack(int[] inBuf, int inOff, int[] outBuf,",
+            "                int outOff, int validBits) {",
+            "                BitPacking.fastunpack(inBuf, inOff, outBuf, outOff, validBits);",
+            "                return validBits;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "unpack( int[] inBuf,  int inOff,  int[] outBuf,  int outOff,  int validBits)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inOff"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "outOff"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "validBits"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "3021-3127:fastunpack"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-11-01 05:03:58",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:58",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\nNone\n```\n\nPYTHON TRANSLATION:\n```\nlist[int]\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` is a list of integers, which can be represented as `list[int]`.",
+                "imports": "None",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` is a list of integers, which can be represented as `list[int]`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static int unpack(int[] inBuf, int inOff, int[] outBuf,\n                int outOff, int validBits) {\n                BitPacking.fastunpack(inBuf, inOff, outBuf, outOff, validBits);\n                return validBits;\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|int|inOff": {
+                "identifier": "|int|inOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:03:59",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:04:02",
+                "source_type": "int[]",
+                "generation": "PYTHON IMPORTS:\n```\n```\n\nPYTHON TRANSLATION:\n```\nlist[int]\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `int[]` array is a list of integers. This maintains the same functionality as a Java array of integers.",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `int[]` array is a list of integers. This maintains the same functionality as a Java array of integers.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static int unpack(int[] inBuf, int inOff, int[] outBuf,\n                int outOff, int validBits) {\n                BitPacking.fastunpack(inBuf, inOff, outBuf, outOff, validBits);\n                return validBits;\n        }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|int|outOff": {
+                "identifier": "|int|outOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:04:03",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|validBits": {
+                "identifier": "|int|validBits",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-11-01 05:04:03",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __unpack(inBuf: list[int], inOff: int, outBuf: list[int], outOff: int, validBits: int) -> int:",
+            "        from src.main.me.lemire.integercompression.BitPacking import BitPacking",
+            "        BitPacking.fastunpack(inBuf, inOff, outBuf, outOff, validBits)",
+            "        return validBits"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test01": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "45-47:add"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test04": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test05": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py\", line 126, in test05\n    deltaZigzagBinaryPacking0.uncompress0(\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/DeltaZigzagBinaryPacking.py\", line 85, in uncompress0\n    ctx.decodeArray0(work, 0, self.__BLOCK_LENGTH, outBuf, op)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/DeltaZigzagEncoding.py\", line 68, in decodeArray0\n    dst[dstoff + i] = self.decodeInt(src[srcoff + i])\n    ~~~^^^^^^^^^^^^\nTypeError: 'NoneType' object does not support item assignment",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "14-28:Context",
+                  "fragment_name": "17-19:Context"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "77-83:decodeArray0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "59-86:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "95-99:unpack"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 37.31976270675659,
+          "generation_timestamp": "2025-11-02T13:46:49.152732",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __unpack(inBuf: list[int], inOff: int, outBuf: list[int], outOff: int, validBits: int) -> int:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "101-104:toString": {
+          "start": 101,
+          "end": 104,
+          "body": [
+            "@Override",
+            "        public String toString() {",
+            "                return this.getClass().getSimpleName();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "getClass()"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getSimpleName()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-11-01 05:04:03",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        return self.__class__.__name__"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagBinaryPacking_ESTest.py::DeltaZigzagBinaryPacking_ESTest::test12": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking",
+                  "class_name": "20-105:DeltaZigzagBinaryPacking",
+                  "fragment_name": "101-104:toString"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 35.62325477600098,
+          "generation_timestamp": "2025-11-02T13:54:20.538082",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "22-22:BLOCK_LENGTH": {
+          "start": 22,
+          "end": 22,
+          "enum_constant": false,
+          "body": [
+            "private static final int BLOCK_LENGTH = 128;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-11-01 05:03:42",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __BLOCK_LENGTH: int = 128"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 37.810280323028564,
+          "generation_timestamp": "2025-11-01T13:02:05.405977",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __BLOCK_LENGTH: int = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class DeltaZigzagBinaryPacking(IntegerCODEC):\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from src.main.me.lemire.integercompression.IntegerCODEC import IntegerCODEC",
+    "from typing import List",
+    "import numpy as np"
+  ]
+}

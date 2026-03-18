@@ -1,0 +1,1204 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-pool/src/main/java/org/apache/commons/pool2/impl/EvictionTimer.java",
+  "imports": {
+    "19-19:import java.lang.ref.WeakReference;": {
+      "start": 19,
+      "end": 19,
+      "body": "import java.lang.ref.WeakReference;"
+    },
+    "20-20:import java.time.Duration;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.time.Duration;"
+    },
+    "21-21:import java.util.HashMap;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.util.HashMap;"
+    },
+    "22-22:import java.util.Map.Entry;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.util.Map.Entry;"
+    },
+    "23-23:import java.util.concurrent.ScheduledThreadPoolExecutor;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.util.concurrent.ScheduledThreadPoolExecutor;"
+    },
+    "24-24:import java.util.concurrent.TimeUnit;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.util.concurrent.TimeUnit;"
+    }
+  },
+  "classes": {
+    "42-178:EvictionTimer": {
+      "start": 42,
+      "end": 178,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [],
+      "nested_inside": "",
+      "nests": [
+        "52-69:Reaper",
+        "75-98:WeakRunner"
+      ],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "115-132:cancel": {
+          "start": 115,
+          "end": 132,
+          "body": [
+            "static synchronized void cancel(",
+            "            final BaseGenericObjectPool<?>.Evictor evictor,",
+            "            final Duration timeout,",
+            "            final boolean restarting) {",
+            "        if (evictor != null) {",
+            "            evictor.cancel();",
+            "            remove(evictor);",
+            "        }",
+            "        if (!restarting && executor != null && taskMap.isEmpty()) {",
+            "            executor.shutdown();",
+            "            try {",
+            "                executor.awaitTermination(timeout.toMillis(), TimeUnit.MILLISECONDS);",
+            "            } catch (final InterruptedException e) {",
+            "            }",
+            "            executor.setCorePoolSize(0);",
+            "            executor = null;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "InterruptedException"
+          ],
+          "signature": "cancel(final BaseGenericObjectPool<?>.Evictor evictor, final Duration timeout, final boolean restarting)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "BaseGenericObjectPool<?>.Evictor",
+              "name": "evictor"
+            },
+            {
+              "modifier": "final",
+              "type": "Duration",
+              "name": "timeout"
+            },
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "restarting"
+            }
+          ],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.BaseGenericObjectPool",
+              "107-132:Evictor",
+              "112-114:cancel"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.EvictionTimer",
+              "42-178:EvictionTimer",
+              "146-154:remove"
+            ],
+            [
+              "library",
+              "java.util.HashMap",
+              "isEmpty()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "shutdown()"
+            ],
+            [
+              "library",
+              "java.time.Duration",
+              "toMillis()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "awaitTermination(long,java.util.concurrent.TimeUnit)"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "setCorePoolSize(int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 20:20:25",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "InterruptedException": {
+                "identifier": "InterruptedException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:22:06",
+                "source_type": "InterruptedException",
+                "generation": "I apologize for the confusion. The `InterruptedException` in Java is used to handle thread interruptions, but Python doesn't have a direct equivalent of this exception type. However, we can mimic its behavior using Python's built-in exceptions and threading mechanisms. \n\nIn Python, we typically use events for interrupting threads. Here's an example:\n\nIMPORTS:\n```python\nfrom threading import Thread, Event\nimport time\n```\n\nTRANSLATION:\n```python\nclass InterruptedException(Exception):\n    pass\n```\n\nREASONING:\nIn Python, we don't have a direct equivalent to Java's `InterruptedException`. However, in Python, threads are typically managed using the threading module and exceptions are generally used for exceptional conditions rather than interruptions. Therefore, we can create our own exception type that mimics the behavior of `InterruptedException`. In this case, we define a new exception class called `InterruptedException` which is just an empty subclass of Python's built-in `Exception` class.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type InterruptedException has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInterruptedException\n```\n\nJAVA TYPE DESCRIPTION:\nThrown when a thread is waiting, sleeping, or otherwise occupied,\n and the thread is interrupted, either before or during the activity.\n Occasionally a method may wish to test whether the current\n thread has been interrupted, and if so, to immediately throw\n this exception.  The following code can be used to achieve\n this effect:\n \n\nJAVA CODE:\n```\n    static synchronized void cancel(\n            final BaseGenericObjectPool<?>.Evictor evictor,\n            final Duration timeout,\n            final boolean restarting) {\n        if (evictor != null) {\n            evictor.cancel();\n            remove(evictor);\n        }\n        if (!restarting && executor != null && taskMap.isEmpty()) {\n            executor.shutdown();\n            try {\n                executor.awaitTermination(timeout.toMillis(), TimeUnit.MILLISECONDS);\n            } catch (final InterruptedException e) {\n            }\n            executor.setCorePoolSize(0);\n            executor = null;\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "final|BaseGenericObjectPool<?>.Evictor|evictor": {
+                "identifier": "final|BaseGenericObjectPool<?>.Evictor|evictor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 20:20:51",
+                "source_type": "BaseGenericObjectPool<?>.Evictor",
+                "generation": "I apologize for the confusion. The previous response was incorrect and it caused an error. I'll provide a correct translation of the Java type to Python. \n\nIMPORTS:\n```python\nfrom typing import TypeVar, Generic\n```\n\nTRANSLATION:\n```python\nT = TypeVar('T')\nclass BaseGenericObjectPool(Generic[T]):\n    class Evictor:\n        def cancel(self):\n            pass\n```\n\nREASONING:\nIn Python, we can use the typing module to create generic types. Here, `TypeVar` is used to define a type variable 'T' that represents any type. The `Generic[T]` syntax indicates that BaseGenericObjectPool is a generic class with one type parameter T. \n\nThe Evictor class inside BaseGenericObjectPool is defined as an inner class and it has a method cancel(). This matches the functionality of the Java code where there's a nested interface Evictor within the BaseGenericObjectPool class, which has a method cancel(). The Python translation reflects this structure.\n",
+                "imports": "",
+                "translated_target_type": "BaseGenericObjectPool",
+                "reasoning": "Custom type BaseGenericObjectPool is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseGenericObjectPool<?>.Evictor\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    static synchronized void cancel(\n            final BaseGenericObjectPool<?>.Evictor evictor,\n            final Duration timeout,\n            final boolean restarting) {\n        if (evictor != null) {\n            evictor.cancel();\n            remove(evictor);\n        }\n        if (!restarting && executor != null && taskMap.isEmpty()) {\n            executor.shutdown();\n            try {\n                executor.awaitTermination(timeout.toMillis(), TimeUnit.MILLISECONDS);\n            } catch (final InterruptedException e) {\n            }\n            executor.setCorePoolSize(0);\n            executor = null;\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "final|Duration|timeout": {
+                "identifier": "final|Duration|timeout",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 20:21:29",
+                "source_type": "Duration",
+                "generation": "I apologize for the confusion. The correct translation is `datetime.timedelta`, not `timedelta`. Here's the corrected response:\n\nPYTHAON IMPORTS:\n```python\nfrom datetime import timedelta\n```\n\nPYTHON TRANSLATION:\n```python\ntimedelta\n```\n\nREASONING:\nIn Python, the equivalent type for Java's Duration is `datetime.timedelta`. This type represents a duration, the difference between two dates or times. In this case, it is used to represent a timeout period in milliseconds. The timedelta object can be created by specifying the number of days, seconds, and microseconds.\n",
+                "imports": "from datetime import timedelta",
+                "translated_target_type": "timedelta",
+                "reasoning": "In Python, the equivalent of Java's Duration type is the timedelta class from the datetime module. This class represents a duration, the difference between two dates or times. In this case, it is used to represent a time-based amount of time, such as '34.5 seconds'. The code snippet provided in the JAVA CODE section can be translated into Python by using the timedelta object and specifying the duration in seconds.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDuration\n```\n\nJAVA TYPE DESCRIPTION:\nA time-based amount of time, such as '34.5 seconds'.\n \n\nJAVA CODE:\n```\n    static synchronized void cancel(\n            final BaseGenericObjectPool<?>.Evictor evictor,\n            final Duration timeout,\n            final boolean restarting) {\n        if (evictor != null) {\n            evictor.cancel();\n            remove(evictor);\n        }\n        if (!restarting && executor != null && taskMap.isEmpty()) {\n            executor.shutdown();\n            try {\n                executor.awaitTermination(timeout.toMillis(), TimeUnit.MILLISECONDS);\n            } catch (final InterruptedException e) {\n            }\n            executor.setCorePoolSize(0);\n            executor = null;\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'timedelta' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "final|boolean|restarting": {
+                "identifier": "final|boolean|restarting",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 20:21:54",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def cancel(evictor: \"BaseGenericObjectPool\", timeout: timedelta, restarting: bool) -> None:",
+            "        if evictor is not None:",
+            "            evictor.cancel()",
+            "            EvictionTimer.__remove(evictor)",
+            "        if not restarting and EvictionTimer.__executor is not None and len(EvictionTimer.__taskMap) == 0:",
+            "            EvictionTimer.__executor.shutdown()",
+            "            try:",
+            "                EvictionTimer.__executor.awaitTermination(timeout.total_seconds(), \"MILLISECONDS\")",
+            "            except Exception as e:",
+            "                pass",
+            "            EvictionTimer.__executor._max_workers = 0",
+            "            EvictionTimer.__executor = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 49.83637976646423,
+          "generation_timestamp": "2026-02-23T10:34:37.703865",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def cancel(evictor: \"BaseGenericObjectPool\", timeout: timedelta, restarting: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "137-139:getNumTasks": {
+          "start": 137,
+          "end": 139,
+          "body": [
+            "static synchronized int getNumTasks() {",
+            "        return taskMap.size();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "getNumTasks()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.HashMap",
+              "size()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 20:22:34",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getNumTasks() -> int:",
+            "        return len(EvictionTimer.__taskMap)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 48.38395094871521,
+          "generation_timestamp": "2026-02-23T10:33:31.444063",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getNumTasks() -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "146-154:remove": {
+          "start": 146,
+          "end": 154,
+          "body": [
+            "private static void remove(final BaseGenericObjectPool<?>.Evictor evictor) {",
+            "        for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {",
+            "            if (entry.getKey().get() == evictor) {",
+            "                executor.remove(entry.getValue());",
+            "                taskMap.remove(entry.getKey());",
+            "                break;",
+            "            }",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Entry<WeakReference<Runnable>, WeakRunner>",
+            "WeakReference<Runnable>"
+          ],
+          "signature": "remove(final BaseGenericObjectPool<?>.Evictor evictor)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "BaseGenericObjectPool<?>.Evictor",
+              "name": "evictor"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.HashMap",
+              "entrySet()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getKey()"
+            ],
+            [
+              "library",
+              "java.lang.ref.WeakReference",
+              "get()"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getValue()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "remove(java.lang.Runnable)"
+            ],
+            [
+              "library",
+              "java.util.HashMap",
+              "remove(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 20:22:34",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Entry<WeakReference<Runnable>, WeakRunner>": {
+                "identifier": "Entry<WeakReference<Runnable>, WeakRunner>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:23:15",
+                "source_type": "Entry<WeakReference<Runnable>, WeakRunner>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import Dict, Tuple\nfrom weakref import WeakValueDictionary, ref\n```\n\nPYTHON TRANSLATION:\n```python\nDict[Tuple[WeakValueDictionary, 'Runnable'], 'WeakRunner']\n```\n\nREASONING:\nIn Python, the equivalent type for `Entry<WeakReference<Runnable>, WeakRunner>` is a dictionary where keys are tuples of weak references to Runnable objects and values are WeakRunner objects. The reason for using weak references here is that they allow garbage collection when an object is no longer in use, which is similar to how Java's WeakReference works.\n",
+                "imports": "from typing import Dict, Tuple\nfrom weakref import WeakValueDictionary, ref",
+                "translated_target_type": "Dict[Tuple[WeakValueDictionary, 'Runnable'], 'WeakRunner']",
+                "reasoning": "In Python, the equivalent type for `Entry<WeakReference<Runnable>, WeakRunner>` is a dictionary where keys are tuples of weak references to Runnable objects and values are WeakRunner objects. The reason for using weak references here is that they allow garbage collection when an object is no longer in use, which is similar to how Java's WeakReference works.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nEntry<WeakReference<Runnable>, WeakRunner>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static void remove(final BaseGenericObjectPool<?>.Evictor evictor) {\n        for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {\n            if (entry.getKey().get() == evictor) {\n                executor.remove(entry.getValue());\n                taskMap.remove(entry.getKey());\n                break;\n            }\n        }\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "WeakReference<Runnable>": {
+                "identifier": "WeakReference<Runnable>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:24:00",
+                "source_type": "WeakReference<Runnable>",
+                "generation": "I apologize for the confusion. The type `Runnable` is not defined in Python, so I can't provide a direct translation. However, if we assume that `Runnable` is equivalent to a function or method in Python, then you could use `weakref.ref` to create weak references to these functions/methods.\n\nHere's how you might do it:\n\nPYTHON IMPORTS:\n```python\nfrom typing import Callable\nimport threading\nimport weakref\n```\n\nPYTHON TRANSLATION:\n```python\nweakref.ref[Callable]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `WeakReference<Runnable>` is `weakref.ref` from the `weakref` module in Python. This type creates a weak reference to an object (in this case, a function or method). The difference between `weakref.ref` and `weakref.WeakValueDictionary` is that the former only holds a single reference while the latter can hold multiple references. In this context, we are using it as a dictionary where the keys are weak references to functions/methods (which are tasks) and the values are threads executing these tasks.\n",
+                "imports": "from typing import Callable\nimport threading\nimport weakref",
+                "translated_target_type": "weakref.ref[Callable]",
+                "reasoning": "In Python, the equivalent of Java's `WeakReference<Runnable>` is `weakref.ref` from the `weakref` module in Python. This type creates a weak reference to an object (in this case, a function or method). The difference between `weakref.ref` and `weakref.WeakValueDictionary` is that the former only holds a single reference while the latter can hold multiple references. In this context, we are using it as a dictionary where the keys are weak references to functions/methods (which are tasks) and the values are threads executing these tasks.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWeakReference<Runnable>\n```\n\nJAVA TYPE DESCRIPTION:\nWeak reference objects, which do not prevent their referents from being\n made finalizable, finalized, and then reclaimed.  Weak references are most\n often used to implement canonicalizing mappings.\n\n\nJAVA CODE:\n```\n    private static void remove(final BaseGenericObjectPool<?>.Evictor evictor) {\n        for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {\n            if (entry.getKey().get() == evictor) {\n                executor.remove(entry.getValue());\n                taskMap.remove(entry.getKey());\n                break;\n            }\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Runnable' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "final|BaseGenericObjectPool<?>.Evictor|evictor": {
+                "identifier": "final|BaseGenericObjectPool<?>.Evictor|evictor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 20:22:54",
+                "source_type": "BaseGenericObjectPool<?>.Evictor",
+                "generation": "I apologize for the confusion. The previous response was incorrect and it caused an error. I'll provide a correct translation now. \n\nIMPORTS:\n```python\nfrom typing import TypeVar, Generic, Any\n```\n\nTRANSLATION:\n```python\nT = TypeVar('T')\nclass BaseGenericObjectPool(Generic[T]):\n    class Evictor:\n        pass\n```\n\nREASONING:\nIn Python, we don't have the same concept of inner classes as in Java. Instead, we can define a class inside another class to achieve similar functionality. Here, I created an `Evictor` class inside the `BaseGenericObjectPool` class. The `TypeVar('T')` is used to create a placeholder for any type that will be provided later when creating instances of this class.\n",
+                "imports": "",
+                "translated_target_type": "BaseGenericObjectPool",
+                "reasoning": "Custom type BaseGenericObjectPool is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseGenericObjectPool<?>.Evictor\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static void remove(final BaseGenericObjectPool<?>.Evictor evictor) {\n        for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {\n            if (entry.getKey().get() == evictor) {\n                executor.remove(entry.getValue());\n                taskMap.remove(entry.getKey());\n                break;\n            }\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __remove(evictor: \"BaseGenericObjectPool\") -> None:",
+            "        for entry in list(__taskMap.items()):",
+            "            if entry[0]() == evictor:",
+            "                __executor.cancel(entry[1])",
+            "                del taskMap[ref(evictor)]",
+            "                break"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.116900205612183,
+          "generation_timestamp": "2026-02-23T10:33:47.761573",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __remove(evictor: \"BaseGenericObjectPool\") -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "167-167:EvictionTimer": {
+          "start": 167,
+          "end": 167,
+          "body": [
+            "private EvictionTimer() {}"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "EvictionTimer()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.1363818645477295,
+          "generation_timestamp": "2026-02-23T10:34:37.959965",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "172-177:toString": {
+          "start": 172,
+          "end": 177,
+          "body": [
+            "@Override",
+            "    public String toString() {",
+            "        final StringBuilder builder = new StringBuilder();",
+            "        builder.append(\"EvictionTimer []\");",
+            "        return builder.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "StringBuilder"
+          ],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 20:24:19",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:24:19",
+                "source_type": "StringBuilder",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom io import StringIO\n```\n\nPYTHON TRANSLATION:\n```python\nStringIO\n```\n\nREASONING: \nIn Python, the equivalent type to Java's `StringBuilder` is `StringIO` from the `io` module. This class provides a way to create a mutable string buffer that can be used in place of StringBuffer in places where the string buffer was being used by a single thread. It also supports the same API as `StringBuilder`, which means it can be used as a drop-in replacement for `StringBuilder` in Python code.\n",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the equivalent type to Java's `StringBuilder` is `StringIO` from the `io` module. This class provides a way to create a mutable string buffer that can be used in place of StringBuffer in places where the string buffer was being used by a single thread. It also supports the same API as `StringBuilder`, which means it can be used as a drop-in replacement for `StringBuilder` in Python code.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nStringBuilder\n```\n\nJAVA TYPE DESCRIPTION:\nA mutable sequence of characters.  This class provides an API compatible\n with StringBuffer, but with no guarantee of synchronization.\n This class is designed for use as a drop-in replacement for\n StringBuffer in places where the string buffer was being\n used by a single thread (as is generally the case).   Where possible,\n it is recommended that this class be used in preference to\n StringBuffer as it will be faster under most implementations.\n\n\nJAVA CODE:\n```\n    @Override\n    public String toString() {\n        final StringBuilder builder = new StringBuilder();\n        builder.append(\"EvictionTimer []\");\n        return builder.toString();\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        builder = StringIO()",
+            "        builder.write(\"EvictionTimer []\")",
+            "        return builder.getvalue()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 32.0707733631134,
+          "generation_timestamp": "2026-02-23T10:35:10.140848",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "101-101:executor": {
+          "start": 101,
+          "end": 101,
+          "enum_constant": false,
+          "body": [
+            "private static ScheduledThreadPoolExecutor executor;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "ScheduledThreadPoolExecutor"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "ScheduledThreadPoolExecutor": {
+                "identifier": "ScheduledThreadPoolExecutor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 20:19:18",
+                "source_type": "ScheduledThreadPoolExecutor",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom concurrent.futures import ThreadPoolExecutor\nimport threading\n```\n\nPYTHON TRANSLATION:\n```python\nthreading.Timer\n```\n\nREASONING:\nIn Python, the equivalent of ScheduledThreadPoolExecutor is not a direct translation because it doesn't exist in the standard library. However, we can use threading.Timer to achieve similar functionality. ThreadPoolExecutor and Timer are both used for scheduling tasks to run at a later time or periodically. The main difference between them is that ThreadPoolExecutor allows multiple threads while Timer only runs on a single thread. In this case, since the original Java code uses ScheduledThreadPoolExecutor which allows multiple threads, we can use ThreadPoolExecutor in Python as well.\n",
+                "imports": "from concurrent.futures import ThreadPoolExecutor\nimport threading",
+                "translated_target_type": "threading.Timer",
+                "reasoning": "In Python, the equivalent of ScheduledThreadPoolExecutor is not a direct translation because it doesn't exist in the standard library. However, we can use threading.Timer to achieve similar functionality. ThreadPoolExecutor and Timer are both used for scheduling tasks to run at a later time or periodically. The main difference between them is that ThreadPoolExecutor allows multiple threads while Timer only runs on a single thread. In this case, since the original Java code uses ScheduledThreadPoolExecutor which allows multiple threads, we can use ThreadPoolExecutor in Python as well.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nScheduledThreadPoolExecutor\n```\n\nJAVA TYPE DESCRIPTION:\nA ThreadPoolExecutor that can additionally schedule\n commands to run after a given delay, or to execute periodically.\n This class is preferable to Timer when multiple\n worker threads are needed, or when the additional flexibility or\n capabilities of ThreadPoolExecutor (which this class\n extends) are required.\n\n\nJAVA CODE:\n```\n    private static ScheduledThreadPoolExecutor executor;\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __executor: threading.Timer = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __executor: threading.Timer = None"
+          ]
+        },
+        "104-105:taskMap": {
+          "start": 104,
+          "end": 105,
+          "enum_constant": false,
+          "body": [
+            "private static final HashMap<WeakReference<Runnable>, WeakRunner> taskMap =",
+            "            new HashMap<>();"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "HashMap<WeakReference<Runnable>, WeakRunner>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "HashMap<WeakReference<Runnable>, WeakRunner>": {
+                "identifier": "HashMap<WeakReference<Runnable>, WeakRunner>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 20:19:58",
+                "source_type": "HashMap<WeakReference<Runnable>, WeakRunner>",
+                "generation": "I apologize for the confusion. The `Any` type is not defined in Python, and it's not necessary to import it. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom weakref import WeakKeyDictionary, ref\nfrom typing import Callable\n```\n\nPYTHON TRANSLATION:\n```python\nWeakKeyDictionary[Callable[[], None], Any]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `HashMap` is `dict`. However, since we are dealing with weak references in this case (i.e., keys and values that can be garbage collected if they are not referenced elsewhere), we should use `WeakKeyDictionary` from the `weakref` module. Also, Python does not have a direct equivalent to Java's `Runnable` interface, so I used `Callable[[], None]` which represents a function that takes no arguments and returns nothing (similar to Java's `void`). The value can be of any type, hence the use of `Any`.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type HashMap<WeakReference<Runnable>, WeakRunner> has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nHashMap<WeakReference<Runnable>, WeakRunner>\n```\n\nJAVA TYPE DESCRIPTION:\nHash table based implementation of the Map interface.  This\n implementation provides all of the optional map operations, and permits\n null values and the null key.  (The HashMap\n class is roughly equivalent to Hashtable, except that it is\n unsynchronized and permits nulls.)  This class makes no guarantees as to\n the order of the map; in particular, it does not guarantee that the order\n will remain constant over time.\n\n\nJAVA CODE:\n```\n    private static final HashMap<WeakReference<Runnable>, WeakRunner> taskMap =\n            new HashMap<>();\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Any' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 78.02825903892517,
+          "generation_timestamp": "2026-02-23T04:16:02.509808",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __taskMap: object = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class EvictionTimer:\n\n"
+    },
+    "52-69:Reaper": {
+      "start": 52,
+      "end": 69,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "nested_inside": "42-178:EvictionTimer",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "53-68:run": {
+          "start": 53,
+          "end": 68,
+          "body": [
+            "@Override",
+            "        public void run() {",
+            "            synchronized (EvictionTimer.class) {",
+            "                for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {",
+            "                    if (entry.getKey().get() == null) {",
+            "                        executor.remove(entry.getValue());",
+            "                        taskMap.remove(entry.getKey());",
+            "                    }",
+            "                }",
+            "                if (taskMap.isEmpty() && executor != null) {",
+            "                    executor.shutdown();",
+            "                    executor.setCorePoolSize(0);",
+            "                    executor = null;",
+            "                }",
+            "            }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "EvictionTimer",
+            "Entry<WeakReference<Runnable>, WeakRunner>",
+            "WeakReference<Runnable>"
+          ],
+          "signature": "run()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.HashMap",
+              "entrySet()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getKey()"
+            ],
+            [
+              "library",
+              "java.lang.ref.WeakReference",
+              "get()"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getValue()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "remove(java.lang.Runnable)"
+            ],
+            [
+              "library",
+              "java.util.HashMap",
+              "remove(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.util.HashMap",
+              "isEmpty()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "shutdown()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "setCorePoolSize(int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 20:24:48",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "EvictionTimer": {
+                "identifier": "EvictionTimer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:24:48",
+                "source_type": "EvictionTimer",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "EvictionTimer",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Entry<WeakReference<Runnable>, WeakRunner>": {
+                "identifier": "Entry<WeakReference<Runnable>, WeakRunner>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:24:48",
+                "source_type": "Entry<WeakReference<Runnable>, WeakRunner>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import Dict, Any\nfrom collections.abc import Callable\n```\n\nPYTHON TRANSLATION:\n```python\nDict[Callable[[Any], None], Any]\n```\n\nREASONING:\nIn the given Java code, `Entry<WeakReference<Runnable>, WeakRunner>` is used as a type for an entry in a map. In Python, we can use the built-in `dict` data structure to achieve similar functionality. The key of this dictionary would be a function (represented by `Callable[[Any], None]`) that takes any argument and returns nothing (similar to Java's `Runnable`), and the value could be anything (represented by `Any`).\n",
+                "imports": "from typing import Dict, Any\nfrom collections.abc import Callable",
+                "translated_target_type": "Dict[Callable[[Any], None], Any]",
+                "reasoning": "In the given Java code, `Entry<WeakReference<Runnable>, WeakRunner>` is used as a type for an entry in a map. In Python, we can use the built-in `dict` data structure to achieve similar functionality. The key of this dictionary would be a function (represented by `Callable[[Any], None]`) that takes any argument and returns nothing (similar to Java's `Runnable`), and the value could be anything (represented by `Any`).",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nEntry<WeakReference<Runnable>, WeakRunner>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Override\n        public void run() {\n            synchronized (EvictionTimer.class) {\n                for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {\n                    if (entry.getKey().get() == null) {\n                        executor.remove(entry.getValue());\n                        taskMap.remove(entry.getKey());\n                    }\n                }\n                if (taskMap.isEmpty() && executor != null) {\n                    executor.shutdown();\n                    executor.setCorePoolSize(0);\n                    executor = null;\n                }\n            }\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "WeakReference<Runnable>": {
+                "identifier": "WeakReference<Runnable>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:24:59",
+                "source_type": "WeakReference<Runnable>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom weakref import WeakKeyDictionary, ref\nimport threading\n```\n\nPYTHON TRANSLATION:\n```python\nWeakKeyDictionary[threading.Thread, None]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `WeakReference<Runnable>` is `weakref.ref` from the `weakref` module in Python. However, since we are dealing with threads here (as seen by `threading.Thread`), it would be more appropriate to use a `WeakKeyDictionary` instead of a regular dictionary. This is because when all references to a key-value pair in a dictionary are removed, the garbage collector will remove the key as well. However, since threads are long-lived objects and we want them to be cleaned up by the garbage collector when they finish their execution, `WeakKeyDictionary` is more appropriate here.\n",
+                "imports": "from weakref import WeakKeyDictionary, ref\nimport threading",
+                "translated_target_type": "WeakKeyDictionary[threading.Thread, None]",
+                "reasoning": "In Python, the equivalent of Java's `WeakReference<Runnable>` is `weakref.ref` from the `weakref` module in Python. However, since we are dealing with threads here (as seen by `threading.Thread`), it would be more appropriate to use a `WeakKeyDictionary` instead of a regular dictionary. This is because when all references to a key-value pair in a dictionary are removed, the garbage collector will remove the key as well. However, since threads are long-lived objects and we want them to be cleaned up by the garbage collector when they finish their execution, `WeakKeyDictionary` is more appropriate here.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWeakReference<Runnable>\n```\n\nJAVA TYPE DESCRIPTION:\nWeak reference objects, which do not prevent their referents from being\n made finalizable, finalized, and then reclaimed.  Weak references are most\n often used to implement canonicalizing mappings.\n\n\nJAVA CODE:\n```\n    @Override\n        public void run() {\n            synchronized (EvictionTimer.class) {\n                for (final Entry<WeakReference<Runnable>, WeakRunner> entry : taskMap.entrySet()) {\n                    if (entry.getKey().get() == null) {\n                        executor.remove(entry.getValue());\n                        taskMap.remove(entry.getKey());\n                    }\n                }\n                if (taskMap.isEmpty() && executor != null) {\n                    executor.shutdown();\n                    executor.setCorePoolSize(0);\n                    executor = null;\n                }\n            }\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def run(self) -> None:",
+            "        with ThreadPoolExecutor() as executor:",
+            "            for task, runner in list(EvictionTimer.__taskMap.items()):",
+            "                if task() is None:",
+            "                    executor.shutdown(wait=False, cancel_futures=True)",
+            "                    EvictionTimer.__executor = None",
+            "                    EvitionTimer.__taskMap.clear()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.080495357513428,
+          "generation_timestamp": "2026-02-23T10:35:40.338189",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def run(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class Reaper:\n\n"
+    },
+    "75-98:WeakRunner": {
+      "start": 75,
+      "end": 98,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "nested_inside": "42-178:EvictionTimer",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "84-86:WeakRunner": {
+          "start": 84,
+          "end": 86,
+          "body": [
+            "private WeakRunner(final WeakReference<Runnable> ref) {",
+            "            this.ref = ref;",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "WeakRunner(final WeakReference<Runnable> ref)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "WeakReference<Runnable>",
+              "name": "ref"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|WeakReference<Runnable>|ref": {
+                "identifier": "final|WeakReference<Runnable>|ref",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 20:26:59",
+                "source_type": "WeakReference<Runnable>",
+                "generation": "I apologize for the confusion. The `Runnable` class is not defined in Python, so I can't provide a direct translation. However, if you have an equivalent class or function in Python that performs the same functionality as the Java `Runnable` interface, please provide it and I will be happy to help with the rest of the translation.\n",
+                "imports": "from typing import Callable\nimport threading\nimport weakref",
+                "translated_target_type": "weakref.ref[Callable]",
+                "reasoning": "In Python, the equivalent of Java's `WeakReference<Runnable>` is `weakref.ref` from the `weakref` module in Python. This type creates a weak reference to an object (in this case, a function or method). The difference between `weakref.ref` and `weakref.WeakValueDictionary` is that the former only holds a single reference while the latter can hold multiple references. In this context, we are using it as a dictionary where the keys are weak references to functions/methods (which are tasks) and the values are threads executing these tasks.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWeakReference<Runnable>\n```\n\nJAVA TYPE DESCRIPTION:\nWeak reference objects, which do not prevent their referents from being\n made finalizable, finalized, and then reclaimed.  Weak references are most\n often used to implement canonicalizing mappings.\n\n\nJAVA CODE:\n```\n    private WeakRunner(final WeakReference<Runnable> ref) {\n            this.ref = ref;\n        }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Runnable' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, ref: weakref.ref[Callable]) -> None:",
+            "        self.__ref = ref"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.70849323272705,
+          "generation_timestamp": "2026-02-23T10:36:11.452377",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, ref: weakref.ref[Callable]) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "88-97:run": {
+          "start": 88,
+          "end": 97,
+          "body": [
+            "@Override",
+            "        public void run() {",
+            "            final Runnable task = ref.get();",
+            "            if (task != null) {",
+            "                task.run();",
+            "            } else {",
+            "                executor.remove(this);",
+            "                taskMap.remove(ref);",
+            "            }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Runnable"
+          ],
+          "signature": "run()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.ref.WeakReference",
+              "get()"
+            ],
+            [
+              "library",
+              "java.lang.Runnable",
+              "run()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ScheduledThreadPoolExecutor",
+              "remove(java.lang.Runnable)"
+            ],
+            [
+              "library",
+              "java.util.HashMap",
+              "remove(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 20:27:10",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Runnable": {
+                "identifier": "Runnable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 20:27:10",
+                "source_type": "Runnable",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom threading import Thread\n```\n\nPYTHON TRANSLATION:\n```python\nThread\n```\n\nREASONING:\nIn Python, the equivalent of Java's `Runnable` is `Thread`. In Java, a `Runnable` represents an operation that does not return a result and can be executed by other threads. In Python, we use the `Thread` class to create new threads which are similar in functionality to Java's `Runnable`.\n",
+                "imports": "from threading import Thread",
+                "translated_target_type": "Thread",
+                "reasoning": "In Python, the equivalent of Java's `Runnable` is `Thread`. In Java, a `Runnable` represents an operation that does not return a result and can be executed by other threads. In Python, we use the `Thread` class to create new threads which are similar in functionality to Java's `Runnable`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nRunnable\n```\n\nJAVA TYPE DESCRIPTION:\nRepresents an operation that does not return a result.\n\n\nJAVA CODE:\n```\n    @Override\n        public void run() {\n            final Runnable task = ref.get();\n            if (task != null) {\n                task.run();\n            } else {\n                executor.remove(this);\n                taskMap.remove(ref);\n            }\n        }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def run(self) -> None:",
+            "        task = self.__ref()",
+            "        if task is not None:",
+            "            task.run()",
+            "        else:",
+            "            EvictionTimer.__executor.remove(self)",
+            "            EvictionTimer.__taskMap.pop(self.__ref, None)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 21.119576454162598,
+          "generation_timestamp": "2026-02-23T10:36:32.696883",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def run(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "77-77:ref": {
+          "start": 77,
+          "end": 77,
+          "enum_constant": false,
+          "body": [
+            "private final WeakReference<Runnable> ref;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "WeakReference<Runnable>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "WeakReference<Runnable>": {
+                "identifier": "WeakReference<Runnable>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 20:26:26",
+                "source_type": "WeakReference<Runnable>",
+                "generation": "I apologize for the confusion. The `Runnable` class is not defined in Python, so we can't use it directly. However, you could define a custom function or class that implements the same functionality as `Runnable` and then use that instead of `Runnable`. Here's an example:\n\nPYTHON IMPORTS:\n```python\nfrom weakref import WeakKeyDictionary\n```\n\nPYTHON TRANSLATION:\n```python\nWeakKeyDictionary[callable]\n```\n\nREASONING: \nIn Python, the equivalent of Java's `WeakReference` is provided by the `weakref` module. Specifically, we can use either `WeakValueDictionary` or `WeakKeyDictionary` depending on whether we want to associate values with keys (`WeakValueDictionary`) or keys with values (`WeakKeyDictionary`). In this case, since we are associating keys (callable objects) with values (some value), we use `WeakKeyDictionary`.\n",
+                "imports": "from weakref import WeakKeyDictionary",
+                "translated_target_type": "WeakKeyDictionary[callable]",
+                "reasoning": "In Python, the equivalent of Java's `WeakReference` is provided by the `weakref` module. Specifically, we can use either `WeakValueDictionary` or `WeakKeyDictionary` depending on whether we want to associate values with keys (`WeakValueDictionary`) or keys with values (`WeakKeyDictionary`). In this case, since we are associating keys (callable objects) with values (some value), we use `WeakKeyDictionary`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWeakReference<Runnable>\n```\n\nJAVA TYPE DESCRIPTION:\nWeak reference objects, which do not prevent their referents from being\n made finalizable, finalized, and then reclaimed.  Weak references are most\n often used to implement canonicalizing mappings.\n\n\nJAVA CODE:\n```\n    private final WeakReference<Runnable> ref;\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Runnable' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __ref: WeakKeyDictionary[callable] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __ref: WeakKeyDictionary[callable] = None"
+          ]
+        }
+      },
+      "python_class_declaration": "class WeakRunner:\n\n"
+    }
+  },
+  "import_map": {
+    "WeakReference": "java.lang.ref.WeakReference",
+    "Duration": "java.time.Duration",
+    "HashMap": "java.util.HashMap",
+    "Entry": "java.util.Map.Entry",
+    "ScheduledThreadPoolExecutor": "java.util.concurrent.ScheduledThreadPoolExecutor",
+    "TimeUnit": "java.util.concurrent.TimeUnit"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from concurrent.futures import ThreadPoolExecutor\nimport threading",
+    "from concurrent.futures import ThreadPoolExecutor, as_completed\nimport random",
+    "from datetime import timedelta",
+    "from io import StringIO",
+    "from typing import Callable\nimport threading\nimport weakref",
+    "from typing import Dict, Tuple\nfrom weakref import WeakValueDictionary, ref",
+    "from weakref import WeakKeyDictionary"
+  ]
+}

@@ -1,0 +1,4589 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/AnsiConsole.java",
+  "imports": {
+    "18-18:import org.fusesource.jansi.internal.CLibrary;": {
+      "start": 18,
+      "end": 18,
+      "body": "import org.fusesource.jansi.internal.CLibrary;"
+    },
+    "19-19:import org.fusesource.jansi.internal.CLibrary.WinSize;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.fusesource.jansi.internal.CLibrary.WinSize;"
+    },
+    "20-20:import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;"
+    },
+    "21-21:import org.fusesource.jansi.internal.MingwSupport;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.fusesource.jansi.internal.MingwSupport;"
+    },
+    "22-22:import org.fusesource.jansi.io.AnsiOutputStream;": {
+      "start": 22,
+      "end": 22,
+      "body": "import org.fusesource.jansi.io.AnsiOutputStream;"
+    },
+    "23-23:import org.fusesource.jansi.io.AnsiProcessor;": {
+      "start": 23,
+      "end": 23,
+      "body": "import org.fusesource.jansi.io.AnsiProcessor;"
+    },
+    "24-24:import org.fusesource.jansi.io.FastBufferedOutputStream;": {
+      "start": 24,
+      "end": 24,
+      "body": "import org.fusesource.jansi.io.FastBufferedOutputStream;"
+    },
+    "25-25:import org.fusesource.jansi.io.WindowsAnsiProcessor;": {
+      "start": 25,
+      "end": 25,
+      "body": "import org.fusesource.jansi.io.WindowsAnsiProcessor;"
+    },
+    "27-27:import java.io.FileDescriptor;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.io.FileDescriptor;"
+    },
+    "28-28:import java.io.FileOutputStream;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.io.FileOutputStream;"
+    },
+    "29-29:import java.io.IOError;": {
+      "start": 29,
+      "end": 29,
+      "body": "import java.io.IOError;"
+    },
+    "30-30:import java.io.IOException;": {
+      "start": 30,
+      "end": 30,
+      "body": "import java.io.IOException;"
+    },
+    "31-31:import java.io.OutputStream;": {
+      "start": 31,
+      "end": 31,
+      "body": "import java.io.OutputStream;"
+    },
+    "32-32:import java.io.PrintStream;": {
+      "start": 32,
+      "end": 32,
+      "body": "import java.io.PrintStream;"
+    },
+    "33-33:import java.io.UnsupportedEncodingException;": {
+      "start": 33,
+      "end": 33,
+      "body": "import java.io.UnsupportedEncodingException;"
+    },
+    "34-34:import java.nio.charset.Charset;": {
+      "start": 34,
+      "end": 34,
+      "body": "import java.nio.charset.Charset;"
+    },
+    "35-35:import java.nio.charset.UnsupportedCharsetException;": {
+      "start": 35,
+      "end": 35,
+      "body": "import java.nio.charset.UnsupportedCharsetException;"
+    },
+    "36-36:import java.util.Locale;": {
+      "start": 36,
+      "end": 36,
+      "body": "import java.util.Locale;"
+    },
+    "38-38:import static org.fusesource.jansi.internal.CLibrary.ioctl;": {
+      "start": 38,
+      "end": 38,
+      "body": "import static org.fusesource.jansi.internal.CLibrary.ioctl;"
+    },
+    "39-39:import static org.fusesource.jansi.internal.CLibrary.isatty;": {
+      "start": 39,
+      "end": 39,
+      "body": "import static org.fusesource.jansi.internal.CLibrary.isatty;"
+    },
+    "40-40:import static org.fusesource.jansi.internal.Kernel32.GetConsoleMode;": {
+      "start": 40,
+      "end": 40,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleMode;"
+    },
+    "41-41:import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;": {
+      "start": 41,
+      "end": 41,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;"
+    },
+    "42-42:import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;": {
+      "start": 42,
+      "end": 42,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;"
+    },
+    "43-43:import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;": {
+      "start": 43,
+      "end": 43,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;"
+    },
+    "44-44:import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;": {
+      "start": 44,
+      "end": 44,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;"
+    },
+    "45-45:import static org.fusesource.jansi.internal.Kernel32.SetConsoleMode;": {
+      "start": 45,
+      "end": 45,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleMode;"
+    }
+  },
+  "classes": {
+    "61-571:AnsiConsole": {
+      "start": 61,
+      "end": 571,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "198-204:getTerminalWidth": {
+          "start": 198,
+          "end": 204,
+          "body": [
+            "public static int getTerminalWidth() {",
+            "        int w = out().getTerminalWidth();",
+            "        if (w <= 0) {",
+            "            w = err().getTerminalWidth();",
+            "        }",
+            "        return w;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "getTerminalWidth()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "478-481:out"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "76-78:getTerminalWidth"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "500-503:err"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getTerminalWidth() -> int:",
+            "        w = AnsiConsole.out().getTerminalWidth()",
+            "        if w <= 0:",
+            "            w = AnsiConsole.err().getTerminalWidth()",
+            "        return w"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.759433031082153,
+          "generation_timestamp": "2025-11-04T21:40:25.718941",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getTerminalWidth() -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "235-235:AnsiConsole": {
+          "start": 235,
+          "end": 235,
+          "body": [
+            "private AnsiConsole() {}"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "AnsiConsole()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.1979966163635254,
+          "generation_timestamp": "2025-11-04T20:26:18.525621",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "237-444:ansiStream": {
+          "start": 237,
+          "end": 444,
+          "body": [
+            "private static AnsiPrintStream ansiStream(boolean stdout) {",
+            "        FileDescriptor descriptor = stdout ? FileDescriptor.out : FileDescriptor.err;",
+            "        final OutputStream out = new FastBufferedOutputStream(new FileOutputStream(descriptor));",
+            "",
+            "        String enc = System.getProperty(stdout ? \"stdout.encoding\" : \"stderr.encoding\");",
+            "        if (enc == null) {",
+            "            enc = System.getProperty(stdout ? \"sun.stdout.encoding\" : \"sun.stderr.encoding\");",
+            "        }",
+            "",
+            "        final boolean isatty;",
+            "        boolean isAtty;",
+            "        boolean withException;",
+            "        // Do not use the CLibrary.STDOUT_FILENO to avoid errors in case",
+            "        // the library can not be loaded on unsupported platforms",
+            "        final int fd = stdout ? STDOUT_FILENO : STDERR_FILENO;",
+            "        try {",
+            "            // If we can detect that stdout is not a tty.. then setup",
+            "            // to strip the ANSI sequences..",
+            "            isAtty = isatty(fd) != 0;",
+            "            String term = System.getenv(\"TERM\");",
+            "            String emacs = System.getenv(\"INSIDE_EMACS\");",
+            "            if (isAtty && \"dumb\".equals(term) && emacs != null && !emacs.contains(\"comint\")) {",
+            "                isAtty = false;",
+            "            }",
+            "            withException = false;",
+            "        } catch (Throwable ignore) {",
+            "            // These errors happen if the JNI lib is not available for your platform.",
+            "            // But since we are on ANSI friendly platform, assume the user is on the console.",
+            "            isAtty = false;",
+            "            withException = true;",
+            "        }",
+            "        isatty = isAtty;",
+            "",
+            "        final AnsiOutputStream.WidthSupplier width;",
+            "        final AnsiProcessor processor;",
+            "        final AnsiType type;",
+            "        final AnsiOutputStream.IoRunnable installer;",
+            "        final AnsiOutputStream.IoRunnable uninstaller;",
+            "        if (!isatty) {",
+            "            processor = null;",
+            "            type = withException ? AnsiType.Unsupported : AnsiType.Redirected;",
+            "            installer = uninstaller = null;",
+            "            width = new AnsiOutputStream.ZeroWidthSupplier();",
+            "        } else if (IS_WINDOWS) {",
+            "            final long console = GetStdHandle(stdout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);",
+            "            final int[] mode = new int[1];",
+            "            final boolean isConsole = GetConsoleMode(console, mode) != 0;",
+            "            final AnsiOutputStream.WidthSupplier kernel32Width = new AnsiOutputStream.WidthSupplier() {",
+            "                @Override",
+            "                public int getTerminalWidth() {",
+            "                    CONSOLE_SCREEN_BUFFER_INFO info = new CONSOLE_SCREEN_BUFFER_INFO();",
+            "                    GetConsoleScreenBufferInfo(console, info);",
+            "                    return info.windowWidth();",
+            "                }",
+            "            };",
+            "",
+            "            if (isConsole && SetConsoleMode(console, mode[0] | ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0) {",
+            "                SetConsoleMode(console, mode[0]); // set it back for now, but we know it works",
+            "                processor = null;",
+            "                type = AnsiType.VirtualTerminal;",
+            "                installer = () -> {",
+            "                    synchronized (AnsiConsole.class) {",
+            "                        virtualProcessing++;",
+            "                        SetConsoleMode(console, mode[0] | ENABLE_VIRTUAL_TERMINAL_PROCESSING);",
+            "                    }",
+            "                };",
+            "                uninstaller = () -> {",
+            "                    synchronized (AnsiConsole.class) {",
+            "                        if (--virtualProcessing == 0) {",
+            "                            SetConsoleMode(console, mode[0]);",
+            "                        }",
+            "                    }",
+            "                };",
+            "                width = kernel32Width;",
+            "            } else if ((IS_CONEMU || IS_CYGWIN || IS_MSYSTEM) && !isConsole) {",
+            "                // ANSI-enabled ConEmu, Cygwin or MSYS(2) on Windows...",
+            "                processor = null;",
+            "                type = AnsiType.Native;",
+            "                installer = uninstaller = null;",
+            "                MingwSupport mingw = new MingwSupport();",
+            "                String name = mingw.getConsoleName(stdout);",
+            "                if (name != null && !name.isEmpty()) {",
+            "                    width = () -> mingw.getTerminalWidth(name);",
+            "                } else {",
+            "                    width = () -> -1;",
+            "                }",
+            "            } else {",
+            "                // On Windows, when no ANSI-capable terminal is used, we know the console does not natively interpret",
+            "                // ANSI",
+            "                // codes but we can use jansi Kernel32 API for console",
+            "                AnsiProcessor proc;",
+            "                AnsiType ttype;",
+            "                try {",
+            "                    proc = new WindowsAnsiProcessor(out, console);",
+            "                    ttype = AnsiType.Emulation;",
+            "                } catch (Throwable ignore) {",
+            "                    // this happens when the stdout is being redirected to a file.",
+            "                    // Use the AnsiProcessor to strip out the ANSI escape sequences.",
+            "                    proc = new AnsiProcessor(out);",
+            "                    ttype = AnsiType.Unsupported;",
+            "                }",
+            "                processor = proc;",
+            "                type = ttype;",
+            "                installer = uninstaller = null;",
+            "                width = kernel32Width;",
+            "            }",
+            "        }",
+            "",
+            "        // We must be on some Unix variant...",
+            "        else {",
+            "            // ANSI-enabled ConEmu, Cygwin or MSYS(2) on Windows...",
+            "            processor = null;",
+            "            type = AnsiType.Native;",
+            "            installer = uninstaller = null;",
+            "            width = new AnsiOutputStream.WidthSupplier() {",
+            "                @Override",
+            "                public int getTerminalWidth() {",
+            "                    WinSize sz = new WinSize((short) 0, (short) 0);",
+            "                    ioctl(fd, CLibrary.TIOCGWINSZ, sz);",
+            "                    return sz.ws_col;",
+            "                }",
+            "            };",
+            "        }",
+            "",
+            "        AnsiMode mode;",
+            "",
+            "        // If the jansi.mode property is set, use it",
+            "        String jansiMode = System.getProperty(stdout ? JANSI_OUT_MODE : JANSI_ERR_MODE, System.getProperty(JANSI_MODE));",
+            "        if (JANSI_MODE_FORCE.equals(jansiMode)) {",
+            "            mode = AnsiMode.Force;",
+            "        } else if (JANSI_MODE_STRIP.equals(jansiMode)) {",
+            "            mode = AnsiMode.Strip;",
+            "        } else if (jansiMode != null) {",
+            "            mode = isatty ? AnsiMode.Default : AnsiMode.Strip;",
+            "        }",
+            "",
+            "        // If the jansi.passthrough property is set, then don't interpret",
+            "        // any of the ansi sequences.",
+            "        else if (getBoolean(JANSI_PASSTHROUGH)) {",
+            "            mode = AnsiMode.Force;",
+            "        }",
+            "",
+            "        // If the jansi.strip property is set, then we just strip the",
+            "        // the ansi escapes.",
+            "        else if (getBoolean(JANSI_STRIP)) {",
+            "            mode = AnsiMode.Strip;",
+            "        }",
+            "",
+            "        // If the jansi.force property is set, then we force to output",
+            "        // the ansi escapes for piping it into ansi color aware commands (e.g. less -r)",
+            "        else if (getBoolean(JANSI_FORCE)) {",
+            "            mode = AnsiMode.Force;",
+            "        } else {",
+            "            mode = isatty ? AnsiMode.Default : AnsiMode.Strip;",
+            "        }",
+            "",
+            "        AnsiColors colors;",
+            "",
+            "        String colorterm, term;",
+            "        // If the jansi.colors property is set, use it",
+            "        String jansiColors =",
+            "                System.getProperty(stdout ? JANSI_OUT_COLORS : JANSI_ERR_COLORS, System.getProperty(JANSI_COLORS));",
+            "        if (JANSI_COLORS_TRUECOLOR.equals(jansiColors)) {",
+            "            colors = AnsiColors.TrueColor;",
+            "        } else if (JANSI_COLORS_256.equals(jansiColors)) {",
+            "            colors = AnsiColors.Colors256;",
+            "        } else if (jansiColors != null) {",
+            "            colors = AnsiColors.Colors16;",
+            "        }",
+            "",
+            "        // If the COLORTERM env variable contains \"truecolor\" or \"24bit\", assume true color support",
+            "        // see https://gist.github.com/XVilka/8346728#true-color-detection",
+            "        else if ((colorterm = System.getenv(\"COLORTERM\")) != null",
+            "                && (colorterm.contains(\"truecolor\") || colorterm.contains(\"24bit\"))) {",
+            "            colors = AnsiColors.TrueColor;",
+            "        }",
+            "",
+            "        // check the if TERM contains -direct",
+            "        else if ((term = System.getenv(\"TERM\")) != null && term.contains(\"-direct\")) {",
+            "            colors = AnsiColors.TrueColor;",
+            "        }",
+            "",
+            "        // check the if TERM contains -256color",
+            "        else if (term != null && term.contains(\"-256color\")) {",
+            "            colors = AnsiColors.Colors256;",
+            "        }",
+            "",
+            "        // else defaults to 16 colors",
+            "        else {",
+            "            colors = AnsiColors.Colors16;",
+            "        }",
+            "",
+            "        // If the jansi.noreset property is not set, reset the attributes",
+            "        // when the stream is closed",
+            "        boolean resetAtUninstall = type != AnsiType.Unsupported && !getBoolean(JANSI_NORESET);",
+            "",
+            "        Charset cs = Charset.defaultCharset();",
+            "        if (enc != null) {",
+            "            try {",
+            "                cs = Charset.forName(enc);",
+            "            } catch (UnsupportedCharsetException e) {",
+            "            }",
+            "        }",
+            "        return newPrintStream(",
+            "                new AnsiOutputStream(",
+            "                        out, width, mode, processor, type, colors, cs, installer, uninstaller, resetAtUninstall),",
+            "                cs.name());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "FileDescriptor",
+            "OutputStream",
+            "FastBufferedOutputStream",
+            "FileOutputStream",
+            "String",
+            "boolean",
+            "int",
+            "Throwable",
+            "AnsiOutputStream.WidthSupplier",
+            "AnsiOutputStream",
+            "WidthSupplier",
+            "AnsiProcessor",
+            "AnsiType",
+            "AnsiOutputStream.IoRunnable",
+            "IoRunnable",
+            "AnsiOutputStream.ZeroWidthSupplier",
+            "ZeroWidthSupplier",
+            "long",
+            "int[]",
+            "CONSOLE_SCREEN_BUFFER_INFO",
+            "AnsiConsole",
+            "MingwSupport",
+            "WindowsAnsiProcessor",
+            "WinSize",
+            "short",
+            "AnsiMode",
+            "AnsiColors",
+            "Charset",
+            "UnsupportedCharsetException"
+          ],
+          "signature": "ansiStream( boolean stdout)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stdout"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.FileOutputStream",
+              "<init>(java.io.FileDescriptor)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.FastBufferedOutputStream",
+              "25-68:FastBufferedOutputStream",
+              "30-32:FastBufferedOutputStream"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.CLibrary",
+              "25-158:CLibrary",
+              "75-75:isatty"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getenv(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "contains(java.lang.CharSequence)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "182-182:GetStdHandle"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "210-210:GetConsoleMode"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "215-215:SetConsoleMode"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiOutputStream",
+              "45-48:IoRunnable",
+              "47-47:run"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "40-67:MingwSupport"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "69-86:getConsoleName"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiOutputStream",
+              "50-53:WidthSupplier",
+              "52-52:getTerminalWidth"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "100-105:WindowsAnsiProcessor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+              "33-559:AnsiProcessor",
+              "37-39:AnsiProcessor"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "460-468:getBoolean"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "defaultCharset()"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "forName(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiOutputStream",
+              "41-359:AnsiOutputStream",
+              "99-120:AnsiOutputStream"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "name()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "446-458:newPrintStream"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "FileDescriptor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.FileIO",
+                "reasoning": "In Python, the equivalent of Java's `FileDescriptor` is `io.FileIO`, which represents a low-level file descriptor. This class provides a way to handle file descriptors directly, similar to how `FileDescriptor` is used in Java.",
+                "prompt": ""
+              },
+              "OutputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.BufferedIOBase",
+                "reasoning": "In Python, the equivalent of Java's `OutputStream` is `io.BufferedIOBase`, which is a base class for binary output streams. This class provides the necessary functionality to handle output streams of bytes, similar to Java's `OutputStream`.",
+                "prompt": ""
+              },
+              "FastBufferedOutputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "FastBufferedOutputStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "FileOutputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.FileIO",
+                "reasoning": "In Python, the equivalent type to Java's `FileOutputStream` is `io.FileIO`. This class provides a way to write data to a file, similar to the functionality provided by `FileOutputStream` in Java.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Throwable": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, the `Exception` class is the base class for all built-in exceptions. It serves a similar purpose to Java's `Throwable` class, which is the superclass of all errors and exceptions. Therefore, `Exception` is the equivalent type in Python that maintains the same functionality as `Throwable` in Java.",
+                "prompt": ""
+              },
+              "AnsiOutputStream.WidthSupplier": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream.WidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WidthSupplier": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiProcessor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiType": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiType",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream.IoRunnable": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream.IoRunnable",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IoRunnable": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IoRunnable",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream.ZeroWidthSupplier": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream.ZeroWidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ZeroWidthSupplier": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ZeroWidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent of a Java `int[]` is a list of integers. The type `list[int]` specifies a list where each element is an integer, which corresponds to Java's `int[]`.",
+                "prompt": ""
+              },
+              "CONSOLE_SCREEN_BUFFER_INFO": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiConsole": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiConsole",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "MingwSupport": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "MingwSupport",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WindowsAnsiProcessor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WinSize": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WinSize",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiMode": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiMode",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiColors": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiColors",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Charset": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Charset has been translated to \"object\"",
+                "prompt": ""
+              },
+              "UnsupportedCharsetException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import locale",
+                "translated_target_type": "locale.Error",
+                "reasoning": "The `UnsupportedCharsetException` in Java is an unchecked exception that is thrown when no support is available for a requested charset. In Python, the equivalent exception is `locale.Error`, which is raised when an error occurs related to locale settings, including encoding issues. This exception is used to handle errors related to character encoding, similar to how `UnsupportedCharsetException` is used in Java.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|stdout": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __ansiStream(stdout: bool) -> \"AnsiPrintStream\":",
+            "        from src.main.org.fusesource.jansi.io.AnsiOutputStream import AnsiOutputStream",
+            "        from src.main.org.fusesource.jansi.io.AnsiOutputStream import WidthSupplier",
+            "        from src.main.org.fusesource.jansi.io.AnsiOutputStream import ZeroWidthSupplier",
+            "        from src.main.org.fusesource.jansi.io.WindowsAnsiProcessor import WindowsAnsiProcessor",
+            "        from src.main.org.fusesource.jansi.AnsiType import AnsiType",
+            "        from src.main.org.fusesource.jansi.AnsiMode import AnsiMode",
+            "        from src.main.org.fusesource.jansi.AnsiColors import AnsiColors",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.io.AnsiProcessor import AnsiProcessor",
+            "        from src.main.org.fusesource.jansi.internal.MingwSupport import MingwSupport",
+            "        descriptor = sys.stdout if stdout else sys.stderr",
+            "        out = io.BufferedWriter(io.FileIO(descriptor.fileno(), 'wb'))",
+            "",
+            "        enc = os.getenv('STDOUT_ENCODING') if stdout else os.getenv('STDERR_ENCODING')",
+            "        if enc is None:",
+            "            enc = os.getenv('SUN_STDOUT_ENCODING') if stdout else os.getenv('SUN_STDERR_ENCODING')",
+            "",
+            "        isatty = os.isatty(descriptor.fileno())",
+            "        term = os.getenv('TERM')",
+            "        emacs = os.getenv('INSIDE_EMACS')",
+            "        if isatty and term == 'dumb' and emacs is not None and 'comint' not in emacs:",
+            "            isatty = False",
+            "",
+            "        width = AnsiOutputStream.ZeroWidthSupplier() if not isatty else AnsiOutputStream.WidthSupplier()",
+            "        processor = None",
+            "        type_ = AnsiType.Unsupported if not isatty else AnsiType.Redirected",
+            "        installer = uninstaller = None",
+            "",
+            "        if isatty and AnsiConsole.IS_WINDOWS:",
+            "            console = Kernel32.GetStdHandle(Kernel32.STD_OUTPUT_HANDLE if stdout else Kernel32.STD_ERROR_HANDLE)",
+            "            mode = [0]",
+            "            is_console = Kernel32.GetConsoleMode(console, mode) != 0",
+            "            kernel32_width = AnsiOutputStream.WidthSupplier()",
+            "",
+            "            if is_console and Kernel32.SetConsoleMode(console, mode[0] | AnsiConsole.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0:",
+            "                Kernel32.SetConsoleMode(console, mode[0])",
+            "                type_ = AnsiType.VirtualTerminal",
+            "                installer = lambda: setattr(AnsiConsole, '__virtualProcessing', getattr(AnsiConsole, '__virtualProcessing', 0) + 1) or Kernel32.SetConsoleMode(console, mode[0] | AnsiConsole.ENABLE_VIRTUAL_TERMINAL_PROCESSING)",
+            "                uninstaller = lambda: setattr(AnsiConsole, '__virtualProcessing', getattr(AnsiConsole, '__virtualProcessing', 0) - 1) or (getattr(AnsiConsole, '__virtualProcessing', 0) == 0 and Kernel32.SetConsoleMode(console, mode[0]))",
+            "                width = kernel32_width",
+            "            elif (AnsiConsole.IS_CONEMU or AnsiConsole.IS_CYGWIN or AnsiConsole.IS_MSYSTEM) and not is_console:",
+            "                mingw = MingwSupport()",
+            "                name = mingw.getConsoleName(stdout)",
+            "                width = lambda: mingw.getTerminalWidth(name) if name else -1",
+            "            else:",
+            "                try:",
+            "                    processor = WindowsAnsiProcessor(out, console)",
+            "                    type_ = AnsiType.Emulation",
+            "                except:",
+            "                    processor = AnsiProcessor(out)",
+            "                    type_ = AnsiType.Unsupported",
+            "                width = kernel32_width",
+            "",
+            "        elif isatty:",
+            "            width = AnsiOutputStream.WidthSupplier()",
+            "",
+            "        jansi_mode = os.getenv('JANSI_OUT_MODE') if stdout else os.getenv('JANSI_ERR_MODE') or os.getenv('JANSI_MODE')",
+            "        if jansi_mode == 'force':",
+            "            mode = AnsiMode.Force",
+            "        elif jansi_mode == 'strip':",
+            "            mode = AnsiMode.Strip",
+            "        elif jansi_mode is not None:",
+            "            mode = AnsiMode.Default if isatty else AnsiMode.Strip",
+            "        elif AnsiConsole.getBoolean('JANSI_PASSTHROUGH'):",
+            "            mode = AnsiMode.Force",
+            "        elif AnsiConsole.getBoolean('JANSI_STRIP'):",
+            "            mode = AnsiMode.Strip",
+            "        elif AnsiConsole.getBoolean('JANSI_FORCE'):",
+            "            mode = AnsiMode.Force",
+            "        else:",
+            "            mode = AnsiMode.Default if isatty else AnsiMode.Strip",
+            "",
+            "        jansi_colors = os.getenv('JANSI_OUT_COLORS') if stdout else os.getenv('JANSI_ERR_COLORS') or os.getenv('JANSI_COLORS')",
+            "        if jansi_colors == 'truecolor':",
+            "            colors = AnsiColors.TrueColor",
+            "        elif jansi_colors == '256':",
+            "            colors = AnsiColors.Colors256",
+            "        elif jansi_colors is not None:",
+            "            colors = AnsiColors.Colors16",
+            "        elif 'truecolor' in os.getenv('COLORTERM', '') or '24bit' in os.getenv('COLORTERM', ''):",
+            "            colors = AnsiColors.TrueColor",
+            "        elif '-direct' in os.getenv('TERM', ''):",
+            "            colors = AnsiColors.TrueColor",
+            "        elif '-256color' in os.getenv('TERM', ''):",
+            "            colors = AnsiColors.Colors256",
+            "        else:",
+            "            colors = AnsiColors.Colors16",
+            "",
+            "        reset_at_uninstall = type_ != AnsiType.Unsupported and not AnsiConsole.getBoolean('JANSI_NORESET')",
+            "",
+            "        cs = locale.getpreferredencoding()",
+            "        if enc:",
+            "            try:",
+            "                cs = enc",
+            "            except:",
+            "                pass",
+            "",
+            "        return AnsiConsole.__newPrintStream(",
+            "            AnsiOutputStream(out, width, mode, processor, type_, colors, cs, installer, uninstaller, reset_at_uninstall),",
+            "            cs",
+            "        )"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 20, in test01\n    from src.main.org.fusesource.jansi.AnsiConsole import AnsiConsole\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 313, in <module>\n    AnsiConsole.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 57, in run_static_init\n    AnsiConsole.initStreams()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 308, in initStreams\n    AnsiConsole.out = AnsiConsole.__ansiStream(True)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 73, in __ansiStream\n    from src.main.org.fusesource.jansi.io.WindowsAnsiProcessor import (\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 10, in <module>\n    class WindowsAnsiProcessor(AnsiProcessor):\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 14, in WindowsAnsiProcessor\n    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/Kernel32.py\", line 550, in <module>\n    Kernel32.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/Kernel32.py\", line 40, in run_static_init\n    if JansiLoader.initialize():\n       ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 35, in initialize\n    cleanup = threading.Thread(target=JansiLoader.__cleanup, name=\"cleanup\")\n                                      ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute '_JansiLoader__cleanup'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "237-444:ansiStream"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "33-38:test01"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 46.79286336898804,
+          "generation_timestamp": "2025-11-04T21:37:20.687933",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __ansiStream(stdout: object) -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "446-458:newPrintStream": {
+          "start": 446,
+          "end": 458,
+          "body": [
+            "private static AnsiPrintStream newPrintStream(AnsiOutputStream out, String enc) {",
+            "        if (enc != null) {",
+            "            try {",
+            "                return new AnsiPrintStream(out, true, enc);",
+            "            } catch (UnsupportedEncodingException e) {",
+            "            }",
+            "        }",
+            "        try {",
+            "            return new AnsiPrintStream(out, true, null);",
+            "        } catch (UnsupportedEncodingException e) {",
+            "        }",
+            "        return null;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "AnsiPrintStream",
+            "UnsupportedEncodingException"
+          ],
+          "signature": "newPrintStream( AnsiOutputStream out,  String enc)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "AnsiOutputStream",
+              "name": "out"
+            },
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "enc"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "30-32:AnsiPrintStream"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "UnsupportedEncodingException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "None",
+                "translated_target_type": "LookupError",
+                "reasoning": "In Python, the equivalent of Java's `UnsupportedEncodingException` is `LookupError`. This exception is raised when an encoding is not found, which aligns with the functionality of `UnsupportedEncodingException` in Java.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|AnsiOutputStream|out": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|String|enc": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __newPrintStream(out: object, enc: object) -> \"AnsiPrintStream\":",
+            "        from src.main.org.fusesource.jansi.AnsiPrintStream import AnsiPrintStream",
+            "        if enc is not None:",
+            "            try:",
+            "                return AnsiPrintStream(out, True, enc)",
+            "            except UnicodeEncodeError:",
+            "                pass",
+            "        try:",
+            "            return AnsiPrintStream(out, True, None)",
+            "        except UnicodeEncodeError:",
+            "            pass",
+            "        return None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.923299789428711,
+          "generation_timestamp": "2025-11-04T20:27:37.218751",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __newPrintStream(out: object, enc: object) -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "460-468:getBoolean": {
+          "start": 460,
+          "end": 468,
+          "body": [
+            "static boolean getBoolean(String name) {",
+            "        boolean result = false;",
+            "        try {",
+            "            String val = System.getProperty(name);",
+            "            result = val.isEmpty() || Boolean.parseBoolean(val);",
+            "        } catch (IllegalArgumentException | NullPointerException ignored) {",
+            "        }",
+            "        return result;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "boolean",
+            "String",
+            "IllegalArgumentException | NullPointerException",
+            "IllegalArgumentException",
+            "NullPointerException"
+          ],
+          "signature": "getBoolean( String name)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "name"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "library",
+              "java.lang.Boolean",
+              "parseBoolean(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IllegalArgumentException | NullPointerException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IllegalArgumentException | NullPointerException has been translated to \"object\"",
+                "prompt": ""
+              },
+              "IllegalArgumentException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from argparse import ArgumentTypeError",
+                "translated_target_type": "ArgumentTypeError",
+                "reasoning": "In Python, the equivalent exception to Java's `IllegalArgumentException` is `ArgumentTypeError` from the `argparse` module. This exception is used to indicate that a method has been passed an illegal or inappropriate argument, similar to the functionality of `IllegalArgumentException` in Java.",
+                "prompt": ""
+              },
+              "NullPointerException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "None",
+                "translated_target_type": "ValueError",
+                "reasoning": "In Python, the equivalent of Java's `NullPointerException` is typically `ValueError` when dealing with cases where a `None` value is passed to a function that expects an object.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|name": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getBoolean(name: object) -> bool:",
+            "        result = False",
+            "        try:",
+            "            val = os.getenv(name)",
+            "            result = not val or val.lower() in ('true', '1')",
+            "        except (ValueError, TypeError):",
+            "            pass",
+            "        return result"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/AnsiConsole_ESTest_test09_decomposed_mocker_0_AnsiConsole_getBoolean.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest_test09_decomposed_mocker_0_AnsiConsole_getBoolean.py\", line 39, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":352192603,\\\"type\\\":\\\"java.lang.Boolean\\\",\\\"value\\\":\\\"false\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test03": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 23, in test03\n    self.assertFalse(boolean0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 709, in assertFalse\n    raise self.failureException(msg)\nAssertionError: True is not false",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "41-45:test03"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test07": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 33, in test07\n    self.assertFalse(boolean0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 709, in assertFalse\n    raise self.failureException(msg)\nAssertionError: True is not false",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "55-59:test07"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test11": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "488-490:sysOut"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "69-73:test11"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test09": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "510-512:sysErr"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "62-66:test09"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test05": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "48-52:test05"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "546-559:systemUninstall"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "26-31:test00"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 20, in test01\n    from src.main.org.fusesource.jansi.AnsiConsole import AnsiConsole\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 313, in <module>\n    AnsiConsole.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 57, in run_static_init\n    AnsiConsole.initStreams()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 308, in initStreams\n    AnsiConsole.out = AnsiConsole.__ansiStream(True)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 73, in __ansiStream\n    from src.main.org.fusesource.jansi.io.WindowsAnsiProcessor import (\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 10, in <module>\n    class WindowsAnsiProcessor(AnsiProcessor):\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 14, in WindowsAnsiProcessor\n    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/Kernel32.py\", line 550, in <module>\n    Kernel32.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/Kernel32.py\", line 40, in run_static_init\n    if JansiLoader.initialize():\n       ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 35, in initialize\n    cleanup = threading.Thread(target=JansiLoader.__cleanup, name=\"cleanup\")\n                                      ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute '_JansiLoader__cleanup'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "237-444:ansiStream"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "33-38:test01"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 64.27075171470642,
+          "generation_timestamp": "2025-11-04T20:28:41.670907",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getBoolean(name: object) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "478-481:out": {
+          "start": 478,
+          "end": 481,
+          "body": [
+            "public static AnsiPrintStream out() {",
+            "        initStreams();",
+            "        return (AnsiPrintStream) out;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "AnsiPrintStream"
+          ],
+          "signature": "out()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "564-570:initStreams"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def out() -> \"AnsiPrintStream\":",
+            "        AnsiConsole.initStreams()",
+            "        return AnsiConsole.out"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.40885066986084,
+          "generation_timestamp": "2025-11-04T21:37:49.826876",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def out() -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "488-490:sysOut": {
+          "start": 488,
+          "end": 490,
+          "body": [
+            "public static PrintStream sysOut() {",
+            "        return system_out;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "PrintStream"
+          ],
+          "body_types": [],
+          "signature": "sysOut()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def sysOut() -> io.TextIOWrapper:",
+            "        return AnsiConsole.system_out"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/AnsiConsole_ESTest_test11_decomposed_mocker_1_AnsiConsole_sysOut.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest_test11_decomposed_mocker_1_AnsiConsole_sysOut.py\", line 37, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"stream_class\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$NullOutputStream\\\",\\\"memory_address\\\":513907863,\\\"stream_type\\\":\\\"unknown\\\",\\\"type\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$ForwardingPrintStream\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test11": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "488-490:sysOut"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "69-73:test11"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 57.711074352264404,
+          "generation_timestamp": "2025-11-04T20:30:06.430214",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def sysOut() -> io.TextIOWrapper:\n",
+            "        pass\n\n"
+          ]
+        },
+        "500-503:err": {
+          "start": 500,
+          "end": 503,
+          "body": [
+            "public static AnsiPrintStream err() {",
+            "        initStreams();",
+            "        return (AnsiPrintStream) err;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "AnsiPrintStream"
+          ],
+          "signature": "err()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "564-570:initStreams"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def err() -> \"AnsiPrintStream\":",
+            "        AnsiConsole.initStreams()",
+            "        return AnsiConsole.err"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.294930934906006,
+          "generation_timestamp": "2025-11-04T21:38:03.313075",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def err() -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "510-512:sysErr": {
+          "start": 510,
+          "end": 512,
+          "body": [
+            "public static PrintStream sysErr() {",
+            "        return system_err;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "PrintStream"
+          ],
+          "body_types": [],
+          "signature": "sysErr()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def sysErr() -> io.TextIOWrapper:",
+            "        return AnsiConsole.system_err"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/AnsiConsole_ESTest_test09_decomposed_mocker_1_AnsiConsole_sysErr.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest_test09_decomposed_mocker_1_AnsiConsole_sysErr.py\", line 37, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"stream_class\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$NullOutputStream\\\",\\\"memory_address\\\":513907863,\\\"stream_type\\\":\\\"unknown\\\",\\\"type\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$ForwardingPrintStream\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test09": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "510-512:sysErr"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "62-66:test09"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 58.15677618980408,
+          "generation_timestamp": "2025-11-04T20:31:23.744160",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def sysErr() -> io.TextIOWrapper:\n",
+            "        pass\n\n"
+          ]
+        },
+        "519-532:systemInstall": {
+          "start": 519,
+          "end": 532,
+          "body": [
+            "public static synchronized void systemInstall() {",
+            "        if (installed == 0) {",
+            "            initStreams();",
+            "            try {",
+            "                ((AnsiPrintStream) out).install();",
+            "                ((AnsiPrintStream) err).install();",
+            "            } catch (IOException e) {",
+            "                throw new IOError(e);",
+            "            }",
+            "            System.setOut(out);",
+            "            System.setErr(err);",
+            "        }",
+            "        installed++;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "AnsiPrintStream",
+            "IOException",
+            "IOError"
+          ],
+          "signature": "systemInstall()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "564-570:initStreams"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "80-82:install"
+            ],
+            [
+              "library",
+              "java.io.IOError",
+              "<init>(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setOut(java.io.PrintStream)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setErr(java.io.PrintStream)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              },
+              "IOError": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import os",
+                "translated_target_type": "OSError",
+                "reasoning": "In Python, the equivalent of Java's `IOError` is `OSError`. Both are used to signal errors related to input/output operations.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def systemInstall() -> None:",
+            "        from src.main.org.fusesource.jansi.AnsiPrintStream import AnsiPrintStream",
+            "        if AnsiConsole.__installed == 0:",
+            "            AnsiConsole.initStreams()",
+            "            try:",
+            "                AnsiPrintStream(AnsiConsole.out, autoFlush=True, args=()).install()",
+            "                AnsiPrintStream(AnsiConsole.err, autoFlush=True, args=()).install()",
+            "            except IOError as e:",
+            "                raise IOError(e)",
+            "            builtins.print = AnsiConsole.out",
+            "            builtins.print_err = AnsiConsole.err",
+            "        AnsiConsole.__installed += 1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "pending",
+          "elapsed_time": 51.08037853240967,
+          "generation_timestamp": "2025-11-04T21:38:54.572235",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def systemInstall() -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "537-539:isInstalled": {
+          "start": 537,
+          "end": 539,
+          "body": [
+            "public static synchronized boolean isInstalled() {",
+            "        return installed > 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isInstalled()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def isInstalled() -> bool:",
+            "        return AnsiConsole.__installed > 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test05": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "48-52:test05"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "546-559:systemUninstall"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "26-31:test00"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 14.438106775283813,
+          "generation_timestamp": "2025-11-04T20:31:57.441990",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def isInstalled() -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "546-559:systemUninstall": {
+          "start": 546,
+          "end": 559,
+          "body": [
+            "public static synchronized void systemUninstall() {",
+            "        installed--;",
+            "        if (installed == 0) {",
+            "            try {",
+            "                ((AnsiPrintStream) out).uninstall();",
+            "                ((AnsiPrintStream) err).uninstall();",
+            "            } catch (IOException e) {",
+            "                throw new IOError(e);",
+            "            }",
+            "            initialized = false;",
+            "            System.setOut(system_out);",
+            "            System.setErr(system_err);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "AnsiPrintStream",
+            "IOException",
+            "IOError"
+          ],
+          "signature": "systemUninstall()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "84-90:uninstall"
+            ],
+            [
+              "library",
+              "java.io.IOError",
+              "<init>(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setOut(java.io.PrintStream)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setErr(java.io.PrintStream)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              },
+              "IOError": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import os",
+                "translated_target_type": "OSError",
+                "reasoning": "In Python, the equivalent of Java's `IOError` is `OSError`. Both are used to signal errors related to input/output operations.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def systemUninstall() -> None:",
+            "        AnsiConsole.__installed -= 1",
+            "        if AnsiConsole.__installed == 0:",
+            "            try:",
+            "                AnsiConsole.out.uninstall()",
+            "                AnsiConsole.err.uninstall()",
+            "            except IOError as e:",
+            "                raise IOError(e)",
+            "            AnsiConsole.__initialized = False",
+            "            builtins.print = AnsiConsole.system_out",
+            "            builtins.print = AnsiConsole.system_err"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "546-559:systemUninstall"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "26-31:test00"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 17.12375545501709,
+          "generation_timestamp": "2025-11-04T21:20:56.805556",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def systemUninstall() -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "564-570:initStreams": {
+          "start": 564,
+          "end": 570,
+          "body": [
+            "static synchronized void initStreams() {",
+            "        if (!initialized) {",
+            "            out = ansiStream(true);",
+            "            err = ansiStream(false);",
+            "            initialized = true;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "initStreams()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "237-444:ansiStream"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def initStreams() -> None:",
+            "        if not AnsiConsole.__initialized:",
+            "            AnsiConsole.out = AnsiConsole.__ansiStream(True)",
+            "            AnsiConsole.err = AnsiConsole.__ansiStream(False)",
+            "            AnsiConsole.__initialized = True"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test03": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 23, in test03\n    self.assertFalse(boolean0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 709, in assertFalse\n    raise self.failureException(msg)\nAssertionError: True is not false",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "41-45:test03"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test07": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 33, in test07\n    self.assertFalse(boolean0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 709, in assertFalse\n    raise self.failureException(msg)\nAssertionError: True is not false",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "55-59:test07"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test11": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "488-490:sysOut"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "69-73:test11"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test09": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "510-512:sysErr"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "62-66:test09"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test05": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "48-52:test05"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "546-559:systemUninstall"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "26-31:test00"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest.py\", line 20, in test01\n    from src.main.org.fusesource.jansi.AnsiConsole import AnsiConsole\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 313, in <module>\n    AnsiConsole.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 57, in run_static_init\n    AnsiConsole.initStreams()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 308, in initStreams\n    AnsiConsole.out = AnsiConsole.__ansiStream(True)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/AnsiConsole.py\", line 73, in __ansiStream\n    from src.main.org.fusesource.jansi.io.WindowsAnsiProcessor import (\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 10, in <module>\n    class WindowsAnsiProcessor(AnsiProcessor):\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 14, in WindowsAnsiProcessor\n    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/Kernel32.py\", line 550, in <module>\n    Kernel32.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/Kernel32.py\", line 40, in run_static_init\n    if JansiLoader.initialize():\n       ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 35, in initialize\n    cleanup = threading.Thread(target=JansiLoader.__cleanup, name=\"cleanup\")\n                                      ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute '_JansiLoader__cleanup'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "237-444:ansiStream"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "564-570:initStreams"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "33-38:test01"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 15.053852796554565,
+          "generation_timestamp": "2025-11-04T21:37:35.940730",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def initStreams() -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "69-69:JANSI_MODE": {
+          "start": 69,
+          "end": 69,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE = \"jansi.mode\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE: str = \"jansi.mode\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.627970933914185,
+          "generation_timestamp": "2025-11-04T17:00:10.535721",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_MODE: str = ",
+            ""
+          ]
+        },
+        "73-73:JANSI_OUT_MODE": {
+          "start": 73,
+          "end": 73,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_OUT_MODE = \"jansi.out.mode\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_OUT_MODE: str = \"jansi.out.mode\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.767723560333252,
+          "generation_timestamp": "2025-11-04T16:59:57.710645",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_OUT_MODE: str = ",
+            ""
+          ]
+        },
+        "77-77:JANSI_ERR_MODE": {
+          "start": 77,
+          "end": 77,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_ERR_MODE = \"jansi.err.mode\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_ERR_MODE: str = \"jansi.err.mode\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.846816778182983,
+          "generation_timestamp": "2025-11-04T16:59:44.742189",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_ERR_MODE: str = ",
+            ""
+          ]
+        },
+        "82-82:JANSI_MODE_STRIP": {
+          "start": 82,
+          "end": 82,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE_STRIP = \"strip\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE_STRIP: str = \"strip\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.83794093132019,
+          "generation_timestamp": "2025-11-04T16:59:31.693507",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_MODE_STRIP: str = ",
+            ""
+          ]
+        },
+        "86-86:JANSI_MODE_FORCE": {
+          "start": 86,
+          "end": 86,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE_FORCE = \"force\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE_FORCE: str = \"force\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.894573211669922,
+          "generation_timestamp": "2025-11-04T16:59:18.633347",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_MODE_FORCE: str = ",
+            ""
+          ]
+        },
+        "90-90:JANSI_MODE_DEFAULT": {
+          "start": 90,
+          "end": 90,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE_DEFAULT = \"default\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE_DEFAULT: str = \"default\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.579471111297607,
+          "generation_timestamp": "2025-11-04T16:59:05.532343",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_MODE_DEFAULT: str = ",
+            ""
+          ]
+        },
+        "98-98:JANSI_COLORS": {
+          "start": 98,
+          "end": 98,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS = \"jansi.colors\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS: str = \"jansi.colors\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.715916633605957,
+          "generation_timestamp": "2025-11-04T16:58:52.755971",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_COLORS: str = ",
+            ""
+          ]
+        },
+        "102-102:JANSI_OUT_COLORS": {
+          "start": 102,
+          "end": 102,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_OUT_COLORS = \"jansi.out.colors\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_OUT_COLORS: str = \"jansi.out.colors\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.7089262008667,
+          "generation_timestamp": "2025-11-04T16:58:39.845602",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_OUT_COLORS: str = ",
+            ""
+          ]
+        },
+        "106-106:JANSI_ERR_COLORS": {
+          "start": 106,
+          "end": 106,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_ERR_COLORS = \"jansi.err.colors\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_ERR_COLORS: str = \"jansi.err.colors\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.844249248504639,
+          "generation_timestamp": "2025-11-04T16:58:26.927610",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_ERR_COLORS: str = ",
+            ""
+          ]
+        },
+        "112-112:JANSI_COLORS_16": {
+          "start": 112,
+          "end": 112,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS_16 = \"16\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS_16: str = \"16\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.0835599899292,
+          "generation_timestamp": "2025-11-04T16:58:13.880683",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_COLORS_16: str = ",
+            ""
+          ]
+        },
+        "117-117:JANSI_COLORS_256": {
+          "start": 117,
+          "end": 117,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS_256 = \"256\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS_256: str = \"256\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.798152446746826,
+          "generation_timestamp": "2025-11-04T16:58:00.604658",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_COLORS_256: str = ",
+            ""
+          ]
+        },
+        "121-121:JANSI_COLORS_TRUECOLOR": {
+          "start": 121,
+          "end": 121,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS_TRUECOLOR = \"truecolor\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS_TRUECOLOR: str = \"truecolor\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.75907826423645,
+          "generation_timestamp": "2025-11-04T16:57:47.608477",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_COLORS_TRUECOLOR: str = ",
+            ""
+          ]
+        },
+        "129-130:JANSI_PASSTHROUGH": {
+          "start": 129,
+          "end": 130,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static final String JANSI_PASSTHROUGH = \"jansi.passthrough\";"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_PASSTHROUGH: str = \"jansi.passthrough\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.036919116973877,
+          "generation_timestamp": "2025-11-04T16:57:34.648228",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_PASSTHROUGH: str = ",
+            ""
+          ]
+        },
+        "137-138:JANSI_STRIP": {
+          "start": 137,
+          "end": 138,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static final String JANSI_STRIP = \"jansi.strip\";"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_STRIP: str = \"jansi.strip\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.739266633987427,
+          "generation_timestamp": "2025-11-04T16:57:21.403841",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_STRIP: str = ",
+            ""
+          ]
+        },
+        "147-148:JANSI_FORCE": {
+          "start": 147,
+          "end": 148,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static final String JANSI_FORCE = \"jansi.force\";"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_FORCE: str = \"jansi.force\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.810187816619873,
+          "generation_timestamp": "2025-11-04T16:57:08.468450",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_FORCE: str = ",
+            ""
+          ]
+        },
+        "157-158:JANSI_EAGER": {
+          "start": 157,
+          "end": 158,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated()",
+            "    public static final String JANSI_EAGER = \"jansi.eager\";"
+          ],
+          "modifiers": [
+            "@Deprecated()",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_EAGER: str = \"jansi.eager\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.748034715652466,
+          "generation_timestamp": "2025-11-04T16:56:55.464020",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_EAGER: str = ",
+            ""
+          ]
+        },
+        "163-163:JANSI_NORESET": {
+          "start": 163,
+          "end": 163,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_NORESET = \"jansi.noreset\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_NORESET: str = \"jansi.noreset\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.692829132080078,
+          "generation_timestamp": "2025-11-04T16:56:42.518955",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_NORESET: str = ",
+            ""
+          ]
+        },
+        "169-169:JANSI_GRACEFUL": {
+          "start": 169,
+          "end": 169,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_GRACEFUL = \"jansi.graceful\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_GRACEFUL: str = \"jansi.graceful\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.865690231323242,
+          "generation_timestamp": "2025-11-04T16:56:29.648982",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    JANSI_GRACEFUL: str = ",
+            ""
+          ]
+        },
+        "174-175:system_out": {
+          "start": 174,
+          "end": 175,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream system_out = System.out;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    system_out: io.TextIOWrapper = builtins.open(os.devnull, 'w')"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 26.01474928855896,
+          "generation_timestamp": "2025-11-04T16:56:16.583117",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    system_out: io.TextIOWrapper = ",
+            ""
+          ]
+        },
+        "179-180:out": {
+          "start": 179,
+          "end": 180,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream out;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    out: io.TextIOWrapper = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    out: io.TextIOWrapper = None"
+          ]
+        },
+        "184-185:system_err": {
+          "start": 184,
+          "end": 185,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream system_err = System.err;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    system_err: io.TextIOWrapper = builtins.open(os.devnull, 'w')"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.800420999526978,
+          "generation_timestamp": "2025-11-04T16:55:50.380675",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    system_err: io.TextIOWrapper = ",
+            ""
+          ]
+        },
+        "189-190:err": {
+          "start": 189,
+          "end": 190,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream err;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    err: io.TextIOWrapper = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    err: io.TextIOWrapper = None"
+          ]
+        },
+        "206-207:IS_WINDOWS": {
+          "start": 206,
+          "end": 207,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_WINDOWS =",
+            "            System.getProperty(\"os.name\").toLowerCase(Locale.ENGLISH).contains(\"win\");"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_WINDOWS: bool = \"win\" in os.name.lower()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 25.938727617263794,
+          "generation_timestamp": "2025-11-04T16:55:37.399450",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    IS_WINDOWS: bool = ",
+            ""
+          ]
+        },
+        "209-210:IS_CYGWIN": {
+          "start": 209,
+          "end": 210,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_CYGWIN =",
+            "            IS_WINDOWS && System.getenv(\"PWD\") != null && System.getenv(\"PWD\").startsWith(\"/\");"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_CYGWIN: bool = IS_WINDOWS and os.getenv(\"PWD\") is not None and os.getenv(\"PWD\").startswith(\"/\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.177536487579346,
+          "generation_timestamp": "2025-11-04T16:55:11.264757",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    IS_CYGWIN: bool = ",
+            ""
+          ]
+        },
+        "212-215:IS_MSYSTEM": {
+          "start": 212,
+          "end": 215,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_MSYSTEM = IS_WINDOWS",
+            "            && System.getenv(\"MSYSTEM\") != null",
+            "            && (System.getenv(\"MSYSTEM\").startsWith(\"MINGW\")",
+            "                    || System.getenv(\"MSYSTEM\").equals(\"MSYS\"));"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_MSYSTEM: bool = IS_WINDOWS and os.getenv(\"MSYSTEM\") is not None and (os.getenv(\"MSYSTEM\").startswith(\"MINGW\") or os.getenv(\"MSYSTEM\") == \"MSYS\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.74995756149292,
+          "generation_timestamp": "2025-11-04T16:54:57.888408",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    IS_MSYSTEM: bool = ",
+            ""
+          ]
+        },
+        "217-217:IS_CONEMU": {
+          "start": 217,
+          "end": 217,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_CONEMU = IS_WINDOWS && System.getenv(\"ConEmuPID\") != null;"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_CONEMU: bool = IS_WINDOWS and os.getenv(\"ConEmuPID\") is not None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.971602201461792,
+          "generation_timestamp": "2025-11-04T16:54:43.933233",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    IS_CONEMU: bool = ",
+            ""
+          ]
+        },
+        "219-219:ENABLE_VIRTUAL_TERMINAL_PROCESSING": {
+          "start": 219,
+          "end": 219,
+          "enum_constant": false,
+          "body": [
+            "static final int ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    ENABLE_VIRTUAL_TERMINAL_PROCESSING: int = 0x0004"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.102720975875854,
+          "generation_timestamp": "2025-11-04T16:54:30.763326",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    ENABLE_VIRTUAL_TERMINAL_PROCESSING: int = ",
+            ""
+          ]
+        },
+        "221-221:STDOUT_FILENO": {
+          "start": 221,
+          "end": 221,
+          "enum_constant": false,
+          "body": [
+            "static int STDOUT_FILENO = 1;"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    STDOUT_FILENO: int = 1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.646521806716919,
+          "generation_timestamp": "2025-11-04T16:54:17.479065",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    STDOUT_FILENO: int = ",
+            ""
+          ]
+        },
+        "223-223:STDERR_FILENO": {
+          "start": 223,
+          "end": 223,
+          "enum_constant": false,
+          "body": [
+            "static int STDERR_FILENO = 2;"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    STDERR_FILENO: int = 2"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.612596273422241,
+          "generation_timestamp": "2025-11-04T16:54:04.640776",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    STDERR_FILENO: int = ",
+            ""
+          ]
+        },
+        "231-231:initialized": {
+          "start": 231,
+          "end": 231,
+          "enum_constant": false,
+          "body": [
+            "private static boolean initialized;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __initialized: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __initialized: bool = False"
+          ]
+        },
+        "232-232:installed": {
+          "start": 232,
+          "end": 232,
+          "enum_constant": false,
+          "body": [
+            "private static int installed;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __installed: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __installed: int = 0"
+          ]
+        },
+        "233-233:virtualProcessing": {
+          "start": 233,
+          "end": 233,
+          "enum_constant": false,
+          "body": [
+            "private static int virtualProcessing;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __virtualProcessing: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __virtualProcessing: int = 0"
+          ]
+        }
+      },
+      "static_initializers": {
+        "225-229:run_static_init": {
+          "start": 225,
+          "end": 229,
+          "body": [
+            "static {",
+            "        if (getBoolean(JANSI_EAGER)) {",
+            "            initStreams();",
+            "        }",
+            "    }"
+          ],
+          "type_translations": {},
+          "translation": [
+            "    @staticmethod",
+            "    def run_static_init():",
+            "        if AnsiConsole.getBoolean(AnsiConsole.JANSI_EAGER):",
+            "            AnsiConsole.initStreams()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.244700193405151,
+          "generation_timestamp": "2025-11-04T16:53:51.839754",
+          "model_name": "devstral-24b",
+          "partial_translation": []
+        }
+      },
+      "python_class_declaration": "class AnsiConsole:\n\n"
+    }
+  },
+  "import_map": {
+    "CLibrary": "org.fusesource.jansi.internal.CLibrary",
+    "WinSize": "org.fusesource.jansi.internal.CLibrary.WinSize",
+    "CONSOLE_SCREEN_BUFFER_INFO": "org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO",
+    "MingwSupport": "org.fusesource.jansi.internal.MingwSupport",
+    "AnsiOutputStream": "org.fusesource.jansi.io.AnsiOutputStream",
+    "AnsiProcessor": "org.fusesource.jansi.io.AnsiProcessor",
+    "FastBufferedOutputStream": "org.fusesource.jansi.io.FastBufferedOutputStream",
+    "WindowsAnsiProcessor": "org.fusesource.jansi.io.WindowsAnsiProcessor",
+    "FileDescriptor": "java.io.FileDescriptor",
+    "FileOutputStream": "java.io.FileOutputStream",
+    "IOError": "java.io.IOError",
+    "IOException": "java.io.IOException",
+    "OutputStream": "java.io.OutputStream",
+    "PrintStream": "java.io.PrintStream",
+    "UnsupportedEncodingException": "java.io.UnsupportedEncodingException",
+    "Charset": "java.nio.charset.Charset",
+    "UnsupportedCharsetException": "java.nio.charset.UnsupportedCharsetException",
+    "Locale": "java.util.Locale",
+    "ioctl": "static org.fusesource.jansi.internal.CLibrary.ioctl",
+    "isatty": "static org.fusesource.jansi.internal.CLibrary.isatty",
+    "GetConsoleMode": "static org.fusesource.jansi.internal.Kernel32.GetConsoleMode",
+    "GetConsoleScreenBufferInfo": "static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo",
+    "GetStdHandle": "static org.fusesource.jansi.internal.Kernel32.GetStdHandle",
+    "STD_ERROR_HANDLE": "static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE",
+    "STD_OUTPUT_HANDLE": "static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE",
+    "SetConsoleMode": "static org.fusesource.jansi.internal.Kernel32.SetConsoleMode"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from argparse import ArgumentTypeError",
+    "import builtins",
+    "import io",
+    "import locale",
+    "import os"
+  ]
+}

@@ -1,0 +1,1247 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/src/main/java/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.java",
+  "imports": {
+    "22-22:import static org.apache.commons.graph.CommonsGraph.findShortestPath;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.apache.commons.graph.CommonsGraph.findShortestPath;"
+    },
+    "23-23:import static org.apache.commons.graph.utils.Assertions.checkNotNull;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.apache.commons.graph.utils.Assertions.checkNotNull;"
+    },
+    "24-24:import static org.apache.commons.graph.utils.Assertions.checkState;": {
+      "start": 24,
+      "end": 24,
+      "body": "import static org.apache.commons.graph.utils.Assertions.checkState;"
+    },
+    "26-26:import static java.util.Collections.reverseOrder;": {
+      "start": 26,
+      "end": 26,
+      "body": "import static java.util.Collections.reverseOrder;"
+    },
+    "28-28:import org.apache.commons.graph.Graph;": {
+      "start": 28,
+      "end": 28,
+      "body": "import org.apache.commons.graph.Graph;"
+    },
+    "29-29:import org.apache.commons.graph.Mapper;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.graph.Mapper;"
+    },
+    "30-30:import org.apache.commons.graph.SpanningTree;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.graph.SpanningTree;"
+    },
+    "31-31:import org.apache.commons.graph.VertexPair;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.graph.VertexPair;"
+    },
+    "32-32:import org.apache.commons.graph.model.MutableSpanningTree;": {
+      "start": 32,
+      "end": 32,
+      "body": "import org.apache.commons.graph.model.MutableSpanningTree;"
+    },
+    "33-33:import org.apache.commons.graph.shortestpath.PathNotFoundException;": {
+      "start": 33,
+      "end": 33,
+      "body": "import org.apache.commons.graph.shortestpath.PathNotFoundException;"
+    },
+    "34-34:import org.apache.commons.graph.weight.OrderedMonoid;": {
+      "start": 34,
+      "end": 34,
+      "body": "import org.apache.commons.graph.weight.OrderedMonoid;"
+    },
+    "36-36:import java.util.ArrayList;": {
+      "start": 36,
+      "end": 36,
+      "body": "import java.util.ArrayList;"
+    },
+    "37-37:import java.util.List;": {
+      "start": 37,
+      "end": 37,
+      "body": "import java.util.List;"
+    },
+    "38-38:import java.util.PriorityQueue;": {
+      "start": 38,
+      "end": 38,
+      "body": "import java.util.PriorityQueue;"
+    },
+    "39-39:import java.util.Queue;": {
+      "start": 39,
+      "end": 39,
+      "body": "import java.util.Queue;"
+    }
+  },
+  "classes": {
+    "48-130:DefaultSpanningTreeSourceSelector": {
+      "start": 48,
+      "end": 130,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "55-58:DefaultSpanningTreeSourceSelector": {
+          "start": 55,
+          "end": 58,
+          "body": [
+            "public DefaultSpanningTreeSourceSelector(Graph<V, WE> graph, Mapper<WE, W> weightedEdges) {",
+            "        this.graph = graph;",
+            "        this.weightedEdges = weightedEdges;",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "DefaultSpanningTreeSourceSelector( Graph<V, WE> graph,  Mapper<WE, W> weightedEdges)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "Graph<V, WE>",
+              "name": "graph"
+            },
+            {
+              "modifier": "",
+              "type": "Mapper<WE, W>",
+              "name": "weightedEdges"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "|Graph<V, WE>|graph": {
+                "identifier": "|Graph<V, WE>|graph",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-31 15:10:31",
+                "source_type": "Graph<V, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic, Dict, Callable\n\nV = TypeVar('V')\nWE = TypeVar('WE')\nW = TypeVar('W')\n```\n\nPYTHON TRANSLATION:\n```\nDict[V, Dict[V, WE]]\n```\n\nREASONING:\nThe Java type `Graph<V, WE>` typically represents a graph where `V` is the type of vertices and `WE` is the type of weighted edges. In Python, we can represent this using nested dictionaries where the outer dictionary maps vertices to another dictionary that maps vertices to weighted edges.",
+                "imports": "from typing import TypeVar, Generic, Dict, Callable\n\nV = TypeVar('V')\nWE = TypeVar('WE')\nW = TypeVar('W')",
+                "translated_target_type": "Dict[V, Dict[V, WE]]",
+                "reasoning": "The Java type `Graph<V, WE>` typically represents a graph where `V` is the type of vertices and `WE` is the type of weighted edges. In Python, we can represent this using nested dictionaries where the outer dictionary maps vertices to another dictionary that maps vertices to weighted edges.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nGraph<V, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public DefaultSpanningTreeSourceSelector(Graph<V, WE> graph, Mapper<WE, W> weightedEdges) {\n        this.graph = graph;\n        this.weightedEdges = weightedEdges;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|Mapper<WE, W>|weightedEdges": {
+                "identifier": "|Mapper<WE, W>|weightedEdges",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-31 15:10:38",
+                "source_type": "Mapper<WE, W>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Callable\n```\n\nPYTHON TRANSLATION:\n```\nCallable[[WE, W]]\n```\n\nREASONING:\nIn Java, `Mapper<WE, W>` is a functional interface that represents a function taking an argument of type `WE` and returning a result of type `W`. In Python, the equivalent type is `Callable[[WE, W]]`, which represents a callable (function) that takes an argument of type `WE` and returns a result of type `W`.",
+                "imports": "from typing import TypeVar, Callable",
+                "translated_target_type": "Callable[[TypeVar('WE'), TypeVar('W')], None]",
+                "reasoning": "In Java, `Mapper<WE, W>` is typically an interface or a functional interface that maps an input of type `WE` to an output of type `W`. In Python, the equivalent would be a callable (function) that takes an argument of type `WE` and returns a value of type `W`. The `Callable` type from the `typing` module is used to represent this. The `TypeVar` is used to define generic types `WE` and `W`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMapper<WE, W>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public DefaultSpanningTreeSourceSelector(Graph<V, WE> graph, Mapper<WE, W> weightedEdges) {\n        this.graph = graph;\n        this.weightedEdges = weightedEdges;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'WE' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, graph: Dict[V, Dict[V, WE]], weightedEdges: Callable[[WE], W]) -> None:",
+            "        self.__graph = graph",
+            "        self.__weightedEdges = weightedEdges"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/graph/spanning/KruskalTestCase_testVerifyNotConnectedMinimumSpanningTree_decomposed_mocker_187_DefaultSpanningTreeSourceSelector_<init>.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/KruskalTestCase_testVerifyNotConnectedMinimumSpanningTree_decomposed_mocker_187_DefaultSpanningTreeSourceSelector_<init>.py\", line 54, in test_mocking\n    self.assertTrue(recursive_equal(obj, convert_to_python(json.loads(\"{\\\"memory_address\\\":263607365,\\\"type\\\":\\\"src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector\\\",\\\"instance_fields\\\":{\\\"weightedEdges\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":270532159,\\\"type\\\":\\\"src.main.org.apache.commons.graph.Mapper\\\",\\\"value\\\":{\\\"memory_address\\\":270532159,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseWeightedEdge\\\",\\\"instance_fields\\\":{},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":550060408,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-2024378704087762740\\\"}}}},\\\"graph\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1105129521,\\\"type\\\":\\\"src.main.org.apache.commons.graph.Graph\\\",\\\"value\\\":{\\\"memory_address\\\":1105129521,\\\"type\\\":\\\"src.main.org.apache.commons.graph.model.UndirectedMutableGraph\\\",\\\"instance_fields\\\":{\\\"indexedVertices\\\":{\\\"declaring_class\\\":\\\"src.main.org.apache.commons.graph.model.BaseGraph\\\",\\\"keys\\\":[{\\\"note\\\":\\\"circular_reference\\\",\\\"memory_address\\\":1300437367,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge\\\"}],\\\"modifier\\\":\\\"private\\\",\\\"values\\\":[{\\\"note\\\":\\\"circular_reference\\\",\\\"memory_address\\\":1944313850,\\\"type\\\":\\\"src.main.org.apache.commons.graph.VertexPair\\\"}],\\\"memory_address\\\":1789387126,\\\"type\\\":\\\"java.util.HashMap\\\"},\\\"indexedEdges\\\":{\\\"declaring_class\\\":\\\"src.main.org.apache.commons.graph.model.BaseGraph\\\",\\\"keys\\\":[{\\\"memory_address\\\":250523835,\\\"type\\\":\\\"src.main.org.apache.commons.graph.VertexPair\\\",\\\"instance_fields\\\":{\\\"head\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":930081152,\\\"type\\\":\\\"java.lang.Object\\\",\\\"value\\\":\\\"{ B }\\\"},\\\"tail\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":2017275702,\\\"type\\\":\\\"java.lang.Object\\\",\\\"value\\\":\\\"{ A }\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":2004083218,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"2333503391707156055\\\"}}},{\\\"memory_address\\\":1944313850,\\\"type\\\":\\\"src.main.org.apache.commons.graph.VertexPair\\\",\\\"instance_fields\\\":{\\\"head\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":2017275702,\\\"type\\\":\\\"java.lang.Object\\\",\\\"value\\\":\\\"{ A }\\\"},\\\"tail\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":930081152,\\\"type\\\":\\\"java.lang.Object\\\",\\\"value\\\":\\\"{ B }\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1803034604,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"2333503391707156055\\\"}}}],\\\"modifier\\\":\\\"private\\\",\\\"values\\\":[{\\\"note\\\":\\\"circular_reference\\\",\\\"memory_address\\\":1300437367,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge\\\"},{\\\"note\\\":\\\"circular_reference\\\",\\\"memory_address\\\":1300437367,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge\\\"}],\\\"memory_address\\\":438270414,\\\"type\\\":\\\"java.util.HashMap\\\"},\\\"allEdges\\\":{\\\"declaring_class\\\":\\\"src.main.org.apache.commons.graph.model.BaseGraph\\\",\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":51325109,\\\"type\\\":\\\"java.util.HashSet\\\",\\\"collection_elements\\\":[{\\\"memory_address\\\":1300437367,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge\\\",\\\"instance_fields\\\":{\\\"weight\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":760082639,\\\"type\\\":\\\"java.lang.Object\\\",\\\"value\\\":\\\"7.0\\\"},\\\"label\\\":{\\\"declaring_class\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledEdge\\\",\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":279772974,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"a <-> b\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1857337810,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"5935967858178091436\\\"},\\\"serialVersionUID_HIDDEN_FIELD___\\\":{\\\"shadowed\\\":\\\"true\\\",\\\"declaring_class\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledEdge\\\",\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":188031887,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-4985890761880816592\\\"}}}]},\\\"adjacencyList\\\":{\\\"declaring_class\\\":\\\"src.main.org.apache.commons.graph.model.BaseGraph\\\",\\\"keys\\\":[{\\\"memory_address\\\":2017275702,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledVertex\\\",\\\"instance_fields\\\":{\\\"label\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":61056079,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"A\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1244088954,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-5167021719818162490\\\"}}},{\\\"note\\\":\\\"circular_reference\\\",\\\"memory_address\\\":930081152,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledVertex\\\"},{\\\"memory_address\\\":508628150,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledVertex\\\",\\\"instance_fields\\\":{\\\"label\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1136339946,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"C\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":732623361,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-5167021719818162490\\\"}}},{\\\"memory_address\\\":2126492918,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledVertex\\\",\\\"instance_fields\\\":{\\\"label\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1037601381,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"D\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":506479860,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-5167021719818162490\\\"}}}],\\\"modifier\\\":\\\"private\\\",\\\"values\\\":[{\\\"memory_address\\\":176677195,\\\"type\\\":\\\"java.util.LinkedHashSet\\\",\\\"collection_elements\\\":[{\\\"memory_address\\\":930081152,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledVertex\\\",\\\"instance_fields\\\":{\\\"label\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1114161126,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"B\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":947631096,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-5167021719818162490\\\"}}}]},{\\\"memory_address\\\":1715417422,\\\"type\\\":\\\"java.util.LinkedHashSet\\\",\\\"collection_elements\\\":[{\\\"note\\\":\\\"circular_reference\\\",\\\"memory_address\\\":2017275702,\\\"type\\\":\\\"src.test.org.apache.commons.graph.model.BaseLabeledVertex\\\"}]},{\\\"memory_address\\\":2065813187,\\\"type\\\":\\\"java.util.LinkedHashSet\\\",\\\"collection_elements\\\":[]},{\\\"memory_address\\\":1682796824,\\\"type\\\":\\\"java.util.LinkedHashSet\\\",\\\"collection_elements\\\":[]}],\\\"memory_address\\\":398468940,\\\"type\\\":\\\"java.util.HashMap\\\"}},\\\"static_fields\\\":{\\\"serialVersionUID\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":106860040,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"3067145277295525946\\\"},\\\"serialVersionUID_HIDDEN_FIELD___\\\":{\\\"shadowed\\\":\\\"true\\\",\\\"declaring_class\\\":\\\"src.main.org.apache.commons.graph.model.BaseGraph\\\",\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1322220572,\\\"type\\\":\\\"long\\\",\\\"value\\\":\\\"-8066786787634472712\\\"}}}}},\\\"static_fields\\\":{}}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test03": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 36, in test03\n    defaultSpanningTreeSourceSelector0.fromArbitrarySource()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 44, in fromArbitrarySource\n    if len(self.__graph) == 0:\n       ^^^^^^^^^^^^^^^^^\nTypeError: object of type 'NoneType' has no len()",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "116-119:fromArbitrarySource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "73-86:test03"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test06": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 58, in test06\n    self.assertIsNotNone(spanningTreeAlgorithmSelector0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 1289, in assertIsNotNone\n    self.fail(self._formatMessage(msg, standardMsg))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: unexpectedly None",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "116-119:fromArbitrarySource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "90-98:test06"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 29, in test01\n    defaultSpanningTreeSourceSelector0.fromSource(long0)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "41-55:test01"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test02": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 44, in test02\n    defaultSpanningTreeSourceSelector0.fromSource(None)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "57-71:test02"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/PrimTestCase.py::PrimTestCase::testVerifyMinimumSpanningTree2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 91, in testVerifyMinimumSpanningTree2\n    self.__internalPrimAssertion(input_, a, expected)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 29, in __internalPrimAssertion\n    .fromSource(source)\n     ^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+                  "class_name": "53-361:CommonsGraph",
+                  "fragment_name": "172-176:minimumSpanningTree"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "32-34:DefaultSpanningWeightedEdgeMapperBuilder"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "36-41:whereEdgesHaveWeights"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.utils.Assertions",
+                  "class_name": "25-95:Assertions",
+                  "fragment_name": "64-70:checkNotNull"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "37-50:internalPrimAssertion"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "116-170:testVerifyMinimumSpanningTree2"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+                  "class_name": "30-70:BaseLabeledVertex",
+                  "fragment_name": "35-37:BaseLabeledVertex"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/PrimTestCase.py::PrimTestCase::testVerifyWikipediaMinimumSpanningTree": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 147, in testVerifyWikipediaMinimumSpanningTree\n    self.__internalPrimAssertion(input_, d, expected)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 29, in __internalPrimAssertion\n    .fromSource(source)\n     ^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+                  "class_name": "53-361:CommonsGraph",
+                  "fragment_name": "172-176:minimumSpanningTree"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "32-34:DefaultSpanningWeightedEdgeMapperBuilder"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "36-41:whereEdgesHaveWeights"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.utils.Assertions",
+                  "class_name": "25-95:Assertions",
+                  "fragment_name": "64-70:checkNotNull"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "37-50:internalPrimAssertion"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "176-230:testVerifyWikipediaMinimumSpanningTree"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+                  "class_name": "30-70:BaseLabeledVertex",
+                  "fragment_name": "35-37:BaseLabeledVertex"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 218.22641515731812,
+          "generation_timestamp": "2025-10-31T23:00:32.434107",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, graph: Dict[V, Dict[V, WE]], weightedEdges: Callable[[TypeVar('WE'), TypeVar('W')], None]) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "61-113:applyingReverseDeleteAlgorithm": {
+          "start": 61,
+          "end": 113,
+          "body": [
+            "public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(",
+            "            WO weightOperations) {",
+            "",
+            "        checkNotNull(",
+            "                weightOperations,",
+            "                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");",
+            "",
+            "        final Queue<WE> sortedEdge =",
+            "                new PriorityQueue<WE>(",
+            "                        11,",
+            "                        reverseOrder(",
+            "                                new WeightedEdgesComparator<W, WE>(",
+            "                                        weightOperations, weightedEdges)));",
+            "        final List<WE> visitedEdge = new ArrayList<WE>();",
+            "",
+            "        Iterable<WE> edges = graph.getEdges();",
+            "        for (WE we : edges) {",
+            "            sortedEdge.offer(we);",
+            "        }",
+            "",
+            "        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);",
+            "",
+            "        while (!sortedEdge.isEmpty()) {",
+            "            WE we = sortedEdge.poll();",
+            "",
+            "            VertexPair<V> vertices = graph.getVertices1(we);",
+            "",
+            "            try {",
+            "                findShortestPath(tmpGraph)",
+            "                        .whereEdgesHaveWeights(weightedEdges)",
+            "                        .from(vertices.getHead())",
+            "                        .to(vertices.getTail())",
+            "                        .applyingDijkstra(weightOperations);",
+            "            } catch (PathNotFoundException ex) {",
+            "                visitedEdge.add(we);",
+            "            }",
+            "        }",
+            "",
+            "        final MutableSpanningTree<V, WE, W> res =",
+            "                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);",
+            "        for (V v : graph.getVertices0()) {",
+            "            res.addVertex(v);",
+            "        }",
+            "",
+            "        for (WE we : edges) {",
+            "            VertexPair<V> pair = tmpGraph.getVertices1(we);",
+            "            if (pair != null) {",
+            "                res.addEdge(pair.getHead(), we, pair.getTail());",
+            "            }",
+            "        }",
+            "",
+            "        return res;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "<WO extends OrderedMonoid<W>>",
+            "SpanningTree<V, WE, W>"
+          ],
+          "body_types": [
+            "Queue<WE>",
+            "PriorityQueue<WE>",
+            "WeightedEdgesComparator<W, WE>",
+            "List<WE>",
+            "ArrayList<WE>",
+            "Iterable<WE>",
+            "WE",
+            "Graph<V, WE>",
+            "ReverseDeleteGraph<V, WE>",
+            "VertexPair<V>",
+            "PathNotFoundException",
+            "MutableSpanningTree<V, WE, W>",
+            "V"
+          ],
+          "signature": "applyingReverseDeleteAlgorithm( WO weightOperations)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "WO",
+              "name": "weightOperations"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "<WO extends OrderedMonoid<W>>": {
+                "identifier": "<WO extends OrderedMonoid<W>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 15:10:46",
+                "source_type": "<WO extends OrderedMonoid<W>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nWO = TypeVar('WO', bound='OrderedMonoid[W]')\n```\n\nREASONING:\nThe Java type `<WO extends OrderedMonoid<W>>` is a generic type parameter `WO` that extends the class `OrderedMonoid<W>`. In Python, we can achieve similar functionality using `TypeVar` from the `typing` module. We define `WO` as a `TypeVar` and use the `bound` parameter to specify that it must be a subclass of `OrderedMonoid[W]`.",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Generic type <WO extends OrderedMonoid<W>> is a pattern which is translated to an object.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\n<WO extends OrderedMonoid<W>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "SpanningTree<V, WE, W>": {
+                "identifier": "SpanningTree<V, WE, W>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 15:10:55",
+                "source_type": "SpanningTree<V, WE, W>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nV = TypeVar('V')\nWE = TypeVar('WE')\nW = TypeVar('W')\nSpanningTree = Generic[V, WE, W]\n```\n\nREASONING:\nThe Java type `SpanningTree<V, WE, W>` is a generic type that represents a spanning tree with vertices of type `V`, edges of type `WE`, and weights of type `W`. In Python, we can use the `TypeVar` and `Generic` constructs from the `typing` module to achieve a similar functionality. The `TypeVar` is used to create a generic type variable, and `Generic` is used to create a generic class. Here, `V`, `WE`, and `W` are defined as type variables, and `SpanningTree` is defined as a generic class that takes these type variables as parameters.",
+                "imports": "",
+                "translated_target_type": "SpanningTree",
+                "reasoning": "Custom type SpanningTree is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSpanningTree<V, WE, W>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: cannot import name 'Queue' from 'typing' (/root/miniconda3/envs/MockingBird/lib/python3.11/typing.py)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "Queue<WE>": {
+                "identifier": "Queue<WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:12",
+                "source_type": "Queue<WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom queue import Queue\n```\n\nPYTHON TRANSLATION:\n```\nQueue[WE]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `Queue<WE>` can be represented using the `Queue` from the `queue` module. This maintains the same functionality of holding elements prior to processing, with additional insertion, extraction, and inspection operations.",
+                "imports": "from collections import deque\nfrom typing import TypeVar, Deque\n\nWE = TypeVar('WE')",
+                "translated_target_type": "Deque[WE]",
+                "reasoning": "In Python, the `collections.deque` class provides an equivalent functionality to Java's `Queue` interface. It is a double-ended queue that supports thread-safe, memory-efficient appends and pops from either end. This makes it a suitable replacement for the `Queue<WE>` type in Java. The `Deque` type from the `typing` module is used to specify the type hint for a deque.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nQueue<WE>\n```\n\nJAVA TYPE DESCRIPTION:\nA collection designed for holding elements prior to processing.\n Besides basic Collection operations, queues provide\n additional insertion, extraction, and inspection operations.\n Each of these methods exists in two forms: one throws an exception\n if the operation fails, the other returns a special value (either\n null or false, depending on the operation).  The\n latter form of the insert operation is designed specifically for\n use with capacity-restricted Queue implementations; in most\n implementations, insert operations cannot fail.\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'WE' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "PriorityQueue<WE>": {
+                "identifier": "PriorityQueue<WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:17",
+                "source_type": "PriorityQueue<WE>",
+                "generation": "PYTHON IMPORTS:\n```\nimport heapq\n```\n\nPYTHON TRANSLATION:\n```\nlist\n```\n\nREASONING:\nIn Python, the equivalent of Java's `PriorityQueue` can be achieved using a list in combination with the `heapq` module. The `heapq` module provides functions to maintain a heap queue, which is similar to a priority queue. By using a list and the `heapq` functions, you can create a priority queue that maintains the same functionality as Java's `PriorityQueue`.",
+                "imports": "import heapq",
+                "translated_target_type": "list",
+                "reasoning": "In Python, the equivalent of Java's `PriorityQueue` can be achieved using a list in combination with the `heapq` module. The `heapq` module provides functions to maintain a heap queue, which is similar to a priority queue. By using a list and the `heapq` functions, you can create a priority queue that maintains the same functionality as Java's `PriorityQueue`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nPriorityQueue<WE>\n```\n\nJAVA TYPE DESCRIPTION:\nAn unbounded priority queue based on a priority heap.\n The elements of the priority queue are ordered according to their\n natural ordering, or by a Comparator\n provided at queue construction time, depending on which constructor is\n used.  A priority queue does not permit null elements.\n A priority queue relying on natural ordering also does not permit\n insertion of non-comparable objects (doing so may result in\n ClassCastException).\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nheapq is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "WeightedEdgesComparator<W, WE>": {
+                "identifier": "WeightedEdgesComparator<W, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:25",
+                "source_type": "WeightedEdgesComparator<W, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic, Callable\n```\n\nPYTHON TRANSLATION:\n```\nT = TypeVar('T')\nW = TypeVar('W')\nWE = TypeVar('WE')\nWeightedEdgesComparator = Callable[[W, WE], int]\n```\n\nREASONING:\nThe `WeightedEdgesComparator<W, WE>` in Java is a comparator that compares edges based on their weights. In Python, we can represent this using a callable (function or method) that takes two arguments of types `W` and `WE` and returns an integer. This integer represents the comparison result, similar to how Java's `Comparator` interface works. The `Queue` type is not needed for the type translation.",
+                "imports": "",
+                "translated_target_type": "WeightedEdgesComparator",
+                "reasoning": "Custom type WeightedEdgesComparator is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWeightedEdgesComparator<W, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: cannot import name 'Queue' from 'typing' (/root/miniconda3/envs/MockingBird/lib/python3.11/typing.py)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "List<WE>": {
+                "identifier": "List<WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:33",
+                "source_type": "List<WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import List, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nList[WE]\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `List<WE>` is `List[WE]`. This maintains the same functionality of an ordered collection where elements can be accessed by their integer index and searched within the list. The `TypeVar` is used to define `WE` as a generic type variable.",
+                "imports": "from typing import List, TypeVar",
+                "translated_target_type": "List[TypeVar('WE')]",
+                "reasoning": "In Python, the equivalent type for a Java `List<WE>` is `List[TypeVar('WE')]`. This maintains the same functionality of an ordered collection where elements can be accessed by their integer index and searched within the list. The use of `TypeVar` ensures that `WE` is treated as a generic type variable, similar to how it is used in Java.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nList<WE>\n```\n\nJAVA TYPE DESCRIPTION:\nAn ordered collection, where the user has precise control over where in the\n list each element is inserted.  The user can access elements by their integer\n index (position in the list), and search for elements in the list.\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'WE' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "ArrayList<WE>": {
+                "identifier": "ArrayList<WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:39",
+                "source_type": "ArrayList<WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import List, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nList[WE]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `ArrayList<WE>` is a `List[WE]`. The `List` type from the `typing` module in Python is used to denote a list that can hold elements of type `WE`. This maintains the same functionality as the Java `ArrayList`, which is a resizable array implementation of the List interface. The `TypeVar` is used to define `WE` as a type variable, ensuring that `WE` is recognized as a valid type in the context.",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ArrayList<WE> has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nArrayList<WE>\n```\n\nJAVA TYPE DESCRIPTION:\nResizable-array implementation of the List interface.  Implements\n all optional list operations, and permits all elements, including\n null.  In addition to implementing the List interface,\n this class provides methods to manipulate the size of the array that is\n used internally to store the list.  (This class is roughly equivalent to\n Vector, except that it is unsynchronized.)\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'WE' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Iterable<WE>": {
+                "identifier": "Iterable<WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:46",
+                "source_type": "Iterable<WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Iterable, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nIterable[WE]\n```\n\nREASONING:\nThe `Iterable` interface in Java is used to represent a collection of objects that can be iterated over, typically using a for-each loop. In Python, the equivalent type is also `Iterable`, which is part of the `typing` module. The `TypeVar` is used to define a generic type variable `WE`, which represents the type of elements in the `Iterable`. This maintains the same functionality of allowing iteration over a collection of objects.",
+                "imports": "from typing import Iterable, TypeVar",
+                "translated_target_type": "Iterable[TypeVar('WE')]",
+                "reasoning": "The `Iterable` interface in Java is equivalent to the `Iterable` type in Python's typing module. The `WE` type parameter in Java is translated to a `TypeVar` in Python to maintain the same functionality.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nIterable<WE>\n```\n\nJAVA TYPE DESCRIPTION:\nImplementing this interface allows an object to be the target of the enhanced\n for statement (sometimes called the \"for-each loop\" statement).\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'WE' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "WE": {
+                "identifier": "WE",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:11:53",
+                "source_type": "WE",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nWE = TypeVar('WE')\n```\n\nREASONING:\nIn Java, `WE` is a type variable. In Python, we can use `TypeVar` from the `typing` module to define a type variable. This allows us to maintain the same functionality and flexibility as in the Java code.",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "The Java type `WE` is not a standard Java type, and without additional context, it is reasonable to assume it is a custom class or interface. In Python, the equivalent for a custom class or interface is typically `object`, which is the base class for all classes in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWE\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Graph<V, WE>": {
+                "identifier": "Graph<V, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:12:00",
+                "source_type": "Graph<V, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nV = TypeVar('V')\nWE = TypeVar('WE')\nGraph[V, WE]\n```\n\nREASONING:\nThe Java type `Graph<V, WE>` uses type parameters `V` and `WE` to represent vertices and weighted edges, respectively. In Python, we need to define these type variables explicitly using `TypeVar` before using them in a generic type. Therefore, the equivalent type in Python is `Graph[V, WE]`, where `V` and `WE` are defined as type variables.",
+                "imports": "from typing import TypeVar, Generic, Dict, Callable\n\nV = TypeVar('V')\nWE = TypeVar('WE')\nW = TypeVar('W')",
+                "translated_target_type": "Dict[V, Dict[V, WE]]",
+                "reasoning": "The Java type `Graph<V, WE>` typically represents a graph where `V` is the type of vertices and `WE` is the type of weighted edges. In Python, we can represent this using nested dictionaries where the outer dictionary maps vertices to another dictionary that maps vertices to weighted edges.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nGraph<V, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'V' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "ReverseDeleteGraph<V, WE>": {
+                "identifier": "ReverseDeleteGraph<V, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:12:08",
+                "source_type": "ReverseDeleteGraph<V, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nReverseDeleteGraph[V, WE]\n```\n\nREASONING:\nThe `ReverseDeleteGraph<V, WE>` in Java is a generic class that takes two type parameters, `V` and `WE`. In Python, we can represent this using the `TypeVar` and `Generic` constructs from the `typing` module. The type parameters `V` and `WE` are used to indicate that the class is generic and can work with any types for vertices and weighted edges, respectively.",
+                "imports": "",
+                "translated_target_type": "ReverseDeleteGraph",
+                "reasoning": "Custom type ReverseDeleteGraph is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nReverseDeleteGraph<V, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'V' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "VertexPair<V>": {
+                "identifier": "VertexPair<V>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:12:14",
+                "source_type": "VertexPair<V>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Tuple\n```\n\nPYTHON TRANSLATION:\n```\nTuple[TypeVar('V'), TypeVar('V')]\n```\n\nREASONING:\nIn Java, `VertexPair<V>` is a pair of vertices of type `V`. In Python, the equivalent type is a tuple containing two elements of the same type variable `V`. The `TypeVar` is used to ensure that both elements of the tuple are of the same type.",
+                "imports": "from typing import TypeVar, Tuple",
+                "translated_target_type": "Tuple[TypeVar('V'), TypeVar('V')]",
+                "reasoning": "In Java, `VertexPair<V>` is a pair of vertices of type `V`. In Python, the equivalent type is a tuple containing two elements of the same type variable `V`. The `TypeVar` is used to ensure that both elements of the tuple are of the same type.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nVertexPair<V>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'V' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "PathNotFoundException": {
+                "identifier": "PathNotFoundException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:12:17",
+                "source_type": "PathNotFoundException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "PathNotFoundException",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "MutableSpanningTree<V, WE, W>": {
+                "identifier": "MutableSpanningTree<V, WE, W>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:12:22",
+                "source_type": "MutableSpanningTree<V, WE, W>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nMutableSpanningTree[V, WE, W]\n```\n\nREASONING:\nThe `MutableSpanningTree<V, WE, W>` in Java is a generic class that represents a mutable spanning tree with vertices of type `V`, edges of type `WE`, and weights of type `W`. In Python, we can use the `TypeVar` and `Generic` from the `typing` module to achieve similar functionality. The equivalent type in Python would be `MutableSpanningTree[V, WE, W]`, where `V`, `WE`, and `W` are type variables representing the vertex type, edge type, and weight type, respectively.",
+                "imports": "",
+                "translated_target_type": "dict",
+                "reasoning": "The `MutableSpanningTree` in Java is a type that represents a mutable spanning tree, which is a specific type of graph. In Python, a `dict` can be used to represent a graph, where keys are vertices and values are lists of adjacent vertices. This allows for the addition of vertices and edges, similar to the functionality provided by `MutableSpanningTree` in Java.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMutableSpanningTree<V, WE, W>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'V' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "V": {
+                "identifier": "V",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:12:30",
+                "source_type": "V",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nV = TypeVar('V')\n```\n\nREASONING:\nIn Java, `V` is a type variable that can be used as a placeholder for any type. In Python, the equivalent construct is a TypeVar from the `typing` module. This allows for generic programming, where `V` can represent any type that is specified when the function or class is used.",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "In Java, `V` is a type variable, which is used to define generic types. In Python, we can achieve the same functionality using the `Any` type from the `typing` module. The `Any` type allows a function to accept arguments of any type, similar to how a type variable in Java can represent any type.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nV\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "|WO|weightOperations": {
+                "identifier": "|WO|weightOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-31 15:11:05",
+                "source_type": "WO",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nWO = TypeVar('WO')\n```\n\nREASONING:\nThe Java type `WO` is a type variable that extends `OrderedMonoid<W>`. In Python, we can use `TypeVar` from the `typing` module to define a similar type variable. The `bound` parameter of `TypeVar` is used to specify that `WO` must be a subclass of `OrderedMonoid`. However, since the `OrderedMonoid` class is not provided in the context, we will define `WO` as a simple type variable without any bounds.",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "In Java, `WO` is a custom type, likely a class or interface. In Python, the equivalent type that maintains the same functionality would be `object`, which is the base class for all classes in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nWO\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <WO extends OrderedMonoid<W>> SpanningTree<V, WE, W> applyingReverseDeleteAlgorithm(\n            WO weightOperations) {\n\n        checkNotNull(\n                weightOperations,\n                \"The Reverse-Delete algorithm cannot be calulated with null weight operations\");\n\n        final Queue<WE> sortedEdge =\n                new PriorityQueue<WE>(\n                        11,\n                        reverseOrder(\n                                new WeightedEdgesComparator<W, WE>(\n                                        weightOperations, weightedEdges)));\n        final List<WE> visitedEdge = new ArrayList<WE>();\n\n        Iterable<WE> edges = graph.getEdges();\n        for (WE we : edges) {\n            sortedEdge.offer(we);\n        }\n\n        Graph<V, WE> tmpGraph = new ReverseDeleteGraph<V, WE>(graph, sortedEdge, visitedEdge);\n\n        while (!sortedEdge.isEmpty()) {\n            WE we = sortedEdge.poll();\n\n            VertexPair<V> vertices = graph.getVertices1(we);\n\n            try {\n                findShortestPath(tmpGraph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .from(vertices.getHead())\n                        .to(vertices.getTail())\n                        .applyingDijkstra(weightOperations);\n            } catch (PathNotFoundException ex) {\n                visitedEdge.add(we);\n            }\n        }\n\n        final MutableSpanningTree<V, WE, W> res =\n                new MutableSpanningTree<V, WE, W>(weightOperations, weightedEdges);\n        for (V v : graph.getVertices0()) {\n            res.addVertex(v);\n        }\n\n        for (WE we : edges) {\n            VertexPair<V> pair = tmpGraph.getVertices1(we);\n            if (pair != null) {\n                res.addEdge(pair.getHead(), we, pair.getTail());\n            }\n        }\n\n        return res;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 38.92940616607666,
+          "generation_timestamp": "2025-10-31T23:01:11.589332",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def applyingReverseDeleteAlgorithm(self, weightOperations: object) -> \"SpanningTree\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "116-119:fromArbitrarySource": {
+          "start": 116,
+          "end": 119,
+          "body": [
+            "public SpanningTreeAlgorithmSelector<V, W, WE> fromArbitrarySource() {",
+            "        checkState(graph.getOrder() > 0, \"Spanning tree cannot be calculated on an empty graph\");",
+            "        return fromSource(graph.getVertices0().iterator().next());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "SpanningTreeAlgorithmSelector<V, W, WE>"
+          ],
+          "body_types": [],
+          "signature": "fromArbitrarySource()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "SpanningTreeAlgorithmSelector<V, W, WE>": {
+                "identifier": "SpanningTreeAlgorithmSelector<V, W, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 15:12:38",
+                "source_type": "SpanningTreeAlgorithmSelector<V, W, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nV = TypeVar('V')\nW = TypeVar('W')\nWE = TypeVar('WE')\nSpanningTreeAlgorithmSelector = Generic[V, W, WE]\n```\n\nREASONING:\nThe Java type `SpanningTreeAlgorithmSelector<V, W, WE>` is a generic class with three type parameters. In Python, we can use `TypeVar` to define these type parameters and `Generic` to create a generic class. Here, `V`, `W`, and `WE` are defined as type variables, and `SpanningTreeAlgorithmSelector` is defined as a generic class that takes these three type parameters.",
+                "imports": "",
+                "translated_target_type": "SpanningTreeAlgorithmSelector",
+                "reasoning": "Custom type SpanningTreeAlgorithmSelector is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSpanningTreeAlgorithmSelector<V, W, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public SpanningTreeAlgorithmSelector<V, W, WE> fromArbitrarySource() {\n        checkState(graph.getOrder() > 0, \"Spanning tree cannot be calculated on an empty graph\");\n        return fromSource(graph.getVertices0().iterator().next());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def fromArbitrarySource(self) -> \"SpanningTreeAlgorithmSelector\":",
+            "        if len(self.__graph) == 0:",
+            "            raise ValueError(\"Spanning tree cannot be calculated on an empty graph\")",
+            "        return self.fromSource(next(iter(self.__graph)))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/graph/spanning/KruskalTestCase_testVerifyNotConnectedMinimumSpanningTree_decomposed_mocker_188_DefaultSpanningTreeSourceSelector_fromArbitrarySource.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/KruskalTestCase_testVerifyNotConnectedMinimumSpanningTree_decomposed_mocker_188_DefaultSpanningTreeSourceSelector_fromArbitrarySource.py\", line 64, in test_mocking\n    method_ret = instance_initial.orig_DefaultSpanningTreeSourceSelector_fromArbitrarySource()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 44, in fromArbitrarySource\n    if len(self.__graph) == 0:\n       ^^^^^^^^^^^^^^^^^\nTypeError: object of type 'UndirectedMutableGraph' has no len()"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test03": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 36, in test03\n    defaultSpanningTreeSourceSelector0.fromArbitrarySource()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 44, in fromArbitrarySource\n    if len(self.__graph) == 0:\n       ^^^^^^^^^^^^^^^^^\nTypeError: object of type 'NoneType' has no len()",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "116-119:fromArbitrarySource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "73-86:test03"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test06": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 58, in test06\n    self.assertIsNotNone(spanningTreeAlgorithmSelector0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 1289, in assertIsNotNone\n    self.fail(self._formatMessage(msg, standardMsg))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: unexpectedly None",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "116-119:fromArbitrarySource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "90-98:test06"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 207.892728805542,
+          "generation_timestamp": "2025-10-31T23:04:39.676155",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def fromArbitrarySource(self) -> \"SpanningTreeAlgorithmSelector\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "122-129:fromSource": {
+          "start": 122,
+          "end": 129,
+          "body": [
+            "public <S extends V> SpanningTreeAlgorithmSelector<V, W, WE> fromSource(S source) {",
+            "        source =",
+            "                checkNotNull(",
+            "                        source,",
+            "                        \"Spanning tree cannot be calculated without expressing the source vertex\");",
+            "        checkState(graph.containsVertex(source), \"Vertex %s does not exist in the Graph\", source);",
+            "        return new DefaultSpanningTreeAlgorithmSelector<V, W, WE>(graph, weightedEdges, source);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "<S extends V>",
+            "SpanningTreeAlgorithmSelector<V, W, WE>"
+          ],
+          "body_types": [
+            "DefaultSpanningTreeAlgorithmSelector<V, W, WE>"
+          ],
+          "signature": "fromSource( S source)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "S",
+              "name": "source"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "<S extends V>": {
+                "identifier": "<S extends V>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 15:12:46",
+                "source_type": "<S extends V>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nS = TypeVar('S', bound='V')\n```\n\nREASONING:\nIn Java, `<S extends V>` defines a type variable `S` that is a subtype of `V`. In Python, we can achieve similar functionality using `TypeVar` from the `typing` module. The `bound` parameter of `TypeVar` is used to specify that `S` must be a subtype of `V`.",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Generic type <S extends V> is a pattern which is translated to an object.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\n<S extends V>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <S extends V> SpanningTreeAlgorithmSelector<V, W, WE> fromSource(S source) {\n        source =\n                checkNotNull(\n                        source,\n                        \"Spanning tree cannot be calculated without expressing the source vertex\");\n        checkState(graph.containsVertex(source), \"Vertex %s does not exist in the Graph\", source);\n        return new DefaultSpanningTreeAlgorithmSelector<V, W, WE>(graph, weightedEdges, source);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "SpanningTreeAlgorithmSelector<V, W, WE>": {
+                "identifier": "SpanningTreeAlgorithmSelector<V, W, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 15:12:54",
+                "source_type": "SpanningTreeAlgorithmSelector<V, W, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nV = TypeVar('V')\nW = TypeVar('W')\nWE = TypeVar('WE')\nSpanningTreeAlgorithmSelector = Generic[V, W, WE]\n```\n\nREASONING:\nThe Java type `SpanningTreeAlgorithmSelector<V, W, WE>` is a generic class with three type parameters. In Python, we can use `TypeVar` to define these type parameters and `Generic` to create a generic class that takes these type parameters. This maintains the same functionality as the Java type.",
+                "imports": "",
+                "translated_target_type": "SpanningTreeAlgorithmSelector",
+                "reasoning": "Custom type SpanningTreeAlgorithmSelector is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSpanningTreeAlgorithmSelector<V, W, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <S extends V> SpanningTreeAlgorithmSelector<V, W, WE> fromSource(S source) {\n        source =\n                checkNotNull(\n                        source,\n                        \"Spanning tree cannot be calculated without expressing the source vertex\");\n        checkState(graph.containsVertex(source), \"Vertex %s does not exist in the Graph\", source);\n        return new DefaultSpanningTreeAlgorithmSelector<V, W, WE>(graph, weightedEdges, source);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "DefaultSpanningTreeAlgorithmSelector<V, W, WE>": {
+                "identifier": "DefaultSpanningTreeAlgorithmSelector<V, W, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 15:13:07",
+                "source_type": "DefaultSpanningTreeAlgorithmSelector<V, W, WE>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nDefaultSpanningTreeAlgorithmSelector[V, W, WE]\n```\n\nREASONING:\nThe Java type `DefaultSpanningTreeAlgorithmSelector<V, W, WE>` is a generic class that takes three type parameters. In Python, we can achieve similar functionality using the `TypeVar` and `Generic` classes from the `typing` module. The type parameters `V`, `W`, and `WE` are preserved in the Python translation to maintain the same functionality.",
+                "imports": "",
+                "translated_target_type": "DefaultSpanningTreeAlgorithmSelector",
+                "reasoning": "Custom type DefaultSpanningTreeAlgorithmSelector is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDefaultSpanningTreeAlgorithmSelector<V, W, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <S extends V> SpanningTreeAlgorithmSelector<V, W, WE> fromSource(S source) {\n        source =\n                checkNotNull(\n                        source,\n                        \"Spanning tree cannot be calculated without expressing the source vertex\");\n        checkState(graph.containsVertex(source), \"Vertex %s does not exist in the Graph\", source);\n        return new DefaultSpanningTreeAlgorithmSelector<V, W, WE>(graph, weightedEdges, source);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'V' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "|S|source": {
+                "identifier": "|S|source",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-31 15:13:01",
+                "source_type": "S",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nS = TypeVar('S', bound='V')\n```\n\nREASONING:\nIn Java, `S` is a type variable that extends `V`. In Python, we can use `TypeVar` from the `typing` module to define a type variable with a bound. The `bound` parameter specifies that `S` must be a subtype of `V`.",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type S has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nS\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public <S extends V> SpanningTreeAlgorithmSelector<V, W, WE> fromSource(S source) {\n        source =\n                checkNotNull(\n                        source,\n                        \"Spanning tree cannot be calculated without expressing the source vertex\");\n        checkState(graph.containsVertex(source), \"Vertex %s does not exist in the Graph\", source);\n        return new DefaultSpanningTreeAlgorithmSelector<V, W, WE>(graph, weightedEdges, source);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def fromSource(self, source: object) -> \"SpanningTreeAlgorithmSelector\":",
+            "        from src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeAlgorithmSelector import DefaultSpanningTreeAlgorithmSelector",
+            "        source = self.checkNotNull(source, \"Spanning tree cannot be calculated without expressing the source vertex\")",
+            "        self.checkState(self.__graph.containsVertex(source), \"Vertex %s does not exist in the Graph\", source)",
+            "        return DefaultSpanningTreeAlgorithmSelector(self.__graph, self.__weightedEdges, source)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest_test06_decomposed_mocker_13_DefaultSpanningTreeSourceSelector_fromSource.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest_test06_decomposed_mocker_13_DefaultSpanningTreeSourceSelector_fromSource.py\", line 64, in test_mocking\n    method_ret = instance_initial.orig_DefaultSpanningTreeSourceSelector_fromSource(*method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 52, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test06": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 58, in test06\n    self.assertIsNotNone(spanningTreeAlgorithmSelector0)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 1289, in assertIsNotNone\n    self.fail(self._formatMessage(msg, standardMsg))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: unexpectedly None",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "116-119:fromArbitrarySource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "90-98:test06"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 29, in test01\n    defaultSpanningTreeSourceSelector0.fromSource(long0)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "41-55:test01"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py::DefaultSpanningTreeSourceSelector_ESTest::test02": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector_ESTest.py\", line 44, in test02\n    defaultSpanningTreeSourceSelector0.fromSource(None)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector_ESTest",
+                  "class_name": "38-104:DefaultSpanningTreeSourceSelector_ESTest",
+                  "fragment_name": "57-71:test02"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/PrimTestCase.py::PrimTestCase::testVerifyMinimumSpanningTree2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 91, in testVerifyMinimumSpanningTree2\n    self.__internalPrimAssertion(input_, a, expected)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 29, in __internalPrimAssertion\n    .fromSource(source)\n     ^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+                  "class_name": "53-361:CommonsGraph",
+                  "fragment_name": "172-176:minimumSpanningTree"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "32-34:DefaultSpanningWeightedEdgeMapperBuilder"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "36-41:whereEdgesHaveWeights"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.utils.Assertions",
+                  "class_name": "25-95:Assertions",
+                  "fragment_name": "64-70:checkNotNull"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "37-50:internalPrimAssertion"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "116-170:testVerifyMinimumSpanningTree2"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+                  "class_name": "30-70:BaseLabeledVertex",
+                  "fragment_name": "35-37:BaseLabeledVertex"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/graph/spanning/PrimTestCase.py::PrimTestCase::testVerifyWikipediaMinimumSpanningTree": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 147, in testVerifyWikipediaMinimumSpanningTree\n    self.__internalPrimAssertion(input_, d, expected)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/test/org/apache/commons/graph/spanning/PrimTestCase.py\", line 29, in __internalPrimAssertion\n    .fromSource(source)\n     ^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-graph/src/main/org/apache/commons/graph/spanning/DefaultSpanningTreeSourceSelector.py\", line 53, in fromSource\n    source = self.checkNotNull(\n             ^^^^^^^^^^^^^^^^^\nAttributeError: 'DefaultSpanningTreeSourceSelector' object has no attribute 'checkNotNull'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+                  "class_name": "53-361:CommonsGraph",
+                  "fragment_name": "172-176:minimumSpanningTree"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "32-34:DefaultSpanningWeightedEdgeMapperBuilder"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningWeightedEdgeMapperBuilder",
+                  "class_name": "27-42:DefaultSpanningWeightedEdgeMapperBuilder",
+                  "fragment_name": "36-41:whereEdgesHaveWeights"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "55-58:DefaultSpanningTreeSourceSelector"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.spanning.DefaultSpanningTreeSourceSelector",
+                  "class_name": "48-130:DefaultSpanningTreeSourceSelector",
+                  "fragment_name": "122-129:fromSource"
+                },
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.utils.Assertions",
+                  "class_name": "25-95:Assertions",
+                  "fragment_name": "64-70:checkNotNull"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "37-50:internalPrimAssertion"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.spanning.PrimTestCase",
+                  "class_name": "36-231:PrimTestCase",
+                  "fragment_name": "176-230:testVerifyWikipediaMinimumSpanningTree"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+                  "class_name": "30-70:BaseLabeledVertex",
+                  "fragment_name": "35-37:BaseLabeledVertex"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 217.9605643749237,
+          "generation_timestamp": "2025-10-31T23:09:32.493061",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def fromSource(self, source: object) -> \"SpanningTreeAlgorithmSelector\":\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "51-51:graph": {
+          "start": 51,
+          "end": 51,
+          "enum_constant": false,
+          "body": [
+            "private final Graph<V, WE> graph;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Graph<V, WE>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Graph<V, WE>": {
+                "identifier": "Graph<V, WE>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-10-31 15:10:19",
+                "source_type": "Graph<V, WE>",
+                "generation": "[TOOL_CALLS]PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nGraph[TypeVar('V'), TypeVar('WE')]\n```\n\nREASONING:\nTo correctly translate the Java generic type `Graph<V, WE>` to Python, we need to define type variables `V` and `WE` using `TypeVar` from the `typing` module. This ensures that the type variables are properly recognized and can be used in the generic type definition.",
+                "imports": "from typing import TypeVar, Generic, Dict, Callable\n\nV = TypeVar('V')\nWE = TypeVar('WE')\nW = TypeVar('W')",
+                "translated_target_type": "Dict[V, Dict[V, WE]]",
+                "reasoning": "The Java type `Graph<V, WE>` typically represents a graph where `V` is the type of vertices and `WE` is the type of weighted edges. In Python, we can represent this using nested dictionaries where the outer dictionary maps vertices to another dictionary that maps vertices to weighted edges.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nGraph<V, WE>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private final Graph<V, WE> graph;\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'V' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __graph: Dict[V, Dict[V, WE]] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __graph: Dict[V, Dict[V, WE]] = None"
+          ]
+        },
+        "53-53:weightedEdges": {
+          "start": 53,
+          "end": 53,
+          "enum_constant": false,
+          "body": [
+            "private final Mapper<WE, W> weightedEdges;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Mapper<WE, W>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Mapper<WE, W>": {
+                "identifier": "Mapper<WE, W>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-10-31 15:10:26",
+                "source_type": "Mapper<WE, W>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Callable\n```\n\nPYTHON TRANSLATION:\n```\nCallable[[TypeVar('WE'), TypeVar('W')], None]\n```\n\nREASONING:\nIn Java, `Mapper<WE, W>` is typically an interface or a functional interface that maps an input of type `WE` to an output of type `W`. In Python, the equivalent would be a callable (function) that takes an argument of type `WE` and returns a value of type `W`. The `Callable` type from the `typing` module is used to represent this. The `TypeVar` is used to define generic types `WE` and `W`.",
+                "imports": "from typing import TypeVar, Callable",
+                "translated_target_type": "Callable[[TypeVar('WE'), TypeVar('W')], None]",
+                "reasoning": "In Java, `Mapper<WE, W>` is typically an interface or a functional interface that maps an input of type `WE` to an output of type `W`. In Python, the equivalent would be a callable (function) that takes an argument of type `WE` and returns a value of type `W`. The `Callable` type from the `typing` module is used to represent this. The `TypeVar` is used to define generic types `WE` and `W`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMapper<WE, W>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private final Mapper<WE, W> weightedEdges;\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'WE' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __weightedEdges: Callable[[TypeVar('WE'), TypeVar('W')], None] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __weightedEdges: Callable[[TypeVar('WE'), TypeVar('W')], None] = None"
+          ]
+        }
+      },
+      "python_class_declaration": "class DefaultSpanningTreeSourceSelector:\n\n"
+    }
+  },
+  "import_map": {
+    "findShortestPath": "static org.apache.commons.graph.CommonsGraph.findShortestPath",
+    "checkNotNull": "static org.apache.commons.graph.utils.Assertions.checkNotNull",
+    "checkState": "static org.apache.commons.graph.utils.Assertions.checkState",
+    "reverseOrder": "static java.util.Collections.reverseOrder",
+    "Graph": "org.apache.commons.graph.Graph",
+    "Mapper": "org.apache.commons.graph.Mapper",
+    "SpanningTree": "org.apache.commons.graph.SpanningTree",
+    "VertexPair": "org.apache.commons.graph.VertexPair",
+    "MutableSpanningTree": "org.apache.commons.graph.model.MutableSpanningTree",
+    "PathNotFoundException": "org.apache.commons.graph.shortestpath.PathNotFoundException",
+    "OrderedMonoid": "org.apache.commons.graph.weight.OrderedMonoid",
+    "ArrayList": "java.util.ArrayList",
+    "List": "java.util.List",
+    "PriorityQueue": "java.util.PriorityQueue",
+    "Queue": "java.util.Queue"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from collections import deque\nfrom typing import TypeVar, Deque\n\nWE = TypeVar('WE')",
+    "from typing import Any",
+    "from typing import Iterable, TypeVar",
+    "from typing import List, TypeVar",
+    "from typing import TypeVar, Callable",
+    "from typing import TypeVar, Generic, Dict, Callable\n\nV = TypeVar('V')\nWE = TypeVar('WE')\nW = TypeVar('W')",
+    "from typing import TypeVar, Tuple",
+    "import heapq"
+  ]
+}

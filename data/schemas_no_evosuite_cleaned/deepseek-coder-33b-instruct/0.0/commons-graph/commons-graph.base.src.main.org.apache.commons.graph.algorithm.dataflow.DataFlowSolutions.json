@@ -1,0 +1,595 @@
+{
+    "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-graph/base/src/main/java/org/apache/commons/graph/algorithm/dataflow/DataFlowSolutions.java",
+    "imports": {
+        "22-22:import org.apache.commons.graph.*;": {
+            "start": 22,
+            "end": 22,
+            "body": "import org.apache.commons.graph.*;"
+        },
+        "24-24:import java.util.BitSet;": {
+            "start": 24,
+            "end": 24,
+            "body": "import java.util.BitSet;"
+        },
+        "25-25:import java.util.HashMap;": {
+            "start": 25,
+            "end": 25,
+            "body": "import java.util.HashMap;"
+        },
+        "26-26:import java.util.Iterator;": {
+            "start": 26,
+            "end": 26,
+            "body": "import java.util.Iterator;"
+        },
+        "27-27:import java.util.Map;": {
+            "start": 27,
+            "end": 27,
+            "body": "import java.util.Map;"
+        }
+    },
+    "classes": {
+        "29-90:DataFlowSolutions": {
+            "start": 29,
+            "end": 90,
+            "is_abstract": false,
+            "is_interface": false,
+            "is_enum": false,
+            "modifiers": [
+                "public"
+            ],
+            "nested_inside": "",
+            "nests": [],
+            "implements": [],
+            "extends": [],
+            "methods": {
+                "33-35:DataFlowSolutions": {
+                    "start": 33,
+                    "end": 35,
+                    "body": [
+                        "public DataFlowSolutions(DirectedGraph graph, DataFlowEquations eq) {",
+                        "        calculateDataFlow(graph, eq);",
+                        "    }"
+                    ],
+                    "is_constructor": true,
+                    "annotations": [],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [],
+                    "body_types": [],
+                    "signature": "DataFlowSolutions( DirectedGraph graph,  DataFlowEquations eq)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "DirectedGraph",
+                            "name": "graph"
+                        },
+                        {
+                            "modifier": "",
+                            "type": "DataFlowEquations",
+                            "name": "eq"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {
+                            "|DirectedGraph|graph": {
+                                "identifier": "|DirectedGraph|graph",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-23 05:04:21",
+                                "source_type": "DirectedGraph",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DirectedGraph",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "|DataFlowEquations|eq": {
+                                "identifier": "|DataFlowEquations|eq",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-23 05:04:21",
+                                "source_type": "DataFlowEquations",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DataFlowEquations",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "37-81:calculateDataFlow": {
+                    "start": 37,
+                    "end": 81,
+                    "body": [
+                        "private void calculateDataFlow(DirectedGraph graph, DataFlowEquations eq) {",
+                        "        Iterator vertices = graph.getVertices().iterator();",
+                        "        while (vertices.hasNext()) {",
+                        "            Vertex v = (Vertex) vertices.next();",
+                        "            inValues.put(v, new BitSet()); // Initialize everything to",
+                        "            outValues.put(v, new BitSet()); // empty",
+                        "        }",
+                        "",
+                        "        boolean isOK = true;",
+                        "        while (isOK) {",
+                        "            vertices = graph.getVertices().iterator();",
+                        "            isOK = false;",
+                        "            while (vertices.hasNext()) {",
+                        "                Vertex v = (Vertex) vertices.next();",
+                        "",
+                        "                BitSet out = new BitSet();",
+                        "                out.or((BitSet) inValues.get(v));",
+                        "                out.or(eq.generates(v));",
+                        "                out.andNot(eq.kills(v));",
+                        "",
+                        "                /*",
+                        "                System.err.println(\"Old Out: \" + v + \":\" + outValues.get( v ));",
+                        "                System.err.println(\"New Out: \" + v + \":\" + out);",
+                        "                */",
+                        "                if (!out.equals(outValues.get(v))) {",
+                        "                    isOK = true;",
+                        "                    outValues.put(v, out);",
+                        "",
+                        "                    Iterator outbound = graph.getOutbound(v).iterator();",
+                        "                    while (outbound.hasNext()) {",
+                        "                        Vertex target = graph.getTarget((Edge) outbound.next());",
+                        "",
+                        "                        BitSet in = (BitSet) inValues.get(target);",
+                        "                        in.or(out);",
+                        "                        inValues.put(target, in);",
+                        "                        /*",
+                        "                        System.err.println(\"Old In: \" + target + \":\" +",
+                        "                        \t\t   inValues.get( target ));",
+                        "                        System.err.println(\"New In: \" + target + \":\" + in );",
+                        "                        */",
+                        "                    }",
+                        "                }",
+                        "            }",
+                        "        }",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "private"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "Iterator",
+                        "Vertex",
+                        "BitSet",
+                        "boolean",
+                        "Edge"
+                    ],
+                    "signature": "calculateDataFlow( DirectedGraph graph,  DataFlowEquations eq)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "DirectedGraph",
+                            "name": "graph"
+                        },
+                        {
+                            "modifier": "",
+                            "type": "DataFlowEquations",
+                            "name": "eq"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2026-02-23 05:04:21",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "Iterator": {
+                                "identifier": "Iterator",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:04:21",
+                                "source_type": "Iterator",
+                                "generation": "PYTHON IMPORTS:\n```python\nfrom collections.abc import Iterator\n```\n\nPYTHON TRANSLATION:\n```python\nIterator\n```\n\nREASONING: \nIn Python, the equivalent type for `java.util.Iterator` is `collections.abc.Iterator`. This is a built-in Python module that provides abstract base classes (ABCs) corresponding to various types of collections, including iterators. The Iterator class in this module can be used as an equivalent replacement for the Java Iterator type.\n",
+                                "imports": "from collections.abc import Iterator",
+                                "translated_target_type": "Iterator",
+                                "reasoning": "In Python, the equivalent type for `java.util.Iterator` is `collections.abc.Iterator`. This is a built-in Python module that provides abstract base classes (ABCs) corresponding to various types of collections, including iterators. The Iterator class in this module can be used as an equivalent replacement for the Java Iterator type.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nIterator\n```\n\nJAVA TYPE DESCRIPTION:\nAn iterator over a collection.  Iterator takes the place of\n Enumeration in the Java Collections Framework.  Iterators\n differ from enumerations in two ways:\n\n\nJAVA CODE:\n```\n    private void calculateDataFlow(DirectedGraph graph, DataFlowEquations eq) {\n        Iterator vertices = graph.getVertices().iterator();\n        while (vertices.hasNext()) {\n            Vertex v = (Vertex) vertices.next();\n            inValues.put(v, new BitSet()); // Initialize everything to\n            outValues.put(v, new BitSet()); // empty\n        }\n\n        boolean isOK = true;\n        while (isOK) {\n            vertices = graph.getVertices().iterator();\n            isOK = false;\n            while (vertices.hasNext()) {\n                Vertex v = (Vertex) vertices.next();\n\n                BitSet out = new BitSet();\n                out.or((BitSet) inValues.get(v));\n                out.or(eq.generates(v));\n                out.andNot(eq.kills(v));\n\n                /*\n                System.err.println(\"Old Out: \" + v + \":\" + outValues.get( v ));\n                System.err.println(\"New Out: \" + v + \":\" + out);\n                */\n                if (!out.equals(outValues.get(v))) {\n                    isOK = true;\n                    outValues.put(v, out);\n\n                    Iterator outbound = graph.getOutbound(v).iterator();\n                    while (outbound.hasNext()) {\n                        Vertex target = graph.getTarget((Edge) outbound.next());\n\n                        BitSet in = (BitSet) inValues.get(target);\n                        in.or(out);\n                        inValues.put(target, in);\n                        /*\n                        System.err.println(\"Old In: \" + target + \":\" +\n                        \t\t   inValues.get( target ));\n                        System.err.println(\"New In: \" + target + \":\" + in );\n                        */\n                    }\n                }\n            }\n        }\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "Vertex": {
+                                "identifier": "Vertex",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:04:57",
+                                "source_type": "Vertex",
+                                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to syntax issues in Python. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom collections import defaultdict, deque\nfrom typing import Dict, Set\n```\n\nPYTHON TRANSLATION:\n```python\nclass Vertex:\n    def __init__(self):\n        self.inValues = defaultdict(set)  # Initialize everything to empty set\n        self.outValues = defaultdict(set)  # empty set\n\n    def calculateDataFlow(self, graph: Dict[Vertex, Set[Vertex]], eq: 'DataFlowEquations'):\n        vertices = list(graph.keys())\n        for v in vertices:\n            self.inValues[v] = set()\n            self.outValues[v] = set()\n\n        isOK = True\n        while isOK:\n            isOK = False\n            for v in vertices:\n                out = self.inValues[v].copy()\n                out.update(eq.generates(v))\n                out.difference_update(eq.kills(v))\n\n                if out != self.outValues[v]:\n                    isOK = True\n                    self.outValues[v] = out\n\n                    for target in graph[v]:\n                        self.inValues[target].update(out)\n```\n\nREASONING:\nThe Java code is translated into Python by creating a class `Vertex` that has methods for calculating data flow. The `calculateDataFlow` method in the `Vertex` class corresponds to the original Java method. The `inValues` and `outValues` are replaced with Python's defaultdict from collections module, which provides a dictionary-like object with default values. The `generates` and `kills` methods of the `DataFlowEquations` class are implemented as placeholders for your specific needs.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nVertex\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private void calculateDataFlow(DirectedGraph graph, DataFlowEquations eq) {\n        Iterator vertices = graph.getVertices().iterator();\n        while (vertices.hasNext()) {\n            Vertex v = (Vertex) vertices.next();\n            inValues.put(v, new BitSet()); // Initialize everything to\n            outValues.put(v, new BitSet()); // empty\n        }\n\n        boolean isOK = true;\n        while (isOK) {\n            vertices = graph.getVertices().iterator();\n            isOK = false;\n            while (vertices.hasNext()) {\n                Vertex v = (Vertex) vertices.next();\n\n                BitSet out = new BitSet();\n                out.or((BitSet) inValues.get(v));\n                out.or(eq.generates(v));\n                out.andNot(eq.kills(v));\n\n                /*\n                System.err.println(\"Old Out: \" + v + \":\" + outValues.get( v ));\n                System.err.println(\"New Out: \" + v + \":\" + out);\n                */\n                if (!out.equals(outValues.get(v))) {\n                    isOK = true;\n                    outValues.put(v, out);\n\n                    Iterator outbound = graph.getOutbound(v).iterator();\n                    while (outbound.hasNext()) {\n                        Vertex target = graph.getTarget((Edge) outbound.next());\n\n                        BitSet in = (BitSet) inValues.get(target);\n                        in.or(out);\n                        inValues.put(target, in);\n                        /*\n                        System.err.println(\"Old In: \" + target + \":\" +\n                        \t\t   inValues.get( target ));\n                        System.err.println(\"New In: \" + target + \":\" + in );\n                        */\n                    }\n                }\n            }\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "BitSet": {
+                                "identifier": "BitSet",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:05:42",
+                                "source_type": "BitSet",
+                                "generation": "I'm sorry for the confusion, but I can't provide a translation without knowing what `Vertex` is. The error message you provided indicates that Python doesn't recognize `Vertex` as a type or variable. \n\nPlease make sure to import any necessary types or classes before using them in your code. If `Vertex` is a custom class defined elsewhere, please include the appropriate import statement at the top of your script.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBitSet\n```\n\nJAVA TYPE DESCRIPTION:\nThis class implements a vector of bits that grows as needed. Each\n component of the bit set has a boolean value. The\n bits of a BitSet are indexed by nonnegative integers.\n Individual indexed bits can be examined, set, or cleared. One\n BitSet may be used to modify the contents of another\n BitSet through logical AND, logical inclusive OR, and\n logical exclusive OR operations.\n\n\nJAVA CODE:\n```\n    private void calculateDataFlow(DirectedGraph graph, DataFlowEquations eq) {\n        Iterator vertices = graph.getVertices().iterator();\n        while (vertices.hasNext()) {\n            Vertex v = (Vertex) vertices.next();\n            inValues.put(v, new BitSet()); // Initialize everything to\n            outValues.put(v, new BitSet()); // empty\n        }\n\n        boolean isOK = true;\n        while (isOK) {\n            vertices = graph.getVertices().iterator();\n            isOK = false;\n            while (vertices.hasNext()) {\n                Vertex v = (Vertex) vertices.next();\n\n                BitSet out = new BitSet();\n                out.or((BitSet) inValues.get(v));\n                out.or(eq.generates(v));\n                out.andNot(eq.kills(v));\n\n                /*\n                System.err.println(\"Old Out: \" + v + \":\" + outValues.get( v ));\n                System.err.println(\"New Out: \" + v + \":\" + out);\n                */\n                if (!out.equals(outValues.get(v))) {\n                    isOK = true;\n                    outValues.put(v, out);\n\n                    Iterator outbound = graph.getOutbound(v).iterator();\n                    while (outbound.hasNext()) {\n                        Vertex target = graph.getTarget((Edge) outbound.next());\n\n                        BitSet in = (BitSet) inValues.get(target);\n                        in.or(out);\n                        inValues.put(target, in);\n                        /*\n                        System.err.println(\"Old In: \" + target + \":\" +\n                        \t\t   inValues.get( target ));\n                        System.err.println(\"New In: \" + target + \":\" + in );\n                        */\n                    }\n                }\n            }\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Vertex' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "boolean": {
+                                "identifier": "boolean",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:06:03",
+                                "source_type": "boolean",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "bool",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "Edge": {
+                                "identifier": "Edge",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:06:21",
+                                "source_type": "Edge",
+                                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to syntax issues. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom collections import defaultdict, deque\nfrom typing import Dict, Set\n```\n\nPYTHON TRANSLATION:\n```python\nclass Vertex:\n    def __init__(self):\n        self.in_values = defaultdict(set)  # Initialize everything to empty set\n        self.out_values = defaultdict(set)  # empty set\n\n    def calculate_data_flow(self, graph: Dict[Vertex, Set[Vertex]], eq: 'DataFlowEquations'):\n        vertices = list(graph.keys())\n\n        for v in vertices:\n            self.in_values[v] = set()  # Initialize everything to empty\n            self.out_values[v] = set()  # empty\n\n        isOK = True\n        while isOK:\n            isOK = False\n            for v in vertices:\n                out = self.in_values[v].copy()\n                out.update(eq.generates(v))\n                out.difference_update(eq.kills(v))\n\n                if out != self.out_values[v]:\n                    isOK = True\n                    self.out_values[v] = out\n\n                    for target in graph[v]:\n                        self.in_values[target].update(out)\n\nclass DataFlowEquations:\n    def __init__(self):\n        pass\n\n    def generates(self, v: Vertex):\n         # Implement this method according to your needs\n        pass\n\n    def kills(self, v: Vertex):\n         # Implement this method according to your needs\n        pass\n```\n\nREASONING:\nThe Java code is translated into Python by creating a class `Vertex` that represents each vertex in the graph. The `calculate_data_flow` method inside the `Vertex` class corresponds to the `calculateDataFlow` method in the original Java code. \n\nIn this translation, we use Python's built-in data types like dictionaries and sets instead of Java's `HashMap` and `BitSet` respectively. The `defaultdict` is used for `in_values` and `out_values` to avoid KeyErrors when accessing non-existent keys. \n\nThe `DataFlowEquations` class is a placeholder for the actual implementation that defines the methods `generates` and `kills`, which are not implemented in this translation as they depend on the specific requirements of your data flow equations. You would need to implement these according to your needs.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nEdge\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private void calculateDataFlow(DirectedGraph graph, DataFlowEquations eq) {\n        Iterator vertices = graph.getVertices().iterator();\n        while (vertices.hasNext()) {\n            Vertex v = (Vertex) vertices.next();\n            inValues.put(v, new BitSet()); // Initialize everything to\n            outValues.put(v, new BitSet()); // empty\n        }\n\n        boolean isOK = true;\n        while (isOK) {\n            vertices = graph.getVertices().iterator();\n            isOK = false;\n            while (vertices.hasNext()) {\n                Vertex v = (Vertex) vertices.next();\n\n                BitSet out = new BitSet();\n                out.or((BitSet) inValues.get(v));\n                out.or(eq.generates(v));\n                out.andNot(eq.kills(v));\n\n                /*\n                System.err.println(\"Old Out: \" + v + \":\" + outValues.get( v ));\n                System.err.println(\"New Out: \" + v + \":\" + out);\n                */\n                if (!out.equals(outValues.get(v))) {\n                    isOK = true;\n                    outValues.put(v, out);\n\n                    Iterator outbound = graph.getOutbound(v).iterator();\n                    while (outbound.hasNext()) {\n                        Vertex target = graph.getTarget((Edge) outbound.next());\n\n                        BitSet in = (BitSet) inValues.get(target);\n                        in.or(out);\n                        inValues.put(target, in);\n                        /*\n                        System.err.println(\"Old In: \" + target + \":\" +\n                        \t\t   inValues.get( target ));\n                        System.err.println(\"New In: \" + target + \":\" + in );\n                        */\n                    }\n                }\n            }\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "parameters": {
+                            "|DirectedGraph|graph": {
+                                "identifier": "|DirectedGraph|graph",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-23 05:04:21",
+                                "source_type": "DirectedGraph",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DirectedGraph",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "|DataFlowEquations|eq": {
+                                "identifier": "|DataFlowEquations|eq",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-23 05:04:21",
+                                "source_type": "DataFlowEquations",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DataFlowEquations",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "83-85:reaches": {
+                    "start": 83,
+                    "end": 85,
+                    "body": [
+                        "public BitSet reaches(Vertex vertex) {",
+                        "        return (BitSet) inValues.get(vertex);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "BitSet"
+                    ],
+                    "body_types": [
+                        "BitSet"
+                    ],
+                    "signature": "reaches( Vertex vertex)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "Vertex",
+                            "name": "vertex"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "BitSet": {
+                                "identifier": "BitSet",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2026-02-23 05:07:15",
+                                "source_type": "BitSet",
+                                "generation": "I apologize for the confusion. The `bitarray` module is not available in Python's standard library, so we need to use a different approach. In Python, you can use lists of booleans or numpy arrays with boolean data type. Here's how you could translate it:\n\nPYTHON IMPORTS:\n```python\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```python\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type to Java's BitSet is a `numpy` array with boolean data type. This module provides an object type which efficiently represents an array of booleans using packed binary data, much like a BitSet in Java. It also supports logical operations such as AND, OR and XOR.\n",
+                                "imports": "import numpy as np",
+                                "translated_target_type": "np.ndarray",
+                                "reasoning": "In Python, the equivalent type to Java's BitSet is a `numpy` array with boolean data type. This module provides an object type which efficiently represents an array of booleans using packed binary data, much like a BitSet in Java. It also supports logical operations such as AND, OR and XOR.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBitSet\n```\n\nJAVA TYPE DESCRIPTION:\nThis class implements a vector of bits that grows as needed. Each\n component of the bit set has a boolean value. The\n bits of a BitSet are indexed by nonnegative integers.\n Individual indexed bits can be examined, set, or cleared. One\n BitSet may be used to modify the contents of another\n BitSet through logical AND, logical inclusive OR, and\n logical exclusive OR operations.\n\n\nJAVA CODE:\n```\n    public BitSet reaches(Vertex vertex) {\n        return (BitSet) inValues.get(vertex);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'bitarray'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "body_types": {
+                            "BitSet": {
+                                "identifier": "BitSet",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:08:08",
+                                "source_type": "BitSet",
+                                "generation": "I apologize for the confusion. The `bitarray` module is not available in Python's standard library, so we need to use a different approach. In Python, you can use lists of booleans or numpy arrays with boolean data type. Here's how you could translate it:\n\nPYTHON IMPORTS:\n```python\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```python\nnp.ndarray\n```\n\nREASONING:\nIn Python, the equivalent type to Java's BitSet is a `numpy` array with boolean data type. This module provides an object type which efficiently represents an array of booleans using packed binary data, much like a BitSet in Java. It also supports logical operations such as AND, OR and XOR.\n",
+                                "imports": "import numpy as np",
+                                "translated_target_type": "np.ndarray",
+                                "reasoning": "In Python, the equivalent type to Java's BitSet is a `numpy` array with boolean data type. This module provides an object type which efficiently represents an array of booleans using packed binary data, much like a BitSet in Java. It also supports logical operations such as AND, OR and XOR.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBitSet\n```\n\nJAVA TYPE DESCRIPTION:\nThis class implements a vector of bits that grows as needed. Each\n component of the bit set has a boolean value. The\n bits of a BitSet are indexed by nonnegative integers.\n Individual indexed bits can be examined, set, or cleared. One\n BitSet may be used to modify the contents of another\n BitSet through logical AND, logical inclusive OR, and\n logical exclusive OR operations.\n\n\nJAVA CODE:\n```\n    public BitSet reaches(Vertex vertex) {\n        return (BitSet) inValues.get(vertex);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'bitarray'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "parameters": {
+                            "|Vertex|vertex": {
+                                "identifier": "|Vertex|vertex",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-23 05:07:48",
+                                "source_type": "Vertex",
+                                "generation": "I apologize for the confusion. The `BitSet` type in Java is not directly equivalent to a Python type. However, we can use a set in Python to represent the same functionality as `BitSet`. Here's how you could translate it:\n\nPYTHON IMPORTS:\n```python\nfrom typing import Dict, Set\n```\n\nPYTHON TRANSLATION:\n```python\nVertex = int\nReachesType = Set[int]\n```\n\nREASONING: \nIn the given Java code, `Vertex` is used as a key in a dictionary. In Python, dictionaries can have any hashable type for keys (not just strings and numbers). Therefore, we can use an integer to represent `Vertex` in Python. The `BitSet` type from Java does not have a direct equivalent in Python, but it can be replaced with the built-in `set` data structure which is more commonly used in Python for this purpose.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nVertex\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public BitSet reaches(Vertex vertex) {\n        return (BitSet) inValues.get(vertex);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: cannot import name 'BitSet' from 'typing' (/root/miniconda3/envs/MockingBird/lib/python3.11/typing.py)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "87-89:leaves": {
+                    "start": 87,
+                    "end": 89,
+                    "body": [
+                        "public BitSet leaves(Vertex vertex) {",
+                        "        return (BitSet) outValues.get(vertex);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "BitSet"
+                    ],
+                    "body_types": [
+                        "BitSet"
+                    ],
+                    "signature": "leaves( Vertex vertex)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "Vertex",
+                            "name": "vertex"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "BitSet": {
+                                "identifier": "BitSet",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2026-02-23 05:08:19",
+                                "source_type": "BitSet",
+                                "generation": "I apologize for the confusion. The `bitarray` module is not available in Python's standard library, so we need to use a different approach. In Python, you can use lists of booleans or sets to represent bitsets. Here's how you could translate it:\n\nPYTHON IMPORTS:\n```python\nfrom typing import List\n```\n\nPYTHON TRANSLATION:\n```python\nList[bool]\n```\n\nREASONING:\nIn Python, a list of booleans can be used to represent a bitset. Each element in the list corresponds to a bit in the bitset. The index of each element in the list represents its position in the bitset. This is similar to how BitSet works in Java where each component has an index and a boolean value.\n",
+                                "imports": "from typing import List",
+                                "translated_target_type": "List[bool]",
+                                "reasoning": "In Python, a list of booleans can be used to represent a bitset. Each element in the list corresponds to a bit in the bitset. The index of each element in the list represents its position in the bitset. This is similar to how BitSet works in Java where each component has an index and a boolean value.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBitSet\n```\n\nJAVA TYPE DESCRIPTION:\nThis class implements a vector of bits that grows as needed. Each\n component of the bit set has a boolean value. The\n bits of a BitSet are indexed by nonnegative integers.\n Individual indexed bits can be examined, set, or cleared. One\n BitSet may be used to modify the contents of another\n BitSet through logical AND, logical inclusive OR, and\n logical exclusive OR operations.\n\n\nJAVA CODE:\n```\n    public BitSet leaves(Vertex vertex) {\n        return (BitSet) outValues.get(vertex);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'bitarray'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "body_types": {
+                            "BitSet": {
+                                "identifier": "BitSet",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-23 05:08:47",
+                                "source_type": "BitSet",
+                                "generation": "I apologize for the confusion. The `bitarray` module is not available in Python's standard library, so we need to use a different approach. In Python, you can use lists of booleans or sets to represent bitsets. Here's how you could translate it:\n\nPYTHON IMPORTS:\n```python\nfrom typing import List\n```\n\nPYTHON TRANSLATION:\n```python\nList[bool]\n```\n\nREASONING:\nIn Python, a list of booleans can be used to represent a bitset. Each element in the list corresponds to a bit in the bitset. The `leaves(vertex)` method in your Java code can be translated to a Python function that returns a list of booleans, as shown below:\n\n```python\ndef leaves(self, vertex): \n    return self.outValues[vertex]\n```\n",
+                                "imports": "from typing import List",
+                                "translated_target_type": "List[bool]",
+                                "reasoning": "In Python, a list of booleans can be used to represent a bitset. Each element in the list corresponds to a bit in the bitset. The `leaves(vertex)` method in your Java code can be translated to a Python function that returns a list of booleans, as shown below:",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBitSet\n```\n\nJAVA TYPE DESCRIPTION:\nThis class implements a vector of bits that grows as needed. Each\n component of the bit set has a boolean value. The\n bits of a BitSet are indexed by nonnegative integers.\n Individual indexed bits can be examined, set, or cleared. One\n BitSet may be used to modify the contents of another\n BitSet through logical AND, logical inclusive OR, and\n logical exclusive OR operations.\n\n\nJAVA CODE:\n```\n    public BitSet leaves(Vertex vertex) {\n        return (BitSet) outValues.get(vertex);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'bitarray'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "parameters": {
+                            "|Vertex|vertex": {
+                                "identifier": "|Vertex|vertex",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-23 05:08:35",
+                                "source_type": "Vertex",
+                                "generation": "I apologize for the confusion. The previous response was incorrect and it caused an error due to invalid syntax. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import Dict, Any\n```\n\nPYTHON TRANSLATION:\n```python\noutValues: Dict[Any, BitSet] = {}\n```\n\nREASONING:\nIn the given Java code snippet, `Vertex` is used as a key in a dictionary (`outValues`). The corresponding value is of type `BitSet`. In Python, dictionaries can have keys and values of any type. Therefore, we use `Any` for the key type and `BitSet` for the value type.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nVertex\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public BitSet leaves(Vertex vertex) {\n        return (BitSet) outValues.get(vertex);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            },
+            "fields": {
+                "30-30:inValues": {
+                    "start": 30,
+                    "end": 30,
+                    "enum_constant": false,
+                    "body": [
+                        "private Map inValues = new HashMap();"
+                    ],
+                    "modifiers": [
+                        "private"
+                    ],
+                    "types": [
+                        "Map"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "Map": {
+                                "identifier": "Map",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "types",
+                                "timestamp": "2026-02-23 05:04:05",
+                                "source_type": "Map",
+                                "generation": "PYTHON IMPORTS:\n```python\nfrom collections import defaultdict\n```\n\nPYTHON TRANSLATION:\n```python\ndefaultdict\n```\n\nREASONING: \nIn Python, the equivalent of Java's Map is a `defaultdict` from the `collections` module. This type maintains the same functionality as a map in Java, where each key can map to at most one value and cannot contain duplicate keys. The defaultdict class provides a dictionary-like object that automatically initializes new values with a default type if they do not exist yet.\n",
+                                "imports": "from collections import defaultdict",
+                                "translated_target_type": "defaultdict",
+                                "reasoning": "In Python, the equivalent of Java's Map is a `defaultdict` from the `collections` module. This type maintains the same functionality as a map in Java, where each key can map to at most one value and cannot contain duplicate keys. The defaultdict class provides a dictionary-like object that automatically initializes new values with a default type if they do not exist yet.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMap\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that maps keys to values.  A map cannot contain duplicate keys;\n each key can map to at most one value.\n\n\nJAVA CODE:\n```\n    private Map inValues = new HashMap();\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "31-31:outValues": {
+                    "start": 31,
+                    "end": 31,
+                    "enum_constant": false,
+                    "body": [
+                        "private Map outValues = new HashMap();"
+                    ],
+                    "modifiers": [
+                        "private"
+                    ],
+                    "types": [
+                        "Map"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "Map": {
+                                "identifier": "Map",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "types",
+                                "timestamp": "2026-02-23 05:04:08",
+                                "source_type": "Map",
+                                "generation": "PYTHON IMPORTS:\n```python\nfrom collections import defaultdict\n```\n\nPYTHON TRANSLATION:\n```python\ndefaultdict\n```\n\nREASONING: \nIn Python, the equivalent of Java's Map is a `defaultdict` from the `collections` module. This type maintains the same functionality as a map in Java, where each key can map to at most one value and cannot contain duplicate keys. The defaultdict class provides a dictionary-like object that automatically initializes new values with a default type if they do not exist yet.\n",
+                                "imports": "from collections import defaultdict",
+                                "translated_target_type": "defaultdict",
+                                "reasoning": "In Python, the equivalent of Java's Map is a `defaultdict` from the `collections` module. This type maintains the same functionality as a map in Java, where each key can map to at most one value and cannot contain duplicate keys. The defaultdict class provides a dictionary-like object that automatically initializes new values with a default type if they do not exist yet.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMap\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that maps keys to values.  A map cannot contain duplicate keys;\n each key can map to at most one value.\n\n\nJAVA CODE:\n```\n    private Map outValues = new HashMap();\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            }
+        }
+    },
+    "import_map": {
+        "*": "org.apache.commons.graph.*",
+        "BitSet": "java.util.BitSet",
+        "HashMap": "java.util.HashMap",
+        "Iterator": "java.util.Iterator",
+        "Map": "java.util.Map"
+    }
+}

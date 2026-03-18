@@ -1,0 +1,1794 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-codec/src/main/java/org/apache/commons/codec/language/bm/Lang.java",
+  "imports": {
+    "20-20:import org.apache.commons.codec.Resources;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.apache.commons.codec.Resources;"
+    },
+    "22-22:import java.util.ArrayList;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.util.ArrayList;"
+    },
+    "23-23:import java.util.Arrays;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.util.Arrays;"
+    },
+    "24-24:import java.util.Collections;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.util.Collections;"
+    },
+    "25-25:import java.util.EnumMap;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.util.EnumMap;"
+    },
+    "26-26:import java.util.HashSet;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.HashSet;"
+    },
+    "27-27:import java.util.List;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.util.List;"
+    },
+    "28-28:import java.util.Locale;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.util.Locale;"
+    },
+    "29-29:import java.util.Map;": {
+      "start": 29,
+      "end": 29,
+      "body": "import java.util.Map;"
+    },
+    "30-30:import java.util.Scanner;": {
+      "start": 30,
+      "end": 30,
+      "body": "import java.util.Scanner;"
+    },
+    "31-31:import java.util.Set;": {
+      "start": 31,
+      "end": 31,
+      "body": "import java.util.Set;"
+    },
+    "32-32:import java.util.regex.Pattern;": {
+      "start": 32,
+      "end": 32,
+      "body": "import java.util.regex.Pattern;"
+    }
+  },
+  "classes": {
+    "79-228:Lang": {
+      "start": 79,
+      "end": 228,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [
+        "81-96:LangRule"
+      ],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "119-121:instance": {
+          "start": 119,
+          "end": 121,
+          "body": [
+            "public static Lang instance(final NameType nameType) {",
+            "        return Langs.get(nameType);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "Lang"
+          ],
+          "body_types": [],
+          "signature": "instance(final NameType nameType)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "NameType",
+              "name": "nameType"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Map",
+              "get(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Lang": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Lang has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|NameType|nameType": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def instance(nameType: object) -> object:",
+            "        return Lang.__Langs[nameType]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.806011438369751,
+          "generation_timestamp": "2026-03-17T05:46:23.969099",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def instance(nameType: object) -> object:\n",
+            "        pass\n\n"
+          ]
+        },
+        "134-183:loadFromResource": {
+          "start": 134,
+          "end": 183,
+          "body": [
+            "public static Lang loadFromResource(",
+            "            final String languageRulesResourceName, final Languages languages) {",
+            "        final List<LangRule> rules = new ArrayList<>();",
+            "        try (final Scanner scanner =",
+            "                new Scanner(",
+            "                        Resources.getInputStream(languageRulesResourceName),",
+            "                        ResourceConstants.ENCODING)) {",
+            "            boolean inExtendedComment = false;",
+            "            while (scanner.hasNextLine()) {",
+            "                final String rawLine = scanner.nextLine();",
+            "                String line = rawLine;",
+            "                if (inExtendedComment) {",
+            "                    if (line.endsWith(ResourceConstants.EXT_CMT_END)) {",
+            "                        inExtendedComment = false;",
+            "                    }",
+            "                } else if (line.startsWith(ResourceConstants.EXT_CMT_START)) {",
+            "                    inExtendedComment = true;",
+            "                } else {",
+            "                    final int cmtI = line.indexOf(ResourceConstants.CMT);",
+            "                    if (cmtI >= 0) {",
+            "                        line = line.substring(0, cmtI);",
+            "                    }",
+            "",
+            "                    line = line.trim();",
+            "",
+            "                    if (line.isEmpty()) {",
+            "                        continue; // empty lines can be safely skipped",
+            "                    }",
+            "",
+            "                    final String[] parts = line.split(\"\\\\s+\");",
+            "",
+            "                    if (parts.length != 3) {",
+            "                        throw new IllegalArgumentException(",
+            "                                \"Malformed line '\"",
+            "                                        + rawLine",
+            "                                        + \"' in language resource '\"",
+            "                                        + languageRulesResourceName",
+            "                                        + \"'\");",
+            "                    }",
+            "",
+            "                    final Pattern pattern = Pattern.compile(parts[0]);",
+            "                    final String[] langs = parts[1].split(\"\\\\+\");",
+            "                    final boolean accept = parts[2].equals(\"true\");",
+            "",
+            "                    rules.add(new LangRule(pattern, new HashSet<>(Arrays.asList(langs)), accept));",
+            "                }",
+            "            }",
+            "        }",
+            "        return new Lang(rules, languages);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "Lang"
+          ],
+          "body_types": [
+            "List<LangRule>",
+            "ArrayList<>",
+            "Scanner",
+            "boolean",
+            "String",
+            "int",
+            "String[]",
+            "IllegalArgumentException",
+            "Pattern",
+            "LangRule",
+            "HashSet<>",
+            "Lang"
+          ],
+          "signature": "loadFromResource(final String languageRulesResourceName, final Languages languages)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "languageRulesResourceName"
+            },
+            {
+              "modifier": "final",
+              "type": "Languages",
+              "name": "languages"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.Resources",
+              "27-42:Resources",
+              "35-41:getInputStream"
+            ],
+            [
+              "library",
+              "java.util.Scanner",
+              "<init>(java.io.InputStream,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Scanner",
+              "nextLine()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "endsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "trim()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.IllegalArgumentException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.regex.Pattern",
+              "compile(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "asList(java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.util.HashSet",
+              "<init>(java.util.Collection)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Lang",
+              "81-96:LangRule",
+              "86-91:LangRule"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Scanner",
+              "hasNextLine()"
+            ],
+            [
+              "library",
+              "java.util.Scanner",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Lang",
+              "79-228:Lang",
+              "188-191:Lang"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Lang": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Lang has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "List<LangRule>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type List<LangRule> has been translated to \"object\"",
+                "prompt": ""
+              },
+              "ArrayList<>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[List[str]]",
+                "reasoning": "In Python, the equivalent of Java's `ArrayList<>` is a list of lists. The outer list corresponds to ArrayList in Java and can contain any type of elements (in this case, it contains lists). Each inner list corresponds to an individual element of the ArrayList in Java and holds strings. Therefore, we use List[List[str]] as the equivalent Python type.",
+                "prompt": ""
+              },
+              "Scanner": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Scanner has been translated to \"object\"",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type for a Java String array is a list of strings. The 'typing' module in Python provides support for type hints as specified by PEP 484. Here, we use List from typing to denote that it is a list and str inside the square brackets denotes that each element in the list is a string.",
+                "prompt": ""
+              },
+              "IllegalArgumentException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Union",
+                "translated_target_type": "Union[bool, str]",
+                "reasoning": "In the Java code provided, the method `getBoolean(String name)` is trying to get a system property and convert it into a boolean. If the property value cannot be converted into a boolean or if the property does not exist, an exception is caught and ignored. In Python, we can use the `Union` type from the typing module to indicate that the method may return either a boolean or a string (if the property does not exist). The Union type is used to specify that the function could potentially return one of several types.",
+                "prompt": ""
+              },
+              "Pattern": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import re",
+                "translated_target_type": "re.Pattern",
+                "reasoning": "In Python, the equivalent type for `java.util.regex.Pattern` is `re.Pattern` in the `re` module. This type represents a compiled regular expression and can be used to match or substitute patterns within strings.",
+                "prompt": ""
+              },
+              "LangRule": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type LangRule has been translated to \"object\"",
+                "prompt": ""
+              },
+              "HashSet<>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Set",
+                "translated_target_type": "Set[str]",
+                "reasoning": "In Python, the equivalent type to Java's `HashSet<>` is a set. In this case, it appears that the HashSet is being used as a Set of Strings (`Set[str]`). The `<>` in Java are replaced with square brackets and the type inside them in Python.",
+                "prompt": ""
+              },
+              "Lang": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Lang has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|languageRulesResourceName": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Languages|languages": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def loadFromResource(languageRulesResourceName: object, languages: object) -> object:",
+            "        from src.main.org.apache.commons.codec.Resources import Resources",
+            "        from src.main.org.apache.commons.codec.language.bm.ResourceConstants import ResourceConstants",
+            "        rules = []",
+            "        with Resources.getInputStream(languageRulesResourceName) as inputStream:",
+            "            scanner = Scanner(inputStream, ResourceConstants.ENCODING)",
+            "            inExtendedComment = False",
+            "            while scanner.hasNextLine():",
+            "                rawLine = scanner.nextLine()",
+            "                line = rawLine",
+            "                if inExtendedComment:",
+            "                    if line.endswith(ResourceConstants.EXT_CMT_END):",
+            "                        inExtendedComment = False",
+            "                elif line.startswith(ResourceConstants.EXT_CMT_START):",
+            "                    inExtendedComment = True",
+            "                else:",
+            "                    cmtI = line.find(ResourceConstants.CMT)",
+            "                    if cmtI >= 0:",
+            "                        line = line[:cmtI]",
+            "                    ",
+            "                    line = line.strip()",
+            "",
+            "                    if not line:",
+            "                        continue  # empty lines can be safely skipped",
+            "",
+            "                    parts = line.split()",
+            "",
+            "                    if len(parts) != 3:",
+            "                        raise IllegalArgumentException(f\"Malformed line '{rawLine}' in language resource '{languageRulesResourceName}'\")",
+            "                    ",
+            "                    pattern = re.compile(parts[0])",
+            "                    langs = parts[1].split(\"+\")",
+            "                    accept = (parts[2] == \"true\")",
+            "",
+            "                    rules.append(LangRule(pattern, set(langs), accept))",
+            "        ",
+            "        return Lang(rules, languages)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 2.569096565246582,
+          "generation_timestamp": "2026-03-17T05:46:53.043247",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def loadFromResource(languageRulesResourceName: object, languages: object) -> object:\n",
+            "        pass\n\n"
+          ]
+        },
+        "188-191:Lang": {
+          "start": 188,
+          "end": 191,
+          "body": [
+            "private Lang(final List<LangRule> rules, final Languages languages) {",
+            "        this.rules = Collections.unmodifiableList(rules);",
+            "        this.languages = languages;",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "Lang(final List<LangRule> rules, final Languages languages)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "List<LangRule>",
+              "name": "rules"
+            },
+            {
+              "modifier": "final",
+              "type": "Languages",
+              "name": "languages"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.Collections",
+              "unmodifiableList(java.util.List)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|List<LangRule>|rules": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Languages|languages": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, rules: object, languages: object) -> None:",
+            "        self.__rules = list(rules)",
+            "        self.__languages = languages"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 2.6537117958068848,
+          "generation_timestamp": "2026-03-17T05:46:37.213660",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, rules: object, languages: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "200-203:guessLanguage": {
+          "start": 200,
+          "end": 203,
+          "body": [
+            "public String guessLanguage(final String text) {",
+            "        final Languages.LanguageSet ls = guessLanguages(text);",
+            "        return ls.isSingleton() ? ls.getAny() : Languages.ANY;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "Languages.LanguageSet",
+            "Languages",
+            "LanguageSet"
+          ],
+          "signature": "guessLanguage(final String text)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Lang",
+              "79-228:Lang",
+              "211-227:guessLanguages"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Languages",
+              "62-79:LanguageSet",
+              "74-74:isSingleton"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Languages",
+              "62-79:LanguageSet",
+              "70-70:getAny"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Languages.LanguageSet": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Languages.LanguageSet has been translated to \"object\"",
+                "prompt": ""
+              },
+              "Languages": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Languages has been translated to \"object\"",
+                "prompt": ""
+              },
+              "LanguageSet": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type LanguageSet has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|text": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def guessLanguage(self, text: object) -> str:",
+            "        from src.main.org.apache.commons.codec.language.bm.Languages import Languages",
+            "        ls = self.guessLanguages(text)",
+            "        return ls.getAny() if ls.isSingleton() else Languages.ANY"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 1.8430495262145996,
+          "generation_timestamp": "2026-03-17T06:20:21.645047",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def guessLanguage(self, text: object) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "211-227:guessLanguages": {
+          "start": 211,
+          "end": 227,
+          "body": [
+            "public Languages.LanguageSet guessLanguages(final String input) {",
+            "        final String text = input.toLowerCase(Locale.ENGLISH);",
+            "",
+            "        final Set<String> langs = new HashSet<>(this.languages.getLanguages());",
+            "        for (final LangRule rule : this.rules) {",
+            "            if (rule.matches(text)) {",
+            "                if (rule.acceptOnMatch) {",
+            "                    langs.retainAll(rule.languages);",
+            "                } else {",
+            "                    langs.removeAll(rule.languages);",
+            "                }",
+            "            }",
+            "        }",
+            "",
+            "        final Languages.LanguageSet ls = Languages.LanguageSet.from(langs);",
+            "        return ls.equals(Languages.NO_LANGUAGES) ? Languages.ANY_LANGUAGE : ls;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Languages.LanguageSet"
+          ],
+          "body_types": [
+            "String",
+            "Set<String>",
+            "HashSet<>",
+            "LangRule",
+            "Languages.LanguageSet",
+            "Languages",
+            "LanguageSet"
+          ],
+          "signature": "guessLanguages(final String input)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "input"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "toLowerCase(java.util.Locale)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Languages",
+              "59-279:Languages",
+              "276-278:getLanguages"
+            ],
+            [
+              "library",
+              "java.util.HashSet",
+              "<init>(java.util.Collection)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Lang",
+              "81-96:LangRule",
+              "93-95:matches"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "retainAll(java.util.Collection)"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "removeAll(java.util.Collection)"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Languages",
+              "62-79:LanguageSet",
+              "64-66:from"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "equals(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Languages.LanguageSet": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Languages.LanguageSet has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Set<String>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Set, List",
+                "translated_target_type": "Set[str]",
+                "reasoning": "In Python, the equivalent type for `Set<String>` in Java is `Set[str]`. The `typing` module from Python's standard library provides support for type hints as specified by PEP 484. Here, we import `Set` and `List` from the typing module to define a set of strings (`Set[str]`) and a list of strings (`List[str]`).",
+                "prompt": ""
+              },
+              "HashSet<>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Set",
+                "translated_target_type": "Set[str]",
+                "reasoning": "In Python, the equivalent type to Java's `HashSet<>` is a set. In this case, it appears that the HashSet is being used as a Set of Strings (`Set[str]`). The `<>` in Java are replaced with square brackets and the type inside them in Python.",
+                "prompt": ""
+              },
+              "LangRule": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type LangRule has been translated to \"object\"",
+                "prompt": ""
+              },
+              "Languages.LanguageSet": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Languages.LanguageSet has been translated to \"object\"",
+                "prompt": ""
+              },
+              "Languages": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Languages has been translated to \"object\"",
+                "prompt": ""
+              },
+              "LanguageSet": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type LanguageSet has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|input": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def guessLanguages(self, input_: object) -> object:",
+            "        from src.main.org.apache.commons.codec.language.bm.Languages import Languages",
+            "        from src.main.org.apache.commons.codec.language.bm.Languages import LanguageSet",
+            "        text = input_.lower()",
+            "",
+            "        langs = set(self.__languages.getLanguages())",
+            "        for rule in self.__rules:",
+            "            if rule.matches(text):",
+            "                if rule.__acceptOnMatch:",
+            "                    langs.intersection_update(rule.__languages)",
+            "                else:",
+            "                    langs.difference_update(rule.__languages)",
+            "        ",
+            "        ls = LanguageSet.from_(langs)",
+            "        return LanguageSet.NO_LANGUAGES if ls == Languages.ANY_LANGUAGE else ls"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.31967973709106445,
+          "generation_timestamp": "2026-03-17T06:20:13.480992",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def guessLanguages(self, input_: object) -> object:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "98-98:Langs": {
+          "start": 98,
+          "end": 98,
+          "enum_constant": false,
+          "body": [
+            "private static final Map<NameType, Lang> Langs = new EnumMap<>(NameType.class);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "Map<NameType, Lang>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Map<NameType, Lang>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Map<NameType, Lang> has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.27080202102661133,
+          "generation_timestamp": "2026-03-17T04:11:01.393014",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __Langs: object = ",
+            ""
+          ]
+        },
+        "100-101:LANGUAGE_RULES_RN": {
+          "start": 100,
+          "end": 101,
+          "enum_constant": false,
+          "body": [
+            "private static final String LANGUAGE_RULES_RN =",
+            "            \"org/apache/commons/codec/language/bm/%s_lang.txt\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __LANGUAGE_RULES_RN: str = \"org/apache/commons/codec/language/bm/{}_lang.txt\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2704732418060303,
+          "generation_timestamp": "2026-03-17T04:11:01.119129",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __LANGUAGE_RULES_RN: str = ",
+            ""
+          ]
+        },
+        "185-185:languages": {
+          "start": 185,
+          "end": 185,
+          "enum_constant": false,
+          "body": [
+            "private final Languages languages;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Languages"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Languages": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Languages has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __languages: object = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.270275354385376,
+          "generation_timestamp": "2026-03-17T04:11:00.845608",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __languages: object = None"
+          ]
+        },
+        "186-186:rules": {
+          "start": 186,
+          "end": 186,
+          "enum_constant": false,
+          "body": [
+            "private final List<LangRule> rules;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "List<LangRule>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "List<LangRule>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type List<LangRule> has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __rules: object = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2708587646484375,
+          "generation_timestamp": "2026-03-17T04:11:00.572340",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __rules: object = None"
+          ]
+        }
+      },
+      "static_initializers": {
+        "103-111:run_static_init": {
+          "start": 103,
+          "end": 111,
+          "body": [
+            "static {",
+            "        for (final NameType s : NameType.values()) {",
+            "            Langs.put(",
+            "                    s,",
+            "                    loadFromResource(",
+            "                            String.format(LANGUAGE_RULES_RN, s.getName()),",
+            "                            Languages.getInstance0(s)));",
+            "        }",
+            "    }"
+          ],
+          "type_translations": {},
+          "translation": [
+            "    @staticmethod",
+            "    def run_static_init():",
+            "        from src.main.org.apache.commons.codec.language.bm.NameType import NameType",
+            "        from src.main.org.apache.commons.codec.language.bm.Languages import Languages",
+            "        from src.main.org.apache.commons.codec.language.bm.NameType import NameType",
+            "        from src.main.org.apache.commons.codec.language.bm.Languages import Languages",
+            "        Lang.__Langs = {}",
+            "        Lang.__LANGUAGE_RULES_RN = \"org/apache/commons/codec/language/bm/{}_lang.txt\"",
+            "        for s in NameType:",
+            "            Lang.__Langs[s] = Lang.loadFromResource(",
+            "                Lang.__LANGUAGE_RULES_RN.format(s.name), Languages.getInstance0(s))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2710285186767578,
+          "generation_timestamp": "2026-03-17T04:11:00.298490",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": []
+        }
+      },
+      "python_class_declaration": "class Lang:\n\n"
+    },
+    "81-96:LangRule": {
+      "start": 81,
+      "end": 96,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "nested_inside": "79-228:Lang",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "86-91:LangRule": {
+          "start": 86,
+          "end": 91,
+          "body": [
+            "private LangRule(",
+            "                final Pattern pattern, final Set<String> languages, final boolean acceptOnMatch) {",
+            "            this.pattern = pattern;",
+            "            this.languages = languages;",
+            "            this.acceptOnMatch = acceptOnMatch;",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "LangRule(final Pattern pattern, final Set<String> languages, final boolean acceptOnMatch)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Pattern",
+              "name": "pattern"
+            },
+            {
+              "modifier": "final",
+              "type": "Set<String>",
+              "name": "languages"
+            },
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "acceptOnMatch"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.bm.Lang",
+              "81-96:LangRule",
+              "86-91:LangRule"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|Pattern|pattern": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Set<String>|languages": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|boolean|acceptOnMatch": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, pattern: object, languages: object, acceptOnMatch: object) -> None:",
+            "        self.__pattern = pattern",
+            "        self.__languages = languages",
+            "        self.__acceptOnMatch = acceptOnMatch"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 2.317136526107788,
+          "generation_timestamp": "2026-03-17T05:46:50.436949",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, pattern: object, languages: object, acceptOnMatch: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "93-95:matches": {
+          "start": 93,
+          "end": 95,
+          "body": [
+            "public boolean matches(final String txt) {",
+            "            return this.pattern.matcher(txt).find();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "matches(final String txt)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "txt"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.regex.Pattern",
+              "matcher(java.lang.CharSequence)"
+            ],
+            [
+              "library",
+              "java.util.regex.Matcher",
+              "find()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|txt": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def matches(self, txt: object) -> bool:",
+            "        return self.__pattern.search(txt) is not None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.7986612319946289,
+          "generation_timestamp": "2026-03-17T05:46:53.856017",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def matches(self, txt: object) -> bool:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "82-82:acceptOnMatch": {
+          "start": 82,
+          "end": 82,
+          "enum_constant": false,
+          "body": [
+            "private final boolean acceptOnMatch;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __acceptOnMatch: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2714695930480957,
+          "generation_timestamp": "2026-03-17T04:11:00.024462",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __acceptOnMatch: bool = False"
+          ]
+        },
+        "83-83:languages": {
+          "start": 83,
+          "end": 83,
+          "enum_constant": false,
+          "body": [
+            "private final Set<String> languages;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Set<String>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Set<String>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Set, List",
+                "translated_target_type": "Set[str]",
+                "reasoning": "In Python, the equivalent type for `Set<String>` in Java is `Set[str]`. The `typing` module from Python's standard library provides support for type hints as specified by PEP 484. Here, we import `Set` and `List` from the typing module to define a set of strings (`Set[str]`) and a list of strings (`List[str]`).",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __languages: Set[str] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2710902690887451,
+          "generation_timestamp": "2026-03-17T04:10:59.749926",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __languages: Set[str] = None"
+          ]
+        },
+        "84-84:pattern": {
+          "start": 84,
+          "end": 84,
+          "enum_constant": false,
+          "body": [
+            "private final Pattern pattern;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Pattern"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Pattern": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import re",
+                "translated_target_type": "re.Pattern",
+                "reasoning": "In Python, the equivalent type for `java.util.regex.Pattern` is `re.Pattern` in the `re` module. This type represents a compiled regular expression and can be used to match or substitute patterns within strings.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __pattern: re.Pattern = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2721719741821289,
+          "generation_timestamp": "2026-03-17T04:10:59.475717",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __pattern: re.Pattern = None"
+          ]
+        }
+      },
+      "python_class_declaration": "class LangRule:\n\n"
+    }
+  },
+  "import_map": {
+    "Resources": "org.apache.commons.codec.Resources",
+    "ArrayList": "java.util.ArrayList",
+    "Arrays": "java.util.Arrays",
+    "Collections": "java.util.Collections",
+    "EnumMap": "java.util.EnumMap",
+    "HashSet": "java.util.HashSet",
+    "List": "java.util.List",
+    "Locale": "java.util.Locale",
+    "Map": "java.util.Map",
+    "Scanner": "java.util.Scanner",
+    "Set": "java.util.Set",
+    "Pattern": "java.util.regex.Pattern"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from typing import List",
+    "from typing import Set",
+    "from typing import Set, List",
+    "from typing import Union",
+    "import re"
+  ]
+}

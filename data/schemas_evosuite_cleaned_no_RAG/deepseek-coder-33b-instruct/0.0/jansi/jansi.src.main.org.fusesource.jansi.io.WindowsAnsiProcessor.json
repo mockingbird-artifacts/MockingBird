@@ -1,0 +1,5121 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/io/WindowsAnsiProcessor.java",
+  "imports": {
+    "18-18:import org.fusesource.jansi.internal.Kernel32;": {
+      "start": 18,
+      "end": 18,
+      "body": "import org.fusesource.jansi.internal.Kernel32;"
+    },
+    "19-19:import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;"
+    },
+    "20-20:import org.fusesource.jansi.internal.Kernel32.COORD;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.fusesource.jansi.internal.Kernel32.COORD;"
+    },
+    "22-22:import java.io.IOException;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.IOException;"
+    },
+    "23-23:import java.io.OutputStream;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.io.OutputStream;"
+    },
+    "25-25:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_BLUE;": {
+      "start": 25,
+      "end": 25,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_BLUE;"
+    },
+    "26-26:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_GREEN;": {
+      "start": 26,
+      "end": 26,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_GREEN;"
+    },
+    "27-27:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_INTENSITY;": {
+      "start": 27,
+      "end": 27,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_INTENSITY;"
+    },
+    "28-28:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_RED;": {
+      "start": 28,
+      "end": 28,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_RED;"
+    },
+    "29-29:import static org.fusesource.jansi.internal.Kernel32.CHAR_INFO;": {
+      "start": 29,
+      "end": 29,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.CHAR_INFO;"
+    },
+    "30-30:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_BLUE;": {
+      "start": 30,
+      "end": 30,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_BLUE;"
+    },
+    "31-31:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_GREEN;": {
+      "start": 31,
+      "end": 31,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_GREEN;"
+    },
+    "32-32:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_INTENSITY;": {
+      "start": 32,
+      "end": 32,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_INTENSITY;"
+    },
+    "33-33:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_RED;": {
+      "start": 33,
+      "end": 33,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_RED;"
+    },
+    "34-34:import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputAttribute;": {
+      "start": 34,
+      "end": 34,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputAttribute;"
+    },
+    "35-35:import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputCharacterW;": {
+      "start": 35,
+      "end": 35,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputCharacterW;"
+    },
+    "36-36:import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;": {
+      "start": 36,
+      "end": 36,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;"
+    },
+    "37-37:import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;": {
+      "start": 37,
+      "end": 37,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;"
+    },
+    "38-38:import static org.fusesource.jansi.internal.Kernel32.SMALL_RECT;": {
+      "start": 38,
+      "end": 38,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SMALL_RECT;"
+    },
+    "39-39:import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;": {
+      "start": 39,
+      "end": 39,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;"
+    },
+    "40-40:import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;": {
+      "start": 40,
+      "end": 40,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;"
+    },
+    "41-41:import static org.fusesource.jansi.internal.Kernel32.ScrollConsoleScreenBuffer;": {
+      "start": 41,
+      "end": 41,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.ScrollConsoleScreenBuffer;"
+    },
+    "42-42:import static org.fusesource.jansi.internal.Kernel32.SetConsoleCursorPosition;": {
+      "start": 42,
+      "end": 42,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleCursorPosition;"
+    },
+    "43-43:import static org.fusesource.jansi.internal.Kernel32.SetConsoleTextAttribute;": {
+      "start": 43,
+      "end": 43,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleTextAttribute;"
+    },
+    "44-44:import static org.fusesource.jansi.internal.Kernel32.SetConsoleTitle;": {
+      "start": 44,
+      "end": 44,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleTitle;"
+    }
+  },
+  "classes": {
+    "55-424:WindowsAnsiProcessor": {
+      "start": 55,
+      "end": 424,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "AnsiProcessor"
+      ],
+      "methods": {
+        "100-105:WindowsAnsiProcessor": {
+          "start": 100,
+          "end": 105,
+          "body": [
+            "public WindowsAnsiProcessor(OutputStream ps, long console) throws IOException {",
+            "        super(ps);",
+            "        this.console = console;",
+            "        getConsoleInfo();",
+            "        originalColors = info.attributes;",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "WindowsAnsiProcessor( OutputStream ps,  long console)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "ps"
+            },
+            {
+              "modifier": "",
+              "type": "long",
+              "name": "console"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+              "33-559:AnsiProcessor",
+              "37-39:AnsiProcessor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "|OutputStream|ps": {
+                "identifier": "|OutputStream|ps",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:09:27",
+                "source_type": "OutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|long|console": {
+                "identifier": "|long|console",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:09:42",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, ps: BytesIO, console: int) -> None:",
+            "        super().__init__(ps)",
+            "        self.__console = console",
+            "        self.__getConsoleInfo()",
+            "        self.__originalColors = self.__info.attributes"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 31.052351236343384,
+          "generation_timestamp": "2025-08-18T07:49:55.034888",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, ps: BytesIO, console: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "107-109:WindowsAnsiProcessor0": {
+          "start": 107,
+          "end": 109,
+          "body": [
+            "public WindowsAnsiProcessor WindowsAnsiProcessor0(OutputStream ps, boolean stdout) throws IOException {",
+            "        return new WindowsAnsiProcessor(ps, GetStdHandle(stdout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE));",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "WindowsAnsiProcessor"
+          ],
+          "body_types": [
+            "WindowsAnsiProcessor"
+          ],
+          "signature": "WindowsAnsiProcessor0( OutputStream ps,  boolean stdout)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "ps"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stdout"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "182-182:GetStdHandle"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "100-105:WindowsAnsiProcessor"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "WindowsAnsiProcessor": {
+                "identifier": "WindowsAnsiProcessor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:09:42",
+                "source_type": "WindowsAnsiProcessor",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "WindowsAnsiProcessor": {
+                "identifier": "WindowsAnsiProcessor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:09:57",
+                "source_type": "WindowsAnsiProcessor",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|OutputStream|ps": {
+                "identifier": "|OutputStream|ps",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:09:42",
+                "source_type": "OutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|boolean|stdout": {
+                "identifier": "|boolean|stdout",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:09:57",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def WindowsAnsiProcessor0(self, ps: BytesIO, stdout: bool) -> \"WindowsAnsiProcessor\":",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        return WindowsAnsiProcessor(ps, Kernel32.GetStdHandle(Kernel32.STD_OUTPUT_HANDLE if stdout else Kernel32.STD_ERROR_HANDLE))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 31.7790846824646,
+          "generation_timestamp": "2025-08-18T07:50:59.614225",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def WindowsAnsiProcessor0(self, ps: BytesIO, stdout: bool) -> \"WindowsAnsiProcessor\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "111-113:WindowsAnsiProcessor1": {
+          "start": 111,
+          "end": 113,
+          "body": [
+            "public WindowsAnsiProcessor WindowsAnsiProcessor1(OutputStream ps) throws IOException {",
+            "        return WindowsAnsiProcessor0(ps, true);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "WindowsAnsiProcessor"
+          ],
+          "body_types": [],
+          "signature": "WindowsAnsiProcessor1( OutputStream ps)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "ps"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "107-109:WindowsAnsiProcessor0"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "WindowsAnsiProcessor": {
+                "identifier": "WindowsAnsiProcessor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:09:57",
+                "source_type": "WindowsAnsiProcessor",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|OutputStream|ps": {
+                "identifier": "|OutputStream|ps",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:09:57",
+                "source_type": "OutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def WindowsAnsiProcessor1(self, ps: BytesIO) -> \"WindowsAnsiProcessor\":",
+            "        return self.WindowsAnsiProcessor0(ps, True)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 34.509852170944214,
+          "generation_timestamp": "2025-08-18T07:51:34.235781",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def WindowsAnsiProcessor1(self, ps: BytesIO) -> \"WindowsAnsiProcessor\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "115-123:getConsoleInfo": {
+          "start": 115,
+          "end": 123,
+          "body": [
+            "private void getConsoleInfo() throws IOException {",
+            "        os.flush();",
+            "        if (GetConsoleScreenBufferInfo(console, info) == 0) {",
+            "            throw new IOException(\"Could not get the screen info: \" + Kernel32.getLastErrorMessage());",
+            "        }",
+            "        if (negative) {",
+            "            info.attributes = invertAttributeColors(info.attributes);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IOException"
+          ],
+          "signature": "getConsoleInfo()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.OutputStream",
+              "flush()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "176-177:GetConsoleScreenBufferInfo"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "136-144:invertAttributeColors"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:10:13",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:10:29",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": null,
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __getConsoleInfo(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self._os.flush()",
+            "        if Kernel32.GetConsoleScreenBufferInfo(self.__console, self.__info) == 0:",
+            "            raise Exception(\"Could not get the screen info: \" + Kernel32.getLastErrorMessage())",
+            "        if self.__negative:",
+            "            self.__info.attributes = self.__invertAttributeColors(self.__info.attributes)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 37.69365859031677,
+          "generation_timestamp": "2025-08-18T07:43:15.453819",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __getConsoleInfo(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "125-134:applyAttribute": {
+          "start": 125,
+          "end": 134,
+          "body": [
+            "private void applyAttribute() throws IOException {",
+            "        os.flush();",
+            "        short attributes = info.attributes;",
+            "        if (negative) {",
+            "            attributes = invertAttributeColors(attributes);",
+            "        }",
+            "        if (SetConsoleTextAttribute(console, attributes) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short",
+            "IOException"
+          ],
+          "signature": "applyAttribute()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.OutputStream",
+              "flush()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "136-144:invertAttributeColors"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "101-101:SetConsoleTextAttribute"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:10:45",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:10:45",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:10:58",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __applyAttribute(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self._os.flush()",
+            "        attributes = self.__info.attributes",
+            "        if self.__negative:",
+            "            attributes = self.__invertAttributeColors(attributes)",
+            "        if Kernel32.SetConsoleTextAttribute(self.__console, attributes) == 0:",
+            "            raise Exception(Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 37.90423011779785,
+          "generation_timestamp": "2025-08-18T07:43:53.453793",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __applyAttribute(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "136-144:invertAttributeColors": {
+          "start": 136,
+          "end": 144,
+          "body": [
+            "private short invertAttributeColors(short attributes) {",
+            "        // Swap the the Foreground and Background bits.",
+            "        int fg = 0x000F & attributes;",
+            "        fg <<= 4;",
+            "        int bg = 0X00F0 & attributes;",
+            "        bg >>= 4;",
+            "        attributes = (short) ((attributes & 0xFF00) | fg | bg);",
+            "        return attributes;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "short"
+          ],
+          "body_types": [
+            "int",
+            "short"
+          ],
+          "signature": "invertAttributeColors( short attributes)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "short",
+              "name": "attributes"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:11:22",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:11:22",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:11:22",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|short|attributes": {
+                "identifier": "|short|attributes",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:11:22",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __invertAttributeColors(self, attributes: int) -> int:",
+            "",
+            "        # Swap the the Foreground and Background bits.",
+            "        fg = 0x000F & attributes",
+            "        fg <<= 4",
+            "        bg = 0X00F0 & attributes",
+            "        bg >>= 4",
+            "        attributes = (attributes & 0xFF00) | fg | bg",
+            "        return attributes"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 22.68136692047119,
+          "generation_timestamp": "2025-08-18T05:41:16.540638",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __invertAttributeColors(self, attributes: int) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "146-150:applyCursorPosition": {
+          "start": 146,
+          "end": 150,
+          "body": [
+            "private void applyCursorPosition() throws IOException {",
+            "        if (SetConsoleCursorPosition(console, info.cursorPosition.copy()) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IOException"
+          ],
+          "signature": "applyCursorPosition()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "103-123:COORD",
+              "117-122:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "187-187:SetConsoleCursorPosition"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:11:22",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:11:44",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __applyCursorPosition(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        if Kernel32.SetConsoleCursorPosition(self.__console, self.__info.cursorPosition.copy()) == 0:",
+            "            raise Exception(Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 34.2811541557312,
+          "generation_timestamp": "2025-08-18T07:54:53.180926",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __applyCursorPosition(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "152-182:processEraseScreen": {
+          "start": 152,
+          "end": 182,
+          "body": [
+            "@Override",
+            "    protected void processEraseScreen(int eraseOption) throws IOException {",
+            "        getConsoleInfo();",
+            "        int[] written = new int[1];",
+            "        switch (eraseOption) {",
+            "            case ERASE_SCREEN:",
+            "                COORD topLeft = new COORD();",
+            "                topLeft.x = 0;",
+            "                topLeft.y = info.window.top;",
+            "                int screenLength = info.window.height() * info.size.x;",
+            "                FillConsoleOutputAttribute(console, info.attributes, screenLength, topLeft, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', screenLength, topLeft, written);",
+            "                break;",
+            "            case ERASE_SCREEN_TO_BEGINING:",
+            "                COORD topLeft2 = new COORD();",
+            "                topLeft2.x = 0;",
+            "                topLeft2.y = info.window.top;",
+            "                int lengthToCursor = (info.cursorPosition.y - info.window.top) * info.size.x + info.cursorPosition.x;",
+            "                FillConsoleOutputAttribute(console, info.attributes, lengthToCursor, topLeft2, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', lengthToCursor, topLeft2, written);",
+            "                break;",
+            "            case ERASE_SCREEN_TO_END:",
+            "                int lengthToEnd = (info.window.bottom - info.cursorPosition.y) * info.size.x",
+            "                        + (info.size.x - info.cursorPosition.x);",
+            "                FillConsoleOutputAttribute(console, info.attributes, lengthToEnd, info.cursorPosition.copy(), written);",
+            "                FillConsoleOutputCharacterW(console, ' ', lengthToEnd, info.cursorPosition.copy(), written);",
+            "                break;",
+            "            default:",
+            "                break;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int[]",
+            "int",
+            "COORD"
+          ],
+          "signature": "processEraseScreen( int eraseOption)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "eraseOption"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "84-86:height"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "198-199:FillConsoleOutputAttribute"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "192-193:FillConsoleOutputCharacterW"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "103-123:COORD",
+              "117-122:copy"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:12:03",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:12:26",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:12:50",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "COORD",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:12:50",
+                "source_type": "COORD",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|eraseOption": {
+                "identifier": "|int|eraseOption",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:12:03",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processEraseScreen(self, eraseOption: int) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import COORD",
+            "        self._os.flush()",
+            "        if Kernel32.GetConsoleScreenBufferInfo(self.__console, self.__info) == 0:",
+            "            raise Exception(\"Could not get the screen info: \" + Kernel32.getLastErrorMessage())",
+            "        if self.__negative:",
+            "            self.__info.attributes = self.__invertAttributeColors(self.__info.attributes)",
+            "        ",
+            "        written   : List[int]  = [0]",
+            "        topLeft   : COORD      = COORD()",
+            "        topLeft2  : COORD      = COORD()",
+            "        lengthToCursor: int    = (self.__info.cursorPosition.y - self.__info.window.top) * self.__info.size.x + self.__info.cursorPosition.x",
+            "        lengthToEnd: int      = (self.__info.size.y - self.__info.cursorPosition.y) * self.__info.size.x - self.__info.cursorPosition.x",
+            "        ",
+            "        if eraseOption == self._ERASE_SCREEN_TO_END:",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', lengthToEnd, topLeft, written)",
+            "        elif eraseOption == self._ERASE_SCREEN_TO_BEGINING:",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', lengthToCursor, topLeft, written)",
+            "        else:",
+            "            for i in range(self.__info.size.y):",
+            "                Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', self.__info.size.x, topLeft, written)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 95.71969485282898,
+          "generation_timestamp": "2025-08-18T07:56:29.032364",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processEraseScreen(self, eraseOption: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "184-210:processEraseLine": {
+          "start": 184,
+          "end": 210,
+          "body": [
+            "@Override",
+            "    protected void processEraseLine(int eraseOption) throws IOException {",
+            "        getConsoleInfo();",
+            "        int[] written = new int[1];",
+            "        switch (eraseOption) {",
+            "            case ERASE_LINE:",
+            "                COORD leftColCurrRow = info.cursorPosition.copy();",
+            "                leftColCurrRow.x = 0;",
+            "                FillConsoleOutputAttribute(console, info.attributes, info.size.x, leftColCurrRow, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', info.size.x, leftColCurrRow, written);",
+            "                break;",
+            "            case ERASE_LINE_TO_BEGINING:",
+            "                COORD leftColCurrRow2 = info.cursorPosition.copy();",
+            "                leftColCurrRow2.x = 0;",
+            "                FillConsoleOutputAttribute(console, info.attributes, info.cursorPosition.x, leftColCurrRow2, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', info.cursorPosition.x, leftColCurrRow2, written);",
+            "                break;",
+            "            case ERASE_LINE_TO_END:",
+            "                int lengthToLastCol = info.size.x - info.cursorPosition.x;",
+            "                FillConsoleOutputAttribute(",
+            "                        console, info.attributes, lengthToLastCol, info.cursorPosition.copy(), written);",
+            "                FillConsoleOutputCharacterW(console, ' ', lengthToLastCol, info.cursorPosition.copy(), written);",
+            "                break;",
+            "            default:",
+            "                break;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int[]",
+            "int",
+            "COORD"
+          ],
+          "signature": "processEraseLine( int eraseOption)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "eraseOption"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "103-123:COORD",
+              "117-122:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "198-199:FillConsoleOutputAttribute"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "192-193:FillConsoleOutputCharacterW"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:12:50",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:08",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "COORD",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "COORD",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|eraseOption": {
+                "identifier": "|int|eraseOption",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:12:50",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processEraseLine(self, eraseOption: int) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        written = [0]",
+            "        if eraseOption == self._ERASE_LINE:",
+            "            leftColCurrRow = self.__info.cursorPosition.copy()",
+            "            leftColCurrRow.x = 0",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, self.__info.size.x, leftColCurrRow, written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', self.__info.size.x, leftColCurrRow, written)",
+            "        elif eraseOption == self._ERASE_LINE_TO_BEGINING:",
+            "            leftColCurrRow = self.__info.cursorPosition.copy()",
+            "            leftColCurrRow.x = 0",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, self.__info.cursorPosition.x, leftColCurrRow, written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', self.__info.cursorPosition.x, leftColCurrRow, written)",
+            "        elif eraseOption == self._ERASE_LINE_TO_END:",
+            "            lengthToLastCol = self.__info.size.x - self.__info.cursorPosition.x",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, lengthToLastCol, self.__info.cursorPosition.copy(), written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', lengthToLastCol, self.__info.cursorPosition.copy(), written)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 40.3800585269928,
+          "generation_timestamp": "2025-08-18T07:57:09.514777",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processEraseLine(self, eraseOption: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "212-217:processCursorLeft": {
+          "start": 212,
+          "end": 217,
+          "body": [
+            "@Override",
+            "    protected void processCursorLeft(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = (short) Math.max(0, info.cursorPosition.x - count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorLeft( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "|int|count",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorLeft(self, count: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = max(0, self.__info.cursorPosition.x - count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.303827047348022,
+          "generation_timestamp": "2025-08-18T07:57:39.934466",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorLeft(self, count: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "219-224:processCursorRight": {
+          "start": 219,
+          "end": 224,
+          "body": [
+            "@Override",
+            "    protected void processCursorRight(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = (short) Math.min(info.window.width(), info.cursorPosition.x + count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorRight( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "80-82:width"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "|int|count",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorRight(self, count: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = min(self.__info.window.width(), self.__info.cursorPosition.x + count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 27.739683628082275,
+          "generation_timestamp": "2025-08-18T07:58:07.780046",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorRight(self, count: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "226-231:processCursorDown": {
+          "start": 226,
+          "end": 231,
+          "body": [
+            "@Override",
+            "    protected void processCursorDown(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.y = (short) Math.min(Math.max(0, info.size.y - 1), info.cursorPosition.y + count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorDown( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "|int|count",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorDown(self, count: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.y = min(max(0, self.__info.size.y - 1), self.__info.cursorPosition.y + count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 47.026387453079224,
+          "generation_timestamp": "2025-08-18T07:58:54.933716",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorDown(self, count: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "233-238:processCursorUp": {
+          "start": 233,
+          "end": 238,
+          "body": [
+            "@Override",
+            "    protected void processCursorUp(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, info.cursorPosition.y - count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorUp( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "|int|count",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorUp(self, count: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, self.__info.cursorPosition.y - count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 22.116389274597168,
+          "generation_timestamp": "2025-08-18T07:59:17.157497",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorUp(self, count: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "240-246:processCursorTo": {
+          "start": 240,
+          "end": 246,
+          "body": [
+            "@Override",
+            "    protected void processCursorTo(int row, int col) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, Math.min(info.size.y, info.window.top + row - 1));",
+            "        info.cursorPosition.x = (short) Math.max(0, Math.min(info.window.width(), col - 1));",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorTo( int row,  int col)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "row"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "col"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "80-82:width"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|row": {
+                "identifier": "|int|row",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|col": {
+                "identifier": "|int|col",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorTo(self, row: int, col: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, min(self.__info.size.y, self.__info.window.top + row - 1))",
+            "        self.__info.cursorPosition.x = max(0, min(self.__info.window.width(), col - 1))",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.400371074676514,
+          "generation_timestamp": "2025-08-18T07:59:46.669666",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorTo(self, row: int, col: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "248-253:processCursorToColumn": {
+          "start": 248,
+          "end": 253,
+          "body": [
+            "@Override",
+            "    protected void processCursorToColumn(int x) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = (short) Math.max(0, Math.min(info.window.width(), x - 1));",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorToColumn( int x)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "x"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "80-82:width"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|x": {
+                "identifier": "|int|x",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorToColumn(self, x: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = max(0, min(self.__info.window.width(), x - 1))",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.210527181625366,
+          "generation_timestamp": "2025-08-18T08:00:15.992845",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorToColumn(self, x: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "255-261:processCursorUpLine": {
+          "start": 255,
+          "end": 261,
+          "body": [
+            "@Override",
+            "    protected void processCursorUpLine(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = 0;",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, info.cursorPosition.y - count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorUpLine( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "|int|count",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorUpLine(self, count: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = 0",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, self.__info.cursorPosition.y - count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 25.689682483673096,
+          "generation_timestamp": "2025-08-18T08:00:41.798716",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorUpLine(self, count: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "263-269:processCursorDownLine": {
+          "start": 263,
+          "end": 269,
+          "body": [
+            "@Override",
+            "    protected void processCursorDownLine(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = 0;",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, info.cursorPosition.y + count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorDownLine( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "|int|count",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorDownLine(self, count: int) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = 0",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, self.__info.cursorPosition.y + count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 25.843482732772827,
+          "generation_timestamp": "2025-08-18T08:01:07.754452",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorDownLine(self, count: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "271-278:processSetForegroundColor1": {
+          "start": 271,
+          "end": 278,
+          "body": [
+            "@Override",
+            "    protected void processSetForegroundColor1(int color, boolean bright) throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x0007) | ANSI_FOREGROUND_COLOR_MAP[color]);",
+            "        if (bright) {",
+            "            info.attributes |= FOREGROUND_INTENSITY;",
+            "        }",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processSetForegroundColor1( int color,  boolean bright)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "color"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "bright"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|color": {
+                "identifier": "|int|color",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|boolean|bright": {
+                "identifier": "|boolean|bright",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetForegroundColor1(self, color: int, bright: bool) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x0007) | self.__ANSI_FOREGROUND_COLOR_MAP[color]",
+            "        if bright:",
+            "            self.__info.attributes |= Kernel32.FOREGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 20.505709171295166,
+          "generation_timestamp": "2025-08-18T07:44:14.058542",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetForegroundColor1(self, color: int, bright: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "281-284:processSetForegroundColorExt0": {
+          "start": 281,
+          "end": 284,
+          "body": [
+            "protected void processSetForegroundColorExt0(int paletteIndex) throws IOException {",
+            "        int round = Colors.roundColor0(paletteIndex, 16);",
+            "        processSetForegroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetForegroundColorExt0( int paletteIndex)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "paletteIndex"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "84-90:roundColor0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "271-278:processSetForegroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|paletteIndex": {
+                "identifier": "|int|paletteIndex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetForegroundColorExt0(self, paletteIndex: int) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundColor0(paletteIndex, 16)",
+            "        self._processSetForegroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 31.036225080490112,
+          "generation_timestamp": "2025-08-18T07:44:45.189987",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetForegroundColorExt0(self, paletteIndex: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "287-290:processSetForegroundColorExt1": {
+          "start": 287,
+          "end": 290,
+          "body": [
+            "protected void processSetForegroundColorExt1(int r, int g, int b) throws IOException {",
+            "        int round = Colors.roundRgbColor(r, g, b, 16);",
+            "        processSetForegroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetForegroundColorExt1( int r,  int g,  int b)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "r"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "g"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "b"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "92-94:roundRgbColor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "271-278:processSetForegroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|r": {
+                "identifier": "|int|r",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|g": {
+                "identifier": "|int|g",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|b": {
+                "identifier": "|int|b",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetForegroundColorExt1(self, r: int, g: int, b: int) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundRgbColor(r, g, b, 16)",
+            "        self._processSetForegroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.219238996505737,
+          "generation_timestamp": "2025-08-18T07:45:15.513314",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetForegroundColorExt1(self, r: int, g: int, b: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "292-299:processSetBackgroundColor1": {
+          "start": 292,
+          "end": 299,
+          "body": [
+            "@Override",
+            "    protected void processSetBackgroundColor1(int color, boolean bright) throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x0070) | ANSI_BACKGROUND_COLOR_MAP[color]);",
+            "        if (bright) {",
+            "            info.attributes |= BACKGROUND_INTENSITY;",
+            "        }",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processSetBackgroundColor1( int color,  boolean bright)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "color"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "bright"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|color": {
+                "identifier": "|int|color",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|boolean|bright": {
+                "identifier": "|boolean|bright",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetBackgroundColor1(self, color: int, bright: bool) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x0070) | self.__ANSI_BACKGROUND_COLOR_MAP[color]",
+            "        if bright:",
+            "            self.__info.attributes |= Kernel32.BACKGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 26.206913232803345,
+          "generation_timestamp": "2025-08-18T07:45:41.832293",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetBackgroundColor1(self, color: int, bright: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "302-305:processSetBackgroundColorExt0": {
+          "start": 302,
+          "end": 305,
+          "body": [
+            "protected void processSetBackgroundColorExt0(int paletteIndex) throws IOException {",
+            "        int round = Colors.roundColor0(paletteIndex, 16);",
+            "        processSetBackgroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetBackgroundColorExt0( int paletteIndex)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "paletteIndex"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "84-90:roundColor0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "292-299:processSetBackgroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|paletteIndex": {
+                "identifier": "|int|paletteIndex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetBackgroundColorExt0(self, paletteIndex: int) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundColor0(paletteIndex, 16)",
+            "        self._processSetBackgroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.093764781951904,
+          "generation_timestamp": "2025-08-18T07:46:11.037844",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetBackgroundColorExt0(self, paletteIndex: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "308-311:processSetBackgroundColorExt1": {
+          "start": 308,
+          "end": 311,
+          "body": [
+            "protected void processSetBackgroundColorExt1(int r, int g, int b) throws IOException {",
+            "        int round = Colors.roundRgbColor(r, g, b, 16);",
+            "        processSetBackgroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetBackgroundColorExt1( int r,  int g,  int b)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "r"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "g"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "b"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "92-94:roundRgbColor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "292-299:processSetBackgroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|r": {
+                "identifier": "|int|r",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|g": {
+                "identifier": "|int|g",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|b": {
+                "identifier": "|int|b",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetBackgroundColorExt1(self, r: int, g: int, b: int) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundRgbColor(r, g, b, 16)",
+            "        self._processSetBackgroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 24.533976078033447,
+          "generation_timestamp": "2025-08-18T07:46:35.687454",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetBackgroundColorExt1(self, r: int, g: int, b: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "313-318:processDefaultTextColor": {
+          "start": 313,
+          "end": 318,
+          "body": [
+            "@Override",
+            "    protected void processDefaultTextColor() throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x000F) | (originalColors & 0xF));",
+            "        info.attributes = (short) (info.attributes & ~FOREGROUND_INTENSITY);",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processDefaultTextColor()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processDefaultTextColor(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x000F) | (self.__originalColors & 0xF)",
+            "        self.__info.attributes = self.__info.attributes & ~Kernel32.FOREGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 22.592684745788574,
+          "generation_timestamp": "2025-08-18T07:46:58.382184",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processDefaultTextColor(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "320-325:processDefaultBackgroundColor": {
+          "start": 320,
+          "end": 325,
+          "body": [
+            "@Override",
+            "    protected void processDefaultBackgroundColor() throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x00F0) | (originalColors & 0xF0));",
+            "        info.attributes = (short) (info.attributes & ~BACKGROUND_INTENSITY);",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processDefaultBackgroundColor()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processDefaultBackgroundColor(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x00F0) | (self.__originalColors & 0xF0)",
+            "        self.__info.attributes = self.__info.attributes & ~Kernel32.BACKGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 35.16022872924805,
+          "generation_timestamp": "2025-08-18T07:47:33.666015",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processDefaultBackgroundColor(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "327-332:processAttributeReset": {
+          "start": 327,
+          "end": 332,
+          "body": [
+            "@Override",
+            "    protected void processAttributeReset() throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x00FF) | originalColors);",
+            "        this.negative = false;",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processAttributeReset()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processAttributeReset(self) -> None:",
+            "        self.__info.attributes = (self.__info.attributes & ~0x00FF) | self.__originalColors",
+            "        self.__negative = False",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 24.24977731704712,
+          "generation_timestamp": "2025-08-18T07:47:58.020917",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processAttributeReset(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "334-368:processSetAttribute": {
+          "start": 334,
+          "end": 368,
+          "body": [
+            "@Override",
+            "    protected void processSetAttribute(int attribute) throws IOException {",
+            "        switch (attribute) {",
+            "            case ATTRIBUTE_INTENSITY_BOLD:",
+            "                info.attributes = (short) (info.attributes | FOREGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "            case ATTRIBUTE_INTENSITY_NORMAL:",
+            "                info.attributes = (short) (info.attributes & ~FOREGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "",
+            "                // Yeah, setting the background intensity is not underlining.. but it's best we can do",
+            "                // using the Windows console API",
+            "            case ATTRIBUTE_UNDERLINE:",
+            "                info.attributes = (short) (info.attributes | BACKGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "            case ATTRIBUTE_UNDERLINE_OFF:",
+            "                info.attributes = (short) (info.attributes & ~BACKGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "",
+            "            case ATTRIBUTE_NEGATIVE_ON:",
+            "                negative = true;",
+            "                applyAttribute();",
+            "                break;",
+            "            case ATTRIBUTE_NEGATIVE_OFF:",
+            "                negative = false;",
+            "                applyAttribute();",
+            "                break;",
+            "            default:",
+            "                break;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processSetAttribute( int attribute)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "attribute"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|attribute": {
+                "identifier": "|int|attribute",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetAttribute(self, attribute: int) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        if attribute == self._ATTRIBUTE_INTENSITY_BOLD:",
+            "            self.__info.attributes = self.__info.attributes | Kernel32.FOREGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_INTENSITY_NORMAL:",
+            "            self.__info.attributes = self.__info.attributes & ~Kernel32.FOREGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_UNDERLINE:",
+            "            self.__info.attributes = self.__info.attributes | Kernel32.BACKGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_UNDERLINE_OFF:",
+            "            self.__info.attributes = self.__info.attributes & ~Kernel32.BACKGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_NEGATIVE_ON:",
+            "            self.__negative = True",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_NEGATIVE_OFF:",
+            "            self.__negative = False",
+            "            self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 33.35916519165039,
+          "generation_timestamp": "2025-08-18T07:48:31.521013",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetAttribute(self, attribute: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "370-375:processSaveCursorPosition": {
+          "start": 370,
+          "end": 375,
+          "body": [
+            "@Override",
+            "    protected void processSaveCursorPosition() throws IOException {",
+            "        getConsoleInfo();",
+            "        savedX = info.cursorPosition.x;",
+            "        savedY = info.cursorPosition.y;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "processSaveCursorPosition()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processSaveCursorPosition(self) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__savedX = self.__info.cursorPosition.x",
+            "        self.__savedY = self.__info.cursorPosition.y"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 25.617966890335083,
+          "generation_timestamp": "2025-08-18T07:48:57.245039",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSaveCursorPosition(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "377-386:processRestoreCursorPosition": {
+          "start": 377,
+          "end": 386,
+          "body": [
+            "@Override",
+            "    protected void processRestoreCursorPosition() throws IOException {",
+            "        // restore only if there was a save operation first",
+            "        if (savedX != -1 && savedY != -1) {",
+            "            os.flush();",
+            "            info.cursorPosition.x = savedX;",
+            "            info.cursorPosition.y = savedY;",
+            "            applyCursorPosition();",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "processRestoreCursorPosition()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.OutputStream",
+              "flush()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processRestoreCursorPosition(self) -> None:",
+            "",
+            "        # restore only if there was a save operation first",
+            "        if self.__savedX != -1 and self.__savedY != -1:",
+            "            self._os.flush()",
+            "            self.__info.cursorPosition.x = self.__savedX",
+            "            self.__info.cursorPosition.y = self.__savedY",
+            "            self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.670256853103638,
+          "generation_timestamp": "2025-08-18T08:01:38.555640",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processRestoreCursorPosition(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "388-402:processInsertLine": {
+          "start": 388,
+          "end": 402,
+          "body": [
+            "@Override",
+            "    protected void processInsertLine(int optionInt) throws IOException {",
+            "        getConsoleInfo();",
+            "        SMALL_RECT scroll = info.window.copy();",
+            "        scroll.top = info.cursorPosition.y;",
+            "        COORD org = new COORD();",
+            "        org.x = 0;",
+            "        org.y = (short) (info.cursorPosition.y + optionInt);",
+            "        CHAR_INFO info = new CHAR_INFO();",
+            "        info.attributes = originalColors;",
+            "        info.unicodeChar = ' ';",
+            "        if (ScrollConsoleScreenBuffer(console, scroll, scroll, org, info) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "SMALL_RECT",
+            "COORD",
+            "short",
+            "CHAR_INFO",
+            "IOException"
+          ],
+          "signature": "processInsertLine( int optionInt)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "optionInt"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "88-95:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "264-269:ScrollConsoleScreenBuffer"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "SMALL_RECT": {
+                "identifier": "SMALL_RECT",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "SMALL_RECT",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "SMALL_RECT",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "COORD",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "COORD",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CHAR_INFO": {
+                "identifier": "CHAR_INFO",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "CHAR_INFO",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CHAR_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:13:43",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|optionInt": {
+                "identifier": "|int|optionInt",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:13:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processInsertLine(self, optionInt: int) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import COORD",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import CHAR_INFO",
+            "        self._os.flush()",
+            "        if Kernel32.GetConsoleScreenBufferInfo(self.__console, self.__info) == 0:",
+            "            raise Exception(\"Could not get the screen info: \" + Kernel32.getLastErrorMessage())",
+            "        if self.__negative:",
+            "            self.__info.attributes = self.__invertAttributeColors(self.__info.attributes)",
+            "        ",
+            "        scroll = self.__info.window.copy()",
+            "        scroll.top = self.__info.cursorPosition.y",
+            "        org = COORD()",
+            "        org.x = 0",
+            "        org.y = (short)(self.__info.cursorPosition.y + optionInt)",
+            "        info = CHAR_INFO()",
+            "        info.attributes = self.__originalColors",
+            "        info.unicodeChar = ' '",
+            "        ",
+            "        if Kernel32.ScrollConsoleScreenBuffer(self.__console, scroll, scroll, org, info) == 0:",
+            "            raise Exception(\"Could not scroll the console screen buffer: \" + Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 31.529550790786743,
+          "generation_timestamp": "2025-08-18T07:53:12.248276",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processInsertLine(self, optionInt: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "404-418:processDeleteLine": {
+          "start": 404,
+          "end": 418,
+          "body": [
+            "@Override",
+            "    protected void processDeleteLine(int optionInt) throws IOException {",
+            "        getConsoleInfo();",
+            "        SMALL_RECT scroll = info.window.copy();",
+            "        scroll.top = info.cursorPosition.y;",
+            "        COORD org = new COORD();",
+            "        org.x = 0;",
+            "        org.y = (short) (info.cursorPosition.y - optionInt);",
+            "        CHAR_INFO info = new CHAR_INFO();",
+            "        info.attributes = originalColors;",
+            "        info.unicodeChar = ' ';",
+            "        if (ScrollConsoleScreenBuffer(console, scroll, scroll, org, info) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "SMALL_RECT",
+            "COORD",
+            "short",
+            "CHAR_INFO",
+            "IOException"
+          ],
+          "signature": "processDeleteLine( int optionInt)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "optionInt"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "88-95:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "264-269:ScrollConsoleScreenBuffer"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:14:00",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "SMALL_RECT": {
+                "identifier": "SMALL_RECT",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:14:00",
+                "source_type": "SMALL_RECT",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "SMALL_RECT",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "COORD",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:14:00",
+                "source_type": "COORD",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:14:00",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CHAR_INFO": {
+                "identifier": "CHAR_INFO",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:14:00",
+                "source_type": "CHAR_INFO",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CHAR_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:14:15",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|optionInt": {
+                "identifier": "|int|optionInt",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:14:00",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processDeleteLine(self, optionInt: int) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import COORD",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import CHAR_INFO",
+            "        self.__getConsoleInfo()",
+            "        scroll = self.__info.window.copy()",
+            "        scroll.top = self.__info.cursorPosition.y",
+            "        org = COORD()",
+            "        org.x = 0",
+            "        org.y = (self.__info.cursorPosition.y - optionInt)",
+            "        info = CHAR_INFO()",
+            "        info.attributes = self.__originalColors",
+            "        info.unicodeChar = ' '",
+            "        if Kernel32.ScrollConsoleScreenBuffer(self.__console, scroll, scroll, org, info) == 0:",
+            "            raise Exception(\"Could not delete line: \" + Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 38.268181800842285,
+          "generation_timestamp": "2025-08-18T07:53:50.631586",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processDeleteLine(self, optionInt: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "420-423:processChangeWindowTitle": {
+          "start": 420,
+          "end": 423,
+          "body": [
+            "@Override",
+            "    protected void processChangeWindowTitle(String label) {",
+            "        SetConsoleTitle(label);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "processChangeWindowTitle( String label)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "label"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "227-227:SetConsoleTitle"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:14:33",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|String|label": {
+                "identifier": "|String|label",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:14:33",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processChangeWindowTitle(self, label: str) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        Kernel32.SetConsoleTitle(label)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 26.878206491470337,
+          "generation_timestamp": "2025-08-18T07:38:53.231986",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processChangeWindowTitle(self, label: str) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "57-57:console": {
+          "start": 57,
+          "end": 57,
+          "enum_constant": false,
+          "body": [
+            "private final long console;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "long"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __console: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __console: int = 0"
+          ]
+        },
+        "59-59:FOREGROUND_BLACK": {
+          "start": 59,
+          "end": 59,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_BLACK = 0;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __FOREGROUND_BLACK: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 22.599393367767334,
+          "generation_timestamp": "2025-08-18T00:22:24.974654",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FOREGROUND_BLACK: int = ",
+            ""
+          ]
+        },
+        "60-60:FOREGROUND_YELLOW": {
+          "start": 60,
+          "end": 60,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_YELLOW = (short) (FOREGROUND_RED | FOREGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 110.58050417900085,
+          "generation_timestamp": "2025-08-18T00:22:02.226049",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FOREGROUND_YELLOW: int = ",
+            ""
+          ]
+        },
+        "61-61:FOREGROUND_MAGENTA": {
+          "start": 61,
+          "end": 61,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_MAGENTA = (short) (FOREGROUND_BLUE | FOREGROUND_RED);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_MAGENTA: int = Kernel32.FOREGROUND_BLUE | Kernel32.FOREGROUND_RED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 17.829717874526978,
+          "generation_timestamp": "2025-08-18T00:20:11.518770",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FOREGROUND_MAGENTA: int = ",
+            ""
+          ]
+        },
+        "62-62:FOREGROUND_CYAN": {
+          "start": 62,
+          "end": 62,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_CYAN = (short) (FOREGROUND_BLUE | FOREGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_CYAN: int = Kernel32.FOREGROUND_BLUE | Kernel32.FOREGROUND_GREEN"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 16.190218210220337,
+          "generation_timestamp": "2025-08-18T00:19:53.573763",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FOREGROUND_CYAN: int = ",
+            ""
+          ]
+        },
+        "63-63:FOREGROUND_WHITE": {
+          "start": 63,
+          "end": 63,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_WHITE = (short) (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_WHITE: int = Kernel32.FOREGROUND_RED | Kernel32.FOREGROUND_GREEN | Kernel32.FOREGROUND_BLUE"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.17247486114502,
+          "generation_timestamp": "2025-08-18T00:19:37.273674",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FOREGROUND_WHITE: int = ",
+            ""
+          ]
+        },
+        "65-65:BACKGROUND_BLACK": {
+          "start": 65,
+          "end": 65,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_BLACK = 0;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __BACKGROUND_BLACK: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 23.80576467514038,
+          "generation_timestamp": "2025-08-18T00:19:23.947071",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BACKGROUND_BLACK: int = ",
+            ""
+          ]
+        },
+        "66-66:BACKGROUND_YELLOW": {
+          "start": 66,
+          "end": 66,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_YELLOW = (short) (BACKGROUND_RED | BACKGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_YELLOW: int = Kernel32.BACKGROUND_RED | Kernel32.BACKGROUND_GREEN"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 11.783801794052124,
+          "generation_timestamp": "2025-08-18T00:19:00.024775",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BACKGROUND_YELLOW: int = ",
+            ""
+          ]
+        },
+        "67-67:BACKGROUND_MAGENTA": {
+          "start": 67,
+          "end": 67,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_MAGENTA = (short) (BACKGROUND_BLUE | BACKGROUND_RED);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_MAGENTA: int = Kernel32.BACKGROUND_BLUE | Kernel32.BACKGROUND_RED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 25.61032724380493,
+          "generation_timestamp": "2025-08-18T00:18:48.113723",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BACKGROUND_MAGENTA: int = ",
+            ""
+          ]
+        },
+        "68-68:BACKGROUND_CYAN": {
+          "start": 68,
+          "end": 68,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_CYAN = (short) (BACKGROUND_BLUE | BACKGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_CYAN: int = Kernel32.BACKGROUND_BLUE | Kernel32.BACKGROUND_GREEN"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 35.719913721084595,
+          "generation_timestamp": "2025-08-18T00:18:22.364274",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BACKGROUND_CYAN: int = ",
+            ""
+          ]
+        },
+        "69-69:BACKGROUND_WHITE": {
+          "start": 69,
+          "end": 69,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_WHITE = (short) (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:10",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 83.70090174674988,
+          "generation_timestamp": "2025-08-18T00:17:46.522468",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BACKGROUND_WHITE: int = ",
+            ""
+          ]
+        },
+        "71-80:ANSI_FOREGROUND_COLOR_MAP": {
+          "start": 71,
+          "end": 80,
+          "enum_constant": false,
+          "body": [
+            "private static final short[] ANSI_FOREGROUND_COLOR_MAP = {",
+            "        FOREGROUND_BLACK,",
+            "        FOREGROUND_RED,",
+            "        FOREGROUND_GREEN,",
+            "        FOREGROUND_YELLOW,",
+            "        FOREGROUND_BLUE,",
+            "        FOREGROUND_MAGENTA,",
+            "        FOREGROUND_CYAN,",
+            "        FOREGROUND_WHITE,",
+            "    };"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short[]": {
+                "identifier": "short[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:08:27",
+                "source_type": "short[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.io.AnsiProcessor import AnsiProcessor",
+            "    __ANSI_FOREGROUND_COLOR_MAP: List[int] = [AnsiProcessor._BLACK, AnsiProcessor._RED, AnsiProcessor._GREEN, AnsiProcessor._YELLOW, AnsiProcessor._BLUE, AnsiProcessor._MAGENTA, AnsiProcessor._CYAN, AnsiProcessor._WHITE]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 108.04551768302917,
+          "generation_timestamp": "2025-08-18T00:16:22.698687",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __ANSI_FOREGROUND_COLOR_MAP: List[int] = ",
+            ""
+          ]
+        },
+        "82-91:ANSI_BACKGROUND_COLOR_MAP": {
+          "start": 82,
+          "end": 91,
+          "enum_constant": false,
+          "body": [
+            "private static final short[] ANSI_BACKGROUND_COLOR_MAP = {",
+            "        BACKGROUND_BLACK,",
+            "        BACKGROUND_RED,",
+            "        BACKGROUND_GREEN,",
+            "        BACKGROUND_YELLOW,",
+            "        BACKGROUND_BLUE,",
+            "        BACKGROUND_MAGENTA,",
+            "        BACKGROUND_CYAN,",
+            "        BACKGROUND_WHITE,",
+            "    };"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short[]": {
+                "identifier": "short[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:09:11",
+                "source_type": "short[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __ANSI_BACKGROUND_COLOR_MAP: List[int] = [0, 4, 2, 6, 1, 5, 3, 7]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 48.61612796783447,
+          "generation_timestamp": "2025-08-18T00:14:34.540415",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __ANSI_BACKGROUND_COLOR_MAP: List[int] = ",
+            ""
+          ]
+        },
+        "93-93:info": {
+          "start": 93,
+          "end": 93,
+          "enum_constant": false,
+          "body": [
+            "private final CONSOLE_SCREEN_BUFFER_INFO info = new CONSOLE_SCREEN_BUFFER_INFO();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "CONSOLE_SCREEN_BUFFER_INFO"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "CONSOLE_SCREEN_BUFFER_INFO": {
+                "identifier": "CONSOLE_SCREEN_BUFFER_INFO",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:09:27",
+                "source_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import CONSOLE_SCREEN_BUFFER_INFO",
+            "    __info: \"CONSOLE_SCREEN_BUFFER_INFO\" = CONSOLE_SCREEN_BUFFER_INFO()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 30.10111165046692,
+          "generation_timestamp": "2025-08-18T00:13:45.797097",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __info: \"CONSOLE_SCREEN_BUFFER_INFO\" = ",
+            ""
+          ]
+        },
+        "94-94:originalColors": {
+          "start": 94,
+          "end": 94,
+          "enum_constant": false,
+          "body": [
+            "private final short originalColors;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:09:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __originalColors: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __originalColors: int = 0"
+          ]
+        },
+        "96-96:negative": {
+          "start": 96,
+          "end": 96,
+          "enum_constant": false,
+          "body": [
+            "private boolean negative;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:09:27",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __negative: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __negative: bool = False"
+          ]
+        },
+        "97-97:savedX": {
+          "start": 97,
+          "end": 97,
+          "enum_constant": false,
+          "body": [
+            "private short savedX = -1;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:09:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __savedX: int = -1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 30.380448818206787,
+          "generation_timestamp": "2025-08-18T00:13:15.575029",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __savedX: int = ",
+            ""
+          ]
+        },
+        "98-98:savedY": {
+          "start": 98,
+          "end": 98,
+          "enum_constant": false,
+          "body": [
+            "private short savedY = -1;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:09:27",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __savedY: int = -1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.517427444458008,
+          "generation_timestamp": "2025-08-18T00:12:45.082832",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __savedY: int = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class WindowsAnsiProcessor(AnsiProcessor):\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO",
+    "from src.main.org.fusesource.jansi.io.AnsiProcessor import AnsiProcessor",
+    "from typing import List",
+    "from unittest import TestCase, main"
+  ]
+}

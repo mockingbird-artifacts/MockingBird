@@ -1,0 +1,539 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/test/java/me/lemire/integercompression/ResourcedTest.java",
+  "imports": {
+    "10-10:import java.util.ArrayList;": {
+      "start": 10,
+      "end": 10,
+      "body": "import java.util.ArrayList;"
+    },
+    "11-11:import me.lemire.integercompression.differential.IntegratedIntCompressor;": {
+      "start": 11,
+      "end": 11,
+      "body": "import me.lemire.integercompression.differential.IntegratedIntCompressor;"
+    },
+    "12-12:import me.lemire.integercompression.differential.SkippableIntegratedIntegerCODEC;": {
+      "start": 12,
+      "end": 12,
+      "body": "import me.lemire.integercompression.differential.SkippableIntegratedIntegerCODEC;"
+    },
+    "14-14:import java.io.BufferedReader;": {
+      "start": 14,
+      "end": 14,
+      "body": "import java.io.BufferedReader;"
+    },
+    "15-15:import java.io.File;": {
+      "start": 15,
+      "end": 15,
+      "body": "import java.io.File;"
+    },
+    "16-16:import org.junit.Assert;": {
+      "start": 16,
+      "end": 16,
+      "body": "import org.junit.Assert;"
+    },
+    "17-17:import java.io.FileReader;": {
+      "start": 17,
+      "end": 17,
+      "body": "import java.io.FileReader;"
+    },
+    "18-18:import java.io.IOException;": {
+      "start": 18,
+      "end": 18,
+      "body": "import java.io.IOException;"
+    },
+    "20-20:import org.junit.Test;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.junit.Test;"
+    }
+  },
+  "classes": {
+    "26-88:ResourcedTest": {
+      "start": 26,
+      "end": 88,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "44-86:IntCompressorTest": {
+          "start": 44,
+          "end": 86,
+          "body": [
+            "@Test",
+            "\tpublic void IntCompressorTest() throws IOException {",
+            "\t\t// next line requires Java8?",
+            "\t\t// int[] data =",
+            "\t\t// Files.lines(Paths.get(\"integers.txt\")).mapToInt(Integer::parseInt).toArray();",
+            "\t\tFile f = new File(\"src/test/resources/integers.txt\");",
+            "\t\tSystem.out.println(\"loading test data from \"+ f.getAbsolutePath());",
+            "\t\tBufferedReader bfr = new BufferedReader(new FileReader(f));",
+            "\t\tString line;",
+            "\t\tArrayList<Integer> ai = new ArrayList<Integer>();",
+            "\t\twhile ((line = bfr.readLine()) != null) {",
+            "\t\t\tai.add(Integer.parseInt(line));",
+            "\t\t}",
+            "\t\tbfr.close();",
+            "\t\tint[] data = new int[ai.size()];",
+            "\t\tfor (int k = 0; k < data.length; ++k)",
+            "\t\t\tdata[k] = ai.get(k).intValue();",
+            "\t\tai = null;",
+            "\t\t// finally!",
+            "\t\t{",
+            "\t\t\tIntegratedIntCompressor iic = new IntegratedIntCompressor(1, null);",
+            "\t\t\tint[] compressed = iic.compress(data);",
+            "\t\t\tint[] recovered = iic.uncompress(compressed);",
+            "\t\t\tAssert.assertArrayEquals(recovered, data);",
+            "\t\t}",
+            "\t\tfor (SkippableIntegerCODEC C : codecs) {",
+            "\t\t\tIntCompressor iic = new IntCompressor(0, C);",
+            "\t\t\tint[] compressed = iic.compress(data);",
+            "\t\t\tint[] recovered = iic.uncompress(compressed);",
+            "\t\t\tAssert.assertArrayEquals(recovered, data);",
+            "",
+            "\t\t}",
+            "\t\tfor (SkippableIntegerCODEC C : codecs) {",
+            "\t\t\tif (C instanceof SkippableIntegratedIntegerCODEC) {",
+            "\t\t\t\tIntegratedIntCompressor iic = new IntegratedIntCompressor(0, (SkippableIntegratedIntegerCODEC) C);",
+            "\t\t\t\tint[] compressed = iic.compress(data);",
+            "\t\t\t\tint[] recovered = iic.uncompress(compressed);",
+            "\t\t\t\tAssert.assertArrayEquals(recovered, data);",
+            "\t\t\t}",
+            "",
+            "\t\t}",
+            "",
+            "\t}"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "File",
+            "BufferedReader",
+            "FileReader",
+            "String",
+            "ArrayList<Integer>",
+            "int[]",
+            "int",
+            "IntegratedIntCompressor",
+            "SkippableIntegerCODEC",
+            "IntCompressor",
+            "SkippableIntegratedIntegerCODEC"
+          ],
+          "signature": "IntCompressorTest()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getAbsolutePath()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.FileReader",
+              "<init>(java.io.File)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "<init>(java.io.Reader)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "parseInt(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "readLine()"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "close()"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "size()"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "get(int)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "intValue()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedIntCompressor",
+              "15-83:IntegratedIntCompressor",
+              "29-39:IntegratedIntCompressor"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedIntCompressor",
+              "15-83:IntegratedIntCompressor",
+              "52-65:compress"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedIntCompressor",
+              "15-83:IntegratedIntCompressor",
+              "73-81:uncompress"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertArrayEquals(int[],int[])"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntCompressor",
+              "10-81:IntCompressor",
+              "26-36:IntCompressor"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntCompressor",
+              "10-81:IntCompressor",
+              "49-63:compress"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntCompressor",
+              "10-81:IntCompressor",
+              "71-79:uncompress"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              },
+              "BufferedReader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import TextIOWrapper\nimport codecs",
+                "translated_target_type": "TextIOWrapper",
+                "reasoning": "In Python, the equivalent type to `BufferedReader` in Java is `TextIOWrapper`. This class provides a buffer for an I/O stream and can be used with any object that supports the iterator protocol and the `readline()` method. In this case, it's being used with `InputStreamReader` which has a `readline()` method to read lines from a character-input stream.",
+                "prompt": ""
+              },
+              "FileReader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import TextIOWrapper, open\nfrom typing import List",
+                "translated_target_type": "TextIOWrapper",
+                "reasoning": "In Python, the equivalent of Java's `FileReader` is `io.TextIOWrapper` which is used to read text from a file. It is part of the io module in Python and it provides methods for reading and writing to files. The `open()` function is also used to open files in Python, but it returns a TextIOWrapper object, so we can use either interchangeably here.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ArrayList<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "In Python, the equivalent type for `ArrayList<Integer>` is `List[int]`. The `typing` module in Python provides support for type hints as specified by PEP 484. Here, we are using `List` from the typing module to denote a list of integers. This is similar to an ArrayList in Java where it can store any number of elements and each element is an integer.",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IntegratedIntCompressor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegratedIntCompressor has been translated to \"object\"",
+                "prompt": ""
+              },
+              "SkippableIntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type SkippableIntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              },
+              "IntCompressor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntCompressor has been translated to \"object\"",
+                "prompt": ""
+              },
+              "SkippableIntegratedIntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type SkippableIntegratedIntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def IntCompressorTest(self) -> None:",
+            "        from src.test.me.lemire.integercompression.IntCompressorTest import IntCompressorTest",
+            "        from src.main.me.lemire.integercompression.differential.IntegratedIntCompressor import IntegratedIntCompressor",
+            "        with open('src/test/resources/integers.txt', 'r') as f:",
+            "            data = [int(line) for line in f]",
+            "            ",
+            "        iic = IntegratedIntCompressor(1, None)",
+            "        compressed = iic.compress(data)",
+            "        recovered = iic.uncompress(compressed)",
+            "        self.assertEqual(recovered, data)",
+            "        ",
+            "        codecs = [IntegratedTest().__methodName()]  # replace with actual method call",
+            "        for codec in codecs:",
+            "            compressed = IntCompressorTest().compress(data)",
+            "            recovered = IntCompressorTest().uncompress(compressed)",
+            "            self.assertEqual(recovered, data)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 10.96264362335205,
+          "generation_timestamp": "2025-11-08T23:29:04.296541",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def IntCompressorTest(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "27-36:codecs": {
+          "start": 27,
+          "end": 36,
+          "enum_constant": false,
+          "body": [
+            "SkippableIntegerCODEC[] codecs = { new JustCopy(), new VariableByte(),",
+            "\t\t\tnew SkippableComposition(new BinaryPacking(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(new NewPFD(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(new NewPFDS9(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(new NewPFDS16(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(new OptPFD(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(new OptPFDS9(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(new OptPFDS16(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(FastPFOR128.FastPFOR1281(), new VariableByte()),",
+            "\t\t\tnew SkippableComposition(FastPFOR.FastPFOR1(), new VariableByte()), new Simple9(), new Simple16() };"
+          ],
+          "modifiers": [],
+          "types": [
+            "SkippableIntegerCODEC[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "SkippableIntegerCODEC[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type SkippableIntegerCODEC[] has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 43.506699323654175,
+          "generation_timestamp": "2025-11-07T14:02:06.929002",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    codecs: object = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class ResourcedTest(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "ArrayList": "java.util.ArrayList",
+    "IntegratedIntCompressor": "me.lemire.integercompression.differential.IntegratedIntCompressor",
+    "SkippableIntegratedIntegerCODEC": "me.lemire.integercompression.differential.SkippableIntegratedIntegerCODEC",
+    "BufferedReader": "java.io.BufferedReader",
+    "File": "java.io.File",
+    "Assert": "org.junit.Assert",
+    "FileReader": "java.io.FileReader",
+    "IOException": "java.io.IOException",
+    "Test": "org.junit.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import TextIOWrapper\nimport codecs",
+    "from io import TextIOWrapper, open\nfrom typing import List",
+    "from pathlib import Path",
+    "from typing import List",
+    "from typing import List, Tuple",
+    "import pytest",
+    "import unittest"
+  ]
+}

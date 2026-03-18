@@ -1,0 +1,4070 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/AnsiConsole.java",
+  "imports": {
+    "18-18:import org.fusesource.jansi.internal.CLibrary;": {
+      "start": 18,
+      "end": 18,
+      "body": "import org.fusesource.jansi.internal.CLibrary;"
+    },
+    "19-19:import org.fusesource.jansi.internal.CLibrary.WinSize;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.fusesource.jansi.internal.CLibrary.WinSize;"
+    },
+    "20-20:import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;"
+    },
+    "21-21:import org.fusesource.jansi.internal.MingwSupport;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.fusesource.jansi.internal.MingwSupport;"
+    },
+    "22-22:import org.fusesource.jansi.io.AnsiOutputStream;": {
+      "start": 22,
+      "end": 22,
+      "body": "import org.fusesource.jansi.io.AnsiOutputStream;"
+    },
+    "23-23:import org.fusesource.jansi.io.AnsiProcessor;": {
+      "start": 23,
+      "end": 23,
+      "body": "import org.fusesource.jansi.io.AnsiProcessor;"
+    },
+    "24-24:import org.fusesource.jansi.io.FastBufferedOutputStream;": {
+      "start": 24,
+      "end": 24,
+      "body": "import org.fusesource.jansi.io.FastBufferedOutputStream;"
+    },
+    "25-25:import org.fusesource.jansi.io.WindowsAnsiProcessor;": {
+      "start": 25,
+      "end": 25,
+      "body": "import org.fusesource.jansi.io.WindowsAnsiProcessor;"
+    },
+    "27-27:import java.io.FileDescriptor;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.io.FileDescriptor;"
+    },
+    "28-28:import java.io.FileOutputStream;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.io.FileOutputStream;"
+    },
+    "29-29:import java.io.IOError;": {
+      "start": 29,
+      "end": 29,
+      "body": "import java.io.IOError;"
+    },
+    "30-30:import java.io.IOException;": {
+      "start": 30,
+      "end": 30,
+      "body": "import java.io.IOException;"
+    },
+    "31-31:import java.io.OutputStream;": {
+      "start": 31,
+      "end": 31,
+      "body": "import java.io.OutputStream;"
+    },
+    "32-32:import java.io.PrintStream;": {
+      "start": 32,
+      "end": 32,
+      "body": "import java.io.PrintStream;"
+    },
+    "33-33:import java.io.UnsupportedEncodingException;": {
+      "start": 33,
+      "end": 33,
+      "body": "import java.io.UnsupportedEncodingException;"
+    },
+    "34-34:import java.nio.charset.Charset;": {
+      "start": 34,
+      "end": 34,
+      "body": "import java.nio.charset.Charset;"
+    },
+    "35-35:import java.nio.charset.UnsupportedCharsetException;": {
+      "start": 35,
+      "end": 35,
+      "body": "import java.nio.charset.UnsupportedCharsetException;"
+    },
+    "36-36:import java.util.Locale;": {
+      "start": 36,
+      "end": 36,
+      "body": "import java.util.Locale;"
+    },
+    "38-38:import static org.fusesource.jansi.internal.CLibrary.ioctl;": {
+      "start": 38,
+      "end": 38,
+      "body": "import static org.fusesource.jansi.internal.CLibrary.ioctl;"
+    },
+    "39-39:import static org.fusesource.jansi.internal.CLibrary.isatty;": {
+      "start": 39,
+      "end": 39,
+      "body": "import static org.fusesource.jansi.internal.CLibrary.isatty;"
+    },
+    "40-40:import static org.fusesource.jansi.internal.Kernel32.GetConsoleMode;": {
+      "start": 40,
+      "end": 40,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleMode;"
+    },
+    "41-41:import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;": {
+      "start": 41,
+      "end": 41,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;"
+    },
+    "42-42:import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;": {
+      "start": 42,
+      "end": 42,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;"
+    },
+    "43-43:import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;": {
+      "start": 43,
+      "end": 43,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;"
+    },
+    "44-44:import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;": {
+      "start": 44,
+      "end": 44,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;"
+    },
+    "45-45:import static org.fusesource.jansi.internal.Kernel32.SetConsoleMode;": {
+      "start": 45,
+      "end": 45,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleMode;"
+    }
+  },
+  "classes": {
+    "61-571:AnsiConsole": {
+      "start": 61,
+      "end": 571,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "198-204:getTerminalWidth": {
+          "start": 198,
+          "end": 204,
+          "body": [
+            "public static int getTerminalWidth() {",
+            "        int w = out().getTerminalWidth();",
+            "        if (w <= 0) {",
+            "            w = err().getTerminalWidth();",
+            "        }",
+            "        return w;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "getTerminalWidth()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "478-481:out"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "76-78:getTerminalWidth"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "500-503:err"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getTerminalWidth() -> int:",
+            "        w = AnsiConsole.out().getTerminalWidth()",
+            "        if w <= 0:",
+            "            w = AnsiConsole.err().getTerminalWidth()",
+            "        return w"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 18.352859020233154,
+          "generation_timestamp": "2025-08-18T08:54:56.252315",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getTerminalWidth() -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "235-235:AnsiConsole": {
+          "start": 235,
+          "end": 235,
+          "body": [
+            "private AnsiConsole() {}"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "AnsiConsole()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.18599700927734375,
+          "generation_timestamp": "2025-08-18T01:30:29.092315",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "237-444:ansiStream": {
+          "start": 237,
+          "end": 444,
+          "body": [
+            "private static AnsiPrintStream ansiStream(boolean stdout) {",
+            "        FileDescriptor descriptor = stdout ? FileDescriptor.out : FileDescriptor.err;",
+            "        final OutputStream out = new FastBufferedOutputStream(new FileOutputStream(descriptor));",
+            "",
+            "        String enc = System.getProperty(stdout ? \"stdout.encoding\" : \"stderr.encoding\");",
+            "        if (enc == null) {",
+            "            enc = System.getProperty(stdout ? \"sun.stdout.encoding\" : \"sun.stderr.encoding\");",
+            "        }",
+            "",
+            "        final boolean isatty;",
+            "        boolean isAtty;",
+            "        boolean withException;",
+            "        // Do not use the CLibrary.STDOUT_FILENO to avoid errors in case",
+            "        // the library can not be loaded on unsupported platforms",
+            "        final int fd = stdout ? STDOUT_FILENO : STDERR_FILENO;",
+            "        try {",
+            "            // If we can detect that stdout is not a tty.. then setup",
+            "            // to strip the ANSI sequences..",
+            "            isAtty = isatty(fd) != 0;",
+            "            String term = System.getenv(\"TERM\");",
+            "            String emacs = System.getenv(\"INSIDE_EMACS\");",
+            "            if (isAtty && \"dumb\".equals(term) && emacs != null && !emacs.contains(\"comint\")) {",
+            "                isAtty = false;",
+            "            }",
+            "            withException = false;",
+            "        } catch (Throwable ignore) {",
+            "            // These errors happen if the JNI lib is not available for your platform.",
+            "            // But since we are on ANSI friendly platform, assume the user is on the console.",
+            "            isAtty = false;",
+            "            withException = true;",
+            "        }",
+            "        isatty = isAtty;",
+            "",
+            "        final AnsiOutputStream.WidthSupplier width;",
+            "        final AnsiProcessor processor;",
+            "        final AnsiType type;",
+            "        final AnsiOutputStream.IoRunnable installer;",
+            "        final AnsiOutputStream.IoRunnable uninstaller;",
+            "        if (!isatty) {",
+            "            processor = null;",
+            "            type = withException ? AnsiType.Unsupported : AnsiType.Redirected;",
+            "            installer = uninstaller = null;",
+            "            width = new AnsiOutputStream.ZeroWidthSupplier();",
+            "        } else if (IS_WINDOWS) {",
+            "            final long console = GetStdHandle(stdout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);",
+            "            final int[] mode = new int[1];",
+            "            final boolean isConsole = GetConsoleMode(console, mode) != 0;",
+            "            final AnsiOutputStream.WidthSupplier kernel32Width = new AnsiOutputStream.WidthSupplier() {",
+            "                @Override",
+            "                public int getTerminalWidth() {",
+            "                    CONSOLE_SCREEN_BUFFER_INFO info = new CONSOLE_SCREEN_BUFFER_INFO();",
+            "                    GetConsoleScreenBufferInfo(console, info);",
+            "                    return info.windowWidth();",
+            "                }",
+            "            };",
+            "",
+            "            if (isConsole && SetConsoleMode(console, mode[0] | ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0) {",
+            "                SetConsoleMode(console, mode[0]); // set it back for now, but we know it works",
+            "                processor = null;",
+            "                type = AnsiType.VirtualTerminal;",
+            "                installer = () -> {",
+            "                    synchronized (AnsiConsole.class) {",
+            "                        virtualProcessing++;",
+            "                        SetConsoleMode(console, mode[0] | ENABLE_VIRTUAL_TERMINAL_PROCESSING);",
+            "                    }",
+            "                };",
+            "                uninstaller = () -> {",
+            "                    synchronized (AnsiConsole.class) {",
+            "                        if (--virtualProcessing == 0) {",
+            "                            SetConsoleMode(console, mode[0]);",
+            "                        }",
+            "                    }",
+            "                };",
+            "                width = kernel32Width;",
+            "            } else if ((IS_CONEMU || IS_CYGWIN || IS_MSYSTEM) && !isConsole) {",
+            "                // ANSI-enabled ConEmu, Cygwin or MSYS(2) on Windows...",
+            "                processor = null;",
+            "                type = AnsiType.Native;",
+            "                installer = uninstaller = null;",
+            "                MingwSupport mingw = new MingwSupport();",
+            "                String name = mingw.getConsoleName(stdout);",
+            "                if (name != null && !name.isEmpty()) {",
+            "                    width = () -> mingw.getTerminalWidth(name);",
+            "                } else {",
+            "                    width = () -> -1;",
+            "                }",
+            "            } else {",
+            "                // On Windows, when no ANSI-capable terminal is used, we know the console does not natively interpret",
+            "                // ANSI",
+            "                // codes but we can use jansi Kernel32 API for console",
+            "                AnsiProcessor proc;",
+            "                AnsiType ttype;",
+            "                try {",
+            "                    proc = new WindowsAnsiProcessor(out, console);",
+            "                    ttype = AnsiType.Emulation;",
+            "                } catch (Throwable ignore) {",
+            "                    // this happens when the stdout is being redirected to a file.",
+            "                    // Use the AnsiProcessor to strip out the ANSI escape sequences.",
+            "                    proc = new AnsiProcessor(out);",
+            "                    ttype = AnsiType.Unsupported;",
+            "                }",
+            "                processor = proc;",
+            "                type = ttype;",
+            "                installer = uninstaller = null;",
+            "                width = kernel32Width;",
+            "            }",
+            "        }",
+            "",
+            "        // We must be on some Unix variant...",
+            "        else {",
+            "            // ANSI-enabled ConEmu, Cygwin or MSYS(2) on Windows...",
+            "            processor = null;",
+            "            type = AnsiType.Native;",
+            "            installer = uninstaller = null;",
+            "            width = new AnsiOutputStream.WidthSupplier() {",
+            "                @Override",
+            "                public int getTerminalWidth() {",
+            "                    WinSize sz = new WinSize((short) 0, (short) 0);",
+            "                    ioctl(fd, CLibrary.TIOCGWINSZ, sz);",
+            "                    return sz.ws_col;",
+            "                }",
+            "            };",
+            "        }",
+            "",
+            "        AnsiMode mode;",
+            "",
+            "        // If the jansi.mode property is set, use it",
+            "        String jansiMode = System.getProperty(stdout ? JANSI_OUT_MODE : JANSI_ERR_MODE, System.getProperty(JANSI_MODE));",
+            "        if (JANSI_MODE_FORCE.equals(jansiMode)) {",
+            "            mode = AnsiMode.Force;",
+            "        } else if (JANSI_MODE_STRIP.equals(jansiMode)) {",
+            "            mode = AnsiMode.Strip;",
+            "        } else if (jansiMode != null) {",
+            "            mode = isatty ? AnsiMode.Default : AnsiMode.Strip;",
+            "        }",
+            "",
+            "        // If the jansi.passthrough property is set, then don't interpret",
+            "        // any of the ansi sequences.",
+            "        else if (getBoolean(JANSI_PASSTHROUGH)) {",
+            "            mode = AnsiMode.Force;",
+            "        }",
+            "",
+            "        // If the jansi.strip property is set, then we just strip the",
+            "        // the ansi escapes.",
+            "        else if (getBoolean(JANSI_STRIP)) {",
+            "            mode = AnsiMode.Strip;",
+            "        }",
+            "",
+            "        // If the jansi.force property is set, then we force to output",
+            "        // the ansi escapes for piping it into ansi color aware commands (e.g. less -r)",
+            "        else if (getBoolean(JANSI_FORCE)) {",
+            "            mode = AnsiMode.Force;",
+            "        } else {",
+            "            mode = isatty ? AnsiMode.Default : AnsiMode.Strip;",
+            "        }",
+            "",
+            "        AnsiColors colors;",
+            "",
+            "        String colorterm, term;",
+            "        // If the jansi.colors property is set, use it",
+            "        String jansiColors =",
+            "                System.getProperty(stdout ? JANSI_OUT_COLORS : JANSI_ERR_COLORS, System.getProperty(JANSI_COLORS));",
+            "        if (JANSI_COLORS_TRUECOLOR.equals(jansiColors)) {",
+            "            colors = AnsiColors.TrueColor;",
+            "        } else if (JANSI_COLORS_256.equals(jansiColors)) {",
+            "            colors = AnsiColors.Colors256;",
+            "        } else if (jansiColors != null) {",
+            "            colors = AnsiColors.Colors16;",
+            "        }",
+            "",
+            "        // If the COLORTERM env variable contains \"truecolor\" or \"24bit\", assume true color support",
+            "        // see https://gist.github.com/XVilka/8346728#true-color-detection",
+            "        else if ((colorterm = System.getenv(\"COLORTERM\")) != null",
+            "                && (colorterm.contains(\"truecolor\") || colorterm.contains(\"24bit\"))) {",
+            "            colors = AnsiColors.TrueColor;",
+            "        }",
+            "",
+            "        // check the if TERM contains -direct",
+            "        else if ((term = System.getenv(\"TERM\")) != null && term.contains(\"-direct\")) {",
+            "            colors = AnsiColors.TrueColor;",
+            "        }",
+            "",
+            "        // check the if TERM contains -256color",
+            "        else if (term != null && term.contains(\"-256color\")) {",
+            "            colors = AnsiColors.Colors256;",
+            "        }",
+            "",
+            "        // else defaults to 16 colors",
+            "        else {",
+            "            colors = AnsiColors.Colors16;",
+            "        }",
+            "",
+            "        // If the jansi.noreset property is not set, reset the attributes",
+            "        // when the stream is closed",
+            "        boolean resetAtUninstall = type != AnsiType.Unsupported && !getBoolean(JANSI_NORESET);",
+            "",
+            "        Charset cs = Charset.defaultCharset();",
+            "        if (enc != null) {",
+            "            try {",
+            "                cs = Charset.forName(enc);",
+            "            } catch (UnsupportedCharsetException e) {",
+            "            }",
+            "        }",
+            "        return newPrintStream(",
+            "                new AnsiOutputStream(",
+            "                        out, width, mode, processor, type, colors, cs, installer, uninstaller, resetAtUninstall),",
+            "                cs.name());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "FileDescriptor",
+            "OutputStream",
+            "FastBufferedOutputStream",
+            "FileOutputStream",
+            "String",
+            "boolean",
+            "int",
+            "Throwable",
+            "AnsiOutputStream.WidthSupplier",
+            "AnsiOutputStream",
+            "WidthSupplier",
+            "AnsiProcessor",
+            "AnsiType",
+            "AnsiOutputStream.IoRunnable",
+            "IoRunnable",
+            "AnsiOutputStream.ZeroWidthSupplier",
+            "ZeroWidthSupplier",
+            "long",
+            "int[]",
+            "CONSOLE_SCREEN_BUFFER_INFO",
+            "AnsiConsole",
+            "MingwSupport",
+            "WindowsAnsiProcessor",
+            "WinSize",
+            "short",
+            "AnsiMode",
+            "AnsiColors",
+            "Charset",
+            "UnsupportedCharsetException"
+          ],
+          "signature": "ansiStream( boolean stdout)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stdout"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.FileOutputStream",
+              "<init>(java.io.FileDescriptor)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.FastBufferedOutputStream",
+              "25-68:FastBufferedOutputStream",
+              "30-32:FastBufferedOutputStream"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.CLibrary",
+              "25-158:CLibrary",
+              "75-75:isatty"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getenv(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "contains(java.lang.CharSequence)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "182-182:GetStdHandle"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "210-210:GetConsoleMode"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "215-215:SetConsoleMode"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiOutputStream",
+              "45-48:IoRunnable",
+              "47-47:run"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "40-67:MingwSupport"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "69-86:getConsoleName"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiOutputStream",
+              "50-53:WidthSupplier",
+              "52-52:getTerminalWidth"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "100-105:WindowsAnsiProcessor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+              "33-559:AnsiProcessor",
+              "37-39:AnsiProcessor"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "460-468:getBoolean"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "defaultCharset()"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "forName(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiOutputStream",
+              "41-359:AnsiOutputStream",
+              "99-120:AnsiOutputStream"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "name()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "446-458:newPrintStream"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "FileDescriptor": {
+                "identifier": "FileDescriptor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:45:11",
+                "source_type": "FileDescriptor",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport base64",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "OutputStream": {
+                "identifier": "OutputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:45:42",
+                "source_type": "OutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "FastBufferedOutputStream": {
+                "identifier": "FastBufferedOutputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 00:53:07",
+                "source_type": "FastBufferedOutputStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "FastBufferedOutputStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "FileOutputStream": {
+                "identifier": "FileOutputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:46:18",
+                "source_type": "FileOutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO, BufferedWriter\nimport os",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 01:43:04",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 01:43:04",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 01:43:04",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Throwable": {
+                "identifier": "Throwable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:46:53",
+                "source_type": "Throwable",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE, STDOUT\nimport os",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream.WidthSupplier": {
+                "identifier": "AnsiOutputStream.WidthSupplier",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "AnsiOutputStream.WidthSupplier",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream.WidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream": {
+                "identifier": "AnsiOutputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "AnsiOutputStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WidthSupplier": {
+                "identifier": "WidthSupplier",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "WidthSupplier",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiProcessor": {
+                "identifier": "AnsiProcessor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "AnsiProcessor",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiType": {
+                "identifier": "AnsiType",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "AnsiType",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiType",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream.IoRunnable": {
+                "identifier": "AnsiOutputStream.IoRunnable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "AnsiOutputStream.IoRunnable",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream.IoRunnable",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IoRunnable": {
+                "identifier": "IoRunnable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "IoRunnable",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IoRunnable",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiOutputStream.ZeroWidthSupplier": {
+                "identifier": "AnsiOutputStream.ZeroWidthSupplier",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "AnsiOutputStream.ZeroWidthSupplier",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream.ZeroWidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ZeroWidthSupplier": {
+                "identifier": "ZeroWidthSupplier",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "ZeroWidthSupplier",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ZeroWidthSupplier",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:42:48",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CONSOLE_SCREEN_BUFFER_INFO": {
+                "identifier": "CONSOLE_SCREEN_BUFFER_INFO",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:37",
+                "source_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiConsole": {
+                "identifier": "AnsiConsole",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:37",
+                "source_type": "AnsiConsole",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiConsole",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "MingwSupport": {
+                "identifier": "MingwSupport",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:37",
+                "source_type": "MingwSupport",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "MingwSupport",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WindowsAnsiProcessor": {
+                "identifier": "WindowsAnsiProcessor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:37",
+                "source_type": "WindowsAnsiProcessor",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WinSize": {
+                "identifier": "WinSize",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:38",
+                "source_type": "WinSize",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WinSize",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "short",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:38",
+                "source_type": "short",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiMode": {
+                "identifier": "AnsiMode",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:38",
+                "source_type": "AnsiMode",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiMode",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiColors": {
+                "identifier": "AnsiColors",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 02:52:38",
+                "source_type": "AnsiColors",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiColors",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Charset": {
+                "identifier": "Charset",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:47:34",
+                "source_type": "Charset",
+                "generation": "",
+                "imports": "# No imports needed in this case",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "UnsupportedCharsetException": {
+                "identifier": "UnsupportedCharsetException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:48:18",
+                "source_type": "UnsupportedCharsetException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main\nimport pytest",
+                "translated_target_type": "LookupError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|stdout": {
+                "identifier": "|boolean|stdout",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __ansiStream(stdout: bool) -> \"AnsiPrintStream\":",
+            "        if stdout:",
+            "            return AnsiConsole.err()",
+            "        else:",
+            "            return AnsiConsole.out()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 23.432448625564575,
+          "generation_timestamp": "2025-08-18T08:36:30.125512",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __ansiStream(stdout: bool) -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "446-458:newPrintStream": {
+          "start": 446,
+          "end": 458,
+          "body": [
+            "private static AnsiPrintStream newPrintStream(AnsiOutputStream out, String enc) {",
+            "        if (enc != null) {",
+            "            try {",
+            "                return new AnsiPrintStream(out, true, enc);",
+            "            } catch (UnsupportedEncodingException e) {",
+            "            }",
+            "        }",
+            "        try {",
+            "            return new AnsiPrintStream(out, true, null);",
+            "        } catch (UnsupportedEncodingException e) {",
+            "        }",
+            "        return null;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "AnsiPrintStream",
+            "UnsupportedEncodingException"
+          ],
+          "signature": "newPrintStream( AnsiOutputStream out,  String enc)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "AnsiOutputStream",
+              "name": "out"
+            },
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "enc"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "30-32:AnsiPrintStream"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 04:11:49",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 04:11:49",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "UnsupportedEncodingException": {
+                "identifier": "UnsupportedEncodingException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:06:12",
+                "source_type": "UnsupportedEncodingException",
+                "generation": "",
+                "imports": "from codecs import decode, EncodedFile",
+                "translated_target_type": "UnicodeError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|AnsiOutputStream|out": {
+                "identifier": "|AnsiOutputStream|out",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-16 04:11:49",
+                "source_type": "AnsiOutputStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiOutputStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|String|enc": {
+                "identifier": "|String|enc",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-16 04:11:49",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __newPrintStream(out: \"AnsiOutputStream\", enc: str) -> \"AnsiPrintStream\":",
+            "        from src.main.org.fusesource.jansi.AnsiPrintStream import AnsiPrintStream",
+            "        if enc is not None:",
+            "            try:",
+            "                return AnsiPrintStream(out, True, enc)",
+            "            except UnicodeError:",
+            "                pass",
+            "        try:",
+            "            return AnsiPrintStream(out, True, None)",
+            "        except UnicodeError:",
+            "            pass",
+            "        return None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 31.928525924682617,
+          "generation_timestamp": "2025-08-18T07:07:04.317541",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __newPrintStream(out: \"AnsiOutputStream\", enc: str) -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "460-468:getBoolean": {
+          "start": 460,
+          "end": 468,
+          "body": [
+            "static boolean getBoolean(String name) {",
+            "        boolean result = false;",
+            "        try {",
+            "            String val = System.getProperty(name);",
+            "            result = val.isEmpty() || Boolean.parseBoolean(val);",
+            "        } catch (IllegalArgumentException | NullPointerException ignored) {",
+            "        }",
+            "        return result;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "boolean",
+            "String",
+            "IllegalArgumentException | NullPointerException",
+            "IllegalArgumentException",
+            "NullPointerException"
+          ],
+          "signature": "getBoolean( String name)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "name"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "library",
+              "java.lang.Boolean",
+              "parseBoolean(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 04:21:51",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 04:21:51",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 04:21:51",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IllegalArgumentException | NullPointerException": {
+                "identifier": "IllegalArgumentException | NullPointerException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:06:58",
+                "source_type": "IllegalArgumentException | NullPointerException",
+                "generation": "",
+                "imports": "from typing import Optional",
+                "translated_target_type": "Optional[Exception]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IllegalArgumentException": {
+                "identifier": "IllegalArgumentException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 04:37:07",
+                "source_type": "IllegalArgumentException",
+                "generation": "",
+                "imports": "from typing import Union",
+                "translated_target_type": "Union[bool, str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "NullPointerException": {
+                "identifier": "NullPointerException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 04:47:43",
+                "source_type": "NullPointerException",
+                "generation": "",
+                "imports": "from typing import Union",
+                "translated_target_type": "Union[str, bool]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|name": {
+                "identifier": "|String|name",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-16 04:21:51",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getBoolean(name: str) -> bool:",
+            "        result = False",
+            "        try:",
+            "            val = os.getenv(name)",
+            "            if val is not None and len(val) > 0:",
+            "                result = bool(distutils.util.strtobool(val))",
+            "        except (TypeError, ValueError):",
+            "            pass",
+            "        return result"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test03": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "41-45:test03"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test07": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "55-59:test07"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test11": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "488-490:sysOut"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "69-73:test11"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test09": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "510-512:sysErr"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "62-66:test09"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test05": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "48-52:test05"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 61.460299253463745,
+          "generation_timestamp": "2025-08-18T01:31:30.657364",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getBoolean(name: str) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "478-481:out": {
+          "start": 478,
+          "end": 481,
+          "body": [
+            "public static AnsiPrintStream out() {",
+            "        initStreams();",
+            "        return (AnsiPrintStream) out;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "AnsiPrintStream"
+          ],
+          "signature": "out()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "564-570:initStreams"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 04:53:13",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 04:53:13",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def out() -> \"AnsiPrintStream\":",
+            "        AnsiConsole.initStreams()",
+            "        return AnsiConsole.out"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 18.62251853942871,
+          "generation_timestamp": "2025-08-18T08:39:21.056657",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def out() -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "488-490:sysOut": {
+          "start": 488,
+          "end": 490,
+          "body": [
+            "public static PrintStream sysOut() {",
+            "        return system_out;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "PrintStream"
+          ],
+          "body_types": [],
+          "signature": "sysOut()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "PrintStream": {
+                "identifier": "PrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 18:07:42",
+                "source_type": "PrintStream",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def sysOut() -> StringIO:",
+            "        return AnsiConsole.system_out"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/AnsiConsole_ESTest_test11_decomposed_mocker_1_AnsiConsole_sysOut.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest_test11_decomposed_mocker_1_AnsiConsole_sysOut.py\", line 37, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"stream_class\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$NullOutputStream\\\",\\\"memory_address\\\":1725305496,\\\"stream_type\\\":\\\"unknown\\\",\\\"type\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$ForwardingPrintStream\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test11": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "488-490:sysOut"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "69-73:test11"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 92.53796744346619,
+          "generation_timestamp": "2025-08-18T01:33:31.681918",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def sysOut() -> StringIO:\n",
+            "        pass\n\n"
+          ]
+        },
+        "500-503:err": {
+          "start": 500,
+          "end": 503,
+          "body": [
+            "public static AnsiPrintStream err() {",
+            "        initStreams();",
+            "        return (AnsiPrintStream) err;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "AnsiPrintStream"
+          ],
+          "body_types": [
+            "AnsiPrintStream"
+          ],
+          "signature": "err()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "564-570:initStreams"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 05:03:58",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 05:03:58",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def err() -> \"AnsiPrintStream\":",
+            "        AnsiConsole.initStreams()",
+            "        return AnsiConsole.err"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 27.298357725143433,
+          "generation_timestamp": "2025-08-18T08:39:48.482001",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def err() -> \"AnsiPrintStream\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "510-512:sysErr": {
+          "start": 510,
+          "end": 512,
+          "body": [
+            "public static PrintStream sysErr() {",
+            "        return system_err;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "PrintStream"
+          ],
+          "body_types": [],
+          "signature": "sysErr()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "PrintStream": {
+                "identifier": "PrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 18:08:20",
+                "source_type": "PrintStream",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def sysErr() -> StringIO:",
+            "        return AnsiConsole.system_err"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/AnsiConsole_ESTest_test09_decomposed_mocker_1_AnsiConsole_sysErr.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/AnsiConsole_ESTest_test09_decomposed_mocker_1_AnsiConsole_sysErr.py\", line 37, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"stream_class\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$NullOutputStream\\\",\\\"memory_address\\\":1725305496,\\\"stream_type\\\":\\\"unknown\\\",\\\"type\\\":\\\"org.apache.maven.surefire.api.report.ConsoleOutputCapture$ForwardingPrintStream\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test09": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "510-512:sysErr"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "62-66:test09"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 84.83617615699768,
+          "generation_timestamp": "2025-08-18T01:35:16.693622",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def sysErr() -> StringIO:\n",
+            "        pass\n\n"
+          ]
+        },
+        "519-532:systemInstall": {
+          "start": 519,
+          "end": 532,
+          "body": [
+            "public static synchronized void systemInstall() {",
+            "        if (installed == 0) {",
+            "            initStreams();",
+            "            try {",
+            "                ((AnsiPrintStream) out).install();",
+            "                ((AnsiPrintStream) err).install();",
+            "            } catch (IOException e) {",
+            "                throw new IOError(e);",
+            "            }",
+            "            System.setOut(out);",
+            "            System.setErr(err);",
+            "        }",
+            "        installed++;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "AnsiPrintStream",
+            "IOException",
+            "IOError"
+          ],
+          "signature": "systemInstall()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "564-570:initStreams"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "80-82:install"
+            ],
+            [
+              "library",
+              "java.io.IOError",
+              "<init>(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setOut(java.io.PrintStream)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setErr(java.io.PrintStream)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 05:14:04",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 05:14:04",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:09:06",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOError": {
+                "identifier": "IOError",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:09:38",
+                "source_type": "IOError",
+                "generation": "",
+                "imports": null,
+                "translated_target_type": "IOError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 81.65034461021423,
+          "generation_timestamp": "2025-08-18T08:41:10.245684",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def systemInstall() -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "537-539:isInstalled": {
+          "start": 537,
+          "end": 539,
+          "body": [
+            "public static synchronized boolean isInstalled() {",
+            "        return installed > 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isInstalled()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 05:39:24",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def isInstalled() -> bool:",
+            "        return AnsiConsole.__installed > 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/AnsiConsole_ESTest.py::AnsiConsole_ESTest::test05": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "460-468:getBoolean"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+                  "class_name": "61-571:AnsiConsole",
+                  "fragment_name": "537-539:isInstalled"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.AnsiConsole_ESTest",
+                  "class_name": "24-74:AnsiConsole_ESTest",
+                  "fragment_name": "48-52:test05"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 19.056195497512817,
+          "generation_timestamp": "2025-08-18T01:35:53.558350",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def isInstalled() -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "546-559:systemUninstall": {
+          "start": 546,
+          "end": 559,
+          "body": [
+            "public static synchronized void systemUninstall() {",
+            "        installed--;",
+            "        if (installed == 0) {",
+            "            try {",
+            "                ((AnsiPrintStream) out).uninstall();",
+            "                ((AnsiPrintStream) err).uninstall();",
+            "            } catch (IOException e) {",
+            "                throw new IOError(e);",
+            "            }",
+            "            initialized = false;",
+            "            System.setOut(system_out);",
+            "            System.setErr(system_err);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "AnsiPrintStream",
+            "IOException",
+            "IOError"
+          ],
+          "signature": "systemUninstall()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "84-90:uninstall"
+            ],
+            [
+              "library",
+              "java.io.IOError",
+              "<init>(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setOut(java.io.PrintStream)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setErr(java.io.PrintStream)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 05:39:24",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "AnsiPrintStream": {
+                "identifier": "AnsiPrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 05:39:24",
+                "source_type": "AnsiPrintStream",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiPrintStream",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:10:19",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOError": {
+                "identifier": "IOError",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-16 05:56:20",
+                "source_type": "IOError",
+                "generation": "",
+                "imports": null,
+                "translated_target_type": "IOError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def systemUninstall() -> None:",
+            "        AnsiConsole.__installed -= 1",
+            "        if AnsiConsole.__installed == 0:",
+            "            try:",
+            "                AnsiConsole.out._getOut().uninstall()",
+            "                AnsiConsole.err._getOut().uninstall()",
+            "            except Exception as e:",
+            "                raise IOError(e)",
+            "            AnsiConsole.__initialized = False",
+            "            sys.stdout = AnsiConsole.system_out",
+            "            sys.stderr = AnsiConsole.system_err"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "pending",
+          "elapsed_time": 51.97223138809204,
+          "generation_timestamp": "2025-08-18T07:31:42.017449",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def systemUninstall() -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "564-570:initStreams": {
+          "start": 564,
+          "end": 570,
+          "body": [
+            "static synchronized void initStreams() {",
+            "        if (!initialized) {",
+            "            out = ansiStream(true);",
+            "            err = ansiStream(false);",
+            "            initialized = true;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "initStreams()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "237-444:ansiStream"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-16 06:02:04",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def initStreams() -> None:",
+            "        if not AnsiConsole.__initialized:",
+            "                    AnsiConsole.out = AnsiConsole.__ansiStream(True)",
+            "                    AnsiConsole.err = AnsiConsole.__ansiStream(False)",
+            "                    AnsiConsole.__initialized = True"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 21.73732566833496,
+          "generation_timestamp": "2025-08-18T08:36:51.981096",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def initStreams() -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "69-69:JANSI_MODE": {
+          "start": 69,
+          "end": 69,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE = \"jansi.mode\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE: str = \"jansi.mode\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 39.77790594100952,
+          "generation_timestamp": "2025-08-18T01:30:28.782152",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_MODE: str = ",
+            ""
+          ]
+        },
+        "73-73:JANSI_OUT_MODE": {
+          "start": 73,
+          "end": 73,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_OUT_MODE = \"jansi.out.mode\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_OUT_MODE: str = \"jansi.out.mode\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 14.298187971115112,
+          "generation_timestamp": "2025-08-18T01:29:48.808800",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_OUT_MODE: str = ",
+            ""
+          ]
+        },
+        "77-77:JANSI_ERR_MODE": {
+          "start": 77,
+          "end": 77,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_ERR_MODE = \"jansi.err.mode\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_ERR_MODE: str = \"jansi.err.mode\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 17.782488346099854,
+          "generation_timestamp": "2025-08-18T01:29:34.397119",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_ERR_MODE: str = ",
+            ""
+          ]
+        },
+        "82-82:JANSI_MODE_STRIP": {
+          "start": 82,
+          "end": 82,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE_STRIP = \"strip\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 53.628434896469116,
+          "generation_timestamp": "2025-08-18T01:29:16.479430",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_MODE_STRIP: str = ",
+            ""
+          ]
+        },
+        "86-86:JANSI_MODE_FORCE": {
+          "start": 86,
+          "end": 86,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE_FORCE = \"force\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE_FORCE: str = \"force\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 15.4382004737854,
+          "generation_timestamp": "2025-08-18T01:28:22.735794",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_MODE_FORCE: str = ",
+            ""
+          ]
+        },
+        "90-90:JANSI_MODE_DEFAULT": {
+          "start": 90,
+          "end": 90,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_MODE_DEFAULT = \"default\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_MODE_DEFAULT: str = \"default\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 14.910419940948486,
+          "generation_timestamp": "2025-08-18T01:28:07.098468",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_MODE_DEFAULT: str = ",
+            ""
+          ]
+        },
+        "98-98:JANSI_COLORS": {
+          "start": 98,
+          "end": 98,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS = \"jansi.colors\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS: str = \"jansi.colors\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.561851501464844,
+          "generation_timestamp": "2025-08-18T01:27:52.047960",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_COLORS: str = ",
+            ""
+          ]
+        },
+        "102-102:JANSI_OUT_COLORS": {
+          "start": 102,
+          "end": 102,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_OUT_COLORS = \"jansi.out.colors\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_OUT_COLORS: str = \"jansi.out.colors\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 20.29092311859131,
+          "generation_timestamp": "2025-08-18T01:27:38.373131",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_OUT_COLORS: str = ",
+            ""
+          ]
+        },
+        "106-106:JANSI_ERR_COLORS": {
+          "start": 106,
+          "end": 106,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_ERR_COLORS = \"jansi.err.colors\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_ERR_COLORS: str = \"jansi.err.colors\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.26223087310791,
+          "generation_timestamp": "2025-08-18T01:27:17.941686",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_ERR_COLORS: str = ",
+            ""
+          ]
+        },
+        "112-112:JANSI_COLORS_16": {
+          "start": 112,
+          "end": 112,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS_16 = \"16\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS_16: str = \"16\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 36.976728439331055,
+          "generation_timestamp": "2025-08-18T01:27:04.575863",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_COLORS_16: str = ",
+            ""
+          ]
+        },
+        "117-117:JANSI_COLORS_256": {
+          "start": 117,
+          "end": 117,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS_256 = \"256\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS_256: str = \"256\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 32.407246589660645,
+          "generation_timestamp": "2025-08-18T01:26:27.439496",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_COLORS_256: str = ",
+            ""
+          ]
+        },
+        "121-121:JANSI_COLORS_TRUECOLOR": {
+          "start": 121,
+          "end": 121,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_COLORS_TRUECOLOR = \"truecolor\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_COLORS_TRUECOLOR: str = \"truecolor\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 15.025965213775635,
+          "generation_timestamp": "2025-08-18T01:25:54.887893",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_COLORS_TRUECOLOR: str = ",
+            ""
+          ]
+        },
+        "129-130:JANSI_PASSTHROUGH": {
+          "start": 129,
+          "end": 130,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static final String JANSI_PASSTHROUGH = \"jansi.passthrough\";"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_PASSTHROUGH: str = \"jansi.passthrough\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 19.11146855354309,
+          "generation_timestamp": "2025-08-18T01:25:39.718834",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_PASSTHROUGH: str = ",
+            ""
+          ]
+        },
+        "137-138:JANSI_STRIP": {
+          "start": 137,
+          "end": 138,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static final String JANSI_STRIP = \"jansi.strip\";"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_STRIP: str = \"jansi.strip\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 30.472397565841675,
+          "generation_timestamp": "2025-08-18T01:25:20.487934",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_STRIP: str = ",
+            ""
+          ]
+        },
+        "147-148:JANSI_FORCE": {
+          "start": 147,
+          "end": 148,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static final String JANSI_FORCE = \"jansi.force\";"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_FORCE: str = \"jansi.force\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 23.88803243637085,
+          "generation_timestamp": "2025-08-18T01:24:49.798077",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_FORCE: str = ",
+            ""
+          ]
+        },
+        "157-158:JANSI_EAGER": {
+          "start": 157,
+          "end": 158,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated()",
+            "    public static final String JANSI_EAGER = \"jansi.eager\";"
+          ],
+          "modifiers": [
+            "@Deprecated()",
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_EAGER: str = \"jansi.eager\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 38.49212718009949,
+          "generation_timestamp": "2025-08-18T01:24:25.784476",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_EAGER: str = ",
+            ""
+          ]
+        },
+        "163-163:JANSI_NORESET": {
+          "start": 163,
+          "end": 163,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_NORESET = \"jansi.noreset\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_NORESET: str = \"jansi.noreset\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.527812242507935,
+          "generation_timestamp": "2025-08-18T01:23:47.140436",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_NORESET: str = ",
+            ""
+          ]
+        },
+        "169-169:JANSI_GRACEFUL": {
+          "start": 169,
+          "end": 169,
+          "enum_constant": false,
+          "body": [
+            "public static final String JANSI_GRACEFUL = \"jansi.graceful\";"
+          ],
+          "modifiers": [
+            "public",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:10:16",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    JANSI_GRACEFUL: str = \"jansi.graceful\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 37.26471281051636,
+          "generation_timestamp": "2025-08-18T01:23:33.497115",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    JANSI_GRACEFUL: str = ",
+            ""
+          ]
+        },
+        "174-175:system_out": {
+          "start": 174,
+          "end": 175,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream system_out = System.out;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "PrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 17:43:34",
+                "source_type": "PrintStream",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    system_out: StringIO = sys.stdout"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 18.48389959335327,
+          "generation_timestamp": "2025-08-18T01:22:56.053222",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    system_out: StringIO = ",
+            ""
+          ]
+        },
+        "179-180:out": {
+          "start": 179,
+          "end": 180,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream out;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "PrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:20:12",
+                "source_type": "PrintStream",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    out: StringIO = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    out: StringIO = None"
+          ]
+        },
+        "184-185:system_err": {
+          "start": 184,
+          "end": 185,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream system_err = System.err;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "PrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 17:44:06",
+                "source_type": "PrintStream",
+                "generation": "",
+                "imports": "import sys",
+                "translated_target_type": "print()",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    system_err: StringIO = sys.stderr"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 19.2745361328125,
+          "generation_timestamp": "2025-08-18T01:22:37.425977",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    system_err: print() = ",
+            ""
+          ]
+        },
+        "189-190:err": {
+          "start": 189,
+          "end": 190,
+          "enum_constant": false,
+          "body": [
+            "@Deprecated",
+            "    public static PrintStream err;"
+          ],
+          "modifiers": [
+            "@Deprecated",
+            "public",
+            "static"
+          ],
+          "types": [
+            "PrintStream"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PrintStream": {
+                "identifier": "PrintStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 17:44:39",
+                "source_type": "PrintStream",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    err: StringIO = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    err: StringIO = None"
+          ]
+        },
+        "206-207:IS_WINDOWS": {
+          "start": 206,
+          "end": 207,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_WINDOWS =",
+            "            System.getProperty(\"os.name\").toLowerCase(Locale.ENGLISH).contains(\"win\");"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_WINDOWS: bool = os.name == 'nt'"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 21.399821996688843,
+          "generation_timestamp": "2025-08-18T01:22:18.026066",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    IS_WINDOWS: bool = ",
+            ""
+          ]
+        },
+        "209-210:IS_CYGWIN": {
+          "start": 209,
+          "end": 210,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_CYGWIN =",
+            "            IS_WINDOWS && System.getenv(\"PWD\") != null && System.getenv(\"PWD\").startsWith(\"/\");"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_CYGWIN: bool = IS_WINDOWS and os.getenv(\"PWD\") is not None and os.getenv(\"PWD\").startswith(\"/\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 20.087124586105347,
+          "generation_timestamp": "2025-08-18T01:21:56.486103",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    IS_CYGWIN: bool = ",
+            ""
+          ]
+        },
+        "212-215:IS_MSYSTEM": {
+          "start": 212,
+          "end": 215,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_MSYSTEM = IS_WINDOWS",
+            "            && System.getenv(\"MSYSTEM\") != null",
+            "            && (System.getenv(\"MSYSTEM\").startsWith(\"MINGW\")",
+            "                    || System.getenv(\"MSYSTEM\").equals(\"MSYS\"));"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_WINDOWS = os.name == 'nt'",
+            "    IS_MSYSTEM = IS_WINDOWS and ('MSYSTEM' in os.environ) and (os.environ['MSYSTEM'].startswith('MINGW') or os.environ['MSYSTEM'] == 'MSYS')"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 51.30545949935913,
+          "generation_timestamp": "2025-08-18T01:21:36.259810",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    IS_MSYSTEM: bool = ",
+            ""
+          ]
+        },
+        "217-217:IS_CONEMU": {
+          "start": 217,
+          "end": 217,
+          "enum_constant": false,
+          "body": [
+            "static final boolean IS_CONEMU = IS_WINDOWS && System.getenv(\"ConEmuPID\") != null;"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    IS_WINDOWS = os.name == 'nt'",
+            "IS_CONEMU = IS_WINDOWS and os.getenv('ConEmuPID') is not None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "failed",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 128.7139630317688,
+          "generation_timestamp": "2025-08-18T01:20:44.828159",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    IS_CONEMU: bool = ",
+            ""
+          ]
+        },
+        "219-219:ENABLE_VIRTUAL_TERMINAL_PROCESSING": {
+          "start": 219,
+          "end": 219,
+          "enum_constant": false,
+          "body": [
+            "static final int ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;"
+          ],
+          "modifiers": [
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    ENABLE_VIRTUAL_TERMINAL_PROCESSING: int = 0x0004"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 19.37713050842285,
+          "generation_timestamp": "2025-08-18T01:18:35.985258",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    ENABLE_VIRTUAL_TERMINAL_PROCESSING: int = ",
+            ""
+          ]
+        },
+        "221-221:STDOUT_FILENO": {
+          "start": 221,
+          "end": 221,
+          "enum_constant": false,
+          "body": [
+            "static int STDOUT_FILENO = 1;"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    STDOUT_FILENO: int = 1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 19.962414264678955,
+          "generation_timestamp": "2025-08-18T01:18:16.453731",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    STDOUT_FILENO: int = ",
+            ""
+          ]
+        },
+        "223-223:STDERR_FILENO": {
+          "start": 223,
+          "end": 223,
+          "enum_constant": false,
+          "body": [
+            "static int STDERR_FILENO = 2;"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    STDERR_FILENO: int = 2"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 21.28984522819519,
+          "generation_timestamp": "2025-08-18T01:17:56.364009",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    STDERR_FILENO: int = ",
+            ""
+          ]
+        },
+        "231-231:initialized": {
+          "start": 231,
+          "end": 231,
+          "enum_constant": false,
+          "body": [
+            "private static boolean initialized;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __initialized: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __initialized: bool = False"
+          ]
+        },
+        "232-232:installed": {
+          "start": 232,
+          "end": 232,
+          "enum_constant": false,
+          "body": [
+            "private static int installed;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __installed: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __installed: int = 0"
+          ]
+        },
+        "233-233:virtualProcessing": {
+          "start": 233,
+          "end": 233,
+          "enum_constant": false,
+          "body": [
+            "private static int virtualProcessing;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-15 23:44:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __virtualProcessing: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __virtualProcessing: int = 0"
+          ]
+        }
+      },
+      "static_initializers": {
+        "225-229:run_static_init": {
+          "start": 225,
+          "end": 229,
+          "body": [
+            "static {",
+            "        if (getBoolean(JANSI_EAGER)) {",
+            "            initStreams();",
+            "        }",
+            "    }"
+          ],
+          "type_translations": {},
+          "translation": [
+            "    def run_static_init():",
+            "        if AnsiConsole.getBoolean(AnsiConsole.JANSI_EAGER): ",
+            "                    AnsiConsole.initStreams()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.066519737243652,
+          "generation_timestamp": "2025-08-18T01:17:34.949793",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": []
+        }
+      },
+      "python_class_declaration": "class AnsiConsole:\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from codecs import decode, EncodedFile",
+    "from io import BytesIO",
+    "from io import BytesIO\nimport base64",
+    "from io import BytesIO\nimport pytest",
+    "from io import BytesIO, BufferedWriter\nimport os",
+    "from io import StringIO",
+    "from subprocess import Popen, PIPE, STDOUT\nimport os",
+    "from typing import List",
+    "from typing import Union",
+    "from unittest import TestCase, main",
+    "from unittest import TestCase, main\nimport pytest",
+    "import sys"
+  ]
+}

@@ -1,0 +1,1094 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-graph/src/test/java/org/apache/commons/graph/shortestpath/DijkstraTestCase.java",
+  "imports": {
+    "22-22:import static org.apache.commons.graph.CommonsGraph.findShortestPath;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.apache.commons.graph.CommonsGraph.findShortestPath;"
+    },
+    "23-23:import static org.junit.Assert.assertEquals;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.junit.Assert.assertEquals;"
+    },
+    "25-25:import org.apache.commons.graph.Graph;": {
+      "start": 25,
+      "end": 25,
+      "body": "import org.apache.commons.graph.Graph;"
+    },
+    "26-26:import org.apache.commons.graph.Path;": {
+      "start": 26,
+      "end": 26,
+      "body": "import org.apache.commons.graph.Path;"
+    },
+    "27-27:import org.apache.commons.graph.model.BaseLabeledVertex;": {
+      "start": 27,
+      "end": 27,
+      "body": "import org.apache.commons.graph.model.BaseLabeledVertex;"
+    },
+    "28-28:import org.apache.commons.graph.model.BaseLabeledWeightedEdge;": {
+      "start": 28,
+      "end": 28,
+      "body": "import org.apache.commons.graph.model.BaseLabeledWeightedEdge;"
+    },
+    "29-29:import org.apache.commons.graph.model.BaseWeightedEdge;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.graph.model.BaseWeightedEdge;"
+    },
+    "30-30:import org.apache.commons.graph.model.DirectedMutableGraph;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.graph.model.DirectedMutableGraph;"
+    },
+    "31-31:import org.apache.commons.graph.model.InMemoryWeightedPath;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.graph.model.InMemoryWeightedPath;"
+    },
+    "32-32:import org.apache.commons.graph.model.UndirectedMutableGraph;": {
+      "start": 32,
+      "end": 32,
+      "body": "import org.apache.commons.graph.model.UndirectedMutableGraph;"
+    },
+    "33-33:import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;": {
+      "start": 33,
+      "end": 33,
+      "body": "import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;"
+    },
+    "34-34:import org.junit.Test;": {
+      "start": 34,
+      "end": 34,
+      "body": "import org.junit.Test;"
+    }
+  },
+  "classes": {
+    "36-150:DijkstraTestCase": {
+      "start": 36,
+      "end": 150,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "42-94:testFindShortestPathAndVerify": {
+          "start": 42,
+          "end": 94,
+          "body": [
+            "@Test",
+            "    public void testFindShortestPathAndVerify() {",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");",
+            "        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");",
+            "        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");",
+            "        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");",
+            "        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");",
+            "        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");",
+            "",
+            "        graph.addVertex(one);",
+            "        graph.addVertex(two);",
+            "        graph.addVertex(three);",
+            "        graph.addVertex(four);",
+            "        graph.addVertex(five);",
+            "        graph.addVertex(six);",
+            "",
+            "        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);",
+            "        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);",
+            "        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);",
+            "",
+            "        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);",
+            "        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);",
+            "",
+            "        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);",
+            "        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);",
+            "",
+            "        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);",
+            "        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);",
+            "",
+            "        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =",
+            "                new InMemoryWeightedPath<",
+            "                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(",
+            "                        one,",
+            "                        five,",
+            "                        new DoubleWeightBaseOperations(),",
+            "                        new BaseWeightedEdge<Double>());",
+            "",
+            "        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);",
+            "        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);",
+            "        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);",
+            "",
+            "        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =",
+            "                findShortestPath(graph)",
+            "                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                        .from(one)",
+            "                        .to(five)",
+            "                        .applyingDijkstra(new DoubleWeightBaseOperations());",
+            "",
+            "        assertEquals(expected, actual);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseLabeledVertex",
+            "InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "DoubleWeightBaseOperations",
+            "BaseWeightedEdge<Double>",
+            "Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>"
+          ],
+          "signature": "testFindShortestPathAndVerify()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "library",
+              "java.lang.Double",
+              "valueOf(double)"
+            ],
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+              "29-75:BaseLabeledWeightedEdge",
+              "35-38:BaseLabeledWeightedEdge"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.model.InMemoryWeightedPath",
+              "38-131:InMemoryWeightedPath",
+              "57-64:InMemoryWeightedPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.model.InMemoryWeightedPath",
+              "38-131:InMemoryWeightedPath",
+              "74-78:addConnectionInTail"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "46-46:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.ShortestPathAlgorithmSelector",
+              "30-61:ShortestPathAlgorithmSelector",
+              "60-60:applyingDijkstra"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-23 01:25:46",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:25:59",
+                "source_type": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "I'm sorry for the confusion, but I need more context to provide a correct translation. The Java code you provided is using custom classes `BaseLabeledVertex` and `BaseLabeledWeightedEdge<Double>` which are not defined in your question. \n\nIf these classes represent vertices and edges of a graph, then they would be translated into Python as follows:\n\nPYTHON IMPORTS:\n```python\nfrom typing import Any\n```\n\nPYTHON TRANSLATION:\n```python\nclass BaseLabeledVertex:\n    def __init__(self, name: str):\n        self.name = name\n        \nclass BaseLabeledWeightedEdge(dict):\n    def __init__(self, label: str, weight: float):\n        super().__init__(weight=weight)\n        self.label = label\n```\n\nREASONING: \nIn Python, we can use the built-in `dict` class to represent a weighted edge. We create subclasses of these classes for vertices and edges with necessary attributes. The `BaseLabeledVertex` class has a name attribute, and the `BaseLabeledWeightedEdge` class inherits from `dict` and adds a label attribute.\n",
+                "imports": "from typing import Dict, List, Tuple",
+                "translated_target_type": "Dict[str, Dict[str, float]]",
+                "reasoning": "In this translation, we're representing the graph as a dictionary where each key is a vertex and its value is another dictionary. This inner dictionary represents the edges from the current vertex to other vertices, with the keys being the neighboring vertices and the values being the weights of these edges.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindShortestPathAndVerify() {\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");\n        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");\n        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");\n        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");\n        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");\n        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");\n\n        graph.addVertex(one);\n        graph.addVertex(two);\n        graph.addVertex(three);\n        graph.addVertex(four);\n        graph.addVertex(five);\n        graph.addVertex(six);\n\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);\n\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);\n\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);\n\n        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);\n        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =\n                new InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(\n                        one,\n                        five,\n                        new DoubleWeightBaseOperations(),\n                        new BaseWeightedEdge<Double>());\n\n        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =\n                findShortestPath(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                        .from(one)\n                        .to(five)\n                        .applyingDijkstra(new DoubleWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:27:06",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "I'm sorry for the confusion, but I can't provide a translation without knowing more about the context of your Java code. The `BaseLabeledWeightedEdge<Double>` type is used in the Java code to represent edges with labels and weights, where the weight is a double. However, this information isn't sufficient to translate it into Python directly. \n\nIn Python, we don't have generics like in Java (e.g., `BaseLabeledWeightedEdge<Double>`), so we can't directly use that type in Python. Instead, we would need to create a class or data structure that represents the same functionality. This could be done using named tuples, classes, dictionaries, etc., depending on the specific requirements of your code.\n\nIf you provide more context about what this type is used for and how it's used in the Java code, I can help translate it to Python more accurately.\n",
+                "imports": "from typing import Dict, Any\nimport heapq",
+                "translated_target_type": "Dict[Any, float]",
+                "reasoning": "In Python, the equivalent type for `BaseLabeledWeightedEdge<Double>` in Java is not a direct translation. In Python, you would typically use dictionaries to represent weighted edges where keys are vertices and values are weights. The 'heapq' module can be used for priority queues which are commonly used in pathfinding algorithms like A*.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindShortestPathAndVerify() {\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");\n        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");\n        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");\n        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");\n        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");\n        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");\n\n        graph.addVertex(one);\n        graph.addVertex(two);\n        graph.addVertex(three);\n        graph.addVertex(four);\n        graph.addVertex(five);\n        graph.addVertex(six);\n\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);\n\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);\n\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);\n\n        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);\n        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =\n                new InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(\n                        one,\n                        five,\n                        new DoubleWeightBaseOperations(),\n                        new BaseWeightedEdge<Double>());\n\n        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =\n                findShortestPath(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                        .from(one)\n                        .to(five)\n                        .applyingDijkstra(new DoubleWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:27:24",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:27:52",
+                "source_type": "InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "generation": "I'm sorry for the confusion, but it seems there was a misunderstanding. The provided Java code does not use an `InMemoryWeightedPath` type or any other custom types that would require translation to Python. \n\nThe Java code uses standard JGraphT (Java Graph Library) classes such as `DirectedMutableGraph`, `BaseLabeledVertex` and `BaseLabeledWeightedEdge` which have direct equivalents in the NetworkX library of Python for graph manipulation. The `findShortestPath` function is a method from the JGraphT library that finds the shortest path between two vertices in a graph using Dijkstra's algorithm, which also has an equivalent in NetworkX.\n\nTherefore, there is no need to translate any custom types or classes used in this code as they are already available in Python and can be used directly. \n\nIf you have any other Java code that uses custom types or methods that require translation, please provide the relevant details so I can assist you further.\n",
+                "imports": "",
+                "translated_target_type": "InMemoryWeightedPath",
+                "reasoning": "Custom type InMemoryWeightedPath is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindShortestPathAndVerify() {\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");\n        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");\n        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");\n        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");\n        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");\n        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");\n\n        graph.addVertex(one);\n        graph.addVertex(two);\n        graph.addVertex(three);\n        graph.addVertex(four);\n        graph.addVertex(five);\n        graph.addVertex(six);\n\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);\n\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);\n\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);\n\n        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);\n        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =\n                new InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(\n                        one,\n                        five,\n                        new DoubleWeightBaseOperations(),\n                        new BaseWeightedEdge<Double>());\n\n        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =\n                findShortestPath(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                        .from(one)\n                        .to(five)\n                        .applyingDijkstra(new DoubleWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:28:18",
+                "source_type": "InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "generation": "I'm sorry for the confusion, but I can't provide a translation without seeing the full context of your Java code. The InMemoryWeightedPath class in Python is equivalent to the InMemoryWeightedPath class in Java. It uses networkx library's Graph and dijkstra_path function for path finding. The addConnectionInTail method adds an edge between two nodes with a given weight, and updates the shortest path accordingly.\n",
+                "imports": "",
+                "translated_target_type": "InMemoryWeightedPath",
+                "reasoning": "Custom type InMemoryWeightedPath is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindShortestPathAndVerify() {\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");\n        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");\n        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");\n        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");\n        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");\n        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");\n\n        graph.addVertex(one);\n        graph.addVertex(two);\n        graph.addVertex(three);\n        graph.addVertex(four);\n        graph.addVertex(five);\n        graph.addVertex(six);\n\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);\n\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);\n\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);\n\n        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);\n        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =\n                new InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(\n                        one,\n                        five,\n                        new DoubleWeightBaseOperations(),\n                        new BaseWeightedEdge<Double>());\n\n        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =\n                findShortestPath(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                        .from(one)\n                        .to(five)\n                        .applyingDijkstra(new DoubleWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "DoubleWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:28:51",
+                "source_type": "DoubleWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DoubleWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:29:09",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "I'm sorry for the confusion, but it seems like there was a misunderstanding. The previous response provided is incorrect and does not match with the Java code provided. \n\nThe `BaseWeightedEdge<Double>` in Java corresponds to a tuple of two elements (name, weight) in Python. However, this translation would only be correct if we were translating the entire Java code into Python, which is beyond the scope of this task.\n\nIf you have any other specific type or code snippet that you need help with, please provide it and I'll do my best to assist you.\n",
+                "imports": "from typing import List, Tuple\nimport heapq",
+                "translated_target_type": "List[Tuple[str, str, float]]",
+                "reasoning": "In Python, we don't have a direct equivalent type for `BaseWeightedEdge<Double>` and `UndirectedMutableGraph`. However, we can use the built-in data structures and algorithms to represent graphs and minimum spanning trees. For example, we can use a list of tuples to represent edges in the graph, where each tuple contains two vertices and their weight. We can also use Python's `heapq` module for implementing Prim's or Kruskal's algorithm for finding minimum spanning tree.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindShortestPathAndVerify() {\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");\n        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");\n        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");\n        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");\n        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");\n        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");\n\n        graph.addVertex(one);\n        graph.addVertex(two);\n        graph.addVertex(three);\n        graph.addVertex(four);\n        graph.addVertex(five);\n        graph.addVertex(six);\n\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);\n\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);\n\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);\n\n        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);\n        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =\n                new InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(\n                        one,\n                        five,\n                        new DoubleWeightBaseOperations(),\n                        new BaseWeightedEdge<Double>());\n\n        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =\n                findShortestPath(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                        .from(one)\n                        .to(five)\n                        .applyingDijkstra(new DoubleWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:29:25",
+                "source_type": "Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "I'm sorry for the confusion, but I don't see any type in your previous response. Could you please provide the type that needs to be translated?\n",
+                "imports": "",
+                "translated_target_type": "Path",
+                "reasoning": "Custom type Path is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that may be used to locate a file in a file system. It will\n typically represent a system dependent file path.\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindShortestPathAndVerify() {\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");\n        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");\n        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");\n        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");\n        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");\n        BaseLabeledVertex six = new BaseLabeledVertex(\"6\");\n\n        graph.addVertex(one);\n        graph.addVertex(two);\n        graph.addVertex(three);\n        graph.addVertex(four);\n        graph.addVertex(five);\n        graph.addVertex(six);\n\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 6\", 14D), six);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 7D), two);\n\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 10D), three);\n        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 15D), four);\n\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 4\", 11D), four);\n\n        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 6D), five);\n        graph.addEdge(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =\n                new InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(\n                        one,\n                        five,\n                        new DoubleWeightBaseOperations(),\n                        new BaseWeightedEdge<Double>());\n\n        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 3\", 9D), three);\n        expected.addConnectionInTail(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 6\", 2D), six);\n        expected.addConnectionInTail(six, new BaseLabeledWeightedEdge<Double>(\"6 -> 5\", 9D), five);\n\n        Path<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> actual =\n                findShortestPath(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                        .from(one)\n                        .to(five)\n                        .applyingDijkstra(new DoubleWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testFindShortestPathAndVerify(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.main.org.apache.commons.graph.model.InMemoryWeightedPath import InMemoryWeightedPath",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        graph = {",
+            "            \"1\": {\"6\": 14, \"3\": 9, \"2\": 7},",
+            "            \"2\": {\"3\": 10, \"4\": 15},",
+            "            \"3\": {\"6\": 2, \"4\": 11},",
+            "            \"4\": {\"5\": 6},",
+            "            \"6\": {\"5\": 9}",
+            "        }",
+            "        ",
+            "        expected = InMemoryWeightedPath(",
+            "            start=\"1\",",
+            "            target=\"5\",",
+            "            weightOperations=DoubleWeightBaseOperations(),",
+            "            weightedEdges=graph",
+            "        )",
+            "        expected.addConnectionInTail(\"1\", (\"1 -> 3\", 9), \"3\")",
+            "        expected.addConnectionInTail(\"3\", (\"3 -> 6\", 2), \"6\")",
+            "        expected.addConnectionInTail(\"6\", (\"6 -> 5\", 9), \"5\")",
+            "        ",
+            "        actual = CommonsGraph.findShortestPath(graph) \\",
+            "            .whereEdgesHaveWeights(BaseWeightedEdge()) \\",
+            "            .from_(\"1\") \\",
+            "            .to(\"5\") \\",
+            "            .applyingDijkstra(DoubleWeightBaseOperations())",
+            "        ",
+            "        self.assertEqual(expected, actual)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 9.588915586471558,
+          "generation_timestamp": "2026-02-24T03:55:54.275424",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testFindShortestPathAndVerify(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "96-111:testNotConnectGraph": {
+          "start": 96,
+          "end": 111,
+          "body": [
+            "@Test(expected = PathNotFoundException.class)",
+            "    public void testNotConnectGraph() {",
+            "        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");",
+            "        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");",
+            "        graph.addVertex(a);",
+            "        graph.addVertex(b);",
+            "",
+            "        findShortestPath(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(a)",
+            "                .to(b)",
+            "                .applyingDijkstra(new DoubleWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = PathNotFoundException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseLabeledVertex",
+            "BaseWeightedEdge<Double>",
+            "DoubleWeightBaseOperations"
+          ],
+          "signature": "testNotConnectGraph()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "46-46:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.ShortestPathAlgorithmSelector",
+              "30-61:ShortestPathAlgorithmSelector",
+              "60-60:applyingDijkstra"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-23 01:29:31",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:29:41",
+                "source_type": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "I'm sorry for the confusion, but I need to clarify that the provided Java code is not complete and does not contain all necessary information. The `UndirectedMutableGraph` class, `BaseLabeledVertex`, `BaseLabeledWeightedEdge`, `findShortestPath`, `DoubleWeightBaseOperations` classes or methods are not defined in this snippet. \n\nIf you could provide the complete Java code and its corresponding description, I would be more than happy to help translate it into Python.\n",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nUndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = PathNotFoundException.class)\n    public void testNotConnectGraph() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");\n        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");\n        graph.addVertex(a);\n        graph.addVertex(b);\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(a)\n                .to(b)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:30:13",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The library 'jgrapht' is not available in Python, and there isn't a direct equivalent to `BaseLabeledWeightedEdge<Double>` in Python. \n\nHowever, if you want to represent graphs in Python, you can use libraries like NetworkX which provides functionalities similar to JGraphT. Here is an example of how you might translate the code:\n\nPYTHON IMPORTS:\n```python\nimport networkx as nx\nfrom networkx import shortest_path\nfrom networkx.exception import NetworkXNoPath\n```\n\nPYTHON TRANSLATION:\n```python\nG = nx.Graph()\na = \"a\"\nb = \"b\"\nG.add_node(a)\nG.add_node(b)\ntry:\n    shortest_path(G, a, b, weight='weight')\nexcept NetworkXNoPath:\n    pass\n```\n\nREASONING: \nIn Python, we use the NetworkX library to represent graphs and perform graph-related operations. The `Graph` class in NetworkX is equivalent to `UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>` in Java. We add nodes using the `add_node()` method and find shortest paths using the `shortest_path()` function from NetworkX. The `try-except` block is used to handle the case where no path exists between two vertices, which corresponds to the `@Test(expected = PathNotFoundException.class)` annotation in Java.\n",
+                "imports": "from typing import Dict, Any\nimport heapq",
+                "translated_target_type": "Dict[Any, float]",
+                "reasoning": "In Python, the equivalent type for `BaseLabeledWeightedEdge<Double>` in Java is not a direct translation. In Python, you would typically use dictionaries to represent weighted edges where keys are vertices and values are weights. The 'heapq' module can be used for priority queues which are commonly used in pathfinding algorithms like A*.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = PathNotFoundException.class)\n    public void testNotConnectGraph() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");\n        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");\n        graph.addVertex(a);\n        graph.addVertex(b);\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(a)\n                .to(b)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'jgrapht'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:30:27",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:31:00",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The previous response was incorrect and caused an error due to a syntax issue. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import TypeVar, Generic\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```python\nclass BaseWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nIn Python, we can use the `typing` module to create generic types. The `TypeVar` function is used to define a type variable that can be substituted with any other type. In this case, 'T' is a placeholder for any type. The `BaseWeightedEdge` class is then defined as a generic class using this type variable.\n",
+                "imports": "from typing import List, Tuple\nimport heapq",
+                "translated_target_type": "List[Tuple[str, str, float]]",
+                "reasoning": "In Python, we don't have a direct equivalent type for `BaseWeightedEdge<Double>` and `UndirectedMutableGraph`. However, we can use the built-in data structures and algorithms to represent graphs and minimum spanning trees. For example, we can use a list of tuples to represent edges in the graph, where each tuple contains two vertices and their weight. We can also use Python's `heapq` module for implementing Prim's or Kruskal's algorithm for finding minimum spanning tree.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = PathNotFoundException.class)\n    public void testNotConnectGraph() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");\n        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");\n        graph.addVertex(a);\n        graph.addVertex(b);\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(a)\n                .to(b)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "DoubleWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:31:17",
+                "source_type": "DoubleWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DoubleWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNotConnectGraph(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.shortestpath.PathNotFoundException import PathNotFoundException",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.model.UndirectedMutableGraph import UndirectedMutableGraph",
+            "        graph = UndirectedMutableGraph()",
+            "        a = BaseLabeledVertex(\"a\")",
+            "        b = BaseLabeledVertex(\"b\")",
+            "        graph.addVertex(a)",
+            "        graph.addVertex(b)",
+            "        ",
+            "        with pytest.raises(PathNotFoundException):",
+            "            findShortestPath(graph).whereEdgesHaveWeights([]).from_(a).to(b).applyingDijkstra(DoubleWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 3.7319934368133545,
+          "generation_timestamp": "2026-02-24T03:55:58.124378",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNotConnectGraph(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "113-120:testNullGraph": {
+          "start": 113,
+          "end": 120,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullGraph() {",
+            "        findShortestPath((Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>) null)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(null)",
+            "                .to(null)",
+            "                .applyingDijkstra(new DoubleWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseWeightedEdge<Double>",
+            "DoubleWeightBaseOperations"
+          ],
+          "signature": "testNullGraph()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "46-46:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.ShortestPathAlgorithmSelector",
+              "30-61:ShortestPathAlgorithmSelector",
+              "60-60:applyingDijkstra"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-23 01:31:17",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:31:17",
+                "source_type": "Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import Dict, List, Tuple\nimport heapq\n```\n\nPYTHON TRANSLATION:\n```python\nDict[str, Tuple[float, List[str]]]\n```\n\nREASONING:\nIn the given Java code, a Graph is used to represent a weighted directed graph. The Graph type in Python can be represented as a dictionary where each key-value pair represents a vertex and its associated value. The key is of string type representing the name or label of the vertex, and the value is a tuple containing two elements: a float representing the shortest distance from the source to this vertex (initially set to infinity for all vertices except the source), and a list of strings representing the path from the source to this vertex.\n",
+                "imports": "from typing import Dict, List, Tuple\nimport heapq",
+                "translated_target_type": "Dict[str, Tuple[float, List[str]]]",
+                "reasoning": "In the given Java code, a Graph is used to represent a weighted directed graph. The Graph type in Python can be represented as a dictionary where each key-value pair represents a vertex and its associated value. The key is of string type representing the name or label of the vertex, and the value is a tuple containing two elements: a float representing the shortest distance from the source to this vertex (initially set to infinity for all vertices except the source), and a list of strings representing the path from the source to this vertex.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullGraph() {\n        findShortestPath((Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>) null)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(null)\n                .to(null)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:32:04",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The previous response was incorrect and caused an error due to a syntax issue. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import TypeVar, Generic\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```python\nclass BaseLabeledWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nIn Python, we can use the `typing` module to create generic types. The `TypeVar` function is used to define a type variable that can be substituted with any other type. In this case, 'T' is a placeholder for any type. The `Generic[T]` syntax indicates that `BaseLabeledWeightedEdge` is a generic class and it takes one type parameter \u2018T\u2019.\n",
+                "imports": "from typing import Dict, Any\nimport heapq",
+                "translated_target_type": "Dict[Any, float]",
+                "reasoning": "In Python, the equivalent type for `BaseLabeledWeightedEdge<Double>` in Java is not a direct translation. In Python, you would typically use dictionaries to represent weighted edges where keys are vertices and values are weights. The 'heapq' module can be used for priority queues which are commonly used in pathfinding algorithms like A*.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullGraph() {\n        findShortestPath((Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>) null)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(null)\n                .to(null)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:33:15",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The previous response was incorrect and caused a syntax error due to an extra space in the type declaration. Here's the corrected translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import TypeVar, Generic\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```python\nclass BaseWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nIn Python, we can use the `typing` module to create generic types. Here, we define a class `BaseWeightedEdge` that is parameterized by a type variable `T`. This allows us to represent edges with weights of any type in Python. The actual type used will be determined when an instance of this class is created.\n",
+                "imports": "from typing import List, Tuple\nimport heapq",
+                "translated_target_type": "List[Tuple[str, str, float]]",
+                "reasoning": "In Python, we don't have a direct equivalent type for `BaseWeightedEdge<Double>` and `UndirectedMutableGraph`. However, we can use the built-in data structures and algorithms to represent graphs and minimum spanning trees. For example, we can use a list of tuples to represent edges in the graph, where each tuple contains two vertices and their weight. We can also use Python's `heapq` module for implementing Prim's or Kruskal's algorithm for finding minimum spanning tree.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullGraph() {\n        findShortestPath((Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>) null)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(null)\n                .to(null)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "DoubleWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:33:39",
+                "source_type": "DoubleWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DoubleWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullGraph(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        with pytest.raises(TypeError):",
+            "            CommonsGraph.findShortestPath(None).whereEdgesHaveWeights({}).from_(None).to(None).applyingDijkstra(DoubleWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 2.419771671295166,
+          "generation_timestamp": "2026-02-24T03:56:00.662950",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullGraph(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "122-137:testNullMonoid": {
+          "start": 122,
+          "end": 137,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullMonoid() {",
+            "        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");",
+            "        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");",
+            "        graph.addVertex(a);",
+            "        graph.addVertex(b);",
+            "",
+            "        findShortestPath(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(a)",
+            "                .to(b)",
+            "                .applyingDijkstra(null);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseLabeledVertex",
+            "BaseWeightedEdge<Double>"
+          ],
+          "signature": "testNullMonoid()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "46-46:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.ShortestPathAlgorithmSelector",
+              "30-61:ShortestPathAlgorithmSelector",
+              "60-60:applyingDijkstra"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-23 01:33:39",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:34:17",
+                "source_type": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "I'm sorry for the confusion, but I need more information to provide a correct translation. The Java code you provided is incomplete and doesn't contain all necessary details about the `UndirectedMutableGraph` class or its methods like `addVertex()`, `findShortestPath()` etc. \n\nCould you please provide the complete Java type description and the full Java code? This will help me to give a more accurate translation in Python.\n",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nUndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullMonoid() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");\n        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");\n        graph.addVertex(a);\n        graph.addVertex(b);\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(a)\n                .to(b)\n                .applyingDijkstra(null);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:34:58",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The previous response was incorrect and caused a syntax error due to an unnecessary import statement. Here is the correct translation:\n\nPYTHON TRANSLATION:\n```python\nclass BaseLabeledWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nIn Python, we can use the `typing` module to create generic types. The `TypeVar` function is used to define a type variable that can be substituted with any other type. In this case, 'T' is a placeholder for any type. The `Generic[T]` syntax indicates that the class `BaseLabeledWeightedEdge` is parameterized by a type variable \u2018T\u2019.\n",
+                "imports": "from typing import Dict, Any\nimport heapq",
+                "translated_target_type": "Dict[Any, float]",
+                "reasoning": "In Python, the equivalent type for `BaseLabeledWeightedEdge<Double>` in Java is not a direct translation. In Python, you would typically use dictionaries to represent weighted edges where keys are vertices and values are weights. The 'heapq' module can be used for priority queues which are commonly used in pathfinding algorithms like A*.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullMonoid() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");\n        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");\n        graph.addVertex(a);\n        graph.addVertex(b);\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(a)\n                .to(b)\n                .applyingDijkstra(null);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:35:33",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:36:18",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The previous response was incorrect and caused a syntax error due to an extra space in the type declaration. Here is the corrected translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import TypeVar, Generic\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```python\nclass BaseWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nIn Python, we can use the `typing` module to create generic types. The `TypeVar` function is used to define a type variable that can be substituted with any other type. In this case, 'T' is a placeholder for any type. The `BaseWeightedEdge` class is then defined as a generic class using this type variable.\n",
+                "imports": "from typing import List, Tuple\nimport heapq",
+                "translated_target_type": "List[Tuple[str, str, float]]",
+                "reasoning": "In Python, we don't have a direct equivalent type for `BaseWeightedEdge<Double>` and `UndirectedMutableGraph`. However, we can use the built-in data structures and algorithms to represent graphs and minimum spanning trees. For example, we can use a list of tuples to represent edges in the graph, where each tuple contains two vertices and their weight. We can also use Python's `heapq` module for implementing Prim's or Kruskal's algorithm for finding minimum spanning tree.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullMonoid() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"a\");\n        final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");\n        graph.addVertex(a);\n        graph.addVertex(b);\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(a)\n                .to(b)\n                .applyingDijkstra(null);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullMonoid(self) -> None:",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.model.UndirectedMutableGraph import UndirectedMutableGraph",
+            "        graph = UndirectedMutableGraph()",
+            "",
+            "        a = BaseLabeledVertex(\"a\")",
+            "        b = BaseLabeledVertex(\"b\")",
+            "        graph.addVertex(a)",
+            "        graph.addVertex(b)",
+            "",
+            "        with pytest.raises(TypeError):",
+            "            findShortestPath(graph).whereEdgesHaveWeights([]).from_(a).to(b).applyingDijkstra(None)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 5.962564468383789,
+          "generation_timestamp": "2026-02-24T03:56:06.728763",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullMonoid(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "139-149:testNullVertices": {
+          "start": 139,
+          "end": 149,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullVertices() {",
+            "        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "        findShortestPath(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(null)",
+            "                .to(null)",
+            "                .applyingDijkstra(new DoubleWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseWeightedEdge<Double>",
+            "DoubleWeightBaseOperations"
+          ],
+          "signature": "testNullVertices()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "46-46:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.ShortestPathAlgorithmSelector",
+              "30-61:ShortestPathAlgorithmSelector",
+              "60-60:applyingDijkstra"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-23 01:36:37",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:36:59",
+                "source_type": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "I apologize for the confusion. The NetworkX library is not installed by default in Python, and it needs to be installed separately using pip or conda. Here's how you can install it:\n\n```bash\npip install networkx\n```\nor \n```bash\nconda install -c anaconda networkx\n```\n\nOnce NetworkX is installed, you should be able to use the following Python translation for your Java type:\n\nPYTHON IMPORTS:\n```python\nfrom networkx import Graph\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```python\nGraph[str, float]\n```\n\nREASONING: \nIn Python, the equivalent type for `UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>` is a NetworkX Graph. In this case, we are using string labels for vertices and floating point numbers for edge weights. This is because NetworkX does not have built-in support for the Java types `BaseLabeledVertex` and `BaseLabeledWeightedEdge<Double>`. However, it does support strings as vertex labels and floating point numbers as edge weights.\n",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nUndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullVertices() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(null)\n                .to(null)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'networkx'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:39:38",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The 'jgrapht' module does not exist in Python, so it cannot be imported. However, I can still provide a translation based on your Java code and description. \n\nPYTHON TRANSLATION:\n```python\ndict[str, float]\n```\n\nREASONING:\nIn Python, the equivalent type for `BaseLabeledVertex` is `str`. For `BaseLabeledWeightedEdge<Double>`, it can be translated to `float` as in Java, a double-precision 64-bit IEEE 754 floating point is used. The reason we use float instead of double is because Python's built-in types are more flexible and easier to work with than Java's primitive types.\n",
+                "imports": null,
+                "translated_target_type": "dict[str, float]",
+                "reasoning": "In Python, the equivalent type for `BaseLabeledVertex` is `str`. For `BaseLabeledWeightedEdge<Double>`, it can be translated to `float` as in Java, a double-precision 64-bit IEEE 754 floating point is used. The reason we use float instead of double is because Python's built-in types are more flexible and easier to work with than Java's primitive types.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullVertices() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(null)\n                .to(null)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'jgrapht'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:40:50",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "I apologize for the confusion. The previous response was incorrect and caused an error due to a syntax issue. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import TypeVar, Generic\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```python\nclass BaseWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nIn Python, we can use the `typing` module to create generic types. Here, we define a class `BaseWeightedEdge` that is parameterized by a type variable `T`. This allows us to represent edges with weights of any type `T` in our graph. The `Generic[T]` syntax indicates that `BaseWeightedEdge` is a generic class and can be parameterized by any type `T`.\n",
+                "imports": "from typing import List, Tuple\nimport heapq",
+                "translated_target_type": "List[Tuple[str, str, float]]",
+                "reasoning": "In Python, we don't have a direct equivalent type for `BaseWeightedEdge<Double>` and `UndirectedMutableGraph`. However, we can use the built-in data structures and algorithms to represent graphs and minimum spanning trees. For example, we can use a list of tuples to represent edges in the graph, where each tuple contains two vertices and their weight. We can also use Python's `heapq` module for implementing Prim's or Kruskal's algorithm for finding minimum spanning tree.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullVertices() {\n        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =\n                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();\n\n        findShortestPath(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())\n                .from(null)\n                .to(null)\n                .applyingDijkstra(new DoubleWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "DoubleWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-23 01:41:25",
+                "source_type": "DoubleWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DoubleWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullVertices(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.model.UndirectedMutableGraph import UndirectedMutableGraph",
+            "        graph = UndirectedMutableGraph()",
+            "",
+            "        with pytest.raises(TypeError):",
+            "            findShortestPath(graph) \\",
+            "                .whereEdgesHaveWeights({}) \\",
+            "                .from_(None) \\",
+            "                .to_(None) \\",
+            "                .applyingDijkstra(DoubleWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 3.034747362136841,
+          "generation_timestamp": "2026-02-24T03:56:09.873331",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullVertices(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class DijkstraTestCase(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "findShortestPath": "static org.apache.commons.graph.CommonsGraph.findShortestPath",
+    "assertEquals": "static org.junit.Assert.assertEquals",
+    "Graph": "org.apache.commons.graph.Graph",
+    "Path": "org.apache.commons.graph.Path",
+    "BaseLabeledVertex": "org.apache.commons.graph.model.BaseLabeledVertex",
+    "BaseLabeledWeightedEdge": "org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+    "BaseWeightedEdge": "org.apache.commons.graph.model.BaseWeightedEdge",
+    "DirectedMutableGraph": "org.apache.commons.graph.model.DirectedMutableGraph",
+    "InMemoryWeightedPath": "org.apache.commons.graph.model.InMemoryWeightedPath",
+    "UndirectedMutableGraph": "org.apache.commons.graph.model.UndirectedMutableGraph",
+    "DoubleWeightBaseOperations": "org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations",
+    "Test": "org.junit.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from typing import Dict, Any\nimport heapq",
+    "from typing import Dict, List, Tuple",
+    "from typing import Dict, List, Tuple\nimport heapq",
+    "from typing import List, Tuple\nimport heapq",
+    "import pytest",
+    "import unittest"
+  ]
+}

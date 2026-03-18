@@ -1,0 +1,485 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-pool/src/test/java/org/apache/commons/pool2/impl/DefaultPooledObjectTest.java",
+  "imports": {
+    "19-19:import static org.junit.jupiter.api.Assertions.assertFalse;": {
+      "start": 19,
+      "end": 19,
+      "body": "import static org.junit.jupiter.api.Assertions.assertFalse;"
+    },
+    "21-21:import org.junit.jupiter.api.Test;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.junit.jupiter.api.Test;"
+    },
+    "23-23:import java.util.ArrayList;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.util.ArrayList;"
+    },
+    "24-24:import java.util.List;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.util.List;"
+    },
+    "25-25:import java.util.concurrent.ExecutorService;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.util.concurrent.ExecutorService;"
+    },
+    "26-26:import java.util.concurrent.Executors;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.concurrent.Executors;"
+    },
+    "27-27:import java.util.concurrent.Future;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.util.concurrent.Future;"
+    },
+    "28-28:import java.util.concurrent.atomic.AtomicBoolean;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.util.concurrent.atomic.AtomicBoolean;"
+    }
+  },
+  "classes": {
+    "31-90:DefaultPooledObjectTest": {
+      "start": 31,
+      "end": 90,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "38-89:testGetIdleTimeMillis": {
+          "start": 38,
+          "end": 89,
+          "body": [
+            "@Test",
+            "    public void testGetIdleTimeMillis() throws Exception {",
+            "        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());",
+            "        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);",
+            "        final ExecutorService executor =",
+            "                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);",
+            "        final Runnable allocateAndDeallocateTask =",
+            "                () -> {",
+            "                    for (int i1 = 0; i1 < 10000; i1++) {",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                    }",
+            "                    dpo.allocate();",
+            "                    for (int i2 = 0; i2 < 10000; i2++) {",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                    }",
+            "                    dpo.deallocate();",
+            "                };",
+            "        final Runnable getIdleTimeTask =",
+            "                () -> {",
+            "                    for (int i = 0; i < 10000; i++) {",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                    }",
+            "                };",
+            "        final double probabilityOfAllocationTask = 0.7;",
+            "        final List<Future<?>> futures = new ArrayList<>();",
+            "        for (int i = 1; i <= 10000; i++) {",
+            "            final Runnable randomTask =",
+            "                    Math.random() < probabilityOfAllocationTask",
+            "                            ? allocateAndDeallocateTask",
+            "                            : getIdleTimeTask;",
+            "            futures.add(executor.submit(randomTask));",
+            "        }",
+            "        for (final Future<?> future : futures) {",
+            "            future.get();",
+            "        }",
+            "        assertFalse(",
+            "                negativeIdleTimeReturned.get(),",
+            "                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DefaultPooledObject<Object>",
+            "DefaultPooledObject<>",
+            "Object",
+            "AtomicBoolean",
+            "ExecutorService",
+            "Runnable",
+            "int",
+            "double",
+            "List<Future<?>>",
+            "Future<?>",
+            "ArrayList<>"
+          ],
+          "signature": "testGetIdleTimeMillis()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "58-60:DefaultPooledObject"
+            ],
+            [
+              "library",
+              "java.util.concurrent.atomic.AtomicBoolean",
+              "<init>(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "getRuntime()"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "availableProcessors()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.Executors",
+              "newFixedThreadPool(int)"
+            ],
+            [
+              "library",
+              "java.lang.Runnable",
+              "run(org.apache.commons.pool2.impl.DefaultPooledObject,java.util.concurrent.atomic.AtomicBoolean)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "random()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ExecutorService",
+              "submit(java.lang.Runnable)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.Future",
+              "get()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.atomic.AtomicBoolean",
+              "get()"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertFalse(boolean,java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-10 05:35:31",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DefaultPooledObject<Object>": {
+                "identifier": "DefaultPooledObject<Object>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:35:43",
+                "source_type": "DefaultPooledObject<Object>",
+                "generation": "",
+                "imports": "from typing import Any, TypeVar\nT = TypeVar('T')",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DefaultPooledObject<>": {
+                "identifier": "DefaultPooledObject<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:36:02",
+                "source_type": "DefaultPooledObject<>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DefaultPooledObject",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Object": {
+                "identifier": "Object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:36:31",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AtomicBoolean": {
+                "identifier": "AtomicBoolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:36:53",
+                "source_type": "AtomicBoolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ExecutorService": {
+                "identifier": "ExecutorService",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:03",
+                "source_type": "ExecutorService",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Runnable": {
+                "identifier": "Runnable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:18",
+                "source_type": "Runnable",
+                "generation": "",
+                "imports": "from concurrent.futures import ThreadPoolExecutor, as_completed\nimport random",
+                "translated_target_type": "ThreadPoolExecutor",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:23",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "double": {
+                "identifier": "double",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:23",
+                "source_type": "double",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "float",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "List<Future<?>>": {
+                "identifier": "List<Future<?>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:23",
+                "source_type": "List<Future<?>>",
+                "generation": "",
+                "imports": "from typing import List, Tuple\nfrom concurrent.futures import Future",
+                "translated_target_type": "List[Future]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Future<?>": {
+                "identifier": "Future<?>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:35",
+                "source_type": "Future<?>",
+                "generation": "",
+                "imports": "from concurrent.futures import Future",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ArrayList<>": {
+                "identifier": "ArrayList<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-10 05:37:46",
+                "source_type": "ArrayList<>",
+                "generation": "",
+                "imports": "from typing import List, Any\nfrom concurrent.futures import Future\nimport threading",
+                "translated_target_type": "List[Future[Any]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testGetIdleTimeMillis(self) -> None:",
+            "        from src.main.org.apache.commons.pool2.impl.DefaultPooledObject import DefaultPooledObject",
+            "        dpo = DefaultPooledObject(object())",
+            "        negativeIdleTimeReturned = threading.Event()",
+            "        executor = ThreadPoolExecutor(max_workers=Runtime().availableProcessors() * 3)",
+            "        ",
+            "        def allocateAndDeallocateTask():",
+            "            for _ in range(10000):",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "            dpo.allocate()",
+            "            for _ in range(10000):",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "            dpo.deallocate()",
+            "        ",
+            "        def getIdleTimeTask():",
+            "            for _ in range(10000):",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "        ",
+            "        probabilityOfAllocationTask = 0.7",
+            "        futures = []",
+            "        for _ in range(1, 10001):",
+            "            randomTask = allocateAndDeallocateTask if random.random() < probabilityOfAllocationTask else getIdleTimeTask",
+            "            futures.append(executor.submit(randomTask))",
+            "        ",
+            "        for future in as_completed(futures):",
+            "            future.result()",
+            "        ",
+            "        self.assertFalse(negativeIdleTimeReturned.is_set(), \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/apache/commons/pool2/impl/DefaultPooledObjectTest.py::DefaultPooledObjectTest::testGetIdleTimeMillis": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-pool/src/test/org/apache/commons/pool2/impl/DefaultPooledObjectTest.py\", line 32, in testGetIdleTimeMillis\n    executor = ThreadPoolExecutor(max_workers=Runtime().availableProcessors() * 3)\n                                              ^^^^^^^\nNameError: name 'Runtime' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-pool.src.main.org.apache.commons.pool2.impl.NoOpCallStack",
+                  "class_name": "27-45:NoOpCallStack",
+                  "fragment_name": "33-33:NoOpCallStack"
+                },
+                {
+                  "schema_name": "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+                  "class_name": "36-266:DefaultPooledObject",
+                  "fragment_name": "58-60:DefaultPooledObject"
+                },
+                {
+                  "schema_name": "commons-pool.src.test.org.apache.commons.pool2.impl.DefaultPooledObjectTest",
+                  "class_name": "31-90:DefaultPooledObjectTest",
+                  "fragment_name": "38-89:testGetIdleTimeMillis"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 24.23876643180847,
+          "generation_timestamp": "2025-08-11T01:48:45.676786",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testGetIdleTimeMillis(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class DefaultPooledObjectTest(unittest.TestCase):\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from concurrent.futures import Future",
+    "from concurrent.futures import ThreadPoolExecutor, as_completed\nimport random",
+    "from typing import Any",
+    "from typing import Any, TypeVar\nT = TypeVar('T')",
+    "from typing import List, Any\nfrom concurrent.futures import Future\nimport threading",
+    "from typing import List, Tuple\nfrom concurrent.futures import Future",
+    "import pytest",
+    "import unittest"
+  ]
+}

@@ -1,0 +1,268 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-codec/src/test/java/org/apache/commons/codec/digest/XXHash32OverflowTest.java",
+  "imports": {
+    "19-19:import org.junit.Assert;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.junit.Assert;"
+    },
+    "20-20:import org.junit.Assume;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.junit.Assume;"
+    },
+    "21-21:import org.junit.Test;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.junit.Test;"
+    }
+  },
+  "classes": {
+    "23-50:XXHash32OverflowTest": {
+      "start": 23,
+      "end": 50,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "31-49:testIncrementalHashWithUnprocessedBytesAndHugeLengthArray": {
+          "start": 31,
+          "end": 49,
+          "body": [
+            "@Test",
+            "    public void testIncrementalHashWithUnprocessedBytesAndHugeLengthArray() {",
+            "        final int bufferSize = 16;",
+            "        final int unprocessedSize = bufferSize - 1;",
+            "        final int hugeLength = Integer.MAX_VALUE - (unprocessedSize - 1);",
+            "        Assert.assertTrue(",
+            "                \"This should overflow to negative\", unprocessedSize + hugeLength < bufferSize);",
+            "",
+            "        byte[] bytes = null;",
+            "        try {",
+            "            bytes = new byte[hugeLength];",
+            "        } catch (final OutOfMemoryError ignore) {",
+            "        }",
+            "        Assume.assumeTrue(\"Cannot allocate array of length \" + hugeLength, bytes != null);",
+            "",
+            "        final XXHash32 inc = XXHash32.XXHash321();",
+            "        inc.update1(bytes, 0, unprocessedSize);",
+            "        inc.update1(bytes, 0, hugeLength);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "byte[]",
+            "byte",
+            "OutOfMemoryError",
+            "XXHash32"
+          ],
+          "signature": "testIncrementalHashWithUnprocessedBytesAndHugeLengthArray()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "org.junit.Assert",
+              "assertTrue(java.lang.String,boolean)"
+            ],
+            [
+              "library",
+              "org.junit.Assume",
+              "assumeTrue(java.lang.String,boolean)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.digest.XXHash32",
+              "35-196:XXHash32",
+              "63-65:XXHash321"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.digest.XXHash32",
+              "35-196:XXHash32",
+              "91-124:update1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-11-01 00:35:12",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 00:35:12",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "byte[]": {
+                "identifier": "byte[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 00:35:14",
+                "source_type": "byte[]",
+                "generation": "PYTHON IMPORTS:\n```\nimport array\n```\n\nPYTHON TRANSLATION:\n```\narray.array('B')\n```\n\nREASONING:\nIn Python, the equivalent type for a Java `byte[]` is `array.array('B')`, where 'B' is the type code for unsigned bytes. This maintains the same functionality as a Java byte array. The import statement for the `array` module is necessary to use this type.",
+                "imports": "",
+                "translated_target_type": "bytes",
+                "reasoning": "In Python, the equivalent type for a Java `byte[]` is `bytes`. The `bytes` type in Python is a built-in immutable sequence of bytes, which directly corresponds to the functionality of a Java `byte[]`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nbyte[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testIncrementalHashWithUnprocessedBytesAndHugeLengthArray() {\n        final int bufferSize = 16;\n        final int unprocessedSize = bufferSize - 1;\n        final int hugeLength = Integer.MAX_VALUE - (unprocessedSize - 1);\n        Assert.assertTrue(\n                \"This should overflow to negative\", unprocessedSize + hugeLength < bufferSize);\n\n        byte[] bytes = null;\n        try {\n            bytes = new byte[hugeLength];\n        } catch (final OutOfMemoryError ignore) {\n        }\n        Assume.assumeTrue(\"Cannot allocate array of length \" + hugeLength, bytes != null);\n\n        final XXHash32 inc = XXHash32.XXHash321();\n        inc.update1(bytes, 0, unprocessedSize);\n        inc.update1(bytes, 0, hugeLength);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: name 'array' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "byte": {
+                "identifier": "byte",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 00:35:16",
+                "source_type": "byte",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "OutOfMemoryError": {
+                "identifier": "OutOfMemoryError",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 00:35:18",
+                "source_type": "OutOfMemoryError",
+                "generation": "PYTHON IMPORTS:\n```\n```\n\nPYTHON TRANSLATION:\n```\nMemoryError\n```\n\nREASONING:\nIn Python, the equivalent of Java's `OutOfMemoryError` is `MemoryError`. Both exceptions are raised when the system runs out of memory and cannot allocate more.",
+                "imports": "",
+                "translated_target_type": "MemoryError",
+                "reasoning": "In Python, the equivalent of Java's `OutOfMemoryError` is `MemoryError`. Both exceptions are raised when the system runs out of memory and cannot allocate more.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nOutOfMemoryError\n```\n\nJAVA TYPE DESCRIPTION:\nThrown when the Java Virtual Machine cannot allocate an object\n because it is out of memory, and no more memory could be made\n available by the garbage collector.\n\n\nJAVA CODE:\n```\n    @Test\n    public void testIncrementalHashWithUnprocessedBytesAndHugeLengthArray() {\n        final int bufferSize = 16;\n        final int unprocessedSize = bufferSize - 1;\n        final int hugeLength = Integer.MAX_VALUE - (unprocessedSize - 1);\n        Assert.assertTrue(\n                \"This should overflow to negative\", unprocessedSize + hugeLength < bufferSize);\n\n        byte[] bytes = null;\n        try {\n            bytes = new byte[hugeLength];\n        } catch (final OutOfMemoryError ignore) {\n        }\n        Assume.assumeTrue(\"Cannot allocate array of length \" + hugeLength, bytes != null);\n\n        final XXHash32 inc = XXHash32.XXHash321();\n        inc.update1(bytes, 0, unprocessedSize);\n        inc.update1(bytes, 0, hugeLength);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'memory_error'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "XXHash32": {
+                "identifier": "XXHash32",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-11-01 00:35:20",
+                "source_type": "XXHash32",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "XXHash32",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testIncrementalHashWithUnprocessedBytesAndHugeLengthArray(self) -> None:",
+            "        from src.main.org.apache.commons.codec.digest.XXHash32 import XXHash32",
+            "        buffer_size = 16",
+            "        unprocessed_size = buffer_size - 1",
+            "        huge_length = 2**31 - 1 - (unprocessed_size - 1)",
+            "        self.assertTrue(\"This should overflow to negative\", unprocessed_size + huge_length < buffer_size)",
+            "",
+            "        bytes_array = None",
+            "        try:",
+            "            bytes_array = bytearray(huge_length)",
+            "        except MemoryError:",
+            "            pass",
+            "",
+            "        self.assertIsNotNone(bytes_array, \"Cannot allocate array of length \" + str(huge_length))",
+            "",
+            "        inc = XXHash32.XXHash321()",
+            "        inc.update1(bytes_array, 0, unprocessed_size)",
+            "        inc.update1(bytes_array, 0, huge_length)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/apache/commons/codec/digest/XXHash32OverflowTest.py::XXHash32OverflowTest::testIncrementalHashWithUnprocessedBytesAndHugeLengthArray": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-codec/src/test/org/apache/commons/codec/digest/XXHash32OverflowTest.py\", line 32, in testIncrementalHashWithUnprocessedBytesAndHugeLengthArray\n    inc.update1(bytes_array, 0, unprocessed_size)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/commons-codec/src/main/org/apache/commons/codec/digest/XXHash32.py\", line 58, in update1\n    self.__buffer[self.__pos : self.__pos + len_] = b[off : off + len_]\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: 'bytes' object does not support item assignment",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.digest.XXHash32",
+                  "class_name": "35-196:XXHash32",
+                  "fragment_name": "58-61:XXHash32"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.digest.XXHash32",
+                  "class_name": "35-196:XXHash32",
+                  "fragment_name": "63-65:XXHash321"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.digest.XXHash32",
+                  "class_name": "35-196:XXHash32",
+                  "fragment_name": "91-124:update1"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.digest.XXHash32",
+                  "class_name": "35-196:XXHash32",
+                  "fragment_name": "171-176:initializeState"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.digest.XXHash32OverflowTest",
+                  "class_name": "23-50:XXHash32OverflowTest",
+                  "fragment_name": "31-49:testIncrementalHashWithUnprocessedBytesAndHugeLengthArray"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 6.551881551742554,
+          "generation_timestamp": "2025-11-03T08:54:23.324590",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testIncrementalHashWithUnprocessedBytesAndHugeLengthArray(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class XXHash32OverflowTest(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "Assert": "org.junit.Assert",
+    "Assume": "org.junit.Assume",
+    "Test": "org.junit.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "import pytest",
+    "import unittest"
+  ]
+}

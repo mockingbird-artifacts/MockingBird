@@ -1,0 +1,362 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-cli/src/main/java/org/apache/commons/cli/GnuParser.java",
+  "imports": {
+    "20-20:import java.util.ArrayList;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.util.ArrayList;"
+    },
+    "21-21:import java.util.List;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.util.List;"
+    }
+  },
+  "classes": {
+    "29-92:GnuParser": {
+      "start": 29,
+      "end": 92,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "@Deprecated",
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "Parser"
+      ],
+      "methods": {
+        "48-91:flatten": {
+          "start": 48,
+          "end": 91,
+          "body": [
+            "@Override",
+            "    protected String[] flatten(",
+            "            final Options options, final String[] arguments, final boolean stopAtNonOption) {",
+            "        final List<String> tokens = new ArrayList<>();",
+            "",
+            "        boolean eatTheRest = false;",
+            "",
+            "        for (int i = 0; i < arguments.length; i++) {",
+            "            final String arg = arguments[i];",
+            "",
+            "            if (\"--\".equals(arg)) {",
+            "                eatTheRest = true;",
+            "                tokens.add(\"--\");",
+            "            } else if (\"-\".equals(arg)) {",
+            "                tokens.add(\"-\");",
+            "            } else if (arg.startsWith(\"-\")) {",
+            "                final String opt = Util.stripLeadingHyphens(arg);",
+            "",
+            "                if (options.hasOption(opt)) {",
+            "                    tokens.add(arg);",
+            "                } else if (opt.indexOf('=') != -1",
+            "                        && options.hasOption(opt.substring(0, opt.indexOf('=')))) {",
+            "                    tokens.add(arg.substring(0, arg.indexOf('='))); // --foo",
+            "                    tokens.add(arg.substring(arg.indexOf('=') + 1)); // value",
+            "                } else if (options.hasOption(arg.substring(0, 2))) {",
+            "                    tokens.add(arg.substring(0, 2)); // -D",
+            "                    tokens.add(arg.substring(2)); // property=value",
+            "                } else {",
+            "                    eatTheRest = stopAtNonOption;",
+            "                    tokens.add(arg);",
+            "                }",
+            "            } else {",
+            "                tokens.add(arg);",
+            "            }",
+            "",
+            "            if (eatTheRest) {",
+            "                for (i++; i < arguments.length; i++) { // NOPMD",
+            "                    tokens.add(arguments[i]);",
+            "                }",
+            "            }",
+            "        }",
+            "",
+            "        return tokens.toArray(Util.EMPTY_STRING_ARRAY);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "String[]"
+          ],
+          "body_types": [
+            "List<String>",
+            "ArrayList<>",
+            "boolean",
+            "int",
+            "String"
+          ],
+          "signature": "flatten(final Options options, final String[] arguments, final boolean stopAtNonOption)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Options",
+              "name": "options"
+            },
+            {
+              "modifier": "final",
+              "type": "String[]",
+              "name": "arguments"
+            },
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "stopAtNonOption"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "commons-cli.src.main.org.apache.commons.cli.Util",
+              "21-64:Util",
+              "51-63:stripLeadingHyphens"
+            ],
+            [
+              "commons-cli.src.main.org.apache.commons.cli.Options",
+              "40-328:Options",
+              "283-287:hasOption"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "toArray(java.lang.Object[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 05:17:21",
+                "source_type": "String[]",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\n```\n\nPYTHON TRANSLATION:\n```python\nList[Tuple[str, str]]\n```\n\nREASONING: \nIn the Java code provided, the `flatten` method returns a list of tuples. Each tuple contains two strings. The first string is the option name and the second string is the value associated with that option. Therefore, in Python, we can use the typing module's List and Tuple types to represent this structure.\n",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[str, str]]",
+                "reasoning": "In the Java code provided, the `flatten` method returns a list of tuples. Each tuple contains two strings. The first string is the option name and the second string is the value associated with that option. Therefore, in Python, we can use the typing module's List and Tuple types to represent this structure.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nString[]\n```\n\nJAVA TYPE DESCRIPTION:\nThe String class represents character strings. All\n string literals in Java programs, such as \"abc\", are\n implemented as instances of this class.\n \n\nJAVA CODE:\n```\n    @Override\n    protected String[] flatten(\n            final Options options, final String[] arguments, final boolean stopAtNonOption) {\n        final List<String> tokens = new ArrayList<>();\n\n        boolean eatTheRest = false;\n\n        for (int i = 0; i < arguments.length; i++) {\n            final String arg = arguments[i];\n\n            if (\"--\".equals(arg)) {\n                eatTheRest = true;\n                tokens.add(\"--\");\n            } else if (\"-\".equals(arg)) {\n                tokens.add(\"-\");\n            } else if (arg.startsWith(\"-\")) {\n                final String opt = Util.stripLeadingHyphens(arg);\n\n                if (options.hasOption(opt)) {\n                    tokens.add(arg);\n                } else if (opt.indexOf('=') != -1\n                        && options.hasOption(opt.substring(0, opt.indexOf('=')))) {\n                    tokens.add(arg.substring(0, arg.indexOf('='))); // --foo\n                    tokens.add(arg.substring(arg.indexOf('=') + 1)); // value\n                } else if (options.hasOption(arg.substring(0, 2))) {\n                    tokens.add(arg.substring(0, 2)); // -D\n                    tokens.add(arg.substring(2)); // property=value\n                } else {\n                    eatTheRest = stopAtNonOption;\n                    tokens.add(arg);\n                }\n            } else {\n                tokens.add(arg);\n            }\n\n            if (eatTheRest) {\n                for (i++; i < arguments.length; i++) { // NOPMD\n                    tokens.add(arguments[i]);\n                }\n            }\n        }\n\n        return tokens.toArray(Util.EMPTY_STRING_ARRAY);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "List<String>": {
+                "identifier": "List<String>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 05:17:29",
+                "source_type": "List<String>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\n```\n\nPYTHON TRANSLATION:\n```python\nList[Tuple[str, str]]\n```\n\nREASONING: \nIn the Java code provided, a list of tuples is created where each tuple contains two strings. The first string represents an argument and the second string represents its corresponding value if it exists. This is similar to how options in Python's argparse module are handled. Therefore, we can use `List[Tuple[str, str]]` as a direct equivalent type in Python.\n",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[str, str]]",
+                "reasoning": "In the Java code provided, a list of tuples is created where each tuple contains two strings. The first string represents an argument and the second string represents its corresponding value if it exists. This is similar to how options in Python's argparse module are handled. Therefore, we can use `List[Tuple[str, str]]` as a direct equivalent type in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nList<String>\n```\n\nJAVA TYPE DESCRIPTION:\nAn ordered collection, where the user has precise control over where in the\n list each element is inserted.  The user can access elements by their integer\n index (position in the list), and search for elements in the list.\n\n\nJAVA CODE:\n```\n    @Override\n    protected String[] flatten(\n            final Options options, final String[] arguments, final boolean stopAtNonOption) {\n        final List<String> tokens = new ArrayList<>();\n\n        boolean eatTheRest = false;\n\n        for (int i = 0; i < arguments.length; i++) {\n            final String arg = arguments[i];\n\n            if (\"--\".equals(arg)) {\n                eatTheRest = true;\n                tokens.add(\"--\");\n            } else if (\"-\".equals(arg)) {\n                tokens.add(\"-\");\n            } else if (arg.startsWith(\"-\")) {\n                final String opt = Util.stripLeadingHyphens(arg);\n\n                if (options.hasOption(opt)) {\n                    tokens.add(arg);\n                } else if (opt.indexOf('=') != -1\n                        && options.hasOption(opt.substring(0, opt.indexOf('=')))) {\n                    tokens.add(arg.substring(0, arg.indexOf('='))); // --foo\n                    tokens.add(arg.substring(arg.indexOf('=') + 1)); // value\n                } else if (options.hasOption(arg.substring(0, 2))) {\n                    tokens.add(arg.substring(0, 2)); // -D\n                    tokens.add(arg.substring(2)); // property=value\n                } else {\n                    eatTheRest = stopAtNonOption;\n                    tokens.add(arg);\n                }\n            } else {\n                tokens.add(arg);\n            }\n\n            if (eatTheRest) {\n                for (i++; i < arguments.length; i++) { // NOPMD\n                    tokens.add(arguments[i]);\n                }\n            }\n        }\n\n        return tokens.toArray(Util.EMPTY_STRING_ARRAY);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "ArrayList<>": {
+                "identifier": "ArrayList<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 05:17:33",
+                "source_type": "ArrayList<>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List\n```\n\nPYTHON TRANSLATION:\n```python\nList[str]\n```\n\nREASONING: \nIn the Java code, an ArrayList of type String is used to store tokens. In Python, we can use a list for this purpose as well. The equivalent Python type would be List[str], where str represents string data type and List is imported from typing module in Python.\n",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In the Java code, an ArrayList of type String is used to store tokens. In Python, we can use a list for this purpose as well. The equivalent Python type would be List[str], where str represents string data type and List is imported from typing module in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nArrayList<>\n```\n\nJAVA TYPE DESCRIPTION:\nResizable-array implementation of the List interface.  Implements\n all optional list operations, and permits all elements, including\n null.  In addition to implementing the List interface,\n this class provides methods to manipulate the size of the array that is\n used internally to store the list.  (This class is roughly equivalent to\n Vector, except that it is unsynchronized.)\n\n\nJAVA CODE:\n```\n    @Override\n    protected String[] flatten(\n            final Options options, final String[] arguments, final boolean stopAtNonOption) {\n        final List<String> tokens = new ArrayList<>();\n\n        boolean eatTheRest = false;\n\n        for (int i = 0; i < arguments.length; i++) {\n            final String arg = arguments[i];\n\n            if (\"--\".equals(arg)) {\n                eatTheRest = true;\n                tokens.add(\"--\");\n            } else if (\"-\".equals(arg)) {\n                tokens.add(\"-\");\n            } else if (arg.startsWith(\"-\")) {\n                final String opt = Util.stripLeadingHyphens(arg);\n\n                if (options.hasOption(opt)) {\n                    tokens.add(arg);\n                } else if (opt.indexOf('=') != -1\n                        && options.hasOption(opt.substring(0, opt.indexOf('=')))) {\n                    tokens.add(arg.substring(0, arg.indexOf('='))); // --foo\n                    tokens.add(arg.substring(arg.indexOf('=') + 1)); // value\n                } else if (options.hasOption(arg.substring(0, 2))) {\n                    tokens.add(arg.substring(0, 2)); // -D\n                    tokens.add(arg.substring(2)); // property=value\n                } else {\n                    eatTheRest = stopAtNonOption;\n                    tokens.add(arg);\n                }\n            } else {\n                tokens.add(arg);\n            }\n\n            if (eatTheRest) {\n                for (i++; i < arguments.length; i++) { // NOPMD\n                    tokens.add(arguments[i]);\n                }\n            }\n        }\n\n        return tokens.toArray(Util.EMPTY_STRING_ARRAY);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 05:17:36",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 05:17:36",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 05:17:36",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Options|options": {
+                "identifier": "final|Options|options",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 05:17:26",
+                "source_type": "Options",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Options",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|String[]|arguments": {
+                "identifier": "final|String[]|arguments",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 05:17:26",
+                "source_type": "String[]",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\n```\n\nPYTHON TRANSLATION:\n```python\nList[Tuple[str, str]]\n```\n\nREASONING: \nThe Java method `flatten` returns a list of tuples where each tuple contains two strings. In Python, we can use the typing module to define this type as `List[Tuple[str, str]]`. The `typing` module provides support for type hints at runtime without any extra overhead by evaluating expressions or serializing types.\n",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[str, str]]",
+                "reasoning": "The Java method `flatten` returns a list of tuples where each tuple contains two strings. In Python, we can use the typing module to define this type as `List[Tuple[str, str]]`. The `typing` module provides support for type hints at runtime without any extra overhead by evaluating expressions or serializing types.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nString[]\n```\n\nJAVA TYPE DESCRIPTION:\nThe String class represents character strings. All\n string literals in Java programs, such as \"abc\", are\n implemented as instances of this class.\n \n\nJAVA CODE:\n```\n    @Override\n    protected String[] flatten(\n            final Options options, final String[] arguments, final boolean stopAtNonOption) {\n        final List<String> tokens = new ArrayList<>();\n\n        boolean eatTheRest = false;\n\n        for (int i = 0; i < arguments.length; i++) {\n            final String arg = arguments[i];\n\n            if (\"--\".equals(arg)) {\n                eatTheRest = true;\n                tokens.add(\"--\");\n            } else if (\"-\".equals(arg)) {\n                tokens.add(\"-\");\n            } else if (arg.startsWith(\"-\")) {\n                final String opt = Util.stripLeadingHyphens(arg);\n\n                if (options.hasOption(opt)) {\n                    tokens.add(arg);\n                } else if (opt.indexOf('=') != -1\n                        && options.hasOption(opt.substring(0, opt.indexOf('=')))) {\n                    tokens.add(arg.substring(0, arg.indexOf('='))); // --foo\n                    tokens.add(arg.substring(arg.indexOf('=') + 1)); // value\n                } else if (options.hasOption(arg.substring(0, 2))) {\n                    tokens.add(arg.substring(0, 2)); // -D\n                    tokens.add(arg.substring(2)); // property=value\n                } else {\n                    eatTheRest = stopAtNonOption;\n                    tokens.add(arg);\n                }\n            } else {\n                tokens.add(arg);\n            }\n\n            if (eatTheRest) {\n                for (i++; i < arguments.length; i++) { // NOPMD\n                    tokens.add(arguments[i]);\n                }\n            }\n        }\n\n        return tokens.toArray(Util.EMPTY_STRING_ARRAY);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "final|boolean|stopAtNonOption": {
+                "identifier": "final|boolean|stopAtNonOption",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 05:17:29",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def   _flatten(self, options:  \"Options\", arguments: List[Tuple[str, str]], stopAtNonOption: bool) -> List[Tuple[str, str]]:",
+            "        from src.main.org.apache.commons.cli.Util import Util",
+            "        tokens = []",
+            "        eatTheRest = False",
+            "        for i in range(len(arguments)):",
+            "            arg = arguments[i]",
+            "            if arg == \"--\":",
+            "                eatTheRest = True",
+            "                tokens.append((\"--\", None))",
+            "            elif arg == \"-\":",
+            "                tokens.append((\"-\", None))",
+            "            elif arg.startswith(\"-\"):",
+            "                opt = Util.stripLeadingHyphens(arg)",
+            "                if options.hasOption(opt):",
+            "                    tokens.append((arg, None))",
+            "                elif \"=\" in opt and options.hasOption(opt[:opt.index('=')]):",
+            "                    tokens.append((opt[:opt.index('=')], opt[opt.index('=')+1:]))    #  --foo",
+            "                elif len(opt) >= 2 and options.hasOption(arg[:2]):",
+            "                    tokens.append((arg[:2], arg[2:]))    # -D",
+            "                else:",
+            "                    eatTheRest = stopAtNonOption",
+            "                    tokens.append((arg, None))",
+            "            else:",
+            "                tokens.append((arg, None))",
+            "            if eatTheRest:",
+            "                for j in range(i+1, len(arguments)):    # NOPMD",
+            "                    tokens.append((arguments[j], None))",
+            "        return tokens"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/cli/GnuParserTest_testMissingRequiredOption_decomposed_mocker_44_GnuParser_flatten.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-cli/src/test/org/apache/commons/cli/GnuParserTest_testMissingRequiredOption_decomposed_mocker_44_GnuParser_flatten.py\", line 56, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":1503226876,\\\"type\\\":\\\"java.util.Arrays$ArrayList\\\",\\\"collection_elements\\\":[{\\\"memory_address\\\":1547389596,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"-a\\\"}]}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 157.6708583831787,
+          "generation_timestamp": "2026-02-22T08:29:02.122444",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _flatten(self, options: \"Options\", arguments: List[Tuple[str, str]], stopAtNonOption: bool) -> List[Tuple[str, str]]:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class GnuParser(Parser):\n\n"
+    }
+  },
+  "import_map": {
+    "ArrayList": "java.util.ArrayList",
+    "List": "java.util.List"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from src.main.org.apache.commons.cli.Parser import Parser",
+    "from typing import List",
+    "from typing import List, Tuple"
+  ]
+}

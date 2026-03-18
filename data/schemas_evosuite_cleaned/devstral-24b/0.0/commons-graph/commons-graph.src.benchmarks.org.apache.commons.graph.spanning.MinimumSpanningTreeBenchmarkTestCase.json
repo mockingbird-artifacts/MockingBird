@@ -1,0 +1,918 @@
+{
+    "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/src/benchmarks/java/org/apache/commons/graph/spanning/MinimumSpanningTreeBenchmarkTestCase.java",
+    "imports": {
+        "22-22:import static org.apache.commons.graph.CommonsGraph.minimumSpanningTree;": {
+            "start": 22,
+            "end": 22,
+            "body": "import static org.apache.commons.graph.CommonsGraph.minimumSpanningTree;"
+        },
+        "23-23:import static org.apache.commons.graph.CommonsGraph.newUndirectedMutableGraph;": {
+            "start": 23,
+            "end": 23,
+            "body": "import static org.apache.commons.graph.CommonsGraph.newUndirectedMutableGraph;"
+        },
+        "24-24:import static org.junit.Assert.assertTrue;": {
+            "start": 24,
+            "end": 24,
+            "body": "import static org.junit.Assert.assertTrue;"
+        },
+        "26-26:import static java.lang.String.format;": {
+            "start": 26,
+            "end": 26,
+            "body": "import static java.lang.String.format;"
+        },
+        "27-27:import static java.lang.String.valueOf;": {
+            "start": 27,
+            "end": 27,
+            "body": "import static java.lang.String.valueOf;"
+        },
+        "29-29:import org.apache.commons.graph.GraphException;": {
+            "start": 29,
+            "end": 29,
+            "body": "import org.apache.commons.graph.GraphException;"
+        },
+        "30-30:import org.apache.commons.graph.Mapper;": {
+            "start": 30,
+            "end": 30,
+            "body": "import org.apache.commons.graph.Mapper;"
+        },
+        "31-31:import org.apache.commons.graph.SpanningTree;": {
+            "start": 31,
+            "end": 31,
+            "body": "import org.apache.commons.graph.SpanningTree;"
+        },
+        "32-32:import org.apache.commons.graph.builder.AbstractGraphConnection;": {
+            "start": 32,
+            "end": 32,
+            "body": "import org.apache.commons.graph.builder.AbstractGraphConnection;"
+        },
+        "33-33:import org.apache.commons.graph.model.BaseLabeledVertex;": {
+            "start": 33,
+            "end": 33,
+            "body": "import org.apache.commons.graph.model.BaseLabeledVertex;"
+        },
+        "34-34:import org.apache.commons.graph.model.BaseLabeledWeightedEdge;": {
+            "start": 34,
+            "end": 34,
+            "body": "import org.apache.commons.graph.model.BaseLabeledWeightedEdge;"
+        },
+        "35-35:import org.apache.commons.graph.model.UndirectedMutableGraph;": {
+            "start": 35,
+            "end": 35,
+            "body": "import org.apache.commons.graph.model.UndirectedMutableGraph;"
+        },
+        "36-36:import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;": {
+            "start": 36,
+            "end": 36,
+            "body": "import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;"
+        },
+        "37-37:import org.junit.BeforeClass;": {
+            "start": 37,
+            "end": 37,
+            "body": "import org.junit.BeforeClass;"
+        },
+        "38-38:import org.junit.Test;": {
+            "start": 38,
+            "end": 38,
+            "body": "import org.junit.Test;"
+        },
+        "40-40:import java.util.ArrayList;": {
+            "start": 40,
+            "end": 40,
+            "body": "import java.util.ArrayList;"
+        },
+        "41-41:import java.util.List;": {
+            "start": 41,
+            "end": 41,
+            "body": "import java.util.List;"
+        },
+        "42-42:import java.util.Random;": {
+            "start": 42,
+            "end": 42,
+            "body": "import java.util.Random;"
+        }
+    },
+    "classes": {
+        "44-138:MinimumSpanningTreeBenchmarkTestCase": {
+            "start": 44,
+            "end": 138,
+            "is_abstract": false,
+            "is_interface": false,
+            "is_enum": false,
+            "modifiers": [
+                "public",
+                "final"
+            ],
+            "nested_inside": "",
+            "nests": [],
+            "implements": [],
+            "extends": [],
+            "methods": {
+                "52-104:setUp": {
+                    "start": 52,
+                    "end": 104,
+                    "body": [
+                        "@BeforeClass",
+                        "    public static void setUp() {",
+                        "        weightedEdges =",
+                        "                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {",
+                        "",
+                        "                    public Double map(BaseLabeledWeightedEdge<Double> input) {",
+                        "                        return input.getWeight();",
+                        "                    }",
+                        "                };",
+                        "",
+                        "        graph =",
+                        "                newUndirectedMutableGraph(",
+                        "                        new AbstractGraphConnection<",
+                        "                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {",
+                        "                            Random r = new Random();",
+                        "",
+                        "                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {",
+                        "                                try {",
+                        "                                    addEdge(",
+                        "                                                    new BaseLabeledWeightedEdge<Double>(",
+                        "                                                            format(\"%s -> %s\", src, dst),",
+                        "                                                            (double) r.nextInt(10)))",
+                        "                                            .from(src)",
+                        "                                            .to(dst);",
+                        "                                    return true;",
+                        "                                } catch (GraphException e) {",
+                        "                                    return false;",
+                        "                                }",
+                        "                            }",
+                        "",
+                        "                            public void connect0() {",
+                        "                                List<BaseLabeledVertex> vertices =",
+                        "                                        new ArrayList<BaseLabeledVertex>();",
+                        "                                for (int i = 0; i < NODES; i++) {",
+                        "                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));",
+                        "                                    addVertex(v);",
+                        "                                    vertices.add(v);",
+                        "                                }",
+                        "",
+                        "                                for (int i = 0; i < NODES - 1; i++) {",
+                        "                                    addEdge(vertices.get(i), vertices.get(i + 1));",
+                        "                                }",
+                        "",
+                        "                                addEdge(vertices.get(NODES - 1), vertices.get(0));",
+                        "                                int maxEdges = Math.max(0, EDGES - NODES);",
+                        "                                for (int i = 0; i < maxEdges; i++) {",
+                        "                                    while (!addEdge(",
+                        "                                            vertices.get(r.nextInt(NODES)),",
+                        "                                            vertices.get(r.nextInt(NODES)))) {}",
+                        "                                }",
+                        "                            }",
+                        "                        });",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [
+                        "@BeforeClass"
+                    ],
+                    "modifiers": [
+                        "public",
+                        "static"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                        "BaseLabeledWeightedEdge<Double>",
+                        "Double",
+                        "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                        "Random",
+                        "boolean",
+                        "BaseLabeledVertex",
+                        "double",
+                        "GraphException",
+                        "void",
+                        "List<BaseLabeledVertex>",
+                        "ArrayList<BaseLabeledVertex>",
+                        "int"
+                    ],
+                    "signature": "setUp()",
+                    "parameters": [],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2025-10-31 20:28:24",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "Mapper<BaseLabeledWeightedEdge<Double>, Double>": {
+                                "identifier": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:28:28",
+                                "source_type": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                                "generation": "[TOOL_CALLS]PYTHON IMPORTS:\n```\nfrom typing import Callable\n```\n\nPYTHON TRANSLATION:\n```\nCallable[[BaseLabeledWeightedEdge], float]\n```\n\nREASONING:\nThe Java type `Mapper<BaseLabeledWeightedEdge<Double>, Double>` is a functional interface that maps an object of type `BaseLabeledWeightedEdge<Double>` to a `Double`. In Python, this can be represented using the `Callable` type from the `typing` module, where the first parameter is the input type and the second parameter is the return type. Since `Double` in Java corresponds to `float` in Python, the equivalent type in Python is `Callable[[BaseLabeledWeightedEdge], float]`.",
+                                "imports": "from typing import Callable",
+                                "translated_target_type": "Callable[[BaseLabeledWeightedEdge], float]",
+                                "reasoning": "The Java type `Mapper<BaseLabeledWeightedEdge<Double>, Double>` is a functional interface that maps an object of type `BaseLabeledWeightedEdge<Double>` to a `Double`. In Python, this can be represented using the `Callable` type from the `typing` module, where the first parameter is the input type and the second parameter is the return type. Since `Double` in Java corresponds to `float` in Python, the equivalent type in Python is `Callable[[BaseLabeledWeightedEdge], float]`.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMapper<BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @BeforeClass\n    public static void setUp() {\n        weightedEdges =\n                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {\n\n                    public Double map(BaseLabeledWeightedEdge<Double> input) {\n                        return input.getWeight();\n                    }\n                };\n\n        graph =\n                newUndirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {\n                            Random r = new Random();\n\n                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {\n                                try {\n                                    addEdge(\n                                                    new BaseLabeledWeightedEdge<Double>(\n                                                            format(\"%s -> %s\", src, dst),\n                                                            (double) r.nextInt(10)))\n                                            .from(src)\n                                            .to(dst);\n                                    return true;\n                                } catch (GraphException e) {\n                                    return false;\n                                }\n                            }\n\n                            public void connect0() {\n                                List<BaseLabeledVertex> vertices =\n                                        new ArrayList<BaseLabeledVertex>();\n                                for (int i = 0; i < NODES; i++) {\n                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));\n                                    addVertex(v);\n                                    vertices.add(v);\n                                }\n\n                                for (int i = 0; i < NODES - 1; i++) {\n                                    addEdge(vertices.get(i), vertices.get(i + 1));\n                                }\n\n                                addEdge(vertices.get(NODES - 1), vertices.get(0));\n                                int maxEdges = Math.max(0, EDGES - NODES);\n                                for (int i = 0; i < maxEdges; i++) {\n                                    while (!addEdge(\n                                            vertices.get(r.nextInt(NODES)),\n                                            vertices.get(r.nextInt(NODES)))) {}\n                                }\n                            }\n                        });\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "BaseLabeledWeightedEdge<Double>": {
+                                "identifier": "BaseLabeledWeightedEdge<Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:28:38",
+                                "source_type": "BaseLabeledWeightedEdge<Double>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nT = TypeVar('T')\nclass BaseLabeledWeightedEdge(Generic[T]):\n    def __init__(self, label: str, weight: T):\n        self.label = label\n        self.weight = weight\n\n    def get_weight(self) -> T:\n        return self.weight\n```\n\nREASONING:\nThe Java type `BaseLabeledWeightedEdge<Double>` is a generic class that takes a type parameter, in this case, `Double`. In Python, we can achieve similar functionality using the `Generic` class from the `typing` module. The `BaseLabeledWeightedEdge` class is defined with a type variable `T` to represent the weight type, which can be any type, including `float` (the equivalent of Java's `Double`). The `get_weight` method returns the weight of the edge.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @BeforeClass\n    public static void setUp() {\n        weightedEdges =\n                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {\n\n                    public Double map(BaseLabeledWeightedEdge<Double> input) {\n                        return input.getWeight();\n                    }\n                };\n\n        graph =\n                newUndirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {\n                            Random r = new Random();\n\n                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {\n                                try {\n                                    addEdge(\n                                                    new BaseLabeledWeightedEdge<Double>(\n                                                            format(\"%s -> %s\", src, dst),\n                                                            (double) r.nextInt(10)))\n                                            .from(src)\n                                            .to(dst);\n                                    return true;\n                                } catch (GraphException e) {\n                                    return false;\n                                }\n                            }\n\n                            public void connect0() {\n                                List<BaseLabeledVertex> vertices =\n                                        new ArrayList<BaseLabeledVertex>();\n                                for (int i = 0; i < NODES; i++) {\n                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));\n                                    addVertex(v);\n                                    vertices.add(v);\n                                }\n\n                                for (int i = 0; i < NODES - 1; i++) {\n                                    addEdge(vertices.get(i), vertices.get(i + 1));\n                                }\n\n                                addEdge(vertices.get(NODES - 1), vertices.get(0));\n                                int maxEdges = Math.max(0, EDGES - NODES);\n                                for (int i = 0; i < maxEdges; i++) {\n                                    while (!addEdge(\n                                            vertices.get(r.nextInt(NODES)),\n                                            vertices.get(r.nextInt(NODES)))) {}\n                                }\n                            }\n                        });\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "Double": {
+                                "identifier": "Double",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:28:43",
+                                "source_type": "Double",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "float",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                                "identifier": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:28:52",
+                                "source_type": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic, List, Callable\n```\n\nPYTHON TRANSLATION:\n```\nT = TypeVar('T')\nV = TypeVar('V')\nE = TypeVar('E')\n\nclass BaseLabeledVertex(Generic[T]):\n    pass\n\nclass BaseLabeledWeightedEdge(Generic[V]):\n    def __init__(self, label: str, weight: V):\n        self.label = label\n        self.weight = weight\n\nclass AbstractGraphConnection(Generic[V, E]):\n    def add_vertex(self, vertex: V) -> None:\n        pass\n\n    def add_edge(self, edge: E) -> None:\n        pass\n\n    def connect(self) -> None:\n        pass\n```\n\nREASONING:\nThe Java type `AbstractGraphConnection<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>` is translated to a Python class `AbstractGraphConnection` with generic type parameters `V` and `E`. The `BaseLabeledVertex` and `BaseLabeledWeightedEdge` classes are also defined as generic classes to maintain the same functionality. The `BaseLabeledWeightedEdge` class includes a constructor to initialize the label and weight. The `AbstractGraphConnection` class includes methods to add vertices and edges, and a method to connect the graph.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nAbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @BeforeClass\n    public static void setUp() {\n        weightedEdges =\n                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {\n\n                    public Double map(BaseLabeledWeightedEdge<Double> input) {\n                        return input.getWeight();\n                    }\n                };\n\n        graph =\n                newUndirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {\n                            Random r = new Random();\n\n                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {\n                                try {\n                                    addEdge(\n                                                    new BaseLabeledWeightedEdge<Double>(\n                                                            format(\"%s -> %s\", src, dst),\n                                                            (double) r.nextInt(10)))\n                                            .from(src)\n                                            .to(dst);\n                                    return true;\n                                } catch (GraphException e) {\n                                    return false;\n                                }\n                            }\n\n                            public void connect0() {\n                                List<BaseLabeledVertex> vertices =\n                                        new ArrayList<BaseLabeledVertex>();\n                                for (int i = 0; i < NODES; i++) {\n                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));\n                                    addVertex(v);\n                                    vertices.add(v);\n                                }\n\n                                for (int i = 0; i < NODES - 1; i++) {\n                                    addEdge(vertices.get(i), vertices.get(i + 1));\n                                }\n\n                                addEdge(vertices.get(NODES - 1), vertices.get(0));\n                                int maxEdges = Math.max(0, EDGES - NODES);\n                                for (int i = 0; i < maxEdges; i++) {\n                                    while (!addEdge(\n                                            vertices.get(r.nextInt(NODES)),\n                                            vertices.get(r.nextInt(NODES)))) {}\n                                }\n                            }\n                        });\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "Random": {
+                                "identifier": "Random",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:00",
+                                "source_type": "Random",
+                                "generation": "PYTHON IMPORTS:\n```\nimport random\n```\n\nPYTHON TRANSLATION:\n```\nrandom.Random\n```\n\nREASONING:\nThe `Random` class in Java is used to generate a stream of pseudorandom numbers. In Python, the equivalent functionality is provided by the `random` module, specifically the `random.Random` class. This class in Python can be used to generate pseudorandom numbers similarly to how the `Random` class is used in Java.",
+                                "imports": "import random",
+                                "translated_target_type": "random.Random",
+                                "reasoning": "The `Random` class in Java is used to generate a stream of pseudorandom numbers. In Python, the equivalent functionality is provided by the `random` module, specifically the `random.Random` class. This class in Python can be used to generate pseudorandom numbers similarly to how the `Random` class is used in Java.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nRandom\n```\n\nJAVA TYPE DESCRIPTION:\nAn instance of this class is used to generate a stream of\n pseudorandom numbers; its period is only 248.\n The class uses a 48-bit seed, which is\n modified using a linear congruential formula. (See Donald E. Knuth,\n The Art of Computer Programming, Volume 2, Third\n edition: Seminumerical Algorithms, Section 3.2.1.)\n \n\nJAVA CODE:\n```\n    @BeforeClass\n    public static void setUp() {\n        weightedEdges =\n                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {\n\n                    public Double map(BaseLabeledWeightedEdge<Double> input) {\n                        return input.getWeight();\n                    }\n                };\n\n        graph =\n                newUndirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {\n                            Random r = new Random();\n\n                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {\n                                try {\n                                    addEdge(\n                                                    new BaseLabeledWeightedEdge<Double>(\n                                                            format(\"%s -> %s\", src, dst),\n                                                            (double) r.nextInt(10)))\n                                            .from(src)\n                                            .to(dst);\n                                    return true;\n                                } catch (GraphException e) {\n                                    return false;\n                                }\n                            }\n\n                            public void connect0() {\n                                List<BaseLabeledVertex> vertices =\n                                        new ArrayList<BaseLabeledVertex>();\n                                for (int i = 0; i < NODES; i++) {\n                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));\n                                    addVertex(v);\n                                    vertices.add(v);\n                                }\n\n                                for (int i = 0; i < NODES - 1; i++) {\n                                    addEdge(vertices.get(i), vertices.get(i + 1));\n                                }\n\n                                addEdge(vertices.get(NODES - 1), vertices.get(0));\n                                int maxEdges = Math.max(0, EDGES - NODES);\n                                for (int i = 0; i < maxEdges; i++) {\n                                    while (!addEdge(\n                                            vertices.get(r.nextInt(NODES)),\n                                            vertices.get(r.nextInt(NODES)))) {}\n                                }\n                            }\n                        });\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "boolean": {
+                                "identifier": "boolean",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:03",
+                                "source_type": "boolean",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "bool",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "BaseLabeledVertex": {
+                                "identifier": "BaseLabeledVertex",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:03",
+                                "source_type": "BaseLabeledVertex",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "BaseLabeledVertex",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "double": {
+                                "identifier": "double",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:03",
+                                "source_type": "double",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "float",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "GraphException": {
+                                "identifier": "GraphException",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:03",
+                                "source_type": "GraphException",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "GraphException",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:03",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "List<BaseLabeledVertex>": {
+                                "identifier": "List<BaseLabeledVertex>",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:03",
+                                "source_type": "List<BaseLabeledVertex>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import List\n```\n\nPYTHON TRANSLATION:\n```\nList[BaseLabeledVertex]\n```\n\nREASONING:\nThe Java type `List<BaseLabeledVertex>` is an ordered collection that allows precise control over the insertion of elements and access by integer index. In Python, the equivalent type is `List[BaseLabeledVertex]` from the `typing` module, which provides similar functionality for an ordered collection of elements.",
+                                "imports": "from typing import List",
+                                "translated_target_type": "List[BaseLabeledVertex]",
+                                "reasoning": "The Java type `List<BaseLabeledVertex>` is an ordered collection that allows precise control over the insertion of elements and access by integer index. In Python, the equivalent type is `List[BaseLabeledVertex]` from the `typing` module, which provides similar functionality for an ordered collection of elements.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nList<BaseLabeledVertex>\n```\n\nJAVA TYPE DESCRIPTION:\nAn ordered collection, where the user has precise control over where in the\n list each element is inserted.  The user can access elements by their integer\n index (position in the list), and search for elements in the list.\n\n\nJAVA CODE:\n```\n    @BeforeClass\n    public static void setUp() {\n        weightedEdges =\n                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {\n\n                    public Double map(BaseLabeledWeightedEdge<Double> input) {\n                        return input.getWeight();\n                    }\n                };\n\n        graph =\n                newUndirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {\n                            Random r = new Random();\n\n                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {\n                                try {\n                                    addEdge(\n                                                    new BaseLabeledWeightedEdge<Double>(\n                                                            format(\"%s -> %s\", src, dst),\n                                                            (double) r.nextInt(10)))\n                                            .from(src)\n                                            .to(dst);\n                                    return true;\n                                } catch (GraphException e) {\n                                    return false;\n                                }\n                            }\n\n                            public void connect0() {\n                                List<BaseLabeledVertex> vertices =\n                                        new ArrayList<BaseLabeledVertex>();\n                                for (int i = 0; i < NODES; i++) {\n                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));\n                                    addVertex(v);\n                                    vertices.add(v);\n                                }\n\n                                for (int i = 0; i < NODES - 1; i++) {\n                                    addEdge(vertices.get(i), vertices.get(i + 1));\n                                }\n\n                                addEdge(vertices.get(NODES - 1), vertices.get(0));\n                                int maxEdges = Math.max(0, EDGES - NODES);\n                                for (int i = 0; i < maxEdges; i++) {\n                                    while (!addEdge(\n                                            vertices.get(r.nextInt(NODES)),\n                                            vertices.get(r.nextInt(NODES)))) {}\n                                }\n                            }\n                        });\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "ArrayList<BaseLabeledVertex>": {
+                                "identifier": "ArrayList<BaseLabeledVertex>",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:05",
+                                "source_type": "ArrayList<BaseLabeledVertex>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import List\n```\n\nPYTHON TRANSLATION:\n```\nList[BaseLabeledVertex]\n```\n\nREASONING:\nThe Java type `ArrayList<BaseLabeledVertex>` is a resizable array implementation of the List interface. In Python, the equivalent type that maintains the same functionality is `List[BaseLabeledVertex]`, which is a dynamic array that can hold elements of type `BaseLabeledVertex`.",
+                                "imports": "from typing import List",
+                                "translated_target_type": "List[BaseLabeledVertex]",
+                                "reasoning": "The Java type `ArrayList<BaseLabeledVertex>` is a resizable array implementation of the List interface. In Python, the equivalent type that maintains the same functionality is `List[BaseLabeledVertex]`, which is a dynamic array that can hold elements of type `BaseLabeledVertex`.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nArrayList<BaseLabeledVertex>\n```\n\nJAVA TYPE DESCRIPTION:\nResizable-array implementation of the List interface.  Implements\n all optional list operations, and permits all elements, including\n null.  In addition to implementing the List interface,\n this class provides methods to manipulate the size of the array that is\n used internally to store the list.  (This class is roughly equivalent to\n Vector, except that it is unsynchronized.)\n\n\nJAVA CODE:\n```\n    @BeforeClass\n    public static void setUp() {\n        weightedEdges =\n                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {\n\n                    public Double map(BaseLabeledWeightedEdge<Double> input) {\n                        return input.getWeight();\n                    }\n                };\n\n        graph =\n                newUndirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {\n                            Random r = new Random();\n\n                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {\n                                try {\n                                    addEdge(\n                                                    new BaseLabeledWeightedEdge<Double>(\n                                                            format(\"%s -> %s\", src, dst),\n                                                            (double) r.nextInt(10)))\n                                            .from(src)\n                                            .to(dst);\n                                    return true;\n                                } catch (GraphException e) {\n                                    return false;\n                                }\n                            }\n\n                            public void connect0() {\n                                List<BaseLabeledVertex> vertices =\n                                        new ArrayList<BaseLabeledVertex>();\n                                for (int i = 0; i < NODES; i++) {\n                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));\n                                    addVertex(v);\n                                    vertices.add(v);\n                                }\n\n                                for (int i = 0; i < NODES - 1; i++) {\n                                    addEdge(vertices.get(i), vertices.get(i + 1));\n                                }\n\n                                addEdge(vertices.get(NODES - 1), vertices.get(0));\n                                int maxEdges = Math.max(0, EDGES - NODES);\n                                for (int i = 0; i < maxEdges; i++) {\n                                    while (!addEdge(\n                                            vertices.get(r.nextInt(NODES)),\n                                            vertices.get(r.nextInt(NODES)))) {}\n                                }\n                            }\n                        });\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "int": {
+                                "identifier": "int",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:08",
+                                "source_type": "int",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "int",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {},
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "106-115:testPerformBoruvka": {
+                    "start": 106,
+                    "end": 115,
+                    "body": [
+                        "@Test",
+                        "    public void testPerformBoruvka() {",
+                        "        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =",
+                        "                minimumSpanningTree(graph)",
+                        "                        .whereEdgesHaveWeights(weightedEdges)",
+                        "                        .fromArbitrarySource()",
+                        "                        .applyingBoruvkaAlgorithm(new DoubleWeightBaseOperations());",
+                        "",
+                        "        assertTrue(actual.getSize() > 0);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [
+                        "@Test"
+                    ],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                        "BaseLabeledWeightedEdge<Double>",
+                        "DoubleWeightBaseOperations"
+                    ],
+                    "signature": "testPerformBoruvka()",
+                    "parameters": [],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2025-10-31 20:29:08",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                                "identifier": "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:12",
+                                "source_type": "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                                "generation": "[TOOL_CALLS]PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nSpanningTree[BaseLabeledVertex, BaseLabeledWeightedEdge[float], float]\n```\n\nREASONING:\nThe Java type `SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>` can be translated to Python using the `typing` module. The `TypeVar` and `Generic` classes are used to define generic types in Python. The type `SpanningTree` is assumed to be a generic class that takes three type parameters, which are translated directly from Java to Python. In Python, the `Double` type in Java corresponds to the `float` type.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testPerformBoruvka() {\n        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =\n                minimumSpanningTree(graph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .fromArbitrarySource()\n                        .applyingBoruvkaAlgorithm(new DoubleWeightBaseOperations());\n\n        assertTrue(actual.getSize() > 0);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Double' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "BaseLabeledWeightedEdge<Double>": {
+                                "identifier": "BaseLabeledWeightedEdge<Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:19",
+                                "source_type": "BaseLabeledWeightedEdge<Double>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```\nBaseLabeledWeightedEdge[T]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `BaseLabeledWeightedEdge<Double>` can be represented using generics with a type variable. Since `Double` in Java corresponds to `float` in Python, the type `BaseLabeledWeightedEdge[T]` is the appropriate translation.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testPerformBoruvka() {\n        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =\n                minimumSpanningTree(graph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .fromArbitrarySource()\n                        .applyingBoruvkaAlgorithm(new DoubleWeightBaseOperations());\n\n        assertTrue(actual.getSize() > 0);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "DoubleWeightBaseOperations": {
+                                "identifier": "DoubleWeightBaseOperations",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:22",
+                                "source_type": "DoubleWeightBaseOperations",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DoubleWeightBaseOperations",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {},
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "117-126:testPerformKruskal": {
+                    "start": 117,
+                    "end": 126,
+                    "body": [
+                        "@Test",
+                        "    public void testPerformKruskal() {",
+                        "        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =",
+                        "                minimumSpanningTree(graph)",
+                        "                        .whereEdgesHaveWeights(weightedEdges)",
+                        "                        .fromArbitrarySource()",
+                        "                        .applyingKruskalAlgorithm(new DoubleWeightBaseOperations());",
+                        "",
+                        "        assertTrue(actual.getSize() > 0);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [
+                        "@Test"
+                    ],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                        "BaseLabeledWeightedEdge<Double>",
+                        "DoubleWeightBaseOperations"
+                    ],
+                    "signature": "testPerformKruskal()",
+                    "parameters": [],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2025-10-31 20:29:22",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                                "identifier": "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:25",
+                                "source_type": "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nSpanningTree[BaseLabeledVertex, BaseLabeledWeightedEdge[float], float]\n```\n\nREASONING:\nThe Java type `SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>` uses the `Double` type, which in Python is equivalent to `float`. The type parameters remain the same, and the syntax is adapted to Python's type hinting system.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testPerformKruskal() {\n        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =\n                minimumSpanningTree(graph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .fromArbitrarySource()\n                        .applyingKruskalAlgorithm(new DoubleWeightBaseOperations());\n\n        assertTrue(actual.getSize() > 0);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Double' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "BaseLabeledWeightedEdge<Double>": {
+                                "identifier": "BaseLabeledWeightedEdge<Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:32",
+                                "source_type": "BaseLabeledWeightedEdge<Double>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```\nBaseLabeledWeightedEdge[T]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `BaseLabeledWeightedEdge<Double>` can be represented using generics with a type variable. Since `Double` in Java corresponds to `float` in Python, the type `BaseLabeledWeightedEdge[T]` is the appropriate translation.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testPerformKruskal() {\n        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =\n                minimumSpanningTree(graph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .fromArbitrarySource()\n                        .applyingKruskalAlgorithm(new DoubleWeightBaseOperations());\n\n        assertTrue(actual.getSize() > 0);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "DoubleWeightBaseOperations": {
+                                "identifier": "DoubleWeightBaseOperations",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:36",
+                                "source_type": "DoubleWeightBaseOperations",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DoubleWeightBaseOperations",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {},
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "128-137:testPerformPrim": {
+                    "start": 128,
+                    "end": 137,
+                    "body": [
+                        "@Test",
+                        "    public void testPerformPrim() {",
+                        "        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =",
+                        "                minimumSpanningTree(graph)",
+                        "                        .whereEdgesHaveWeights(weightedEdges)",
+                        "                        .fromArbitrarySource()",
+                        "                        .applyingPrimAlgorithm(new DoubleWeightBaseOperations());",
+                        "",
+                        "        assertTrue(actual.getSize() > 0);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [
+                        "@Test"
+                    ],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                        "BaseLabeledWeightedEdge<Double>",
+                        "DoubleWeightBaseOperations"
+                    ],
+                    "signature": "testPerformPrim()",
+                    "parameters": [],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2025-10-31 20:29:36",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                                "identifier": "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:41",
+                                "source_type": "SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nSpanningTree[BaseLabeledVertex, BaseLabeledWeightedEdge[float], float]\n```\n\nREASONING:\nThe Java type `SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>` can be translated to Python using the `typing` module. The `TypeVar` and `Generic` classes are used to define generic types in Python. The `BaseLabeledVertex` and `BaseLabeledWeightedEdge[Double]` are assumed to be classes or types that can be directly translated to Python. The `Double` type in Java can be represented as `float` in Python.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testPerformPrim() {\n        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =\n                minimumSpanningTree(graph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .fromArbitrarySource()\n                        .applyingPrimAlgorithm(new DoubleWeightBaseOperations());\n\n        assertTrue(actual.getSize() > 0);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Double' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "BaseLabeledWeightedEdge<Double>": {
+                                "identifier": "BaseLabeledWeightedEdge<Double>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:50",
+                                "source_type": "BaseLabeledWeightedEdge<Double>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n\nT = TypeVar('T')\n```\n\nPYTHON TRANSLATION:\n```\nBaseLabeledWeightedEdge[T]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `BaseLabeledWeightedEdge<Double>` can be represented using generics with a type variable. Since `Double` in Java corresponds to `float` in Python, the type `BaseLabeledWeightedEdge[T]` is the appropriate translation.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testPerformPrim() {\n        SpanningTree<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =\n                minimumSpanningTree(graph)\n                        .whereEdgesHaveWeights(weightedEdges)\n                        .fromArbitrarySource()\n                        .applyingPrimAlgorithm(new DoubleWeightBaseOperations());\n\n        assertTrue(actual.getSize() > 0);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "DoubleWeightBaseOperations": {
+                                "identifier": "DoubleWeightBaseOperations",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2025-10-31 20:29:54",
+                                "source_type": "DoubleWeightBaseOperations",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "DoubleWeightBaseOperations",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {},
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            },
+            "fields": {
+                "45-45:NODES": {
+                    "start": 45,
+                    "end": 45,
+                    "enum_constant": false,
+                    "body": [
+                        "private static final int NODES = 1000;"
+                    ],
+                    "modifiers": [
+                        "private",
+                        "static",
+                        "final"
+                    ],
+                    "types": [
+                        "int"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "int": {
+                                "identifier": "int",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "types",
+                                "timestamp": "2025-10-31 20:28:09",
+                                "source_type": "int",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "int",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "46-46:EDGES": {
+                    "start": 46,
+                    "end": 46,
+                    "enum_constant": false,
+                    "body": [
+                        "private static final int EDGES = 6000;"
+                    ],
+                    "modifiers": [
+                        "private",
+                        "static",
+                        "final"
+                    ],
+                    "types": [
+                        "int"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "int": {
+                                "identifier": "int",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "types",
+                                "timestamp": "2025-10-31 20:28:09",
+                                "source_type": "int",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "int",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "48-48:graph": {
+                    "start": 48,
+                    "end": 48,
+                    "enum_constant": false,
+                    "body": [
+                        "private static UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph;"
+                    ],
+                    "modifiers": [
+                        "private",
+                        "static"
+                    ],
+                    "types": [
+                        "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                                "identifier": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "types",
+                                "timestamp": "2025-10-31 20:28:13",
+                                "source_type": "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Dict, List, Tuple\n```\n\nPYTHON TRANSLATION:\n```\nDict[BaseLabeledVertex, List[Tuple[BaseLabeledVertex, Double]]]\n```\n\nREASONING:\nThe Java type `UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>` represents an undirected graph with labeled vertices and weighted edges. In Python, we can represent this using a dictionary where the keys are vertices (`BaseLabeledVertex`) and the values are lists of tuples. Each tuple contains a neighboring vertex and the weight of the edge connecting them (`BaseLabeledVertex, Double`). This structure maintains the same functionality as the Java type.",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nUndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph;\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'networkx'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "50-50:weightedEdges": {
+                    "start": 50,
+                    "end": 50,
+                    "enum_constant": false,
+                    "body": [
+                        "private static Mapper<BaseLabeledWeightedEdge<Double>, Double> weightedEdges;"
+                    ],
+                    "modifiers": [
+                        "private",
+                        "static"
+                    ],
+                    "types": [
+                        "Mapper<BaseLabeledWeightedEdge<Double>, Double>"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "Mapper<BaseLabeledWeightedEdge<Double>, Double>": {
+                                "identifier": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "types",
+                                "timestamp": "2025-10-31 20:28:21",
+                                "source_type": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                                "generation": "[TOOL_CALLS]PYTHON IMPORTS:\n```\nfrom typing import Callable\n```\n\nPYTHON TRANSLATION:\n```\nCallable[[BaseLabeledWeightedEdge, float], float]\n```\n\nREASONING:\nIn Java, `Mapper<BaseLabeledWeightedEdge<Double>, Double>` represents a functional interface that maps an object of type `BaseLabeledWeightedEdge<Double>` to a `Double`. In Python, the equivalent type is `Callable[[BaseLabeledWeightedEdge, float], float]`, which represents a callable (function) that takes an instance of `BaseLabeledWeightedEdge` and returns a `float`.",
+                                "imports": "from typing import Callable",
+                                "translated_target_type": "Callable[[BaseLabeledWeightedEdge, float], float]",
+                                "reasoning": "In Java, `Mapper<BaseLabeledWeightedEdge<Double>, Double>` represents a functional interface that maps an object of type `BaseLabeledWeightedEdge<Double>` to a `Double`. In Python, the equivalent type is `Callable[[BaseLabeledWeightedEdge, float], float]`, which represents a callable (function) that takes an instance of `BaseLabeledWeightedEdge` and returns a `float`.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMapper<BaseLabeledWeightedEdge<Double>, Double>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static Mapper<BaseLabeledWeightedEdge<Double>, Double> weightedEdges;\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            }
+        }
+    },
+    "import_map": {
+        "minimumSpanningTree": "static org.apache.commons.graph.CommonsGraph.minimumSpanningTree",
+        "newUndirectedMutableGraph": "static org.apache.commons.graph.CommonsGraph.newUndirectedMutableGraph",
+        "assertTrue": "static org.junit.Assert.assertTrue",
+        "format": "static java.lang.String.format",
+        "valueOf": "static java.lang.String.valueOf",
+        "GraphException": "org.apache.commons.graph.GraphException",
+        "Mapper": "org.apache.commons.graph.Mapper",
+        "SpanningTree": "org.apache.commons.graph.SpanningTree",
+        "AbstractGraphConnection": "org.apache.commons.graph.builder.AbstractGraphConnection",
+        "BaseLabeledVertex": "org.apache.commons.graph.model.BaseLabeledVertex",
+        "BaseLabeledWeightedEdge": "org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+        "UndirectedMutableGraph": "org.apache.commons.graph.model.UndirectedMutableGraph",
+        "DoubleWeightBaseOperations": "org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations",
+        "BeforeClass": "org.junit.BeforeClass",
+        "Test": "org.junit.Test",
+        "ArrayList": "java.util.ArrayList",
+        "List": "java.util.List",
+        "Random": "java.util.Random"
+    }
+}

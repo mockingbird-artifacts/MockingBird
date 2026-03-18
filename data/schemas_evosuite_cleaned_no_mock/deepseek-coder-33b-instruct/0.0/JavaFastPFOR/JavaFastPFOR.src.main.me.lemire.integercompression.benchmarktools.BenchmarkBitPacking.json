@@ -1,0 +1,858 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/main/java/me/lemire/integercompression/benchmarktools/BenchmarkBitPacking.java",
+  "imports": {
+    "9-9:import java.text.DecimalFormat;": {
+      "start": 9,
+      "end": 9,
+      "body": "import java.text.DecimalFormat;"
+    },
+    "10-10:import java.util.Arrays;": {
+      "start": 10,
+      "end": 10,
+      "body": "import java.util.Arrays;"
+    },
+    "11-11:import java.util.Random;": {
+      "start": 11,
+      "end": 11,
+      "body": "import java.util.Random;"
+    },
+    "13-13:import me.lemire.integercompression.BitPacking;": {
+      "start": 13,
+      "end": 13,
+      "body": "import me.lemire.integercompression.BitPacking;"
+    },
+    "14-14:import me.lemire.integercompression.differential.Delta;": {
+      "start": 14,
+      "end": 14,
+      "body": "import me.lemire.integercompression.differential.Delta;"
+    },
+    "15-15:import me.lemire.integercompression.differential.IntegratedBitPacking;": {
+      "start": 15,
+      "end": 15,
+      "body": "import me.lemire.integercompression.differential.IntegratedBitPacking;"
+    }
+  },
+  "classes": {
+    "23-154:BenchmarkBitPacking": {
+      "start": 23,
+      "end": 154,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "25-68:test": {
+          "start": 25,
+          "end": 68,
+          "body": [
+            "private static void test(boolean verbose) {",
+            "                DecimalFormat dfspeed = new DecimalFormat(\"0\");",
+            "                final int N = 32;",
+            "                final int times = 100000;",
+            "                Random r = new Random(0);",
+            "                int[] data = new int[N];",
+            "                int[] compressed = new int[N];",
+            "                int[] uncompressed = new int[N];",
+            "                for (int bit = 0; bit < 31; ++bit) {",
+            "                        long comp = 0;",
+            "                        long compwm = 0;",
+            "                        long decomp = 0;",
+            "                        for (int t = 0; t < times; ++t) {",
+            "                                for (int k = 0; k < N; ++k) {",
+            "                                        data[k] = r.nextInt(1 << bit);",
+            "                                }",
+            "                                long time1 = System.nanoTime();",
+            "                                BitPacking",
+            "                                        .fastpack(data, 0, compressed, 0, bit);",
+            "                                long time2 = System.nanoTime();",
+            "                                BitPacking.fastpackwithoutmask(data, 0,",
+            "                                        compressed, 0, bit);",
+            "                                long time3 = System.nanoTime();",
+            "                                BitPacking.fastunpack(compressed, 0,",
+            "                                        uncompressed, 0, bit);",
+            "                                long time4 = System.nanoTime();",
+            "                                comp += time2 - time1;",
+            "                                compwm += time3 - time2;",
+            "                                decomp += time4 - time3;",
+            "                        }",
+            "                        if (verbose)",
+            "                                System.out.println(\"bit = \"",
+            "                                        + bit",
+            "                                        + \" comp. speed = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (comp))",
+            "                                        + \" comp. speed wm = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (compwm))",
+            "                                        + \" decomp. speed = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (decomp)));",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DecimalFormat",
+            "int",
+            "Random",
+            "int[]",
+            "long"
+          ],
+          "signature": "test( boolean verbose)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "verbose"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.text.DecimalFormat",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "<init>(long)"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "nextInt(int)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "nanoTime()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "42-148:fastpack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "1706-1812:fastpackwithoutmask"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "3021-3127:fastunpack"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.text.DecimalFormat",
+              "format(double)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DecimalFormat": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DecimalFormat has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Random": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import random",
+                "translated_target_type": "random.Random",
+                "reasoning": "In Python, the equivalent of Java's `java.util.Random` class is `random.Random` in the `random` module. This class provides methods for generating random numbers and sequences. The seed value can be set using the constructor or by calling the `seed()` method. In this case, a seed value is passed to the constructor of `random.Random` which is equivalent to creating an instance of `java.util.Random` with a specified seed in Java.",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|verbose": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __test(verbose: object) -> None:",
+            "        from src.main.me.lemire.integercompression.BitPacking import BitPacking",
+            "        dfspeed = DecimalFormat(\"0\")",
+            "        N = 32",
+            "        times = 100000",
+            "        r = Random(0)",
+            "        data = [0]*N",
+            "        compressed = [0]*N",
+            "        uncompressed = [0]*N",
+            "        ",
+            "        for bit in range(31):",
+            "            comp, compwm, decomp = 0, 0, 0",
+            "            ",
+            "            for t in range(times):",
+            "                data = [r.nextInt(1 << bit) for _ in range(N)]",
+            "                ",
+            "                time1 = System.nanoTime()",
+            "                BitPacking.fastpack(data, 0, compressed, 0, bit)",
+            "                time2 = System.nanoTime()",
+            "                BitPacking.fastpackwithoutmask(data, 0, compressed, 0, bit)",
+            "                time3 = System.nanoTime()",
+            "                BitPacking.fastunpack(compressed, 0, uncompressed, 0, bit)",
+            "                time4 = System.nanoTime()",
+            "                ",
+            "                comp += time2 - time1",
+            "                compwm += time3 - time2",
+            "                decomp += time4 - time3",
+            "            ",
+            "            if verbose:",
+            "                print(\"bit = \" + str(bit) + ",
+            "                      \" comp. speed = \" + dfspeed.format(N * times * 1000.0 / (comp)) + ",
+            "                      \" comp. speed wm = \" + dfspeed.format(N * times * 1000.0 / (compwm)) + ",
+            "                      \" decomp. speed = \" + dfspeed.format(N * times * 1000.0 / (decomp)))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.4154016971588135,
+          "generation_timestamp": "2026-03-17T06:39:51.923256",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __test(verbose: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "70-137:testWithDeltas": {
+          "start": 70,
+          "end": 137,
+          "body": [
+            "private static void testWithDeltas(boolean verbose) {",
+            "                DecimalFormat dfspeed = new DecimalFormat(\"0\");",
+            "                final int N = 32;",
+            "                final int times = 100000;",
+            "                Random r = new Random(0);",
+            "                int[] data = new int[N];",
+            "                int[] compressed = new int[N];",
+            "                int[] icompressed = new int[N];",
+            "                int[] uncompressed = new int[N];",
+            "                for (int bit = 1; bit < 31; ++bit) {",
+            "                        long comp = 0;",
+            "                        long decomp = 0;",
+            "                        long icomp = 0;",
+            "                        long idecomp = 0;",
+            "                        for (int t = 0; t < times; ++t) {",
+            "                                data[0] = r.nextInt(1 << bit);",
+            "                                for (int k = 1; k < N; ++k) {",
+            "                                        data[k] = r.nextInt(1 << bit)",
+            "                                                + data[k - 1];",
+            "                                }",
+            "                                int[] tmpdata = Arrays",
+            "                                        .copyOf(data, data.length);",
+            "                                long time1 = System.nanoTime();",
+            "                                Delta.delta0(tmpdata);",
+            "                                BitPacking.fastpackwithoutmask(tmpdata, 0,",
+            "                                        compressed, 0, bit);",
+            "                                long time2 = System.nanoTime();",
+            "                                BitPacking.fastunpack(compressed, 0,",
+            "                                        uncompressed, 0, bit);",
+            "                                Delta.fastinverseDelta0(uncompressed);",
+            "                                long time3 = System.nanoTime();",
+            "                                if (!Arrays.equals(data, uncompressed))",
+            "                                        throw new RuntimeException(\"bug\");",
+            "                                comp += time2 - time1;",
+            "                                decomp += time3 - time2;",
+            "                                tmpdata = Arrays.copyOf(data, data.length);",
+            "                                time1 = System.nanoTime();",
+            "                                IntegratedBitPacking.integratedpack(0, tmpdata,",
+            "                                        0, icompressed, 0, bit);",
+            "                                time2 = System.nanoTime();",
+            "                                IntegratedBitPacking.integratedunpack(0,",
+            "                                        icompressed, 0, uncompressed, 0, bit);",
+            "                                time3 = System.nanoTime();",
+            "                                if (!Arrays.equals(icompressed, compressed))",
+            "                                        throw new RuntimeException(\"ibug \"",
+            "                                                + bit);",
+            "                                if (!Arrays.equals(data, uncompressed))",
+            "                                        throw new RuntimeException(\"bug \" + bit);",
+            "                                icomp += time2 - time1;",
+            "                                idecomp += time3 - time2;",
+            "                        }",
+            "                        if (verbose)",
+            "                                System.out.println(\"bit = \"",
+            "                                        + bit",
+            "                                        + \" comp. speed = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (comp))",
+            "                                        + \" decomp. speed = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (decomp))",
+            "                                        + \" icomp. speed = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (icomp))",
+            "                                        + \" idecomp. speed = \"",
+            "                                        + dfspeed.format(N * times * 1000.0",
+            "                                                / (idecomp)));",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DecimalFormat",
+            "int",
+            "Random",
+            "int[]",
+            "long",
+            "RuntimeException"
+          ],
+          "signature": "testWithDeltas( boolean verbose)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "verbose"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.text.DecimalFormat",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "<init>(long)"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "nextInt(int)"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "copyOf(int[],int)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "nanoTime()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.Delta",
+              "16-150:Delta",
+              "24-28:delta0"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "1706-1812:fastpackwithoutmask"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "3021-3127:fastunpack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.Delta",
+              "16-150:Delta",
+              "97-113:fastinverseDelta0"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "equals(int[],int[])"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedBitPacking",
+              "27-3914:IntegratedBitPacking",
+              "39-145:integratedpack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.IntegratedBitPacking",
+              "27-3914:IntegratedBitPacking",
+              "1701-1808:integratedunpack"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.text.DecimalFormat",
+              "format(double)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DecimalFormat": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DecimalFormat has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Random": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import random",
+                "translated_target_type": "random.Random",
+                "reasoning": "In Python, the equivalent of Java's `java.util.Random` class is `random.Random` in the `random` module. This class provides methods for generating random numbers and sequences. The seed value can be set using the constructor or by calling the `seed()` method. In this case, a seed value is passed to the constructor of `random.Random` which is equivalent to creating an instance of `java.util.Random` with a specified seed in Java.",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|verbose": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __testWithDeltas(verbose: object) -> None:",
+            "        from src.main.me.lemire.integercompression.differential.IntegratedBitPacking import IntegratedBitPacking",
+            "        from src.main.me.lemire.integercompression.differential.Delta import Delta",
+            "        from src.main.me.lemire.integercompression.BitPacking import BitPacking",
+            "        dfspeed = DecimalFormat(\"0\")",
+            "        N = 32",
+            "        times = 100000",
+            "        r = Random(0)",
+            "        data = [0]*N",
+            "        compressed = [0]*N",
+            "        icompressed = [0]*N",
+            "        uncompressed = [0]*N",
+            "        ",
+            "        for bit in range(1, 31):",
+            "            comp = 0",
+            "            decomp = 0",
+            "            icomp = 0",
+            "            idecomp = 0",
+            "            ",
+            "            for t in range(times):",
+            "                data[0] = r.nextInt(1 << bit)",
+            "                ",
+            "                for k in range(1, N):",
+            "                    data[k] = r.nextInt(1 << bit) + data[k - 1]",
+            "                    ",
+            "                tmpdata = list(data)",
+            "                time1 = System.nanoTime()",
+            "                Delta.delta0(tmpdata)",
+            "                BitPacking.fastpackwithoutmask(tmpdata, 0, compressed, 0, bit)",
+            "                time2 = System.nanoTime()",
+            "                BitPacking.fastunpack(compressed, 0, uncompressed, 0, bit)",
+            "                Delta.fastinverseDelta0(uncompressed)",
+            "                time3 = System.nanoTime()",
+            "                ",
+            "                if not Arrays.equals(data, uncompressed):",
+            "                    raise RuntimeException(\"bug\")",
+            "                    ",
+            "                comp += time2 - time1",
+            "                decomp += time3 - time2",
+            "                ",
+            "                tmpdata = list(data)",
+            "                time1 = System.nanoTime()",
+            "                IntegratedBitPacking.integratedpack(0, tmpdata, 0, icompressed, 0, bit)",
+            "                time2 = System.nanoTime()",
+            "                IntegratedBitPacking.integratedunpack(0, icompressed, 0, uncompressed, 0, bit)",
+            "                time3 = System.nanoTime()",
+            "                ",
+            "                if not Arrays.equals(icompressed, compressed):",
+            "                    raise RuntimeException(\"ibug \" + bit)",
+            "                    ",
+            "                if not Arrays.equals(data, uncompressed):",
+            "                    raise RuntimeException(\"bug \" + bit)",
+            "                    ",
+            "                icomp += time2 - time1",
+            "                idecomp += time3 - time2",
+            "                ",
+            "            if verbose:",
+            "                print(\"bit = \" + str(bit) + ",
+            "                      \" comp. speed = \" + dfspeed.format(N * times * 1000.0 / (comp)) + ",
+            "                      \" decomp. speed = \" + dfspeed.format(N * times * 1000.0 / (decomp)) + ",
+            "                      \" icomp. speed = \" + dfspeed.format(N * times * 1000.0 / (icomp)) + ",
+            "                      \" idecomp. speed = \" + dfspeed.format(N * times * 1000.0 / (idecomp)))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.25261783599853516,
+          "generation_timestamp": "2026-03-17T06:39:52.184628",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __testWithDeltas(verbose: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "145-152:main": {
+          "start": 145,
+          "end": 152,
+          "body": [
+            "public static void main(String[] args) {",
+            "                System.out.println(\"Testing packing and delta \");",
+            "                testWithDeltas(false);",
+            "                testWithDeltas(true);",
+            "                System.out.println(\"Testing packing alone \");",
+            "                test(false);",
+            "                test(true);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "main( String[] args)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String[]",
+              "name": "args"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkBitPacking",
+              "23-154:BenchmarkBitPacking",
+              "70-137:testWithDeltas"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkBitPacking",
+              "23-154:BenchmarkBitPacking",
+              "25-68:test"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|String[]|args": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def main(args: object) -> None:",
+            "        print(\"Testing packing and delta \")",
+            "        BenchmarkBitPacking.__testWithDeltas(False)",
+            "        BenchmarkBitPacking.__testWithDeltas(True)",
+            "        print(\"Testing packing alone \")",
+            "        BenchmarkBitPacking.__test(False)",
+            "        BenchmarkBitPacking.__test(True)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.23204660415649414,
+          "generation_timestamp": "2026-03-17T06:39:52.424087",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def main(args: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class BenchmarkBitPacking:\n\n"
+    }
+  },
+  "import_map": {
+    "DecimalFormat": "java.text.DecimalFormat",
+    "Arrays": "java.util.Arrays",
+    "Random": "java.util.Random",
+    "BitPacking": "me.lemire.integercompression.BitPacking",
+    "Delta": "me.lemire.integercompression.differential.Delta",
+    "IntegratedBitPacking": "me.lemire.integercompression.differential.IntegratedBitPacking"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from typing import Any, Optional",
+    "from typing import List, Tuple",
+    "import random"
+  ]
+}

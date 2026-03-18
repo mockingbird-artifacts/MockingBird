@@ -1,0 +1,1295 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/internal/MingwSupport.java",
+  "imports": {
+    "18-18:import java.io.ByteArrayOutputStream;": {
+      "start": 18,
+      "end": 18,
+      "body": "import java.io.ByteArrayOutputStream;"
+    },
+    "19-19:import java.io.File;": {
+      "start": 19,
+      "end": 19,
+      "body": "import java.io.File;"
+    },
+    "20-20:import java.io.FileDescriptor;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.io.FileDescriptor;"
+    },
+    "21-21:import java.io.IOException;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.io.IOException;"
+    },
+    "22-22:import java.io.InputStream;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.InputStream;"
+    },
+    "23-23:import java.lang.reflect.Constructor;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.lang.reflect.Constructor;"
+    },
+    "24-24:import java.lang.reflect.Field;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.lang.reflect.Field;"
+    },
+    "25-25:import java.util.regex.Matcher;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.util.regex.Matcher;"
+    },
+    "26-26:import java.util.regex.Pattern;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.regex.Pattern;"
+    }
+  },
+  "classes": {
+    "34-137:MingwSupport": {
+      "start": 34,
+      "end": 137,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "40-67:MingwSupport": {
+          "start": 40,
+          "end": 67,
+          "body": [
+            "public MingwSupport() {",
+            "        String tty = null;",
+            "        String stty = null;",
+            "        String path = System.getenv(\"PATH\");",
+            "        if (path != null) {",
+            "            String[] paths = path.split(File.pathSeparator);",
+            "            for (String p : paths) {",
+            "                File ttyFile = new File(p, \"tty.exe\");",
+            "                if (tty == null && ttyFile.canExecute()) {",
+            "                    tty = ttyFile.getAbsolutePath();",
+            "                }",
+            "                File sttyFile = new File(p, \"stty.exe\");",
+            "                if (stty == null && sttyFile.canExecute()) {",
+            "                    stty = sttyFile.getAbsolutePath();",
+            "                }",
+            "            }",
+            "        }",
+            "        if (tty == null) {",
+            "            tty = \"tty.exe\";",
+            "        }",
+            "        if (stty == null) {",
+            "            stty = \"stty.exe\";",
+            "        }",
+            "        ttyCommand = tty;",
+            "        sttyCommand = stty;",
+            "        // Compute patterns",
+            "        columnsPatterns = Pattern.compile(\"\\\\b\" + \"columns\" + \"\\\\s+(\\\\d+)\\\\b\");",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [
+            "String",
+            "String[]",
+            "File"
+          ],
+          "signature": "MingwSupport()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getenv(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "canExecute()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getAbsolutePath()"
+            ],
+            [
+              "library",
+              "java.util.regex.Pattern",
+              "compile(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 15:51:21",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 15:51:21",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "File",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:49:35",
+                "source_type": "File",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:",
+            "        stty = tty = None",
+            "        path = os.getenv(\"PATH\")",
+            "        if path is not None:",
+            "            paths = path.split(os.pathsep)",
+            "            for p in paths:",
+            "                tty_file = Path(p, \"tty.exe\")",
+            "                if tty is None and tty_file.exists():",
+            "                    tty = str(tty_file.absolute())",
+            "                ",
+            "                stty_file = Path(p, \"stty.exe\")",
+            "                if stty is None and stty_file.exists():",
+            "                    stty = str(stty_file.absolute())",
+            "        ",
+            "        if tty is None:",
+            "            tty = \"tty.exe\"",
+            "        ",
+            "        if stty is None:",
+            "            stty = \"stty.exe\"",
+            "        ",
+            "        self.__ttyCommand = tty",
+            "        self.__sttyCommand = stty",
+            "        # Compute patterns",
+            "        self.__columnsPatterns = re.compile(r'\\b' + 'columns' + r'\\s+(\\d+)\\b')"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 27.244717836380005,
+          "generation_timestamp": "2025-08-18T04:25:28.668852",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "69-86:getConsoleName": {
+          "start": 69,
+          "end": 86,
+          "body": [
+            "public String getConsoleName(boolean stdout) {",
+            "        try {",
+            "            Process p = new ProcessBuilder(ttyCommand)",
+            "                    .redirectInput(getRedirect(stdout ? FileDescriptor.out : FileDescriptor.err))",
+            "                    .start();",
+            "            String result = waitAndCapture(p);",
+            "            if (p.exitValue() == 0) {",
+            "                return result.trim();",
+            "            }",
+            "        } catch (Throwable t) {",
+            "            if (\"java.lang.reflect.InaccessibleObjectException\"",
+            "                    .equals(t.getClass().getName())) {",
+            "                System.err.println(\"MINGW support requires --add-opens java.base/java.lang=ALL-UNNAMED\");",
+            "            }",
+            "            // ignore",
+            "        }",
+            "        return null;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "Process",
+            "ProcessBuilder",
+            "String",
+            "Throwable"
+          ],
+          "signature": "getConsoleName( boolean stdout)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stdout"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "<init>(java.lang.String[])"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "124-136:getRedirect"
+            ],
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "redirectInput(java.lang.ProcessBuilder$Redirect)"
+            ],
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "start()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "105-119:waitAndCapture"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "exitValue()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "trim()"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "getClass()"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getName()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 16:36:48",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Process": {
+                "identifier": "Process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 16:36:48",
+                "source_type": "Process",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ProcessBuilder": {
+                "identifier": "ProcessBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:50:21",
+                "source_type": "ProcessBuilder",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE\nimport os",
+                "translated_target_type": "Popen",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:02:33",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Throwable": {
+                "identifier": "Throwable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:02:33",
+                "source_type": "Throwable",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE, STDOUT\nimport os",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|stdout": {
+                "identifier": "|boolean|stdout",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 16:36:48",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def getConsoleName(self, stdout: bool) -> str:",
+            "        p = subprocess.Popen([self.__ttyCommand], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)",
+            "        output, error = p.communicate()",
+            "        if p.returncode == 0:",
+            "            return output.decode('utf-8').strip()",
+            "        ",
+            "        # ignore InaccessibleObjectException",
+            "        if \"java.lang.reflect.InaccessibleObjectException\" in str(error): ",
+            "            print(\"MINGW support requires --add-opens java.base/java.lang=ALL-UNNAMED\")",
+            "            ",
+            "        return None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 24.52839231491089,
+          "generation_timestamp": "2025-08-18T04:27:57.411597",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getConsoleName(self, stdout: bool) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "88-103:getTerminalWidth": {
+          "start": 88,
+          "end": 103,
+          "body": [
+            "public int getTerminalWidth(String name) {",
+            "        try {",
+            "            Process p = new ProcessBuilder(sttyCommand, \"-F\", name, \"-a\").start();",
+            "            String result = waitAndCapture(p);",
+            "            if (p.exitValue() != 0) {",
+            "                throw new IOException(\"Error executing '\" + sttyCommand + \"': \" + result);",
+            "            }",
+            "            Matcher matcher = columnsPatterns.matcher(result);",
+            "            if (matcher.find()) {",
+            "                return Integer.parseInt(matcher.group(1));",
+            "            }",
+            "            throw new IOException(\"Unable to parse columns\");",
+            "        } catch (Exception e) {",
+            "            throw new RuntimeException(e);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "Process",
+            "ProcessBuilder",
+            "String",
+            "IOException",
+            "Matcher",
+            "Exception",
+            "RuntimeException"
+          ],
+          "signature": "getTerminalWidth( String name)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "name"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "<init>(java.lang.String[])"
+            ],
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "start()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "105-119:waitAndCapture"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "exitValue()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.regex.Pattern",
+              "matcher(java.lang.CharSequence)"
+            ],
+            [
+              "library",
+              "java.util.regex.Matcher",
+              "find()"
+            ],
+            [
+              "library",
+              "java.util.regex.Matcher",
+              "group(int)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "parseInt(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.Throwable)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 17:07:44",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Process": {
+                "identifier": "Process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:51:17",
+                "source_type": "Process",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ProcessBuilder": {
+                "identifier": "ProcessBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:52:32",
+                "source_type": "ProcessBuilder",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE\nimport os",
+                "translated_target_type": "Popen",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:19:00",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:53:11",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE\nimport re",
+                "translated_target_type": "OSError",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Matcher": {
+                "identifier": "Matcher",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:53:25",
+                "source_type": "Matcher",
+                "generation": "",
+                "imports": "from re import compile, Match",
+                "translated_target_type": "Match",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Exception": {
+                "identifier": "Exception",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:54:32",
+                "source_type": "Exception",
+                "generation": "",
+                "imports": "from typing import Callable, Optional",
+                "translated_target_type": "Optional[Callable[[], bool]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "RuntimeException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:54:48",
+                "source_type": "RuntimeException",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE\nimport re",
+                "translated_target_type": "RuntimeError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|name": {
+                "identifier": "|String|name",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 17:07:44",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def getTerminalWidth(self, name: str) -> int:",
+            "        try:",
+            "            p = subprocess.Popen([self.__sttyCommand, \"-F\", name, \"-a\"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)",
+            "            result, _ = p.communicate()",
+            "            result_str = result.decode('utf-8')",
+            "            ",
+            "            if p.returncode != 0:",
+            "                raise OSError(\"Error executing '\" + self.__sttyCommand + \"': \" + result_str)",
+            "                ",
+            "            matcher = self.__columnsPatterns.match(result_str)",
+            "            if matcher:",
+            "                return int(matcher.group(1))",
+            "            ",
+            "            raise OSError(\"Unable to parse columns\")",
+            "        except Exception as e:",
+            "            raise RuntimeError(e)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 35.23171257972717,
+          "generation_timestamp": "2025-08-18T04:27:03.856765",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getTerminalWidth(self, name: str) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "105-119:waitAndCapture": {
+          "start": 105,
+          "end": 119,
+          "body": [
+            "private static String waitAndCapture(Process p) throws IOException, InterruptedException {",
+            "        ByteArrayOutputStream bout = new ByteArrayOutputStream();",
+            "        try (InputStream in = p.getInputStream();",
+            "                InputStream err = p.getErrorStream()) {",
+            "            int c;",
+            "            while ((c = in.read()) != -1) {",
+            "                bout.write(c);",
+            "            }",
+            "            while ((c = err.read()) != -1) {",
+            "                bout.write(c);",
+            "            }",
+            "            p.waitFor();",
+            "        }",
+            "        return bout.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "ByteArrayOutputStream",
+            "InputStream",
+            "int"
+          ],
+          "signature": "waitAndCapture( Process p)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "Process",
+              "name": "p"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "getInputStream()"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "getErrorStream()"
+            ],
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "write(int)"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "read()"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "waitFor()"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 17:19:06",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "ByteArrayOutputStream": {
+                "identifier": "ByteArrayOutputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:55:49",
+                "source_type": "ByteArrayOutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport subprocess",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "InputStream": {
+                "identifier": "InputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:56:39",
+                "source_type": "InputStream",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pkg_resources",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 17:19:10",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|Process|p": {
+                "identifier": "|Process|p",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 18:55:24",
+                "source_type": "Process",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 59.71395659446716,
+          "generation_timestamp": "2025-08-18T04:26:28.508998",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __waitAndCapture(p: subprocess.Popen) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "124-136:getRedirect": {
+          "start": 124,
+          "end": 136,
+          "body": [
+            "private ProcessBuilder.Redirect getRedirect(FileDescriptor fd) throws ReflectiveOperationException {",
+            "        // This is not really allowed, but this is the only way to redirect the output or error stream",
+            "        // to the input.  This is definitely not something you'd usually want to do, but in the case of",
+            "        // the `tty` utility, it provides a way to get",
+            "        Class<?> rpi = Class.forName(\"java.lang.ProcessBuilder$RedirectPipeImpl\");",
+            "        Constructor<?> cns = rpi.getDeclaredConstructor();",
+            "        cns.setAccessible(true);",
+            "        ProcessBuilder.Redirect input = (ProcessBuilder.Redirect) cns.newInstance();",
+            "        Field f = rpi.getDeclaredField(\"fd\");",
+            "        f.setAccessible(true);",
+            "        f.set(input, fd);",
+            "        return input;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "ProcessBuilder.Redirect"
+          ],
+          "body_types": [
+            "Class<?>",
+            "Constructor<?>",
+            "ProcessBuilder.Redirect",
+            "ProcessBuilder",
+            "Redirect",
+            "Field"
+          ],
+          "signature": "getRedirect( FileDescriptor fd)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "FileDescriptor",
+              "name": "fd"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "forName(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getDeclaredConstructor(java.lang.Class[])"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Constructor",
+              "setAccessible(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Constructor",
+              "newInstance(java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getDeclaredField(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Field",
+              "setAccessible(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Field",
+              "set(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "ProcessBuilder.Redirect": {
+                "identifier": "ProcessBuilder.Redirect",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 18:57:07",
+                "source_type": "ProcessBuilder.Redirect",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Class<?>": {
+                "identifier": "Class<?>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:58:07",
+                "source_type": "Class<?>",
+                "generation": "",
+                "imports": "from typing import Type, Any\nimport inspect",
+                "translated_target_type": "Type[Any]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Constructor<?>": {
+                "identifier": "Constructor<?>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:58:46",
+                "source_type": "Constructor<?>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ProcessBuilder.Redirect": {
+                "identifier": "ProcessBuilder.Redirect",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:59:20",
+                "source_type": "ProcessBuilder.Redirect",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ProcessBuilder": {
+                "identifier": "ProcessBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 18:59:55",
+                "source_type": "ProcessBuilder",
+                "generation": "",
+                "imports": "from subprocess import Popen, PIPE\nimport os",
+                "translated_target_type": "Popen",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Redirect": {
+                "identifier": "Redirect",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:00:43",
+                "source_type": "Redirect",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Field": {
+                "identifier": "Field",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:01:12",
+                "source_type": "Field",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Field",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|FileDescriptor|fd": {
+                "identifier": "|FileDescriptor|fd",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 18:57:46",
+                "source_type": "FileDescriptor",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport base64",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __getRedirect(self, fd: BytesIO) -> object:",
+            "        rpi = type(ProcessBuilder().Redirect())",
+            "        cns = rpi.__init__()",
+            "        cns.setAccessible(True)",
+            "        input = cns.newInstance()",
+            "        f = rpi.getDeclaredField(\"fd\")",
+            "        f.setAccessible(True)",
+            "        f.set(input, fd)",
+            "        return input"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 28.80960178375244,
+          "generation_timestamp": "2025-08-18T04:27:32.772585",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __getRedirect(self, fd: BytesIO) -> object:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "36-36:sttyCommand": {
+          "start": 36,
+          "end": 36,
+          "enum_constant": false,
+          "body": [
+            "private final String sttyCommand;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 15:46:41",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __sttyCommand: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __sttyCommand: str = ''"
+          ]
+        },
+        "37-37:ttyCommand": {
+          "start": 37,
+          "end": 37,
+          "enum_constant": false,
+          "body": [
+            "private final String ttyCommand;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 15:46:41",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __ttyCommand: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __ttyCommand: str = ''"
+          ]
+        },
+        "38-38:columnsPatterns": {
+          "start": 38,
+          "end": 38,
+          "enum_constant": false,
+          "body": [
+            "private final Pattern columnsPatterns;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Pattern"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Pattern": {
+                "identifier": "Pattern",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 15:46:41",
+                "source_type": "Pattern",
+                "generation": "",
+                "imports": "import re",
+                "translated_target_type": "re.Pattern",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __columnsPatterns: re.Pattern = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __columnsPatterns: re.Pattern = None"
+          ]
+        }
+      },
+      "python_class_declaration": "class MingwSupport:\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO",
+    "from io import BytesIO\nimport base64",
+    "from io import BytesIO\nimport pkg_resources",
+    "from pathlib import Path",
+    "from re import compile, Match",
+    "from subprocess import Popen, PIPE\nimport os",
+    "from subprocess import Popen, PIPE, STDOUT\nimport os",
+    "from typing import Any, Optional",
+    "from typing import Callable, Optional",
+    "from typing import List",
+    "from typing import Type, Any\nimport inspect",
+    "from unittest import TestCase, main",
+    "import re",
+    "import subprocess"
+  ]
+}

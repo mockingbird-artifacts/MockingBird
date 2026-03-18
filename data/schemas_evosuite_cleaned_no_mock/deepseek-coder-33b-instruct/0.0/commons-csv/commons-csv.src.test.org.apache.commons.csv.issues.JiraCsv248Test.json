@@ -1,0 +1,456 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-csv/src/test/java/org/apache/commons/csv/issues/JiraCsv248Test.java",
+  "imports": {
+    "20-20:import static org.junit.jupiter.api.Assertions.assertEquals;": {
+      "start": 20,
+      "end": 20,
+      "body": "import static org.junit.jupiter.api.Assertions.assertEquals;"
+    },
+    "21-21:import static org.junit.jupiter.api.Assertions.assertFalse;": {
+      "start": 21,
+      "end": 21,
+      "body": "import static org.junit.jupiter.api.Assertions.assertFalse;"
+    },
+    "22-22:import static org.junit.jupiter.api.Assertions.assertNull;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.junit.jupiter.api.Assertions.assertNull;"
+    },
+    "23-23:import static org.junit.jupiter.api.Assertions.assertTrue;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.junit.jupiter.api.Assertions.assertTrue;"
+    },
+    "25-25:import org.apache.commons.csv.CSVRecord;": {
+      "start": 25,
+      "end": 25,
+      "body": "import org.apache.commons.csv.CSVRecord;"
+    },
+    "26-26:import org.junit.jupiter.api.Test;": {
+      "start": 26,
+      "end": 26,
+      "body": "import org.junit.jupiter.api.Test;"
+    },
+    "28-28:import java.io.IOException;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.io.IOException;"
+    },
+    "29-29:import java.io.InputStream;": {
+      "start": 29,
+      "end": 29,
+      "body": "import java.io.InputStream;"
+    },
+    "30-30:import java.io.ObjectInputStream;": {
+      "start": 30,
+      "end": 30,
+      "body": "import java.io.ObjectInputStream;"
+    }
+  },
+  "classes": {
+    "32-73:JiraCsv248Test": {
+      "start": 32,
+      "end": 73,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "33-36:getTestInput": {
+          "start": 33,
+          "end": 36,
+          "body": [
+            "private static InputStream getTestInput() {",
+            "        return ClassLoader.getSystemClassLoader()",
+            "                .getResourceAsStream(\"org/apache/commons/csv/CSV-248/csvRecord.bin\");",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "InputStream"
+          ],
+          "body_types": [],
+          "signature": "getTestInput()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.ClassLoader",
+              "getSystemClassLoader()"
+            ],
+            [
+              "library",
+              "java.lang.ClassLoader",
+              "getResourceAsStream(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "InputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pkg_resources",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type to Java's `InputStream` is `io.BytesIO`. This class provides an in-memory stream for text data that can be used as a drop-in replacement for file and socket objects. In this case, we are using it to read from a resource file located at \"/META-INF/maven/\" + path + \"/pom.properties\". The `pkg_resources` module is also imported to access the resource file.",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __getTestInput() -> BytesIO:",
+            "        with pkg_resources.resource_stream(\"org/apache/commons/csv/CSV-248\", \"csvRecord.bin\") as stream:",
+            "            return BytesIO(stream.read())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 9.854320287704468,
+          "generation_timestamp": "2025-11-09T07:37:08.401255",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __getTestInput() -> BytesIO:\n",
+            "        pass\n\n"
+          ]
+        },
+        "47-72:testJiraCsv248": {
+          "start": 47,
+          "end": 72,
+          "body": [
+            "@Test",
+            "    public void testJiraCsv248() throws IOException, ClassNotFoundException {",
+            "        try (InputStream in = getTestInput();",
+            "                final ObjectInputStream ois = new ObjectInputStream(in)) {",
+            "            final Object object = ois.readObject();",
+            "            assertTrue(object instanceof CSVRecord);",
+            "            final CSVRecord rec = (CSVRecord) object;",
+            "            assertEquals(1L, rec.getRecordNumber());",
+            "            assertEquals(\"One\", rec.get1(0));",
+            "            assertEquals(\"Two\", rec.get1(1));",
+            "            assertEquals(2, rec.size());",
+            "            assertEquals(4, rec.getCharacterPosition());",
+            "            assertEquals(\"my comment\", rec.getComment());",
+            "            assertNull(rec.getParser());",
+            "            assertTrue(rec.isConsistent());",
+            "            assertFalse(rec.isMapped(\"A\"));",
+            "            assertFalse(rec.isSet1(\"A\"));",
+            "            assertEquals(0, rec.toMap().size());",
+            "            try {",
+            "                rec.get2(\"A\");",
+            "                org.junit.jupiter.api.Assertions.fail(",
+            "                        \"Access by name is not expected after deserialisation\");",
+            "            } catch (final IllegalStateException expected) {",
+            "            }",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "InputStream",
+            "ObjectInputStream",
+            "Object",
+            "CSVRecord",
+            "IllegalStateException"
+          ],
+          "signature": "testJiraCsv248()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-csv.src.test.org.apache.commons.csv.issues.JiraCsv248Test",
+              "32-73:JiraCsv248Test",
+              "33-36:getTestInput"
+            ],
+            [
+              "library",
+              "java.io.ObjectInputStream",
+              "<init>(java.io.InputStream)"
+            ],
+            [
+              "library",
+              "java.io.ObjectInputStream",
+              "readObject()"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertTrue(boolean)"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "179-181:getRecordNumber"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertEquals(long,long)"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "86-88:get1"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "276-278:size"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertEquals(int,int)"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "138-140:getCharacterPosition"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "149-151:getComment"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "166-168:getParser"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertNull(java.lang.Object)"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "203-206:isConsistent"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "214-217:isMapped"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertFalse(boolean)"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "235-237:isSet1"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "309-311:toMap"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "size()"
+            ],
+            [
+              "commons-csv.src.main.org.apache.commons.csv.CSVRecord",
+              "39-340:CSVRecord",
+              "109-130:get2"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "fail(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.ObjectInputStream",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "close()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "InputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pkg_resources",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type to Java's `InputStream` is `io.BytesIO`. This class provides an in-memory stream for text data that can be used as a drop-in replacement for file and socket objects. In this case, we are using it to read from a resource file located at \"/META-INF/maven/\" + path + \"/pom.properties\". The `pkg_resources` module is also imported to access the resource file.",
+                "prompt": ""
+              },
+              "ObjectInputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pickle",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type to `ObjectInputStream` in Java is `BytesIO`. This is because `ObjectInputStream` is used for reading primitive data and objects previously written using an `ObjectOutputStream`. In Python, we can use `pickle` module which provides functions for serializing and de-serializing a Python object structure. The `pickle.dumps()` function returns the pickled representation of the object as a bytes object, instead of writing it to a file. Similarly, `pickle.loads()` can be used to read a pickled object representation from a bytes object.",
+                "prompt": ""
+              },
+              "Object": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, List",
+                "translated_target_type": "List[Any]",
+                "reasoning": "In the Java code provided, an ArrayList of type Object is used. In Python, we can use a list with elements of any type (`Any`). Therefore, `ArrayList<Object>` in Java translates to `List[Any]` in Python.",
+                "prompt": ""
+              },
+              "CSVRecord": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type CSVRecord has been translated to \"object\"",
+                "prompt": ""
+              },
+              "IllegalStateException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Optional",
+                "translated_target_type": "Optional[ExecuteException]",
+                "reasoning": "In Python, the equivalent of Java's `IllegalStateException` is not a direct translation. However, in this specific case, we can use Python's built-in `Optional` type to indicate that the method may return an `ExecuteException` or `None` if no exception occurred. This is similar to how `IllegalStateException` is used in Java - it indicates that something has gone wrong and the program should not proceed as it is in an illegal state.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/apache/commons/csv/issues/JiraCsv248Test.py::JiraCsv248Test::testJiraCsv248": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 419, in get_provider\n    module = sys.modules[moduleOrReq]\n             ~~~~~~~~~~~^^^^^^^^^^^^^\nKeyError: 'org/apache/commons/csv/CSV-248'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-csv/src/test/org/apache/commons/csv/issues/JiraCsv248Test.py\", line 30, in testJiraCsv248\n    with pkg_resources.resource_stream(\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1387, in resource_stream\n    return get_provider(package_or_requirement).get_resource_stream(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 421, in get_provider\n    __import__(moduleOrReq)\nModuleNotFoundError: No module named 'org/apache/commons/csv/CSV-248'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-csv.src.test.org.apache.commons.csv.issues.JiraCsv248Test",
+                  "class_name": "32-73:JiraCsv248Test",
+                  "fragment_name": "47-72:testJiraCsv248"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 85.72659277915955,
+          "generation_timestamp": "2025-11-09T11:15:26.059605",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testJiraCsv248(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class JiraCsv248Test(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "assertEquals": "static org.junit.jupiter.api.Assertions.assertEquals",
+    "assertFalse": "static org.junit.jupiter.api.Assertions.assertFalse",
+    "assertNull": "static org.junit.jupiter.api.Assertions.assertNull",
+    "assertTrue": "static org.junit.jupiter.api.Assertions.assertTrue",
+    "CSVRecord": "org.apache.commons.csv.CSVRecord",
+    "Test": "org.junit.jupiter.api.Test",
+    "IOException": "java.io.IOException",
+    "InputStream": "java.io.InputStream",
+    "ObjectInputStream": "java.io.ObjectInputStream"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO\nimport pickle",
+    "from io import BytesIO\nimport pkg_resources",
+    "from typing import Any, List",
+    "from typing import Optional",
+    "import pytest",
+    "import unittest"
+  ]
+}

@@ -1,0 +1,480 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-exec/src/test/java/org/apache/commons/exec/issues/Exec60Test.java",
+  "imports": {
+    "20-20:import static org.junit.jupiter.api.Assertions.assertTrue;": {
+      "start": 20,
+      "end": 20,
+      "body": "import static org.junit.jupiter.api.Assertions.assertTrue;"
+    },
+    "22-22:import java.io.File;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.File;"
+    },
+    "24-24:import org.apache.commons.exec.AbstractExecTest;": {
+      "start": 24,
+      "end": 24,
+      "body": "import org.apache.commons.exec.AbstractExecTest;"
+    },
+    "25-25:import org.apache.commons.exec.CommandLine;": {
+      "start": 25,
+      "end": 25,
+      "body": "import org.apache.commons.exec.CommandLine;"
+    },
+    "26-26:import org.apache.commons.exec.DefaultExecutor;": {
+      "start": 26,
+      "end": 26,
+      "body": "import org.apache.commons.exec.DefaultExecutor;"
+    },
+    "27-27:import org.apache.commons.exec.ExecuteException;": {
+      "start": 27,
+      "end": 27,
+      "body": "import org.apache.commons.exec.ExecuteException;"
+    },
+    "28-28:import org.apache.commons.exec.ExecuteWatchdog;": {
+      "start": 28,
+      "end": 28,
+      "body": "import org.apache.commons.exec.ExecuteWatchdog;"
+    },
+    "29-29:import org.apache.commons.exec.Executor;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.exec.Executor;"
+    },
+    "30-30:import org.junit.jupiter.api.Disabled;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.junit.jupiter.api.Disabled;"
+    },
+    "31-31:import org.junit.jupiter.api.Test;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.junit.jupiter.api.Test;"
+    }
+  },
+  "classes": {
+    "36-86:Exec60Test": {
+      "start": 36,
+      "end": 86,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "AbstractExecTest"
+      ],
+      "methods": {
+        "45-85:testExec_60": {
+          "start": 45,
+          "end": 85,
+          "body": [
+            "@Disabled(\"The test is fragile and might fail out of the blue\")",
+            "    @Test",
+            "    public void testExec_60() throws Exception {",
+            "",
+            "        final int start = 0;",
+            "        final int seconds = 1;",
+            "        final int offsetMultiplier = 1;",
+            "        final int maxRetries = 180;",
+            "        int processTerminatedCounter = 0;",
+            "        int watchdogKilledProcessCounter = 0;",
+            "        final CommandLine cmdLine = new CommandLine(1, null, pingScript, null);",
+            "        cmdLine.addArgument0(Integer.toString(seconds + 1)); // need to add \"1\" to wait the requested number of seconds",
+            "",
+            "        final long startTime = System.currentTimeMillis();",
+            "        for (int offset = start; offset <= maxRetries; offset++) {",
+            "            // wait progressively longer for process to complete",
+            "            // tricky to get this test right. We want to try and catch the process while it is terminating,",
+            "            // so we increase the timeout gradually until the test terminates normally.",
+            "            // However if the increase is too gradual, we never wait long enough for any test to exit normally",
+            "            final ExecuteWatchdog watchdog = ExecuteWatchdog.ExecuteWatchdog0(seconds * 1000 + offset * offsetMultiplier);",
+            "            exec.setWatchdog(watchdog);",
+            "            try {",
+            "                exec.execute0(cmdLine);",
+            "                processTerminatedCounter++;",
+            "                // System.out.println(offset + \": process has terminated: \" + watchdog.killedProcess());",
+            "                if (processTerminatedCounter > 5) {",
+            "                    break;",
+            "                }",
+            "            } catch (final ExecuteException ex) {",
+            "                // System.out.println(offset + \": process was killed: \" + watchdog.killedProcess());",
+            "                assertTrue(watchdog.killedProcess(), \"Watchdog killed the process\");",
+            "                watchdogKilledProcessCounter++;",
+            "            }",
+            "        }",
+            "",
+            "        final long avg = (System.currentTimeMillis() - startTime) / (watchdogKilledProcessCounter + processTerminatedCounter);",
+            "        System.out.println(\"Processes terminated: \" + processTerminatedCounter + \" killed: \" + watchdogKilledProcessCounter + \" Multiplier: \" + offsetMultiplier",
+            "                + \" MaxRetries: \" + maxRetries + \" Elapsed (avg ms): \" + avg);",
+            "        assertTrue(processTerminatedCounter > 0, \"Not a single process terminated on its own\");",
+            "        assertTrue(watchdogKilledProcessCounter > 0, \"Not a single process was killed by the watch dog\");",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Disabled(\"The test is fragile and might fail out of the blue\")",
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "CommandLine",
+            "long",
+            "ExecuteWatchdog",
+            "ExecuteException"
+          ],
+          "signature": "testExec_60()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "192-208:CommandLine"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "toString(int)"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "239-241:addArgument0"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "currentTimeMillis()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ExecuteWatchdog",
+              "52-309:ExecuteWatchdog",
+              "146-149:ExecuteWatchdog0"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.Executor",
+              "47-182:Executor",
+              "174-174:setWatchdog"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.Executor",
+              "47-182:Executor",
+              "60-60:execute0"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ExecuteWatchdog",
+              "52-309:ExecuteWatchdog",
+              "241-243:killedProcess"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertTrue(boolean,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(long)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-30 13:44:49",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:44:49",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CommandLine": {
+                "identifier": "CommandLine",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:44:49",
+                "source_type": "CommandLine",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:44:49",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ExecuteWatchdog": {
+                "identifier": "ExecuteWatchdog",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:44:49",
+                "source_type": "ExecuteWatchdog",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ExecuteWatchdog",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ExecuteException": {
+                "identifier": "ExecuteException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:44:49",
+                "source_type": "ExecuteException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ExecuteException",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testExec_60(self) -> None:",
+            "        from src.main.org.apache.commons.exec.CommandLine import CommandLine",
+            "        from src.main.org.apache.commons.exec.ExecuteWatchdog import ExecuteWatchdog",
+            "        from src.main.org.apache.commons.exec.ExecuteException import ExecuteException",
+            "        start = 0",
+            "        seconds = 1",
+            "        offset_multiplier = 1",
+            "        max_retries = 180",
+            "        process_terminated_counter = 0",
+            "        watchdog_killed_process_counter = 0",
+            "        cmd_line = CommandLine(1, None, self.__pingScript, None)",
+            "        cmd_line.addArgument0(str(seconds + 1))  # need to add \"1\" to wait the requested number of seconds",
+            "",
+            "        start_time = int(time.time() * 1000)",
+            "        for offset in range(start, max_retries + 1):",
+            "            # wait progressively longer for process to complete",
+            "            # tricky to get this test right. We want to try and catch the process while it is terminating,",
+            "            # so we increase the timeout gradually until the test terminates normally.",
+            "            # However if the increase is too gradual, we never wait long enough for any test to exit normally",
+            "            watchdog = ExecuteWatchdog.ExecuteWatchdog0(seconds * 1000 + offset * offset_multiplier)",
+            "            self.__exec.setWatchdog(watchdog)",
+            "            try:",
+            "                self.__exec.execute0(cmd_line)",
+            "                process_terminated_counter += 1",
+            "                if process_terminated_counter > 5:",
+            "                    break",
+            "            except ExecuteException:",
+            "                assert watchdog.killedProcess(), \"Watchdog killed the process\"",
+            "                watchdog_killed_process_counter += 1",
+            "",
+            "        avg = (int(time.time() * 1000) - start_time) // (watchdog_killed_process_counter + process_terminated_counter)",
+            "        print(f\"Processes terminated: {process_terminated_counter} killed: {watchdog_killed_process_counter} Multiplier: {offset_multiplier} MaxRetries: {max_retries} Elapsed (avg ms): {avg}\")",
+            "        assert process_terminated_counter > 0, \"Not a single process terminated on its own\"",
+            "        assert watchdog_killed_process_counter > 0, \"Not a single process was killed by the watch dog\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.883753299713135,
+          "generation_timestamp": "2025-10-30T20:49:40.431078",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testExec_60(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "38-38:exec": {
+          "start": 38,
+          "end": 38,
+          "enum_constant": false,
+          "body": [
+            "private final Executor exec = DefaultExecutor.builder().get();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Executor"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Executor": {
+                "identifier": "Executor",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-10-30 13:44:46",
+                "source_type": "Executor",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Executor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.apache.commons.exec.DefaultExecutor import DefaultExecutor",
+            "    __exec: \"Executor\" = DefaultExecutor().builder().get()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "failed",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 96.61262083053589,
+          "generation_timestamp": "2025-10-30T14:45:12.041883",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __exec: \"Executor\" = ",
+            ""
+          ]
+        },
+        "39-39:pingScript": {
+          "start": 39,
+          "end": 39,
+          "enum_constant": false,
+          "body": [
+            "private final File pingScript = resolveTestScript0(\"ping\");"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "File"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "File": {
+                "identifier": "File",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-10-30 13:44:46",
+                "source_type": "File",
+                "generation": "PYTHON IMPORTS:\n```\nfrom pathlib import Path\n```\n\nPYTHON TRANSLATION:\n```\nPath\n```\n\nREASONING:\nThe `File` class in Java is used to represent file and directory pathnames. In Python, the `Path` class from the `pathlib` module serves a similar purpose, providing an object-oriented interface for handling filesystem paths.",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "The `File` class in Java is used to represent file and directory pathnames. In Python, the `Path` class from the `pathlib` module serves a similar purpose, providing an object-oriented interface for handling filesystem paths.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nFile\n```\n\nJAVA TYPE DESCRIPTION:\nAn abstract representation of file and directory pathnames.\n\n\nJAVA CODE:\n```\n    private final File pingScript = resolveTestScript0(\"ping\");\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __pingScript: Path = Path(AbstractExecTest.resolveTestScript0(\"ping\"))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "failed",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 106.1925528049469,
+          "generation_timestamp": "2025-10-30T14:46:58.438011",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __pingScript: Path = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class Exec60Test(AbstractExecTest, unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "assertTrue": "static org.junit.jupiter.api.Assertions.assertTrue",
+    "File": "java.io.File",
+    "AbstractExecTest": "org.apache.commons.exec.AbstractExecTest",
+    "CommandLine": "org.apache.commons.exec.CommandLine",
+    "DefaultExecutor": "org.apache.commons.exec.DefaultExecutor",
+    "ExecuteException": "org.apache.commons.exec.ExecuteException",
+    "ExecuteWatchdog": "org.apache.commons.exec.ExecuteWatchdog",
+    "Executor": "org.apache.commons.exec.Executor",
+    "Disabled": "org.junit.jupiter.api.Disabled",
+    "Test": "org.junit.jupiter.api.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from pathlib import Path",
+    "from src.test.org.apache.commons.exec.AbstractExecTest import AbstractExecTest",
+    "import pytest",
+    "import unittest"
+  ]
+}

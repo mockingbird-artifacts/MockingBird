@@ -1,0 +1,3278 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/internal/JansiLoader.java",
+  "imports": {
+    "34-34:import org.fusesource.jansi.AnsiConsole;": {
+      "start": 34,
+      "end": 34,
+      "body": "import org.fusesource.jansi.AnsiConsole;"
+    },
+    "36-36:import java.io.File;": {
+      "start": 36,
+      "end": 36,
+      "body": "import java.io.File;"
+    },
+    "37-37:import java.io.FileInputStream;": {
+      "start": 37,
+      "end": 37,
+      "body": "import java.io.FileInputStream;"
+    },
+    "38-38:import java.io.FileOutputStream;": {
+      "start": 38,
+      "end": 38,
+      "body": "import java.io.FileOutputStream;"
+    },
+    "39-39:import java.io.FilenameFilter;": {
+      "start": 39,
+      "end": 39,
+      "body": "import java.io.FilenameFilter;"
+    },
+    "40-40:import java.io.IOException;": {
+      "start": 40,
+      "end": 40,
+      "body": "import java.io.IOException;"
+    },
+    "41-41:import java.io.InputStream;": {
+      "start": 41,
+      "end": 41,
+      "body": "import java.io.InputStream;"
+    },
+    "42-42:import java.net.URL;": {
+      "start": 42,
+      "end": 42,
+      "body": "import java.net.URL;"
+    },
+    "43-43:import java.nio.file.Files;": {
+      "start": 43,
+      "end": 43,
+      "body": "import java.nio.file.Files;"
+    },
+    "44-44:import java.nio.file.StandardCopyOption;": {
+      "start": 44,
+      "end": 44,
+      "body": "import java.nio.file.StandardCopyOption;"
+    },
+    "45-45:import java.util.Arrays;": {
+      "start": 45,
+      "end": 45,
+      "body": "import java.util.Arrays;"
+    },
+    "46-46:import java.util.LinkedList;": {
+      "start": 46,
+      "end": 46,
+      "body": "import java.util.LinkedList;"
+    },
+    "47-47:import java.util.List;": {
+      "start": 47,
+      "end": 47,
+      "body": "import java.util.List;"
+    },
+    "48-48:import java.util.Properties;": {
+      "start": 48,
+      "end": 48,
+      "body": "import java.util.Properties;"
+    },
+    "49-49:import java.util.Random;": {
+      "start": 49,
+      "end": 49,
+      "body": "import java.util.Random;"
+    }
+  },
+  "classes": {
+    "61-395:JansiLoader": {
+      "start": 61,
+      "end": 395,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "73-91:initialize": {
+          "start": 73,
+          "end": 91,
+          "body": [
+            "public static synchronized boolean initialize() {",
+            "        // only cleanup before the first extract",
+            "        if (!loaded) {",
+            "            Thread cleanup = new Thread(JansiLoader::cleanup, \"cleanup\");",
+            "            cleanup.setPriority(Thread.MIN_PRIORITY);",
+            "            cleanup.setDaemon(true);",
+            "            cleanup.start();",
+            "        }",
+            "        try {",
+            "            loadJansiNativeLibrary();",
+            "        } catch (Exception e) {",
+            "            if (!Boolean.parseBoolean(System.getProperty(AnsiConsole.JANSI_GRACEFUL, \"true\"))) {",
+            "                throw new RuntimeException(",
+            "                        \"Unable to load jansi native library. You may want set the `jansi.graceful` system property to true to be able to use Jansi on your platform\",",
+            "                        e);",
+            "            }",
+            "        }",
+            "        return loaded;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static",
+            "synchronized"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "Thread",
+            "Exception",
+            "RuntimeException"
+          ],
+          "signature": "initialize()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Runnable",
+              "run()"
+            ],
+            [
+              "library",
+              "java.lang.Thread",
+              "<init>(java.lang.Runnable,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Thread",
+              "setPriority(int)"
+            ],
+            [
+              "library",
+              "java.lang.Thread",
+              "setDaemon(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.Thread",
+              "start()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "283-353:loadJansiNativeLibrary"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Boolean",
+              "parseBoolean(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String,java.lang.Throwable)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Thread": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from threading import Thread",
+                "translated_target_type": "Thread",
+                "reasoning": "In Python, the equivalent of Java's `Thread` class is provided by the `threading.Thread` class in the `threading` module. This class allows for the creation and management of threads in a similar way to how it is done in Java.",
+                "prompt": ""
+              },
+              "Exception": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Callable, Optional",
+                "translated_target_type": "Optional[Callable[[], bool]]",
+                "reasoning": "In the given Java code, `detector.call()` is a method that returns a boolean value. If an exception occurs during this call, it will be caught and `true` will be returned. This functionality can be translated into Python by using the `Optional[Callable[[], bool]]` type in Python. The `Optional` type allows for either a boolean or None to be returned, which is similar to how Java's Exception handling works. The `Callable[[], bool]` type represents a function that takes no arguments and returns a boolean value, which is equivalent to the `detector.call()` method in Java.",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def initialize() -> bool:",
+            "",
+            "        # only cleanup before the first extract",
+            "        if not JansiLoader.__loaded:",
+            "            cleanup = Thread(target=JansiLoader.__cleanup, name=\"cleanup\")",
+            "            cleanup.setPriority(Thread.MIN_PRIORITY)",
+            "            cleanup.setDaemon(True)",
+            "            cleanup.start()",
+            "        ",
+            "        try: ",
+            "            JansiLoader.__loadJansiNativeLibrary()",
+            "        except Exception as e: ",
+            "            if not bool(os.getenv('jansi.graceful', 'true')):",
+            "                raise RuntimeError(\"Unable to load jansi native library. You may want set the `jansi.graceful` system property to true to be able to use Jansi on your platform\", e)",
+            "        ",
+            "        return JansiLoader.__loaded"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_0_JansiLoader_initialize.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_0_JansiLoader_initialize.py\", line 40, in test_mocking\n    method_ret = orig_JansiLoader_initialize()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 45, in initialize\n    cleanup = Thread(target=JansiLoader.__cleanup, name=\"cleanup\")\n                            ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute '_JansiLoader__cleanup'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/internal/Kernel32Test.py::Kernel32Test::testErrorMessage": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/Kernel32Test.py\", line 14, in testErrorMessage\n    self.assertEqual(msg, \"User profile cannot be loaded.\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 1253, in assertMultiLineEqual\n    self.fail(self._formatMessage(msg, standardMsg))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: '\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\[275 chars]\\x00' != 'User profile cannot be loaded.'\n- #x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00#x00\n+ User profile cannot be loaded.",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "170-171:FormatMessageW"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "526-535:getErrorMessage"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.Kernel32Test",
+                  "class_name": "24-32:Kernel32Test",
+                  "fragment_name": "26-31:testErrorMessage"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/WindowsSupport_ESTest.py::WindowsSupport_ESTest::test0": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/WindowsSupport_ESTest.py\", line 14, in test0\n    WindowsSupport.getErrorMessage(0)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/WindowsSupport.py\", line 23, in getErrorMessage\n    return decode(data, \"UTF-16LE\").strip()\n           ^^^^^^\nNameError: name 'decode' is not defined\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/WindowsSupport_ESTest.py\", line 17, in test0\n    except UnsatisfiedLinkError as e:\n           ^^^^^^^^^^^^^^^^^^^^\nNameError: name 'UnsatisfiedLinkError' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.WindowsSupport",
+                  "class_name": "23-35:WindowsSupport",
+                  "fragment_name": "31-34:getErrorMessage"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "170-171:FormatMessageW"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.WindowsSupport_ESTest",
+                  "class_name": "22-56:WindowsSupport_ESTest",
+                  "fragment_name": "24-36:test0"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/WindowsSupport_ESTest.py::WindowsSupport_ESTest::test1": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/WindowsSupport_ESTest.py\", line 25, in test1\n    pytest.fail(\"Expecting exception: UnsatisfiedLinkError\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 177, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expecting exception: UnsatisfiedLinkError\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/WindowsSupport_ESTest.py\", line 26, in test1\n    except UnsatisfiedLinkError as e:\n           ^^^^^^^^^^^^^^^^^^^^\nNameError: name 'UnsatisfiedLinkError' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.WindowsSupport",
+                  "class_name": "23-35:WindowsSupport",
+                  "fragment_name": "26-29:getLastErrorMessage"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "168-168:GetLastError"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "170-171:FormatMessageW"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "526-535:getErrorMessage"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.WindowsSupport_ESTest",
+                  "class_name": "22-56:WindowsSupport_ESTest",
+                  "fragment_name": "38-50:test1"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/io/WindowsAnsiProcessor_ESTest.py::WindowsAnsiProcessor_ESTest::test0": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/io/WindowsAnsiProcessor_ESTest.py\", line 21, in test0\n    windowsAnsiProcessor0 = WindowsAnsiProcessor(byteArrayOutputStream0, 0)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/io/WindowsAnsiProcessor.py\", line 62, in __init__\n    self.getConsoleInfo()\n    ^^^^^^^^^^^^^^^^^^^\nAttributeError: 'WindowsAnsiProcessor' object has no attribute 'getConsoleInfo'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+                  "class_name": "55-424:WindowsAnsiProcessor",
+                  "fragment_name": "100-105:WindowsAnsiProcessor"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+                  "class_name": "33-559:AnsiProcessor",
+                  "fragment_name": "37-39:AnsiProcessor"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.io.WindowsAnsiProcessor_ESTest",
+                  "class_name": "24-40:WindowsAnsiProcessor_ESTest",
+                  "fragment_name": "26-39:test0"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/internal/JansiLoaderTest.py::JansiLoaderTest::testLoadJansi": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest.py\", line 13, in testLoadJansi\n    JansiLoader.initialize()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 41, in initialize\n    cleanup = Thread(target=JansiLoader.__cleanup, name=\"cleanup\")\n                            ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute '_JansiLoader__cleanup'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoaderTest",
+                  "class_name": "20-26:JansiLoaderTest",
+                  "fragment_name": "22-25:testLoadJansi"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/internal/CLibrary_ESTest.py::CLibrary_ESTest::test6": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/CLibrary_ESTest.py\", line 39, in test6\n    from src.main.org.fusesource.jansi.internal.CLibrary import WinSize\n  File \"<frozen importlib._bootstrap>\", line 1176, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1147, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 690, in _load_unlocked\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 186, in exec_module\n    exec(co, module.__dict__)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/CLibrary.py\", line 120, in <module>\n    CLibrary.run_static_init()\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/CLibrary.py\", line 30, in run_static_init\n    CLibrary.LOADED = JansiLoader.initialize()\n                      ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 41, in initialize\n    cleanup = Thread(target=JansiLoader.__cleanup, name=\"cleanup\")\n                            ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute '_JansiLoader__cleanup'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.CLibrary_ESTest",
+                  "class_name": "22-127:CLibrary_ESTest",
+                  "fragment_name": "100-109:test6"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 3.3798987865448,
+          "generation_timestamp": "2026-03-17T08:12:55.326369",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def initialize() -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "93-95:getNativeLibraryPath": {
+          "start": 93,
+          "end": 95,
+          "body": [
+            "public static String getNativeLibraryPath() {",
+            "        return nativeLibraryPath;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "getNativeLibraryPath()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getNativeLibraryPath() -> str:",
+            "        return JansiLoader.__nativeLibraryPath"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test05": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 14, in test05\n    self.assertIsNone(JansiLoader.getNativeLibraryPath())\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 1283, in assertIsNone\n    self.fail(self._formatMessage(msg, standardMsg))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: '' is not None",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "93-95:getNativeLibraryPath"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "29-33:test05"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 4.263726711273193,
+          "generation_timestamp": "2026-03-17T08:12:16.619242",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getNativeLibraryPath() -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "97-99:getNativeLibrarySourceUrl": {
+          "start": 97,
+          "end": 99,
+          "body": [
+            "public static String getNativeLibrarySourceUrl() {",
+            "        return nativeLibrarySourceUrl;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "getNativeLibrarySourceUrl()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getNativeLibrarySourceUrl() -> str:",
+            "        return JansiLoader.__nativeLibrarySourceUrl"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test08": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 19, in test08\n    self.assertIsNone(JansiLoader.getNativeLibrarySourceUrl())\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 1283, in assertIsNone\n    self.fail(self._formatMessage(msg, standardMsg))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: '' is not None",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "97-99:getNativeLibrarySourceUrl"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "37-41:test08"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 2.27360200881958,
+          "generation_timestamp": "2026-03-17T08:12:18.959984",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getNativeLibrarySourceUrl() -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "101-103:getTempDir": {
+          "start": 101,
+          "end": 103,
+          "body": [
+            "private static File getTempDir() {",
+            "        return new File(System.getProperty(\"jansi.tmpdir\", System.getProperty(\"java.io.tmpdir\")));",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "File"
+          ],
+          "body_types": [
+            "File"
+          ],
+          "signature": "getTempDir()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __getTempDir() -> Path:",
+            "        from pathlib import Path",
+            "        import os",
+            "        ",
+            "        return Path(os.getenv('JANSITEMPDIR', os.getenv('TMPDIR')))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_8_JansiLoader_getTempDir.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_8_JansiLoader_getTempDir.py\", line 37, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":1276761134,\\\"type\\\":\\\"java.io.File\\\",\\\"value\\\":\\\"/tmp\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 2.0354349613189697,
+          "generation_timestamp": "2026-03-17T08:12:21.030751",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __getTempDir() -> Path:\n",
+            "        pass\n\n"
+          ]
+        },
+        "109-132:cleanup": {
+          "start": 109,
+          "end": 132,
+          "body": [
+            "static void cleanup() {",
+            "        String tempFolder = getTempDir().getAbsolutePath();",
+            "        File dir = new File(tempFolder);",
+            "",
+            "        File[] nativeLibFiles = dir.listFiles(new FilenameFilter() {",
+            "            private final String searchPattern = \"jansi-\" + getVersion();",
+            "",
+            "            public boolean accept(File dir, String name) {",
+            "                return name.startsWith(searchPattern) && !name.endsWith(\".lck\");",
+            "            }",
+            "        });",
+            "        if (nativeLibFiles != null) {",
+            "            for (File nativeLibFile : nativeLibFiles) {",
+            "                File lckFile = new File(nativeLibFile.getAbsolutePath() + \".lck\");",
+            "                if (!lckFile.exists()) {",
+            "                    try {",
+            "                        nativeLibFile.delete();",
+            "                    } catch (SecurityException e) {",
+            "                        System.err.println(\"Failed to delete old native lib\" + e.getMessage());",
+            "                    }",
+            "                }",
+            "            }",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "String",
+            "File",
+            "File[]",
+            "FilenameFilter",
+            "boolean",
+            "SecurityException"
+          ],
+          "signature": "cleanup()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "101-103:getTempDir"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getAbsolutePath()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "listFiles(java.io.FilenameFilter)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "exists()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "delete()"
+            ],
+            [
+              "library",
+              "java.lang.SecurityException",
+              "getMessage()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              },
+              "File[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type File[] has been translated to \"object\"",
+                "prompt": ""
+              },
+              "FilenameFilter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type FilenameFilter has been translated to \"object\"",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "SecurityException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type SecurityException has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def cleanup() -> None:",
+            "        temp_folder = str(JansiLoader.__getTempDir())",
+            "        dir = Path(temp_folder)",
+            "",
+            "        nativeLibFiles = [file for file in dir.iterdir() if file.name.startswith(\"jansi-\" + getVersion()) and not file.name.endswith(\".lck\")]",
+            "        ",
+            "        for nativeLibFile in nativeLibFiles:",
+            "            lck_file = Path(str(nativeLibFile) + \".lck\")",
+            "            if not lck_file.exists():",
+            "                try:",
+            "                    nativeLibFile.unlink()",
+            "                except OSError as e:",
+            "                    print(\"Failed to delete old native lib\" + str(e))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.04636955261230469,
+          "generation_timestamp": "2026-03-17T08:12:21.097616",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def cleanup() -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "134-143:readNBytes": {
+          "start": 134,
+          "end": 143,
+          "body": [
+            "private static int readNBytes(InputStream in, byte[] b) throws IOException {",
+            "        int n = 0;",
+            "        int len = b.length;",
+            "        while (n < len) {",
+            "            int count = in.read(b, n, len - n);",
+            "            if (count <= 0) break;",
+            "            n += count;",
+            "        }",
+            "        return n;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "readNBytes( InputStream in,  byte[] b)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "InputStream",
+              "name": "in"
+            },
+            {
+              "modifier": "",
+              "type": "byte[]",
+              "name": "b"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.InputStream",
+              "read(byte[],int,int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|InputStream|in": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|byte[]|b": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __readNBytes(in_: object, b: object) -> int:",
+            "        n = 0",
+            "        len_ = len(b)",
+            "        while n < len_:",
+            "            count = in_.read(b[n:], len_ - n)",
+            "            if count <= 0: break",
+            "            n += count",
+            "        return n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_17_JansiLoader_readNBytes.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_17_JansiLoader_readNBytes.py\", line 39, in test_mocking\n    method_ret = orig_JansiLoader_readNBytes(*method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 98, in __readNBytes\n    len_ = len(b.getvalue())\n               ^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'getvalue'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 4.534724950790405,
+          "generation_timestamp": "2026-03-17T08:12:25.644136",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __readNBytes(in_: object, b: object) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "145-174:contentsEquals": {
+          "start": 145,
+          "end": 174,
+          "body": [
+            "private static String contentsEquals(InputStream in1, InputStream in2) throws IOException {",
+            "        byte[] buffer1 = new byte[8192];",
+            "        byte[] buffer2 = new byte[8192];",
+            "        int numRead1;",
+            "        int numRead2;",
+            "        while (true) {",
+            "            numRead1 = readNBytes(in1, buffer1);",
+            "            numRead2 = readNBytes(in2, buffer2);",
+            "            if (numRead1 > 0) {",
+            "                if (numRead2 <= 0) {",
+            "                    return \"EOF on second stream but not first\";",
+            "                }",
+            "                if (numRead2 != numRead1) {",
+            "                    return \"Read size different (\" + numRead1 + \" vs \" + numRead2 + \")\";",
+            "                }",
+            "                // Otherwise same number of bytes read",
+            "                if (!Arrays.equals(buffer1, buffer2)) {",
+            "                    return \"Content differs\";",
+            "                }",
+            "                // Otherwise same bytes read, so continue ...",
+            "            } else {",
+            "                // Nothing more in stream 1 ...",
+            "                if (numRead2 > 0) {",
+            "                    return \"EOF on first stream but not second\";",
+            "                } else {",
+            "                    return null;",
+            "                }",
+            "            }",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "byte[]",
+            "byte",
+            "int"
+          ],
+          "signature": "contentsEquals( InputStream in1,  InputStream in2)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "InputStream",
+              "name": "in1"
+            },
+            {
+              "modifier": "",
+              "type": "InputStream",
+              "name": "in2"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "134-143:readNBytes"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "equals(byte[],byte[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "byte[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO, SEEK_CUR\nimport pytest",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type for `byte[]` in Java is `BytesIO` from the `io` module. This class provides a stream of bytes that can be read and written to. It's used here because it has methods like `seek()` and `write()` which are similar to the ones used in the Java code.",
+                "prompt": ""
+              },
+              "byte": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|InputStream|in1": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|InputStream|in2": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __contentsEquals(in1: object, in2: object) -> str:",
+            "        buffer1 = bytearray(8192)",
+            "        buffer2 = bytearray(8192)",
+            "        numRead1 = 0",
+            "        numRead2 = 0",
+            "        while True:",
+            "            numRead1 = JansiLoader.__readNBytes(in1, buffer1)",
+            "            numRead2 = JansiLoader.__readNBytes(in2, buffer2)",
+            "            if numRead1 > 0:",
+            "                if numRead2 <= 0:",
+            "                    return \"EOF on second stream but not first\"",
+            "                if numRead2 != numRead1:",
+            "                    return \"Read size different (\" + str(numRead1) + \" vs \" + str(numRead2) + \")\"",
+            "                # Otherwise same number of bytes read",
+            "                if buffer1[:numRead1] != buffer2[:numRead2]:",
+            "                    return \"Content differs\"",
+            "            else:",
+            "                # Nothing more in stream 1 ...",
+            "                if numRead2 > 0:",
+            "                    return \"EOF on first stream but not second\"",
+            "                else:",
+            "                    return None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 4.476640462875366,
+          "generation_timestamp": "2026-03-17T08:12:30.149005",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __contentsEquals(in1: object, in2: object) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "184-235:extractAndLoadLibraryFile": {
+          "start": 184,
+          "end": 235,
+          "body": [
+            "private static boolean extractAndLoadLibraryFile(",
+            "            String libFolderForCurrentOS, String libraryFileName, String targetFolder) {",
+            "        String nativeLibraryFilePath = libFolderForCurrentOS + \"/\" + libraryFileName;",
+            "        // Include architecture name in temporary filename in order to avoid conflicts",
+            "        // when multiple JVMs with different architectures running at the same time",
+            "        String uuid = randomUUID();",
+            "        String extractedLibFileName = String.format(\"jansi-%s-%s-%s\", getVersion(), uuid, libraryFileName);",
+            "        String extractedLckFileName = extractedLibFileName + \".lck\";",
+            "",
+            "        File extractedLibFile = new File(targetFolder, extractedLibFileName);",
+            "        File extractedLckFile = new File(targetFolder, extractedLckFileName);",
+            "",
+            "        try {",
+            "            // Extract a native library file into the target directory",
+            "            try (InputStream in = JansiLoader.class.getResourceAsStream(nativeLibraryFilePath)) {",
+            "                if (!extractedLckFile.exists()) {",
+            "                    new FileOutputStream(extractedLckFile).close();",
+            "                }",
+            "                Files.copy(in, extractedLibFile.toPath(), StandardCopyOption.REPLACE_EXISTING);",
+            "            } finally {",
+            "                // Delete the extracted lib file on JVM exit.",
+            "                extractedLibFile.deleteOnExit();",
+            "                extractedLckFile.deleteOnExit();",
+            "            }",
+            "",
+            "            // Set executable (x) flag to enable Java to load the native library",
+            "            extractedLibFile.setReadable(true);",
+            "            extractedLibFile.setWritable(true);",
+            "            extractedLibFile.setExecutable(true);",
+            "",
+            "            // Check whether the contents are properly copied from the resource folder",
+            "            try (InputStream nativeIn = JansiLoader.class.getResourceAsStream(nativeLibraryFilePath)) {",
+            "                try (InputStream extractedLibIn = new FileInputStream(extractedLibFile)) {",
+            "                    String eq = contentsEquals(nativeIn, extractedLibIn);",
+            "                    if (eq != null) {",
+            "                        throw new RuntimeException(String.format(",
+            "                                \"Failed to write a native library file at %s because %s\", extractedLibFile, eq));",
+            "                    }",
+            "                }",
+            "            }",
+            "",
+            "            // Load library",
+            "            if (loadNativeLibrary(extractedLibFile)) {",
+            "                nativeLibrarySourceUrl =",
+            "                        JansiLoader.class.getResource(nativeLibraryFilePath).toExternalForm();",
+            "                return true;",
+            "            }",
+            "        } catch (IOException e) {",
+            "            System.err.println(e.getMessage());",
+            "        }",
+            "        return false;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "String",
+            "File",
+            "InputStream",
+            "JansiLoader",
+            "FileOutputStream",
+            "FileInputStream",
+            "RuntimeException",
+            "IOException"
+          ],
+          "signature": "extractAndLoadLibraryFile( String libFolderForCurrentOS,  String libraryFileName,  String targetFolder)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "libFolderForCurrentOS"
+            },
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "libraryFileName"
+            },
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "targetFolder"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "237-239:randomUUID"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "378-394:getVersion"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getResourceAsStream(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "exists()"
+            ],
+            [
+              "library",
+              "java.io.FileOutputStream",
+              "<init>(java.io.File)"
+            ],
+            [
+              "library",
+              "java.io.FileOutputStream",
+              "close()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "toPath()"
+            ],
+            [
+              "library",
+              "java.nio.file.Files",
+              "copy(java.io.InputStream,java.nio.file.Path,java.nio.file.CopyOption[])"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "deleteOnExit()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "setReadable(boolean)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "setWritable(boolean)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "setExecutable(boolean)"
+            ],
+            [
+              "library",
+              "java.io.FileInputStream",
+              "<init>(java.io.File)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "145-174:contentsEquals"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "247-276:loadNativeLibrary"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getResource(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.net.URL",
+              "toExternalForm()"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "getMessage()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              },
+              "InputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pkg_resources",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type to Java's `InputStream` is `io.BytesIO`. This class provides an in-memory stream for text data that can be used as a drop-in replacement for file and socket objects. In this case, we are using it to read from a resource file located at \"/META-INF/maven/\" + path + \"/pom.properties\". The `pkg_resources` module is also imported to access the resource file.",
+                "prompt": ""
+              },
+              "JansiLoader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type JansiLoader has been translated to \"object\"",
+                "prompt": ""
+              },
+              "FileOutputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO, BufferedWriter\nimport os",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In the given Java code, a `FileOutputStream` is used to write data into a file. However, in Python, we can use `BytesIO` from the io module which provides a stream of bytes that supports various methods for reading and writing. It's also compatible with the `BufferedWriter` class from the built-in io module, so it can be used as a replacement for `FileOutputStream`.",
+                "prompt": ""
+              },
+              "FileInputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import FileIO",
+                "translated_target_type": "FileIO",
+                "reasoning": "In Python, the equivalent type to `java.io.FileInputStream` is `io.FileIO` in Python's standard library. This class provides a way to read and write binary files. It has methods for reading and writing bytes from/to the file. The main difference between Java's FileInputStream and Python's io.FileIO is that Python's FileIO does not have a `read()` method, but it can be used in a similar manner with the `read()` function.",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, `Exception` is the base class for all exceptions. It's used to catch any type of exception that might occur during execution. In this case, it would be used to catch any type of I/O related errors.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|libFolderForCurrentOS": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|String|libraryFileName": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|String|targetFolder": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __extractAndLoadLibraryFile(libFolderForCurrentOS: object, libraryFileName: object, targetFolder: object) -> bool:",
+            "        pass"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_9_JansiLoader_extractAndLoadLibraryFile.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_9_JansiLoader_extractAndLoadLibraryFile.py\", line 59, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":247969246,\\\"type\\\":\\\"java.lang.Boolean\\\",\\\"value\\\":\\\"true\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 2.368729591369629,
+          "generation_timestamp": "2026-03-17T08:12:44.994111",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __extractAndLoadLibraryFile(libFolderForCurrentOS: object, libraryFileName: object, targetFolder: object) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "237-239:randomUUID": {
+          "start": 237,
+          "end": 239,
+          "body": [
+            "private static String randomUUID() {",
+            "        return Long.toHexString(new Random().nextLong());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "Random"
+          ],
+          "signature": "randomUUID()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.Random",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "nextLong()"
+            ],
+            [
+              "library",
+              "java.lang.Long",
+              "toHexString(long)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Random": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import random",
+                "translated_target_type": "random.Random",
+                "reasoning": "In Python, the equivalent of Java's `java.util.Random` class is `random.Random` in the `random` module. This class provides methods for generating random numbers and sequences. The seed value can be set using the constructor or by calling the `seed()` method. In this case, a seed value is passed to the constructor of `random.Random` which is equivalent to creating an instance of `java.util.Random` with a specified seed in Java.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __randomUUID() -> str:",
+            "        return hex(random.getrandbits(64))[2:-1]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_10_JansiLoader_randomUUID.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_10_JansiLoader_randomUUID.py\", line 37, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":1417854124,\\\"type\\\":\\\"java.lang.String\\\",\\\"value\\\":\\\"add9a77564376fc0\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.9965472221374512,
+          "generation_timestamp": "2026-03-17T08:12:31.196931",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __randomUUID() -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "247-276:loadNativeLibrary": {
+          "start": 247,
+          "end": 276,
+          "body": [
+            "private static boolean loadNativeLibrary(File libPath) {",
+            "        if (libPath.exists()) {",
+            "            try {",
+            "                String path = libPath.getAbsolutePath();",
+            "                System.load(path);",
+            "                nativeLibraryPath = path;",
+            "                return true;",
+            "            } catch (UnsatisfiedLinkError e) {",
+            "                if (!libPath.canExecute()) {",
+            "                    // NOTE: this can be tested using something like:",
+            "                    // docker run --rm --tmpfs /tmp -v $PWD:/jansi openjdk:11 java -jar",
+            "                    // /jansi/target/jansi-xxx-SNAPSHOT.jar",
+            "                    System.err.printf(",
+            "                            \"Failed to load native library:%s. The native library file at %s is not executable, \"",
+            "                                    + \"make sure that the directory is mounted on a partition without the noexec flag, or set the \"",
+            "                                    + \"jansi.tmpdir system property to point to a proper location.  osinfo: %s%n\",",
+            "                            libPath.getName(), libPath, OSInfo.getNativeLibFolderPathForCurrentOS());",
+            "                } else {",
+            "                    System.err.printf(",
+            "                            \"Failed to load native library:%s. osinfo: %s%n\",",
+            "                            libPath.getName(), OSInfo.getNativeLibFolderPathForCurrentOS());",
+            "                }",
+            "                System.err.println(e);",
+            "                return false;",
+            "            }",
+            "",
+            "        } else {",
+            "            return false;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "String",
+            "UnsatisfiedLinkError"
+          ],
+          "signature": "loadNativeLibrary( File libPath)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "File",
+              "name": "libPath"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.File",
+              "exists()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getAbsolutePath()"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "load(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "canExecute()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getName()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.OSInfo",
+              "46-229:OSInfo",
+              "113-115:getNativeLibFolderPathForCurrentOS"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "printf(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "UnsatisfiedLinkError": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type UnsatisfiedLinkError has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|File|libPath": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __loadNativeLibrary(libPath: object) -> bool:",
+            "        from src.main.org.fusesource.jansi.internal.OSInfo import OSInfo",
+            "        if libPath.exists():",
+            "            try:",
+            "                path = libPath.getAbsolutePath()",
+            "                ctypes.CDLL(path)",
+            "                JansiLoader.__nativeLibraryPath = path",
+            "                return True",
+            "            except OSError as e:",
+            "                if not libPath.canExecute():",
+            "                    print(f\"Failed to load native library:{libPath.getName()}. The native library file at {libPath} is not executable, make sure that the directory is mounted on a partition without the noexec flag, or set the jansi.tmpdir system property to point to a proper location. osinfo: {OSInfo.getNativeLibFolderPathForCurrentOS()}\")",
+            "                else:",
+            "                    print(f\"Failed to load native library:{libPath.getName()}. osinfo: {OSInfo.getNativeLibFolderPathForCurrentOS()}\")",
+            "                print(e)",
+            "                return False",
+            "        else:",
+            "            return False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_21_JansiLoader_loadNativeLibrary.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_21_JansiLoader_loadNativeLibrary.py\", line 39, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":247969246,\\\"type\\\":\\\"java.lang.Boolean\\\",\\\"value\\\":\\\"true\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 4.622830867767334,
+          "generation_timestamp": "2026-03-17T08:12:35.829445",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __loadNativeLibrary(libPath: object) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "283-353:loadJansiNativeLibrary": {
+          "start": 283,
+          "end": 353,
+          "body": [
+            "private static void loadJansiNativeLibrary() throws Exception {",
+            "        if (loaded) {",
+            "            return;",
+            "        }",
+            "",
+            "        List<String> triedPaths = new LinkedList<String>();",
+            "",
+            "        // Try loading library from library.jansi.path library path */",
+            "        String jansiNativeLibraryPath = System.getProperty(\"library.jansi.path\");",
+            "        String jansiNativeLibraryName = System.getProperty(\"library.jansi.name\");",
+            "        if (jansiNativeLibraryName == null) {",
+            "            jansiNativeLibraryName = System.mapLibraryName(\"jansi\");",
+            "            assert jansiNativeLibraryName != null;",
+            "            if (jansiNativeLibraryName.endsWith(\".dylib\")) {",
+            "                jansiNativeLibraryName = jansiNativeLibraryName.replace(\".dylib\", \".jnilib\");",
+            "            }",
+            "        }",
+            "",
+            "        if (jansiNativeLibraryPath != null) {",
+            "            String withOs = jansiNativeLibraryPath + \"/\" + OSInfo.getNativeLibFolderPathForCurrentOS();",
+            "            if (loadNativeLibrary(new File(withOs, jansiNativeLibraryName))) {",
+            "                loaded = true;",
+            "                return;",
+            "            } else {",
+            "                triedPaths.add(withOs);",
+            "            }",
+            "",
+            "            if (loadNativeLibrary(new File(jansiNativeLibraryPath, jansiNativeLibraryName))) {",
+            "                loaded = true;",
+            "                return;",
+            "            } else {",
+            "                triedPaths.add(jansiNativeLibraryPath);",
+            "            }",
+            "        }",
+            "",
+            "        // Load the os-dependent library from the jar file",
+            "        String packagePath = JansiLoader.class.getPackage().getName().replace('.', '/');",
+            "        jansiNativeLibraryPath =",
+            "                String.format(\"/%s/native/%s\", packagePath, OSInfo.getNativeLibFolderPathForCurrentOS());",
+            "        boolean hasNativeLib = hasResource(jansiNativeLibraryPath + \"/\" + jansiNativeLibraryName);",
+            "",
+            "        if (hasNativeLib) {",
+            "            // temporary library folder",
+            "            String tempFolder = getTempDir().getAbsolutePath();",
+            "            // Try extracting the library from jar",
+            "            if (extractAndLoadLibraryFile(jansiNativeLibraryPath, jansiNativeLibraryName, tempFolder)) {",
+            "                loaded = true;",
+            "                return;",
+            "            } else {",
+            "                triedPaths.add(jansiNativeLibraryPath);",
+            "            }",
+            "        }",
+            "",
+            "        // As a last resort try from java.library.path",
+            "        String javaLibraryPath = System.getProperty(\"java.library.path\", \"\");",
+            "        for (String ldPath : javaLibraryPath.split(File.pathSeparator)) {",
+            "            if (ldPath.isEmpty()) {",
+            "                continue;",
+            "            }",
+            "            if (loadNativeLibrary(new File(ldPath, jansiNativeLibraryName))) {",
+            "                loaded = true;",
+            "                return;",
+            "            } else {",
+            "                triedPaths.add(ldPath);",
+            "            }",
+            "        }",
+            "",
+            "        throw new Exception(String.format(",
+            "                \"No native library found for os.name=%s, os.arch=%s, paths=[%s]\",",
+            "                OSInfo.getOSName(), OSInfo.getArchName(), String.join(File.pathSeparator, triedPaths)));",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "List<String>",
+            "LinkedList<String>",
+            "String",
+            "File",
+            "JansiLoader",
+            "boolean",
+            "Exception"
+          ],
+          "signature": "loadJansiNativeLibrary()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.LinkedList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "mapLibraryName(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.AssertionError",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "endsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "replace(java.lang.CharSequence,java.lang.CharSequence)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.OSInfo",
+              "46-229:OSInfo",
+              "113-115:getNativeLibFolderPathForCurrentOS"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String,java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "247-276:loadNativeLibrary"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getPackage()"
+            ],
+            [
+              "library",
+              "java.lang.Package",
+              "getName()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "replace(char,char)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "355-357:hasResource"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "101-103:getTempDir"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getAbsolutePath()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "184-235:extractAndLoadLibraryFile"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.OSInfo",
+              "46-229:OSInfo",
+              "117-119:getOSName"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.OSInfo",
+              "46-229:OSInfo",
+              "194-208:getArchName"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "join(java.lang.CharSequence,java.lang.Iterable)"
+            ],
+            [
+              "library",
+              "java.lang.Exception",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "List<String>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type to Java's `List<String>` is `List[str]`. The `typing` module in Python provides support for type hints as specified by PEP 484. Here, we import List from typing and use it to denote a list of strings.",
+                "prompt": ""
+              },
+              "LinkedList<String>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type for `LinkedList<String>` in Java is `List[str]`. The `List` class in Python is a built-in data structure that can hold any number of items and maintain their order. In this case, it holds strings (`str`). This is similar to the LinkedList in Java which also maintains the insertion order and allows null elements.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              },
+              "JansiLoader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type JansiLoader has been translated to \"object\"",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Exception": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Callable, Optional",
+                "translated_target_type": "Optional[Callable[[], bool]]",
+                "reasoning": "In the given Java code, `detector.call()` is a method that returns a boolean value. If an exception occurs during this call, it will be caught and `true` will be returned. This functionality can be translated into Python by using the `Optional[Callable[[], bool]]` type in Python. The `Optional` type allows for either a boolean or None to be returned, which is similar to how Java's Exception handling works. The `Callable[[], bool]` type represents a function that takes no arguments and returns a boolean value, which is equivalent to the `detector.call()` method in Java.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __loadJansiNativeLibrary() -> None:",
+            "        import os",
+            "        from pathlib import Path",
+            "        import pkg_resources",
+            "        import ctypes",
+            "",
+            "        class OSUtils:",
+            "            @classmethod",
+            "            def isWindows(cls) -> bool:",
+            "                return os.name == 'nt'",
+            "",
+            "            @classmethod",
+            "            def isMacOS(cls) -> bool:",
+            "                return os.name == 'mac'",
+            "",
+            "            @classmethod",
+            "            def isUnix(cls) -> bool:",
+            "                return os.name == 'posix' and OSUtils.isLinux()",
+            "",
+            "            @classmethod",
+            "            def isLinux(cls) -> bool:",
+            "                return os.uname().sysname == 'Linux' if OSUtils.isUnix() else False",
+            "",
+            "        class FileUtils:",
+            "            @staticmethod",
+            "            def getResourcePath(resourceName: str) -> Path:",
+            "                resourcePath = None",
+            "                try:",
+            "                    with pkg_resources.resource_stream(__name__, resourceName) as stream:",
+            "                        nativeDir = os.path.join(os.path.dirname(__file__), \"native\", OSUtils.getOSName())",
+            "                        if not os.path.exists(nativeDir):",
+            "                            os.makedirs(nativeDir)",
+            "                        resourcePath = os.path.join(nativeDir, resourceName)",
+            "                        with open(resourcePath, 'wb') as file:",
+            "                            file.write(stream.read())",
+            "                except Exception as e:",
+            "                    print('Error loading native library', e)",
+            "                return Path(resourcePath) if resourcePath else None",
+            "",
+            "            @staticmethod",
+            "            def getOSName() -> str:",
+            "                if OSUtils.isWindows():",
+            "                    return 'windows'",
+            "                elif OSUtils.isMacOS():",
+            "                    return 'macosx'",
+            "                elif OSUtils.isLinux():",
+            "                    return 'linux'",
+            "                else:",
+            "                    raise Exception('Unsupported operating system')",
+            "",
+            "        class NativeLoader:",
+            "            @staticmethod",
+            "            def loadLibraryFromResource(resourcePath: Path) -> ctypes.CDLL:",
+            "                try:",
+            "                    lib = ctypes.cdll.LoadLibrary(str(resourcePath))",
+            "                    return lib",
+            "                except Exception as e:",
+            "                    print('Error loading native library', e)",
+            "                return None",
+            "",
+            "        class NativeUtils:",
+            "            @staticmethod",
+            "            def loadNativeLibrary() -> ctypes.CDLL:",
+            "                resourceName = 'libjnacl.so' if OSUtils.isUnix() else 'jnacl.dll'",
+            "                resourcePath = FileUtils.getResourcePath(resourceName)",
+            "                return NativeLoader.loadLibraryFromResource(resourcePath)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 3.0327112674713135,
+          "generation_timestamp": "2026-03-17T08:12:48.087208",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __loadJansiNativeLibrary() -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "355-357:hasResource": {
+          "start": 355,
+          "end": 357,
+          "body": [
+            "private static boolean hasResource(String path) {",
+            "        return JansiLoader.class.getResource(path) != null;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "JansiLoader"
+          ],
+          "signature": "hasResource( String path)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "path"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "getResource(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "JansiLoader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type JansiLoader has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|path": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __hasResource(path: object) -> bool:",
+            "        return pkg_resources.resource_exists(__name__, path)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_7_JansiLoader_hasResource.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_7_JansiLoader_hasResource.py\", line 38, in test_mocking\n    method_ret = orig_JansiLoader_hasResource(*method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 170, in __hasResource\n    return JansiLoader().__class__.getResource(path) != None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'JansiLoader' has no attribute 'getResource'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 3.7719569206237793,
+          "generation_timestamp": "2026-03-17T08:12:39.646860",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __hasResource(path: object) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "362-365:getMajorVersion": {
+          "start": 362,
+          "end": 365,
+          "body": [
+            "public static int getMajorVersion() {",
+            "        String[] c = getVersion().split(\"\\\\.\");",
+            "        return (c.length > 0) ? Integer.parseInt(c[0]) : 1;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "String[]"
+          ],
+          "signature": "getMajorVersion()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "378-394:getVersion"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "parseInt(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type for a Java String array is a list of strings. The 'typing' module in Python provides support for type hints as specified by PEP 484. Here, we use List from typing to denote that it is a list and str inside the square brackets denotes that each element in the list is a string.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getMajorVersion() -> int:",
+            "        c = JansiLoader.getVersion().split(\"\\\\.\")",
+            "        return (len(c) > 0) and int(c[0]) or 1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.1876220703125,
+          "generation_timestamp": "2026-03-17T08:12:48.344675",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getMajorVersion() -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "370-373:getMinorVersion": {
+          "start": 370,
+          "end": 373,
+          "body": [
+            "public static int getMinorVersion() {",
+            "        String[] c = getVersion().split(\"\\\\.\");",
+            "        return (c.length > 1) ? Integer.parseInt(c[1]) : 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "String[]"
+          ],
+          "signature": "getMinorVersion()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "378-394:getVersion"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "parseInt(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type for a Java String array is a list of strings. The 'typing' module in Python provides support for type hints as specified by PEP 484. Here, we use List from typing to denote that it is a list and str inside the square brackets denotes that each element in the list is a string.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getMinorVersion() -> int:",
+            "        c = JansiLoader.getVersion().split(\"\\\\.\")",
+            "        return (len(c) > 1) and int(c[1]) or 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test09": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 24, in test09\n    self.assertEqual(4, JansiLoader.getMinorVersion())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 233, in getMinorVersion\n    c = JansiLoader.getVersion().split(\"\\\\.\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 238, in getVersion\n    versionFile = pkg_resources.resource_stream(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1387, in resource_stream\n    return get_provider(package_or_requirement).get_resource_stream(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1672, in get_resource_stream\n    return io.BytesIO(self.get_resource_string(manager, resource_name))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1677, in get_resource_string\n    return self._get(self._fn(self.module_path, resource_name))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1854, in _get\n    return self.loader.get_data(path)  # type: ignore[attr-defined]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 291, in get_data\n    with open(pathname, \"rb\") as f:\n         ^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/org/fusesource/jansi/jansi.properties'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "370-373:getMinorVersion"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "378-394:getVersion"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "43-47:test09"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test11": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 35, in test11\n    int0 = JansiLoader.getMinorVersion()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 233, in getMinorVersion\n    c = JansiLoader.getVersion().split(\"\\\\.\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 238, in getVersion\n    versionFile = pkg_resources.resource_stream(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1387, in resource_stream\n    return get_provider(package_or_requirement).get_resource_stream(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1672, in get_resource_stream\n    return io.BytesIO(self.get_resource_string(manager, resource_name))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1677, in get_resource_string\n    return self._get(self._fn(self.module_path, resource_name))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1854, in _get\n    return self.loader.get_data(path)  # type: ignore[attr-defined]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 291, in get_data\n    with open(pathname, \"rb\") as f:\n         ^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/org/fusesource/jansi/jansi.properties'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "370-373:getMinorVersion"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "378-394:getVersion"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "55-60:test11"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 3.2227466106414795,
+          "generation_timestamp": "2026-03-17T08:12:51.607930",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getMinorVersion() -> int:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "378-394:getVersion": {
+          "start": 378,
+          "end": 394,
+          "body": [
+            "public static String getVersion() {",
+            "",
+            "        URL versionFile = JansiLoader.class.getResource(\"/org/fusesource/jansi/jansi.properties\");",
+            "",
+            "        String version = \"unknown\";",
+            "        try {",
+            "            if (versionFile != null) {",
+            "                Properties versionData = new Properties();",
+            "                versionData.load(versionFile.openStream());",
+            "                version = versionData.getProperty(\"version\", version);",
+            "                version = version.trim().replaceAll(\"[^0-9.]\", \"\");",
+            "            }",
+            "        } catch (IOException e) {",
+            "            System.err.println(e);",
+            "        }",
+            "        return version;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "URL",
+            "JansiLoader",
+            "String",
+            "Properties",
+            "IOException"
+          ],
+          "signature": "getVersion()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "getResource(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Properties",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.net.URL",
+              "openStream()"
+            ],
+            [
+              "library",
+              "java.util.Properties",
+              "load(java.io.InputStream)"
+            ],
+            [
+              "library",
+              "java.util.Properties",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "trim()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "replaceAll(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "URL": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type URL has been translated to \"object\"",
+                "prompt": ""
+              },
+              "JansiLoader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type JansiLoader has been translated to \"object\"",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Properties": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from configparser import ConfigParser\nimport os",
+                "translated_target_type": "ConfigParser",
+                "reasoning": "In Python, the equivalent of Java's Properties class is the ConfigParser class from the configparser module. This class allows for reading and writing configuration files in a variety of formats, including Windows .ini style files and simple flat files. In this case, we are using it to read properties from a pom.properties file, which is similar to Java's Properties class.",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, `Exception` is the base class for all exceptions. It's used to catch any type of exception that might occur during execution. In this case, it would be used to catch any type of I/O related errors.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def getVersion() -> str:",
+            "        versionFile = pkg_resources.resource_stream(__name__, 'org/fusesource/jansi/jansi.properties')",
+            "",
+            "        version = \"unknown\"",
+            "        try:",
+            "            if versionFile is not None:",
+            "                versionData = ConfigParser()",
+            "                versionData.read_file(BytesIO(versionFile.read().decode('utf-8')))",
+            "                version = versionData.get('DEFAULT', 'version')",
+            "                version = version.strip().replace(\"[^0-9.]\", \"\")",
+            "        except Exception as e:",
+            "            print(e)",
+            "        ",
+            "        return version"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_11_JansiLoader_getVersion.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoaderTest_testLoadJansi_decomposed_mocker_11_JansiLoader_getVersion.py\", line 36, in test_mocking\n    method_ret = orig_JansiLoader_getVersion()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 184, in getVersion\n    versionFile = JansiLoader.__class__.getResource(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'type' has no attribute 'getResource'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test10": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 28, in test10\n    self.assertEqual(\"2.4.2\", JansiLoader.getVersion())\n                              ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 172, in getVersion\n    versionFile = pkg_resources.resource_stream(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1387, in resource_stream\n    return get_provider(package_or_requirement).get_resource_stream(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1672, in get_resource_stream\n    return io.BytesIO(self.get_resource_string(manager, resource_name))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1677, in get_resource_string\n    return self._get(self._fn(self.module_path, resource_name))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1854, in _get\n    return self.loader.get_data(path)  # type: ignore[attr-defined]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 291, in get_data\n    with open(pathname, \"rb\") as f:\n         ^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/org/fusesource/jansi/jansi.properties'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "378-394:getVersion"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "49-53:test10"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test09": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 24, in test09\n    self.assertEqual(4, JansiLoader.getMinorVersion())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 233, in getMinorVersion\n    c = JansiLoader.getVersion().split(\"\\\\.\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 238, in getVersion\n    versionFile = pkg_resources.resource_stream(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1387, in resource_stream\n    return get_provider(package_or_requirement).get_resource_stream(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1672, in get_resource_stream\n    return io.BytesIO(self.get_resource_string(manager, resource_name))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1677, in get_resource_string\n    return self._get(self._fn(self.module_path, resource_name))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1854, in _get\n    return self.loader.get_data(path)  # type: ignore[attr-defined]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 291, in get_data\n    with open(pathname, \"rb\") as f:\n         ^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/org/fusesource/jansi/jansi.properties'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "370-373:getMinorVersion"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "378-394:getVersion"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "43-47:test09"
+                }
+              ]
+            },
+            "src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py::JansiLoader_ESTest::test11": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/test/org/fusesource/jansi/internal/JansiLoader_ESTest.py\", line 35, in test11\n    int0 = JansiLoader.getMinorVersion()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 233, in getMinorVersion\n    c = JansiLoader.getVersion().split(\"\\\\.\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/JansiLoader.py\", line 238, in getVersion\n    versionFile = pkg_resources.resource_stream(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1387, in resource_stream\n    return get_provider(package_or_requirement).get_resource_stream(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1672, in get_resource_stream\n    return io.BytesIO(self.get_resource_string(manager, resource_name))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1677, in get_resource_string\n    return self._get(self._fn(self.module_path, resource_name))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/pkg_resources/__init__.py\", line 1854, in _get\n    return self.loader.get_data(path)  # type: ignore[attr-defined]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/assertion/rewrite.py\", line 291, in get_data\n    with open(pathname, \"rb\") as f:\n         ^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/jansi/src/main/org/fusesource/jansi/internal/org/fusesource/jansi/jansi.properties'",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "370-373:getMinorVersion"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "378-394:getVersion"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.internal.JansiLoader_ESTest",
+                  "class_name": "22-61:JansiLoader_ESTest",
+                  "fragment_name": "55-60:test11"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 2.905766248703003,
+          "generation_timestamp": "2026-03-17T08:12:42.584939",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def getVersion() -> str:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "63-63:loaded": {
+          "start": 63,
+          "end": 63,
+          "enum_constant": false,
+          "body": [
+            "private static boolean loaded = false;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __loaded: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.17213773727416992,
+          "generation_timestamp": "2026-03-17T07:19:03.396452",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __loaded: bool = ",
+            ""
+          ]
+        },
+        "64-64:nativeLibraryPath": {
+          "start": 64,
+          "end": 64,
+          "enum_constant": false,
+          "body": [
+            "private static String nativeLibraryPath;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __nativeLibraryPath: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.09055876731872559,
+          "generation_timestamp": "2026-03-17T07:19:03.201386",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __nativeLibraryPath: str = ''"
+          ]
+        },
+        "65-65:nativeLibrarySourceUrl": {
+          "start": 65,
+          "end": 65,
+          "enum_constant": false,
+          "body": [
+            "private static String nativeLibrarySourceUrl;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __nativeLibrarySourceUrl: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.14622902870178223,
+          "generation_timestamp": "2026-03-17T07:19:03.097172",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __nativeLibrarySourceUrl: str = ''"
+          ]
+        }
+      },
+      "python_class_declaration": "class JansiLoader:\n\n"
+    }
+  },
+  "import_map": {
+    "AnsiConsole": "org.fusesource.jansi.AnsiConsole",
+    "File": "java.io.File",
+    "FileInputStream": "java.io.FileInputStream",
+    "FileOutputStream": "java.io.FileOutputStream",
+    "FilenameFilter": "java.io.FilenameFilter",
+    "IOException": "java.io.IOException",
+    "InputStream": "java.io.InputStream",
+    "URL": "java.net.URL",
+    "Files": "java.nio.file.Files",
+    "StandardCopyOption": "java.nio.file.StandardCopyOption",
+    "Arrays": "java.util.Arrays",
+    "LinkedList": "java.util.LinkedList",
+    "List": "java.util.List",
+    "Properties": "java.util.Properties",
+    "Random": "java.util.Random"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from configparser import ConfigParser\nimport os",
+    "from io import BytesIO\nimport pkg_resources",
+    "from io import BytesIO, BufferedWriter\nimport os",
+    "from io import BytesIO, SEEK_CUR\nimport pytest",
+    "from io import FileIO",
+    "from pathlib import Path",
+    "from threading import Thread",
+    "from typing import Any, Optional",
+    "from typing import Callable, Optional",
+    "from typing import List",
+    "from typing import List, Any",
+    "from unittest import TestCase, main",
+    "import random"
+  ]
+}

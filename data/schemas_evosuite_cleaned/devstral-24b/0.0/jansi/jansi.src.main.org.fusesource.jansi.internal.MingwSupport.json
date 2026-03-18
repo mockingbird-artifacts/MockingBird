@@ -1,0 +1,1309 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/internal/MingwSupport.java",
+  "imports": {
+    "18-18:import java.io.ByteArrayOutputStream;": {
+      "start": 18,
+      "end": 18,
+      "body": "import java.io.ByteArrayOutputStream;"
+    },
+    "19-19:import java.io.File;": {
+      "start": 19,
+      "end": 19,
+      "body": "import java.io.File;"
+    },
+    "20-20:import java.io.FileDescriptor;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.io.FileDescriptor;"
+    },
+    "21-21:import java.io.IOException;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.io.IOException;"
+    },
+    "22-22:import java.io.InputStream;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.InputStream;"
+    },
+    "23-23:import java.lang.reflect.Constructor;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.lang.reflect.Constructor;"
+    },
+    "24-24:import java.lang.reflect.Field;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.lang.reflect.Field;"
+    },
+    "25-25:import java.util.regex.Matcher;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.util.regex.Matcher;"
+    },
+    "26-26:import java.util.regex.Pattern;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.regex.Pattern;"
+    }
+  },
+  "classes": {
+    "34-137:MingwSupport": {
+      "start": 34,
+      "end": 137,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "40-67:MingwSupport": {
+          "start": 40,
+          "end": 67,
+          "body": [
+            "public MingwSupport() {",
+            "        String tty = null;",
+            "        String stty = null;",
+            "        String path = System.getenv(\"PATH\");",
+            "        if (path != null) {",
+            "            String[] paths = path.split(File.pathSeparator);",
+            "            for (String p : paths) {",
+            "                File ttyFile = new File(p, \"tty.exe\");",
+            "                if (tty == null && ttyFile.canExecute()) {",
+            "                    tty = ttyFile.getAbsolutePath();",
+            "                }",
+            "                File sttyFile = new File(p, \"stty.exe\");",
+            "                if (stty == null && sttyFile.canExecute()) {",
+            "                    stty = sttyFile.getAbsolutePath();",
+            "                }",
+            "            }",
+            "        }",
+            "        if (tty == null) {",
+            "            tty = \"tty.exe\";",
+            "        }",
+            "        if (stty == null) {",
+            "            stty = \"stty.exe\";",
+            "        }",
+            "        ttyCommand = tty;",
+            "        sttyCommand = stty;",
+            "        // Compute patterns",
+            "        columnsPatterns = Pattern.compile(\"\\\\b\" + \"columns\" + \"\\\\s+(\\\\d+)\\\\b\");",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [
+            "String",
+            "String[]",
+            "File"
+          ],
+          "signature": "MingwSupport()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getenv(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "canExecute()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getAbsolutePath()"
+            ],
+            [
+              "library",
+              "java.util.regex.Pattern",
+              "compile(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "None",
+                "translated_target_type": "list[str]",
+                "reasoning": "In Python, the equivalent type for a Java `String[]` is `list[str]`. This maintains the same functionality as a list of strings.",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import os",
+                "translated_target_type": "os.PathLike",
+                "reasoning": "The `File` class in Java represents file and directory pathnames. In Python, the equivalent type that represents file and directory pathnames is `os.PathLike`, which is an abstract base class for representing filesystem paths.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:",
+            "        tty = None",
+            "        stty = None",
+            "        path = os.getenv(\"PATH\")",
+            "        if path is not None:",
+            "            paths = path.split(os.pathsep)",
+            "            for p in paths:",
+            "                tty_file = os.path.join(p, \"tty.exe\")",
+            "                if tty is None and os.access(tty_file, os.X_OK):",
+            "                    tty = tty_file",
+            "                stty_file = os.path.join(p, \"stty.exe\")",
+            "                if stty is None and os.access(stty_file, os.X_OK):",
+            "                    stty = stty_file",
+            "        if tty is None:",
+            "            tty = \"tty.exe\"",
+            "        if stty is None:",
+            "            stty = \"stty.exe\"",
+            "        self.__ttyCommand = tty",
+            "        self.__sttyCommand = stty",
+            "        self.__columnsPatterns = re.compile(r\"\\bcolumns\\s+(\\d+)\\b\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 18.75621747970581,
+          "generation_timestamp": "2025-11-04T21:34:34.593549",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "69-86:getConsoleName": {
+          "start": 69,
+          "end": 86,
+          "body": [
+            "public String getConsoleName(boolean stdout) {",
+            "        try {",
+            "            Process p = new ProcessBuilder(ttyCommand)",
+            "                    .redirectInput(getRedirect(stdout ? FileDescriptor.out : FileDescriptor.err))",
+            "                    .start();",
+            "            String result = waitAndCapture(p);",
+            "            if (p.exitValue() == 0) {",
+            "                return result.trim();",
+            "            }",
+            "        } catch (Throwable t) {",
+            "            if (\"java.lang.reflect.InaccessibleObjectException\"",
+            "                    .equals(t.getClass().getName())) {",
+            "                System.err.println(\"MINGW support requires --add-opens java.base/java.lang=ALL-UNNAMED\");",
+            "            }",
+            "            // ignore",
+            "        }",
+            "        return null;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "Process",
+            "ProcessBuilder",
+            "String",
+            "Throwable"
+          ],
+          "signature": "getConsoleName( boolean stdout)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stdout"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "<init>(java.lang.String[])"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "124-136:getRedirect"
+            ],
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "redirectInput(java.lang.ProcessBuilder$Redirect)"
+            ],
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "start()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "105-119:waitAndCapture"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "exitValue()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "trim()"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "getClass()"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getName()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Process": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `Process` class in Java is used to control native processes started by `ProcessBuilder.start` and `Runtime.exec`. In Python, the equivalent functionality is provided by the `subprocess` module, specifically the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": ""
+              },
+              "ProcessBuilder": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `ProcessBuilder` class in Java is used to create operating system processes. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Throwable": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, the `Exception` class is the base class for all built-in exceptions. It serves a similar purpose to Java's `Throwable` class, which is the superclass of all errors and exceptions. Therefore, `Exception` is the equivalent type in Python that maintains the same functionality as `Throwable` in Java.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|stdout": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def getConsoleName(self, stdout: bool) -> str:",
+            "        try:",
+            "            p = subprocess.Popen(self.__ttyCommand, stdin=self.__getRedirect(stdout), stdout=subprocess.PIPE, stderr=subprocess.PIPE)",
+            "            result = self.__waitAndCapture(p)",
+            "            if p.returncode == 0:",
+            "                return result.strip()",
+            "        except Exception as t:",
+            "            if t.__class__.__name__ == \"InaccessibleObjectException\":",
+            "                print(\"MINGW support requires --add-opens java.base/java.lang=ALL-UNNAMED\", file=sys.stderr)",
+            "        return None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 17.21991801261902,
+          "generation_timestamp": "2025-11-04T21:35:43.656144",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getConsoleName(self, stdout: object) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "88-103:getTerminalWidth": {
+          "start": 88,
+          "end": 103,
+          "body": [
+            "public int getTerminalWidth(String name) {",
+            "        try {",
+            "            Process p = new ProcessBuilder(sttyCommand, \"-F\", name, \"-a\").start();",
+            "            String result = waitAndCapture(p);",
+            "            if (p.exitValue() != 0) {",
+            "                throw new IOException(\"Error executing '\" + sttyCommand + \"': \" + result);",
+            "            }",
+            "            Matcher matcher = columnsPatterns.matcher(result);",
+            "            if (matcher.find()) {",
+            "                return Integer.parseInt(matcher.group(1));",
+            "            }",
+            "            throw new IOException(\"Unable to parse columns\");",
+            "        } catch (Exception e) {",
+            "            throw new RuntimeException(e);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "Process",
+            "ProcessBuilder",
+            "String",
+            "IOException",
+            "Matcher",
+            "Exception",
+            "RuntimeException"
+          ],
+          "signature": "getTerminalWidth( String name)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "name"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "<init>(java.lang.String[])"
+            ],
+            [
+              "library",
+              "java.lang.ProcessBuilder",
+              "start()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "105-119:waitAndCapture"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "exitValue()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.regex.Pattern",
+              "matcher(java.lang.CharSequence)"
+            ],
+            [
+              "library",
+              "java.util.regex.Matcher",
+              "find()"
+            ],
+            [
+              "library",
+              "java.util.regex.Matcher",
+              "group(int)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "parseInt(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.Throwable)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Process": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `Process` class in Java is used to control native processes started by `ProcessBuilder.start` and `Runtime.exec`. In Python, the equivalent functionality is provided by the `subprocess` module, specifically the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": ""
+              },
+              "ProcessBuilder": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `ProcessBuilder` class in Java is used to create operating system processes. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              },
+              "Matcher": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import re",
+                "translated_target_type": "re.Match",
+                "reasoning": "In Python, the `re` module provides support for regular expressions. The `re.Match` object is the equivalent of Java's `Matcher` class, as it is used to perform match operations on a string by interpreting a compiled regular expression pattern.",
+                "prompt": ""
+              },
+              "Exception": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, the `Exception` class is a built-in class and does not require an import statement. It serves the same purpose as Java's `Exception` class, representing a base class for all built-in exceptions.",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, the `Exception` class is the base class for all built-in exceptions. It serves a similar purpose to Java's `RuntimeException`, which is the superclass for exceptions that can be thrown during the normal operation of the Java Virtual Machine.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|name": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def getTerminalWidth(self, name: object) -> int:",
+            "        try:",
+            "            p = subprocess.Popen([self.__sttyCommand, \"-F\", name, \"-a\"])",
+            "            result = self.__waitAndCapture(p)",
+            "            if p.returncode != 0:",
+            "                raise IOError(f\"Error executing '{self.__sttyCommand}': {result}\")",
+            "            matcher = self.__columnsPatterns.matcher(result)",
+            "            if matcher.find():",
+            "                return int(matcher.group(1))",
+            "            raise IOError(\"Unable to parse columns\")",
+            "        except Exception as e:",
+            "            raise RuntimeError(e)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 17.012084007263184,
+          "generation_timestamp": "2025-11-04T21:35:08.230590",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getTerminalWidth(self, name: object) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "105-119:waitAndCapture": {
+          "start": 105,
+          "end": 119,
+          "body": [
+            "private static String waitAndCapture(Process p) throws IOException, InterruptedException {",
+            "        ByteArrayOutputStream bout = new ByteArrayOutputStream();",
+            "        try (InputStream in = p.getInputStream();",
+            "                InputStream err = p.getErrorStream()) {",
+            "            int c;",
+            "            while ((c = in.read()) != -1) {",
+            "                bout.write(c);",
+            "            }",
+            "            while ((c = err.read()) != -1) {",
+            "                bout.write(c);",
+            "            }",
+            "            p.waitFor();",
+            "        }",
+            "        return bout.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "ByteArrayOutputStream",
+            "InputStream",
+            "int"
+          ],
+          "signature": "waitAndCapture( Process p)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "Process",
+              "name": "p"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "getInputStream()"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "getErrorStream()"
+            ],
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "write(int)"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "read()"
+            ],
+            [
+              "library",
+              "java.lang.Process",
+              "waitFor()"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "ByteArrayOutputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO",
+                "translated_target_type": "BytesIO",
+                "reasoning": "The `ByteArrayOutputStream` in Java is used to write data to a byte array. In Python, the equivalent type that provides similar functionality is `BytesIO` from the `io` module. `BytesIO` allows you to write data to an in-memory bytes buffer, which can be read back later. This maintains the same functionality as `ByteArrayOutputStream` in Java.",
+                "prompt": ""
+              },
+              "InputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess\nimport io",
+                "translated_target_type": "io.BytesIO",
+                "reasoning": "In Python, the equivalent of Java's `InputStream` for handling byte streams is `io.BytesIO`. This class provides a way to work with in-memory binary streams, similar to how `InputStream` works in Java.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|Process|p": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __waitAndCapture(p: subprocess.Popen) -> str:",
+            "        bout = BytesIO()",
+            "        with p.stdout as in_stream, p.stderr as err_stream:",
+            "            c = in_stream.read(1)",
+            "            while c:",
+            "                bout.write(c.encode())",
+            "                c = in_stream.read(1)",
+            "            c = err_stream.read(1)",
+            "            while c:",
+            "                bout.write(c.encode())",
+            "                c = err_stream.read(1)",
+            "            p.wait()",
+            "        return bout.getvalue().decode()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.293833017349243,
+          "generation_timestamp": "2025-11-04T21:34:51.051288",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __waitAndCapture(p: object) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "124-136:getRedirect": {
+          "start": 124,
+          "end": 136,
+          "body": [
+            "private ProcessBuilder.Redirect getRedirect(FileDescriptor fd) throws ReflectiveOperationException {",
+            "        // This is not really allowed, but this is the only way to redirect the output or error stream",
+            "        // to the input.  This is definitely not something you'd usually want to do, but in the case of",
+            "        // the `tty` utility, it provides a way to get",
+            "        Class<?> rpi = Class.forName(\"java.lang.ProcessBuilder$RedirectPipeImpl\");",
+            "        Constructor<?> cns = rpi.getDeclaredConstructor();",
+            "        cns.setAccessible(true);",
+            "        ProcessBuilder.Redirect input = (ProcessBuilder.Redirect) cns.newInstance();",
+            "        Field f = rpi.getDeclaredField(\"fd\");",
+            "        f.setAccessible(true);",
+            "        f.set(input, fd);",
+            "        return input;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "ProcessBuilder.Redirect"
+          ],
+          "body_types": [
+            "Class<?>",
+            "Constructor<?>",
+            "ProcessBuilder.Redirect",
+            "ProcessBuilder",
+            "Redirect",
+            "Field"
+          ],
+          "signature": "getRedirect( FileDescriptor fd)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "FileDescriptor",
+              "name": "fd"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "forName(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getDeclaredConstructor(java.lang.Class[])"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Constructor",
+              "setAccessible(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Constructor",
+              "newInstance(java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getDeclaredField(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Field",
+              "setAccessible(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.reflect.Field",
+              "set(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "ProcessBuilder.Redirect": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `ProcessBuilder.Redirect` in Java is used to represent a source of subprocess input or a destination of subprocess output. In Python, the equivalent functionality is provided by the `subprocess` module, specifically using `subprocess.Popen` to handle subprocess input and output redirection.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Class<?>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "type[Any]",
+                "reasoning": "In Python, the equivalent of Java's `Class<?>` is `type[Any]`. The `type` function in Python can be used to get the type of an object, and `Any` from the `typing` module represents an arbitrary type, similar to the wildcard `?` in Java generics.",
+                "prompt": ""
+              },
+              "Constructor<?>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import inspect",
+                "translated_target_type": "inspect._empty",
+                "reasoning": "In Python, the equivalent of Java's `Constructor<?>` can be represented using `inspect._empty`, which is a sentinel value used to indicate the absence of a constructor or method. This is often used in introspection and reflection contexts, similar to how `Constructor<?>` is used in Java.",
+                "prompt": ""
+              },
+              "ProcessBuilder.Redirect": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `ProcessBuilder.Redirect` in Java is used to represent a source of subprocess input or a destination of subprocess output. In Python, the equivalent functionality is provided by the `subprocess` module, specifically using `subprocess.Popen` to handle subprocess input and output redirection.",
+                "prompt": ""
+              },
+              "ProcessBuilder": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `ProcessBuilder` class in Java is used to create operating system processes. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": ""
+              },
+              "Redirect": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Redirect has been translated to \"object\"",
+                "prompt": ""
+              },
+              "Field": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Field has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|FileDescriptor|fd": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __getRedirect(self, fd: object) -> subprocess.Popen:",
+            "        # This is not really allowed, but this is the only way to redirect the output or error stream",
+            "        # to the input.  This is definitely not something you'd usually want to do, but in the case of",
+            "        # the `tty` utility, it provides a way to get",
+            "        rpi = getattr(builtins, \"ProcessBuilder$RedirectPipeImpl\")",
+            "        cns = getattr(rpi, \"__init__\")",
+            "        cns.__setattr__(\"accessible\", True)",
+            "        input = cns()",
+            "        f = getattr(rpi, \"fd\")",
+            "        f.__setattr__(\"accessible\", True)",
+            "        f.__setattr__(input, fd)",
+            "        return input"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 17.862083196640015,
+          "generation_timestamp": "2025-11-04T21:35:26.261385",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __getRedirect(self, fd: object) -> subprocess.Popen:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "36-36:sttyCommand": {
+          "start": 36,
+          "end": 36,
+          "enum_constant": false,
+          "body": [
+            "private final String sttyCommand;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __sttyCommand: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __sttyCommand: str = ''"
+          ]
+        },
+        "37-37:ttyCommand": {
+          "start": 37,
+          "end": 37,
+          "enum_constant": false,
+          "body": [
+            "private final String ttyCommand;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __ttyCommand: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __ttyCommand: str = ''"
+          ]
+        },
+        "38-38:columnsPatterns": {
+          "start": 38,
+          "end": 38,
+          "enum_constant": false,
+          "body": [
+            "private final Pattern columnsPatterns;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Pattern"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Pattern": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import re",
+                "translated_target_type": "re.Pattern",
+                "reasoning": "In Python, the `re` module provides support for regular expressions. The `re.compile()` function returns a `re.Pattern` object, which is the equivalent of Java's `Pattern` class. This object represents a compiled regular expression and can be used to perform matching operations.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __columnsPatterns: re.Pattern = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __columnsPatterns: re.Pattern = None"
+          ]
+        }
+      },
+      "python_class_declaration": "class MingwSupport:\n\n"
+    }
+  },
+  "import_map": {
+    "ByteArrayOutputStream": "java.io.ByteArrayOutputStream",
+    "File": "java.io.File",
+    "FileDescriptor": "java.io.FileDescriptor",
+    "IOException": "java.io.IOException",
+    "InputStream": "java.io.InputStream",
+    "Constructor": "java.lang.reflect.Constructor",
+    "Field": "java.lang.reflect.Field",
+    "Matcher": "java.util.regex.Matcher",
+    "Pattern": "java.util.regex.Pattern"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO",
+    "from typing import Any",
+    "import builtins",
+    "import inspect",
+    "import os",
+    "import re",
+    "import subprocess",
+    "import subprocess\nimport io"
+  ]
+}

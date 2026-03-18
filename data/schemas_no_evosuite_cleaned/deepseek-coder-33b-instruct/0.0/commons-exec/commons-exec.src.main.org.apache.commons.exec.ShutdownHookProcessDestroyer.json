@@ -1,0 +1,1350 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-exec/src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java",
+  "imports": {
+    "20-20:import java.util.Vector;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.util.Vector;"
+    }
+  },
+  "classes": {
+    "25-187:ShutdownHookProcessDestroyer": {
+      "start": 25,
+      "end": 187,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [
+        "27-45:ProcessDestroyerThread"
+      ],
+      "implements": [
+        "ProcessDestroyer"
+      ],
+      "extends": [],
+      "methods": {
+        "67-68:ShutdownHookProcessDestroyer": {
+          "start": 67,
+          "end": 68,
+          "body": [
+            "public ShutdownHookProcessDestroyer() {",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "ShutdownHookProcessDestroyer()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.28037500381469727,
+          "generation_timestamp": "2026-02-22T04:20:54.090429",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "76-86:add": {
+          "start": 76,
+          "end": 86,
+          "body": [
+            "@Override",
+            "    public boolean add(final Process process) {",
+            "        synchronized (processes) {",
+            "            // if this list is empty, register the shutdown hook",
+            "            if (processes.isEmpty()) {",
+            "                addShutdownHook();",
+            "            }",
+            "            processes.addElement(process);",
+            "            return processes.contains(process);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "add(final Process process)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Process",
+              "name": "process"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Vector",
+              "isEmpty()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "91-97:addShutdownHook"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "addElement(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "contains(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:55:54",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|Process|process": {
+                "identifier": "final|Process|process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 02:56:04",
+                "source_type": "Process",
+                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to syntax issues. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom subprocess import Popen, PIPE\nimport threading\nimport atexit\n```\n\nPYTHON TRANSLATION:\n```python\nclass ProcessManager:\n    def __init__(self):\n        self.processes = []\n        self._shutdown_hook_added = False\n        self._lock = threading.Lock()\n\n    def add(self, process):\n        with self._lock:\n            if not self.processes and not self._shutdown_hook_added:\n                atexit.register(self.killall)\n                self._shutdown_hook_added = True\n            \n            self.processes.append(Popen(process, stdout=PIPE, stderr=PIPE))\n```\n\nREASONING:\nIn Python, the equivalent of Java's `Process` class is provided by the `subprocess` module in combination with threading and atexit modules for process management. The `Popen` function from the subprocess module can be used to start a new process, which returns an instance of Popen that can be managed using methods like `wait()`, `communicate()`, etc.\n",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "In Python, the equivalent type to Java's `Process` is `subprocess.Popen` from the `subprocess` module. This class provides methods for controlling and interacting with a new process. It can be used in place of Java's `Runtime.exec()` or `ProcessBuilder.start()` methods, which are used to start a new native process.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nProcess\n```\n\nJAVA TYPE DESCRIPTION:\nProcess provides control of native processes started by\n ProcessBuilder.start and Runtime.exec.\n The class provides methods for performing input from the process, performing\n output to the process, waiting for the process to complete,\n checking the exit status of the process, and destroying (killing)\n the process.\n The ProcessBuilder.start() and\n Runtime.exec\n methods create a native process and return an instance of a\n subclass of Process that can be used to control the process\n and obtain information about it.\n\n\nJAVA CODE:\n```\n    @Override\n    public boolean add(final Process process) {\n        synchronized (processes) {\n            // if this list is empty, register the shutdown hook\n            if (processes.isEmpty()) {\n                addShutdownHook();\n            }\n            processes.addElement(process);\n            return processes.contains(process);\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def add(self, process: subprocess.Popen) -> bool:",
+            "        with self.__lock:",
+            "            if not self.__added:",
+            "                self.__addShutdownHook()",
+            "            self.__processes.append(process)",
+            "            return process in self.__processes"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.724167585372925,
+          "generation_timestamp": "2026-02-22T04:22:48.707800",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def add(self, process: subprocess.Popen) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "91-97:addShutdownHook": {
+          "start": 91,
+          "end": 97,
+          "body": [
+            "private void addShutdownHook() {",
+            "        if (!running) {",
+            "            destroyProcessThread = new ProcessDestroyerThread();",
+            "            Runtime.getRuntime().addShutdownHook(destroyProcessThread);",
+            "            added = true;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "ProcessDestroyerThread"
+          ],
+          "signature": "addShutdownHook()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "27-45:ProcessDestroyerThread",
+              "31-33:ProcessDestroyerThread"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "getRuntime()"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "addShutdownHook(java.lang.Thread)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:56:13",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "ProcessDestroyerThread": {
+                "identifier": "ProcessDestroyerThread",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 02:56:13",
+                "source_type": "ProcessDestroyerThread",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ProcessDestroyerThread",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __addShutdownHook(self) -> None:",
+            "        if not self.__running:",
+            "                    self.__destroyProcessThread = ProcessDestroyerThread()",
+            "                    subprocess.Popen(['sh', '-c', 'kill -9 `pgrep -f process_name`'])",
+            "                    RuntimeError().addShutdownHook(self.__destroyProcessThread)",
+            "                    self.__added = True"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 17.473039150238037,
+          "generation_timestamp": "2026-02-22T04:22:19.717552",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __addShutdownHook(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "104-106:isAddedAsShutdownHook": {
+          "start": 104,
+          "end": 106,
+          "body": [
+            "public boolean isAddedAsShutdownHook() {",
+            "        return added;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isAddedAsShutdownHook()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:56:13",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def isAddedAsShutdownHook(self) -> bool:",
+            "        return self.__added"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 12.704225540161133,
+          "generation_timestamp": "2026-02-22T04:21:06.915197",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isAddedAsShutdownHook(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "114-116:isEmpty": {
+          "start": 114,
+          "end": 116,
+          "body": [
+            "public boolean isEmpty() {",
+            "        return size() == 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isEmpty()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "183-186:size"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:56:13",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def isEmpty(self) -> bool:",
+            "        return self.size() == 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.126161813735962,
+          "generation_timestamp": "2026-02-22T04:21:48.925504",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isEmpty(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "124-133:remove": {
+          "start": 124,
+          "end": 133,
+          "body": [
+            "@Override",
+            "    public boolean remove(final Process process) {",
+            "        synchronized (processes) {",
+            "            final boolean processRemoved = processes.removeElement(process);",
+            "            if (processRemoved && processes.isEmpty()) {",
+            "                removeShutdownHook();",
+            "            }",
+            "            return processRemoved;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "boolean"
+          ],
+          "signature": "remove(final Process process)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Process",
+              "name": "process"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Vector",
+              "removeElement(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "isEmpty()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "138-159:removeShutdownHook"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:56:13",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 02:56:36",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Process|process": {
+                "identifier": "final|Process|process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 02:56:26",
+                "source_type": "Process",
+                "generation": "I apologize for the confusion. The `psutil` library is not installed by default in Python, and it's not a standard library. You can install it using pip:\n\n```bash\npip install psutil\n```\n\nOnce you have installed `psutil`, your previous response should work correctly. Here it is again for reference:\n\nPYTHON IMPORTS:\n```python\nfrom subprocess import Popen, PIPE\nimport psutil\n```\n\nPYTHON TRANSLATION:\n```python\nclass ProcessManager:\n    def __init__(self):\n        self.processes = []\n\n    def start_process(self, command):\n        process = Popen(command, stdout=PIPE, stderr=PIPE, shell=True)\n        self.processes.append(process)\n        return process\n\n    def remove(self, process):\n        if process in self.processes:\n            psutil.Process(process.pid).kill()\n            self.processes.remove(process)\n            if not self.processes:\n                self.remove_shutdown_hook()\n            return True\n        else:\n            return False\n```\n\nREASONING:\nIn Python, the equivalent of Java's Process class is a subprocess.Popen object. This object represents a process that has been started and allows you to interact with it (e.g., read its output or send input to it). The psutil library provides an interface for retrieving information about running processes and sending signals to processes, which we use here to kill the process when requested by our remove method.\n",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "In Python, the equivalent type to Java's `Process` is `subprocess.Popen` from the `subprocess` module. This class provides methods for controlling and interacting with a new process. It can be used in place of Java's `Runtime.exec()` or `ProcessBuilder.start()` methods, which are used to start a new native process.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nProcess\n```\n\nJAVA TYPE DESCRIPTION:\nProcess provides control of native processes started by\n ProcessBuilder.start and Runtime.exec.\n The class provides methods for performing input from the process, performing\n output to the process, waiting for the process to complete,\n checking the exit status of the process, and destroying (killing)\n the process.\n The ProcessBuilder.start() and\n Runtime.exec\n methods create a native process and return an instance of a\n subclass of Process that can be used to control the process\n and obtain information about it.\n\n\nJAVA CODE:\n```\n    @Override\n    public boolean remove(final Process process) {\n        synchronized (processes) {\n            final boolean processRemoved = processes.removeElement(process);\n            if (processRemoved && processes.isEmpty()) {\n                removeShutdownHook();\n            }\n            return processRemoved;\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'psutil'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def remove(self, process: subprocess.Popen) -> bool:",
+            "        with self.__lock:",
+            "            try:",
+            "                self.__processes.remove(process)",
+            "            except ValueError:",
+            "                return False",
+            "            ",
+            "            if not self.__processes and self.__added:",
+            "                self.__removeShutdownHook()",
+            "                ",
+            "            return True"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.57219648361206,
+          "generation_timestamp": "2026-02-22T04:23:49.497858",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def remove(self, process: subprocess.Popen) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "138-159:removeShutdownHook": {
+          "start": 138,
+          "end": 159,
+          "body": [
+            "private void removeShutdownHook() {",
+            "        if (added && !running) {",
+            "            final boolean removed = Runtime.getRuntime().removeShutdownHook(destroyProcessThread);",
+            "            if (!removed) {",
+            "                System.err.println(\"Could not remove shutdown hook\");",
+            "            }",
+            "            // start the hook thread, a unstarted thread may not be eligible for garbage collection Cf.: http://developer.java.sun.com/developer/",
+            "            // bugParade/bugs/4533087.html",
+            "",
+            "            destroyProcessThread.setShouldDestroy(false);",
+            "            destroyProcessThread.start();",
+            "            // this should return quickly, since it basically is a NO-OP.",
+            "            try {",
+            "                destroyProcessThread.join(20000);",
+            "            } catch (final InterruptedException ie) {",
+            "                // the thread didn't die in time",
+            "                // it should not kill any processes unexpectedly",
+            "            }",
+            "            destroyProcessThread = null;",
+            "            added = false;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "boolean",
+            "InterruptedException"
+          ],
+          "signature": "removeShutdownHook()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Runtime",
+              "getRuntime()"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "removeShutdownHook(java.lang.Thread)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "27-45:ProcessDestroyerThread",
+              "42-44:setShouldDestroy"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:56:36",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 02:56:36",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "InterruptedException": {
+                "identifier": "InterruptedException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 02:56:48",
+                "source_type": "InterruptedException",
+                "generation": "PYTHAON IMPORTS:\n```python\nimport threading\n```\n\nPYTHON TRANSLATION:\n```python\nthreading.ThreadError\n```\n\nREASONING: \nIn Python, the equivalent type to `InterruptedException` in Java is `threading.ThreadError`. This exception is raised when a thread is waiting, sleeping or otherwise occupied and it's interrupted before or during its activity. In this case, the code is trying to remove a shutdown hook from the runtime which may not be possible if the thread is still running. If the removal fails, an error message is printed. The `try-except` block catches any `InterruptedException` that might occur while waiting for the thread to die in time and handles it by printing a warning message.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type InterruptedException has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInterruptedException\n```\n\nJAVA TYPE DESCRIPTION:\nThrown when a thread is waiting, sleeping, or otherwise occupied,\n and the thread is interrupted, either before or during the activity.\n Occasionally a method may wish to test whether the current\n thread has been interrupted, and if so, to immediately throw\n this exception.  The following code can be used to achieve\n this effect:\n \n\nJAVA CODE:\n```\n    private void removeShutdownHook() {\n        if (added && !running) {\n            final boolean removed = Runtime.getRuntime().removeShutdownHook(destroyProcessThread);\n            if (!removed) {\n                System.err.println(\"Could not remove shutdown hook\");\n            }\n            // start the hook thread, a unstarted thread may not be eligible for garbage collection Cf.: http://developer.java.sun.com/developer/\n            // bugParade/bugs/4533087.html\n\n            destroyProcessThread.setShouldDestroy(false);\n            destroyProcessThread.start();\n            // this should return quickly, since it basically is a NO-OP.\n            try {\n                destroyProcessThread.join(20000);\n            } catch (final InterruptedException ie) {\n                // the thread didn't die in time\n                // it should not kill any processes unexpectedly\n            }\n            destroyProcessThread = null;\n            added = false;\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'threading' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __removeShutdownHook(self) -> None:",
+            "        if self.__added and not self.__running:",
+            "                    removed = Runtime.getRuntime().removeShutdownHook(self.__destroyProcessThread)",
+            "                    if not removed:",
+            "                        print(\"Could not remove shutdown hook\", file=sys.stderr)",
+            "                    ",
+            "                    # start the hook thread, a unstarted thread may not be eligible for garbage collection Cf.: http://developer.java.sun.com/developer/bugParade/bugs/4533087.html",
+            "                    self.__destroyProcessThread.setShouldDestroy(False)",
+            "                    self.__destroyProcessThread.start()",
+            "                    ",
+            "                    # this should return quickly, since it basically is a NO-OP.",
+            "                    try:",
+            "                        self.__destroyProcessThread.join(20000)",
+            "                    except InterruptedException as ie:",
+            "                        # the thread didn't die in time",
+            "                        # it should not kill any processes unexpectedly",
+            "                        pass",
+            "                    ",
+            "                    self.__destroyProcessThread = None",
+            "                    self.__added = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 17.869067907333374,
+          "generation_timestamp": "2026-02-22T04:23:19.987964",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __removeShutdownHook(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "164-176:run": {
+          "start": 164,
+          "end": 176,
+          "body": [
+            "@Override",
+            "    public void run() {",
+            "        synchronized (processes) {",
+            "            running = true;",
+            "            processes.forEach(process -> {",
+            "                try {",
+            "                    process.destroy();",
+            "                } catch (final Throwable t) {",
+            "                    System.err.println(\"Unable to terminate process during process shutdown\");",
+            "                }",
+            "            });",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Throwable"
+          ],
+          "signature": "run()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.function.Consumer",
+              "accept()"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "forEach(java.util.function.Consumer)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:56:53",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Throwable": {
+                "identifier": "Throwable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 02:56:57",
+                "source_type": "Throwable",
+                "generation": "PYTHAON IMPORTS:\n```python\nfrom typing import Any, TypeVar\n```\n\nPYTHON TRANSLATION:\n```python\nExceptionType = TypeVar('ExceptionType', bound=BaseException)\n```\n\nREASONING:\nIn Python, the equivalent of Java's Throwable class is BaseException. However, in Python, exceptions are not checked at compile time but at runtime. Therefore, we use a type variable to represent any subclass of BaseException. This allows us to catch any exception that is a subclass of BaseException.\n",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In Python, the equivalent of Java's Throwable class is represented by the built-in type hint 'Any'. This type hint allows any object to be assigned. However, in this specific context, it seems like we are dealing with an optional exception that might not always exist (hence the Optional[...] wrapper).",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nThrowable\n```\n\nJAVA TYPE DESCRIPTION:\nThe Throwable class is the superclass of all errors and\n exceptions in the Java language. Only objects that are instances of this\n class (or one of its subclasses) are thrown by the Java Virtual Machine or\n can be thrown by the Java throw statement. Similarly, only\n this class or one of its subclasses can be the argument type in a\n catch clause.\n\n\nJAVA CODE:\n```\n    @Override\n    public void run() {\n        synchronized (processes) {\n            running = true;\n            processes.forEach(process -> {\n                try {\n                    process.destroy();\n                } catch (final Throwable t) {\n                    System.err.println(\"Unable to terminate process during process shutdown\");\n                }\n            });\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def run(self) -> None:",
+            "        with self.__processes:",
+            "            self.__running = True",
+            "            for process in self.__processes:",
+            "                try:",
+            "                    process.terminate()",
+            "                except Exception as e:",
+            "                    print(\"Unable to terminate process during process shutdown\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.59654426574707,
+          "generation_timestamp": "2026-02-22T04:21:21.639990",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def run(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "183-186:size": {
+          "start": 183,
+          "end": 186,
+          "body": [
+            "@Override",
+            "    public int size() {",
+            "        return processes.size();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "size()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.Vector",
+              "size()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:57:10",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def size(self) -> int:",
+            "        return len(self.__processes)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 12.90357780456543,
+          "generation_timestamp": "2026-02-22T04:21:34.681951",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def size(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "48-48:processes": {
+          "start": 48,
+          "end": 48,
+          "enum_constant": false,
+          "body": [
+            "private final Vector<Process> processes = new Vector<>();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Vector<Process>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Vector<Process>": {
+                "identifier": "Vector<Process>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 02:55:48",
+                "source_type": "Vector<Process>",
+                "generation": "I'm sorry for the confusion, but without knowing what type Process is in Java, I can't provide a correct translation. The error message you provided indicates that Python doesn't recognize 'Process'. \n\nIf 'Process' is a custom class defined somewhere else in your code, please make sure to import it at the top of your Python file. If 'Process' is a built-in type or a third-party library, you might need to install and import that library as well.\n\nHere's an example:\n\nPYTHON IMPORTS:\n```python\nfrom typing import List\nimport custom_process  # assuming Process is defined in custom_process module\n```\n\nPYTHON TRANSLATION:\n```python\nList[custom_process.Process]\n```\n\nREASONING: \nIn Python, the equivalent of Java's Vector class is a list. The List type in Python can hold any number of items and they need not all be of the same type. In this case, it holds objects of type Process which is defined in custom_process module. Therefore, we use typing.List to denote that processes is a list containing elements of type Process from custom_process module.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Vector<Process> has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nVector<Process>\n```\n\nJAVA TYPE DESCRIPTION:\nThe Vector class implements a growable array of\n objects. Like an array, it contains components that can be\n accessed using an integer index. However, the size of a\n Vector can grow or shrink as needed to accommodate\n adding and removing items after the Vector has been created.\n\n\nJAVA CODE:\n```\n    private final Vector<Process> processes = new Vector<>();\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Process' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __processes: List[subprocess.Popen] = []"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 16.954671144485474,
+          "generation_timestamp": "2026-02-22T03:41:39.924108",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __processes: object = ",
+            ""
+          ]
+        },
+        "51-51:destroyProcessThread": {
+          "start": 51,
+          "end": 51,
+          "enum_constant": false,
+          "body": [
+            "private ProcessDestroyerThread destroyProcessThread;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "ProcessDestroyerThread"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "ProcessDestroyerThread": {
+                "identifier": "ProcessDestroyerThread",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 02:55:54",
+                "source_type": "ProcessDestroyerThread",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ProcessDestroyerThread",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __destroyProcessThread: \"ProcessDestroyerThread\" = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __destroyProcessThread: \"ProcessDestroyerThread\" = None"
+          ]
+        },
+        "54-54:added": {
+          "start": 54,
+          "end": 54,
+          "enum_constant": false,
+          "body": [
+            "private boolean added;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 02:55:54",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __added: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __added: bool = False"
+          ]
+        },
+        "59-59:running": {
+          "start": 59,
+          "end": 59,
+          "enum_constant": false,
+          "body": [
+            "private volatile boolean running;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 02:55:54",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __running: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __running: bool = False"
+          ]
+        }
+      },
+      "python_class_declaration": "class ShutdownHookProcessDestroyer(ProcessDestroyer):\n\n"
+    },
+    "27-45:ProcessDestroyerThread": {
+      "start": 27,
+      "end": 45,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "nested_inside": "25-187:ShutdownHookProcessDestroyer",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "31-33:ProcessDestroyerThread": {
+          "start": 31,
+          "end": 33,
+          "body": [
+            "public ProcessDestroyerThread() {",
+            "            super(\"ProcessDestroyer Shutdown Hook\");",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "ProcessDestroyerThread()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Thread",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:",
+            "        super().__init__(\"ProcessDestroyer Shutdown Hook\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.039350748062134,
+          "generation_timestamp": "2026-02-22T04:22:02.091320",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "35-40:run": {
+          "start": 35,
+          "end": 40,
+          "body": [
+            "@Override",
+            "        public void run() {",
+            "            if (shouldDestroy) {",
+            "                ShutdownHookProcessDestroyer.this.run();",
+            "            }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "run()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "164-176:run"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:57:10",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def run(self) -> None:",
+            "        if self.__shouldDestroy:",
+            "            ShutdownHookProcessDestroyer().run()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.989060640335083,
+          "generation_timestamp": "2026-02-22T04:22:33.841995",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def run(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "42-44:setShouldDestroy": {
+          "start": 42,
+          "end": 44,
+          "body": [
+            "public void setShouldDestroy(final boolean shouldDestroy) {",
+            "            this.shouldDestroy = shouldDestroy;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "setShouldDestroy(final boolean shouldDestroy)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "shouldDestroy"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 02:57:10",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|boolean|shouldDestroy": {
+                "identifier": "final|boolean|shouldDestroy",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 02:57:10",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def setShouldDestroy(self, shouldDestroy: bool) -> None:",
+            "        self.__shouldDestroy = shouldDestroy"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.168845176696777,
+          "generation_timestamp": "2026-02-22T04:23:01.981399",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def setShouldDestroy(self, shouldDestroy: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "29-29:shouldDestroy": {
+          "start": 29,
+          "end": 29,
+          "enum_constant": false,
+          "body": [
+            "private boolean shouldDestroy = true;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 02:57:10",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __shouldDestroy: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 16.06314253807068,
+          "generation_timestamp": "2026-02-22T03:41:22.843442",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __shouldDestroy: bool = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class ProcessDestroyerThread:\n\n"
+    }
+  },
+  "import_map": {
+    "Vector": "java.util.Vector"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from src.main.org.apache.commons.exec.ProcessDestroyer import ProcessDestroyer",
+    "from typing import Any, Optional",
+    "import subprocess"
+  ]
+}

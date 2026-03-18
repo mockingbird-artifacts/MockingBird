@@ -1,0 +1,2346 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/main/java/me/lemire/integercompression/benchmarktools/BenchmarkCSV.java",
+  "imports": {
+    "3-3:import me.lemire.integercompression.*;": {
+      "start": 3,
+      "end": 3,
+      "body": "import me.lemire.integercompression.*;"
+    },
+    "4-4:import me.lemire.integercompression.differential.IntegratedBinaryPacking;": {
+      "start": 4,
+      "end": 4,
+      "body": "import me.lemire.integercompression.differential.IntegratedBinaryPacking;"
+    },
+    "5-5:import me.lemire.integercompression.differential.IntegratedByteIntegerCODEC;": {
+      "start": 5,
+      "end": 5,
+      "body": "import me.lemire.integercompression.differential.IntegratedByteIntegerCODEC;"
+    },
+    "6-6:import me.lemire.integercompression.differential.IntegratedComposition;": {
+      "start": 6,
+      "end": 6,
+      "body": "import me.lemire.integercompression.differential.IntegratedComposition;"
+    },
+    "7-7:import me.lemire.integercompression.differential.IntegratedIntegerCODEC;": {
+      "start": 7,
+      "end": 7,
+      "body": "import me.lemire.integercompression.differential.IntegratedIntegerCODEC;"
+    },
+    "8-8:import me.lemire.integercompression.differential.IntegratedVariableByte;": {
+      "start": 8,
+      "end": 8,
+      "body": "import me.lemire.integercompression.differential.IntegratedVariableByte;"
+    },
+    "10-10:import java.io.*;": {
+      "start": 10,
+      "end": 10,
+      "body": "import java.io.*;"
+    },
+    "11-11:import java.util.ArrayList;": {
+      "start": 11,
+      "end": 11,
+      "body": "import java.util.ArrayList;"
+    },
+    "12-12:import java.util.Arrays;": {
+      "start": 12,
+      "end": 12,
+      "body": "import java.util.Arrays;"
+    }
+  },
+  "classes": {
+    "20-314:BenchmarkCSV": {
+      "start": 20,
+      "end": 314,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [
+        "118-120:Format",
+        "122-124:CompressionMode"
+      ],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "31-116:loadIntegers": {
+          "start": 31,
+          "end": 116,
+          "body": [
+            "private static ArrayList<int[]> loadIntegers(final String filename, final Format f)",
+            "                throws IOException {",
+            "                int misparsed = 0;",
+            "                if (f == Format.ONEARRAYPERLINE) {",
+            "                        ArrayList<int[]> answer = new ArrayList<int[]>();",
+            "                        BufferedReader br = new BufferedReader(new FileReader(",
+            "                                filename));",
+            "                        String s;",
+            "                        while ((s = br.readLine()) != null) {",
+            "                                String[] numbers = s.split(\"[,;;]\"); // that's",
+            "                                                                     // slow",
+            "                                int[] a = new int[numbers.length];",
+            "                                for (int k = 0; k < numbers.length; ++k) {",
+            "                                        try {",
+            "                                                a[k] = Integer",
+            "                                                        .parseInt(numbers[k]",
+            "                                                                .trim());",
+            "                                        } catch (java.lang.NumberFormatException nfe) {",
+            "                                                if (misparsed == 0)",
+            "                                                        System.err.println(nfe);",
+            "                                                ++misparsed;",
+            "                                        }",
+            "                                }",
+            "                                answer.add(a);",
+            "                        }",
+            "                        if (misparsed > 0)",
+            "                                System.out.println(\"Failed to parse \"",
+            "                                        + misparsed + \" entries\");",
+            "                        br.close();",
+            "                        return answer;",
+            "                } else if (f == Format.ONEARRAYPERFILE) {",
+            "                        ArrayList<Integer> answer = new ArrayList<Integer>();",
+            "                        BufferedReader br = new BufferedReader(new FileReader(",
+            "                                filename));",
+            "                        String s;",
+            "                        while ((s = br.readLine()) != null) {",
+            "                                String[] numbers = s.split(\"[,;;]\");// that's",
+            "                                                                    // slow",
+            "                                for (int k = 0; k < numbers.length; ++k) {",
+            "                                        try {",
+            "                                                answer.add(Integer",
+            "                                                        .parseInt(numbers[k]",
+            "                                                                .trim()));",
+            "                                        } catch (java.lang.NumberFormatException nfe) {",
+            "                                                if (misparsed == 0)",
+            "                                                        System.err.println(nfe);",
+            "                                                ++misparsed;",
+            "                                        }",
+            "                                }",
+            "                        }",
+            "                        int[] actualanswer = new int[answer.size()];",
+            "                        for (int i = 0; i < answer.size(); ++i)",
+            "                                actualanswer[i] = answer.get(i);",
+            "                        ArrayList<int[]> wrap = new ArrayList<int[]>();",
+            "                        wrap.add(actualanswer);",
+            "                        if (misparsed > 0)",
+            "                                System.out.println(\"Failed to parse \"",
+            "                                        + misparsed + \" entries\");",
+            "                        br.close();",
+            "                        return wrap;",
+            "                } else {",
+            "                        ArrayList<Integer> answer = new ArrayList<Integer>();",
+            "                        BufferedReader br = new BufferedReader(new FileReader(",
+            "                                filename));",
+            "                        String s;",
+            "                        while ((s = br.readLine()) != null) {",
+            "                                try {",
+            "                                        answer.add(Integer.parseInt(s.trim()));",
+            "                                } catch (java.lang.NumberFormatException nfe) {",
+            "                                        if (misparsed == 0)",
+            "                                                System.err.println(nfe);",
+            "                                        ++misparsed;",
+            "                                }",
+            "                        }",
+            "                        int[] actualanswer = new int[answer.size()];",
+            "                        for (int i = 0; i < answer.size(); ++i)",
+            "                                actualanswer[i] = answer.get(i);",
+            "                        ArrayList<int[]> wrap = new ArrayList<int[]>();",
+            "                        wrap.add(actualanswer);",
+            "                        if (misparsed > 0)",
+            "                                System.out.println(\"Failed to parse \"",
+            "                                        + misparsed + \" entries\");",
+            "                        br.close();",
+            "                        return wrap;",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "ArrayList<int[]>"
+          ],
+          "body_types": [
+            "int",
+            "ArrayList<int[]>",
+            "int[]",
+            "BufferedReader",
+            "FileReader",
+            "String",
+            "String[]",
+            "java.lang.NumberFormatException",
+            "java.lang",
+            "java",
+            "lang",
+            "NumberFormatException",
+            "ArrayList<Integer>"
+          ],
+          "signature": "loadIntegers(final String filename, final Format f)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "filename"
+            },
+            {
+              "modifier": "final",
+              "type": "Format",
+              "name": "f"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.io.FileReader",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "<init>(java.io.Reader)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "trim()"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "parseInt(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "readLine()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "size()"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "get(int)"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "intValue()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "ArrayList<int[]>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ArrayList<int[]> has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ArrayList<int[]>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ArrayList<int[]> has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "BufferedReader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import TextIOWrapper\nimport codecs",
+                "translated_target_type": "TextIOWrapper",
+                "reasoning": "In Python, the equivalent type to `BufferedReader` in Java is `TextIOWrapper`. This class provides a buffer for an I/O stream and can be used with any object that supports the iterator protocol and the `readline()` method. In this case, it's being used with `InputStreamReader` which has a `readline()` method to read lines from a character-input stream.",
+                "prompt": ""
+              },
+              "FileReader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import TextIOWrapper, open\nfrom typing import List",
+                "translated_target_type": "TextIOWrapper",
+                "reasoning": "In Python, the equivalent of Java's `FileReader` is `io.TextIOWrapper` which is used to read text from a file. It is part of the io module in Python and it provides methods for reading and writing to files. The `open()` function is also used to open files in Python, but it returns a TextIOWrapper object, so we can use either interchangeably here.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent type for a Java String array is a list of strings. The 'typing' module in Python provides support for type hints as specified by PEP 484. Here, we use List from typing to denote that it is a list and str inside the square brackets denotes that each element in the list is a string.",
+                "prompt": ""
+              },
+              "java.lang.NumberFormatException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type java.lang.NumberFormatException has been translated to \"object\"",
+                "prompt": ""
+              },
+              "java.lang": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type java.lang has been translated to \"object\"",
+                "prompt": ""
+              },
+              "java": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type java has been translated to \"object\"",
+                "prompt": ""
+              },
+              "lang": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type lang has been translated to \"object\"",
+                "prompt": ""
+              },
+              "NumberFormatException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type NumberFormatException has been translated to \"object\"",
+                "prompt": ""
+              },
+              "ArrayList<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "In Python, the equivalent type for `ArrayList<Integer>` is `List[int]`. The `typing` module in Python provides support for type hints as specified by PEP 484. Here, we are using `List` from the typing module to denote a list of integers. This is similar to an ArrayList in Java where it can store any number of elements and each element is an integer.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|filename": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|Format|f": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __loadIntegers(filename: object, f: object) -> object:",
+            "        misparsed = 0",
+            "        if f == Format.ONEARRAYPERLINE:",
+            "            answer = []",
+            "            with open(filename, 'r') as br:",
+            "                for s in br:",
+            "                    numbers = s.strip().split(',')  # that's slow",
+            "                    a = [int(num) for num in numbers]",
+            "                    answer.append(a)",
+            "        elif f == Format.ONEARRAYPERFILE:",
+            "            answer = []",
+            "            with open(filename, 'r') as br:",
+            "                for s in br:",
+            "                    numbers = s.strip().split(',')  # that's slow",
+            "                    a = [int(num) for num in numbers]",
+            "                    answer += a",
+            "        else:",
+            "            answer = []",
+            "            with open(filename, 'r') as br:",
+            "                for s in br:",
+            "                    try:",
+            "                        answer.append(int(s))",
+            "                    except ValueError:",
+            "                        if misparsed == 0:",
+            "                            print(\"Failed to parse entry\")",
+            "                        misparsed += 1",
+            "        if misparsed > 0:",
+            "            print(\"Failed to parse {} entries\".format(misparsed))",
+            "        return answer"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.43525242805480957,
+          "generation_timestamp": "2026-03-17T06:14:29.808554",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __loadIntegers(filename: object, f: object) -> object:\n",
+            "        pass\n\n"
+          ]
+        },
+        "130-180:main": {
+          "start": 130,
+          "end": 180,
+          "body": [
+            "public static void main(final String[] args) throws IOException {",
+            "                Format myformat = Format.ONEARRAYPERLINE;",
+            "                CompressionMode cm = CompressionMode.DELTA;",
+            "                ArrayList<String> files = new ArrayList<String>();",
+            "                for (String s : args) {",
+            "                        if (s.startsWith(\"-\")) {// it is a flag",
+            "                                if (s.equals(\"--onearrayperfile\"))",
+            "                                        myformat = Format.ONEARRAYPERFILE;",
+            "                                else if (s.equals(\"--nodelta\"))",
+            "                                        cm = CompressionMode.AS_IS;",
+            "                                else if (s.equals(\"--oneintperline\"))",
+            "                                        myformat = Format.ONEINTPERLINE;",
+            "                                else",
+            "                                        throw new RuntimeException(",
+            "                                                \"I don't understand: \" + s);",
+            "                        } else {// it is a filename",
+            "                                files.add(s);",
+            "                        }",
+            "                }",
+            "                if (myformat == Format.ONEARRAYPERFILE)",
+            "                        System.out.println(\"Treating each file as one array.\");",
+            "                else if (myformat == Format.ONEARRAYPERLINE)",
+            "                        System.out",
+            "                                .println(\"Each line of each file is an array: use --onearrayperfile or --oneintperline to change.\");",
+            "                else if (myformat == Format.ONEINTPERLINE)",
+            "                        System.out",
+            "                                .println(\"Treating each file as one array, with one integer per line.\");",
+            "                if (cm == CompressionMode.AS_IS)",
+            "                        System.out",
+            "                                .println(\"Compressing the integers 'as is' (no differential coding)\");",
+            "                else",
+            "                        System.out",
+            "                                .println(\"Using differential coding (arrays will be sorted): use --nodelta to prevent sorting\");",
+            "                ArrayList<int[]> data = new ArrayList<int[]>();",
+            "                for (String fn : files)",
+            "                        for (int[] x : loadIntegers(fn, myformat))",
+            "                                data.add(x);",
+            "                System.out.println(\"Loaded \" + data.size() + \" array(s)\");",
+            "                if (cm == CompressionMode.DELTA) {",
+            "                        System.out",
+            "                                .println(\"Sorting the arrray(s) because you are using differential coding\");",
+            "                        for (int[] x : data)",
+            "                                Arrays.sort(x);",
+            "                }",
+            "                bench(data, cm, false);",
+            "                bench(data, cm, false);",
+            "                bench(data, cm, true);",
+            "                bytebench(data, cm, false);",
+            "                bytebench(data, cm, false);",
+            "                bytebench(data, cm, true);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Format",
+            "CompressionMode",
+            "ArrayList<String>",
+            "String",
+            "RuntimeException",
+            "ArrayList<int[]>",
+            "int[]",
+            "int"
+          ],
+          "signature": "main(final String[] args)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String[]",
+              "name": "args"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkCSV",
+              "20-314:BenchmarkCSV",
+              "31-116:loadIntegers"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "size()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "sort(int[])"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkCSV",
+              "20-314:BenchmarkCSV",
+              "182-246:bench"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkCSV",
+              "20-314:BenchmarkCSV",
+              "248-312:bytebench"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Format": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Format",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CompressionMode": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type CompressionMode has been translated to \"object\"",
+                "prompt": ""
+              },
+              "ArrayList<String>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "In Python, the equivalent of Java's `ArrayList<String>` is `List[str]`. The `typing` module in Python provides support for type hints as specified by PEP 484. Here, we import List from typing and use it to specify that our function returns a list of strings.",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              },
+              "ArrayList<int[]>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ArrayList<int[]> has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String[]|args": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def main(args: object) -> None:",
+            "        misunderstood_flags = [\"--bytebench\", \"--bench\"]",
+            "        for flag in args:",
+            "            if any([flag.startswith(misunderstood) for misunderstood in misunderstood_flags]):",
+            "                raise RuntimeError(\"I'm sorry, but I don't understand the command line argument '{}'. Please check your input.\".format(flag))",
+            "        ",
+            "        format_flags = [\"--format=\", \"--output-format=\"]",
+            "        for flag in args:",
+            "            if any([flag.startswith(form) for form in format_flags]):",
+            "                print(\"I'm sorry, but I don't support the '{}' command line argument at this time.\".format(flag))",
+            "        ",
+            "        verbose_flags = [\"-v\", \"--verbose\"]",
+            "        verbose = any([flag in verbose_flags for flag in args])",
+            "        ",
+            "        if verbose:",
+            "            print(\"Verbose output enabled.\")",
+            "        ",
+            "        files = []",
+            "        for arg in args:",
+            "            if not (arg.startswith(\"-\") or arg.startswith(\"--\")):",
+            "                files.append(arg)",
+            "        ",
+            "        if len(files) == 0:",
+            "            raise RuntimeError(\"No input file specified.\")",
+            "        ",
+            "        for filename in files:",
+            "            try:",
+            "                with open(filename, \"r\") as f:",
+            "                    lines = f.readlines()",
+            "                ",
+            "                data = []",
+            "                for line in lines:",
+            "                    if not line.startswith(\"#\"):",
+            "                        split_line = line.split(\" \")",
+            "                        while \"\" in split_line:",
+            "                            split_line.remove(\"\")",
+            "                        ",
+            "                        if len(split_line) > 0:",
+            "                            data.append([int(i) for i in split_line])",
+            "                ",
+            "                Bench.__bench(data, verbose)",
+            "            ",
+            "            except FileNotFoundError:",
+            "                raise RuntimeError(\"File '{}' not found.\".format(filename))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest_test06_decomposed_mocker_18_BenchmarkCSV_main.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest_test06_decomposed_mocker_18_BenchmarkCSV_main.py\", line 40, in test_mocking\n    orig_BenchmarkCSV_main(*method_args)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/benchmarktools/BenchmarkCSV.py\", line 51, in main\n    self.assertEqual(actual, expected, my_format)\n    ^^^^\nNameError: name 'self' is not defined"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest.py::BenchmarkCSV_ESTest::test02": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkCSV",
+                  "class_name": "20-314:BenchmarkCSV",
+                  "fragment_name": "130-180:main"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest.py::BenchmarkCSV_ESTest::test05": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest.py\", line 31, in test05\n    BenchmarkCSV.main(stringArray0)\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/benchmarktools/BenchmarkCSV.py\", line 107, in main\n    raise RuntimeError(\"No input file specified.\")\nRuntimeError: No input file specified.",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkCSV",
+                  "class_name": "20-314:BenchmarkCSV",
+                  "fragment_name": "130-180:main"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest.py::BenchmarkCSV_ESTest::test06": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest.py\", line 43, in test06\n    BenchmarkCSV.main([\"----onearrayperfile\"])\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/benchmarktools/BenchmarkCSV.py\", line 107, in main\n    raise RuntimeError(\"No input file specified.\")\nRuntimeError: No input file specified.\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/benchmarktools/BenchmarkCSV_ESTest.py\", line 39, in test06\n    with pytest.raises(\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/raises.py\", line 721, in __exit__\n    raise AssertionError(self._fail_reason)\nAssertionError: Regex pattern did not match.\n Regex: \"I'm sorry, but I don't understand the command line argument '----onearrayperfile'. Please check your input.\"\n Input: 'No input file specified.'",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkCSV",
+                  "class_name": "20-314:BenchmarkCSV",
+                  "fragment_name": "130-180:main"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 4.770757436752319,
+          "generation_timestamp": "2026-03-17T07:17:42.150674",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def main(args: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "182-246:bench": {
+          "start": 182,
+          "end": 246,
+          "body": [
+            "private static void bench(ArrayList<int[]> postings, CompressionMode cm,",
+            "                boolean verbose) {",
+            "                int maxlength = 0;",
+            "                for (int[] x : postings)",
+            "                        if (maxlength < x.length)",
+            "                                maxlength = x.length;",
+            "                if (verbose)",
+            "                        System.out.println(\"Max array length: \" + maxlength);",
+            "                int[] compbuffer = new int[2 * maxlength + 1024];",
+            "                int[] decompbuffer = new int[maxlength];",
+            "                if (verbose)",
+            "                        System.out.println(\"Scheme -- bits/int -- speed (mis)\");",
+            "                for (IntegerCODEC c : (cm == CompressionMode.DELTA ? codecs",
+            "                        : regcodecs)) {",
+            "                        long bef = 0;",
+            "                        long aft = 0;",
+            "                        long decomptime = 0;",
+            "                        long volumein = 0;",
+            "                        long volumeout = 0;",
+            "                        int[][] compdata = new int[postings.size()][];",
+            "                        for (int k = 0; k < postings.size(); ++k) {",
+            "                                int[] in = postings.get(k);",
+            "                                IntWrapper inpos = new IntWrapper(0);",
+            "                                IntWrapper outpos = new IntWrapper(0);",
+            "                                c.compress0(in, inpos, in.length, compbuffer,",
+            "                                        outpos);",
+            "                                int clength = outpos.get();",
+            "                                inpos = new IntWrapper(0);",
+            "                                outpos = new IntWrapper(0);",
+            "                                c.uncompress0(compbuffer, inpos, clength,",
+            "                                        decompbuffer, outpos);",
+            "                                volumein += in.length;",
+            "                                volumeout += clength;",
+            "",
+            "                                if (outpos.get() != in.length)",
+            "                                        throw new RuntimeException(\"bug\");",
+            "                                for (int z = 0; z < in.length; ++z)",
+            "                                        if (in[z] != decompbuffer[z])",
+            "                                                throw new RuntimeException(",
+            "                                                        \"bug\");",
+            "                                compdata[k] = Arrays",
+            "                                        .copyOf(compbuffer, clength);",
+            "                        }",
+            "                        bef = System.nanoTime();",
+            "                        for (int[] cin : compdata) {",
+            "                                IntWrapper inpos = new IntWrapper(0);",
+            "                                IntWrapper outpos = new IntWrapper(0);",
+            "                                c.uncompress0(cin, inpos, cin.length,",
+            "                                        decompbuffer, outpos);",
+            "                                if (inpos.get() != cin.length)",
+            "                                        throw new RuntimeException(\"bug\");",
+            "                        }",
+            "                        aft = System.nanoTime();",
+            "                        decomptime += (aft - bef);",
+            "                        double bitsPerInt = volumeout * 32.0 / volumein;",
+            "                        double decompressSpeed = volumein * 1000.0",
+            "                                / (decomptime);",
+            "                        if (verbose)",
+            "                                System.out.println(c.toString()",
+            "                                        + \"\\t\"",
+            "                                        + String.format(\"\\t%1$.2f\\t%2$.2f\",",
+            "                                                bitsPerInt, decompressSpeed));",
+            "",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "int[]",
+            "IntegerCODEC",
+            "long",
+            "int[][]",
+            "IntWrapper",
+            "RuntimeException",
+            "double"
+          ],
+          "signature": "bench( ArrayList<int[]> postings,  CompressionMode cm,  boolean verbose)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "ArrayList<int[]>",
+              "name": "postings"
+            },
+            {
+              "modifier": "",
+              "type": "CompressionMode",
+              "name": "cm"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "verbose"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.ArrayList",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "size()"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "get(int)"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "21-23:IntWrapper"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntegerCODEC",
+              "16-60:IntegerCODEC",
+              "36-37:compress0"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntegerCODEC",
+              "16-60:IntegerCODEC",
+              "57-58:uncompress0"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "copyOf(int[],int)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "nanoTime()"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Double",
+              "valueOf(double)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "IntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "IntWrapper": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntWrapper has been translated to \"object\"",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              },
+              "double": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "float",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|ArrayList<int[]>|postings": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|CompressionMode|cm": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|boolean|verbose": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __bench(postings: object, cm: object, verbose: object) -> None:",
+            "        from src.main.me.lemire.integercompression.IntWrapper import IntWrapper",
+            "        maxlength = 0",
+            "        for x in postings:",
+            "            if maxlength < len(x):",
+            "                maxlength = len(x)",
+            "        if verbose:",
+            "            print(\"Max array length: \" + str(maxlength))",
+            "        compbuffer = [0] * (2 * maxlength + 1024)",
+            "        decompbuffer = [0] * maxlength",
+            "        if verbose:",
+            "            print(\"Scheme -- bits/int -- speed (mis)\")",
+            "        for c in (codecs if cm == CompressionMode.DELTA else regcodecs):",
+            "            bef = 0",
+            "            aft = 0",
+            "            decomptime = 0",
+            "            volumein = 0",
+            "            volumeout = 0",
+            "            compdata = [None] * len(postings)",
+            "            for k in range(len(postings)):",
+            "                in_ = postings[k]",
+            "                inpos = IntWrapper(0)",
+            "                outpos = IntWrapper(0)",
+            "                c.compress0(in_, inpos, len(in_), compbuffer, outpos)",
+            "                clength = outpos.get()",
+            "                inpos = IntWrapper(0)",
+            "                outpos = IntWrapper(0)",
+            "                c.uncompress0(compbuffer, inpos, clength, decompbuffer, outpos)",
+            "                volumein += len(in_)",
+            "                volumeout += clength",
+            "                if outpos.get() != len(in_):",
+            "                    raise RuntimeError(\"bug\")",
+            "                for z in range(len(in_)):",
+            "                    if in_[z] != decompbuffer[z]:",
+            "                        raise RuntimeError(\"bug\")",
+            "                compdata[k] = compbuffer[:clength]",
+            "            bef = time.time() * 1000000000",
+            "            for cin in compdata:",
+            "                inpos = IntWrapper(0)",
+            "                outpos = IntWrapper(0)",
+            "                c.uncompress0(cin, inpos, len(cin), decompbuffer, outpos)",
+            "                if inpos.get() != len(cin):",
+            "                    raise RuntimeError(\"bug\")",
+            "            aft = time.time() * 1000000000",
+            "            decomptime += (aft - bef)",
+            "            bitsPerInt = volumeout * 32 / volumein",
+            "            decompressSpeed = volumein / decomptime",
+            "            if verbose:",
+            "                print(c + \" -- \" + str(bitsPerInt) + \" -- \" + str(decompressSpeed))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 8.444590091705322,
+          "generation_timestamp": "2026-03-17T07:11:42.845409",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __bench(postings: object, cm: object, verbose: object) -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "248-312:bytebench": {
+          "start": 248,
+          "end": 312,
+          "body": [
+            "private static void bytebench(ArrayList<int[]> postings,",
+            "                CompressionMode cm, boolean verbose) {",
+            "                int maxlength = 0;",
+            "                for (int[] x : postings)",
+            "                        if (maxlength < x.length)",
+            "                                maxlength = x.length;",
+            "                if (verbose)",
+            "                        System.out.println(\"Max array length: \" + maxlength);",
+            "                byte[] compbuffer = new byte[6 * (maxlength + 1024)];",
+            "                int[] decompbuffer = new int[maxlength];",
+            "                if (verbose)",
+            "                        System.out.println(\"Scheme -- bits/int -- speed (mis)\");",
+            "                for (ByteIntegerCODEC c : (cm == CompressionMode.DELTA ? bcodecs",
+            "                        : regbcodecs)) {",
+            "                        long bef = 0;",
+            "                        long aft = 0;",
+            "                        long decomptime = 0;",
+            "                        long volumein = 0;",
+            "                        long volumeout = 0;",
+            "                        byte[][] compdata = new byte[postings.size()][];",
+            "                        for (int k = 0; k < postings.size(); ++k) {",
+            "                                int[] in = postings.get(k);",
+            "                                IntWrapper inpos = new IntWrapper(0);",
+            "                                IntWrapper outpos = new IntWrapper(0);",
+            "                                c.compress1(in, inpos, in.length, compbuffer,",
+            "                                        outpos);",
+            "                                int clength = outpos.get();",
+            "                                inpos = new IntWrapper(0);",
+            "                                outpos = new IntWrapper(0);",
+            "                                c.uncompress1(compbuffer, inpos, clength,",
+            "                                        decompbuffer, outpos);",
+            "                                volumein += in.length;",
+            "                                volumeout += clength;",
+            "",
+            "                                if (outpos.get() != in.length)",
+            "                                        throw new RuntimeException(\"bug\");",
+            "                                for (int z = 0; z < in.length; ++z)",
+            "                                        if (in[z] != decompbuffer[z])",
+            "                                                throw new RuntimeException(",
+            "                                                        \"bug\");",
+            "                                compdata[k] = Arrays",
+            "                                        .copyOf(compbuffer, clength);",
+            "                        }",
+            "                        bef = System.nanoTime();",
+            "                        for (byte[] cin : compdata) {",
+            "                                IntWrapper inpos = new IntWrapper(0);",
+            "                                IntWrapper outpos = new IntWrapper(0);",
+            "                                c.uncompress1(cin, inpos, cin.length,",
+            "                                        decompbuffer, outpos);",
+            "                                if (inpos.get() != cin.length)",
+            "                                        throw new RuntimeException(\"bug\");",
+            "                        }",
+            "                        aft = System.nanoTime();",
+            "                        decomptime += (aft - bef);",
+            "                        double bitsPerInt = volumeout * 8.0 / volumein;",
+            "                        double decompressSpeed = volumein * 1000.0",
+            "                                / (decomptime);",
+            "                        if (verbose)",
+            "                                System.out.println(c.toString()",
+            "                                        + \"\\t\"",
+            "                                        + String.format(\"\\t%1$.2f\\t%2$.2f\",",
+            "                                                bitsPerInt, decompressSpeed));",
+            "",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "int[]",
+            "byte[]",
+            "byte",
+            "ByteIntegerCODEC",
+            "long",
+            "byte[][]",
+            "IntWrapper",
+            "RuntimeException",
+            "double"
+          ],
+          "signature": "bytebench( ArrayList<int[]> postings,  CompressionMode cm,  boolean verbose)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "ArrayList<int[]>",
+              "name": "postings"
+            },
+            {
+              "modifier": "",
+              "type": "CompressionMode",
+              "name": "cm"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "verbose"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.ArrayList",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "size()"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "get(int)"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "21-23:IntWrapper"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.ByteIntegerCODEC",
+              "16-60:ByteIntegerCODEC",
+              "36-37:compress1"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.ByteIntegerCODEC",
+              "16-60:ByteIntegerCODEC",
+              "57-58:uncompress1"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "copyOf(byte[],int)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "nanoTime()"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Double",
+              "valueOf(double)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "byte[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO, SEEK_CUR\nimport pytest",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type for `byte[]` in Java is `BytesIO` from the `io` module. This class provides a stream of bytes that can be read and written to. It's used here because it has methods like `seek()` and `write()` which are similar to the ones used in the Java code.",
+                "prompt": ""
+              },
+              "byte": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ByteIntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ByteIntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "byte[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[int]]",
+                "reasoning": "In Python, the equivalent type for a two-dimensional byte array in Java would be `List[Tuple[int]]`. This is because Python does not have a built-in byte data type like Java. Instead, it uses integers to represent bytes. The outer list represents rows and each inner tuple represents columns of the 2D array.",
+                "prompt": ""
+              },
+              "IntWrapper": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntWrapper has been translated to \"object\"",
+                "prompt": ""
+              },
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              },
+              "double": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "float",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|ArrayList<int[]>|postings": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|CompressionMode|cm": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|boolean|verbose": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __bytebench(postings: object, cm: object, verbose: object) -> None:",
+            "        from src.main.me.lemire.integercompression.IntWrapper import IntWrapper",
+            "        maxlength = 0",
+            "        for x in postings:",
+            "            if maxlength < len(x):",
+            "                maxlength = len(x)",
+            "        if verbose:",
+            "            print(\"Max array length: \" + str(maxlength))",
+            "        compbuffer = bytearray(6 * (maxlength + 1024))",
+            "        decompbuffer = [0]*maxlength",
+            "        if verbose:",
+            "            print(\"Scheme -- bits/int -- speed (mis)\")",
+            "        for c in (bcodecs if cm == CompressionMode.DELTA else regbcodecs):",
+            "            bef = 0",
+            "            aft = 0",
+            "            decomptime = 0",
+            "            volumein = 0",
+            "            volumeout = 0",
+            "            compdata = [None]*len(postings)",
+            "            for k in range(len(postings)):",
+            "                in_ = postings[k]",
+            "                inpos = IntWrapper(0)",
+            "                outpos = IntWrapper(0)",
+            "                c.compress1(in_, inpos, len(in_), compbuffer, outpos)",
+            "                clength = outpos.get()",
+            "                inpos = IntWrapper(0)",
+            "                outpos = IntWrapper(0)",
+            "                c.uncompress1(compbuffer, inpos, clength, decompbuffer, outpos)",
+            "                volumein += len(in_)",
+            "                volumeout += clength",
+            "                if outpos.get() != len(in_):",
+            "                    raise RuntimeError(\"bug\")",
+            "                for z in range(len(in_)):",
+            "                    if in_[z] != decompbuffer[z]:",
+            "                        raise RuntimeError(\"bug\")",
+            "                compdata[k] = compbuffer[:clength]",
+            "            bef = time.time_ns()",
+            "            for cin in compdata:",
+            "                inpos = IntWrapper(0)",
+            "                outpos = IntWrapper(0)",
+            "                c.uncompress1(cin, inpos, len(cin), decompbuffer, outpos)",
+            "                if inpos.get() != len(cin):",
+            "                    raise RuntimeError(\"bug\")",
+            "            aft = time.time_ns()",
+            "            decomptime += (aft - bef)",
+            "            bitsPerInt = volumeout * 8.0 / volumein",
+            "            decompressSpeed = volumein * 1000.0 / decomptime",
+            "            if verbose:",
+            "                print(str(c) + \"\\t\" + \"{:.2f}\\t{:.2f}\".format(bitsPerInt, decompressSpeed))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 3.227123260498047,
+          "generation_timestamp": "2026-03-17T07:11:46.103877",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __bytebench(postings: object, cm: object, verbose: object) -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "21-23:codecs": {
+          "start": 21,
+          "end": 23,
+          "enum_constant": false,
+          "body": [
+            "static IntegratedIntegerCODEC codecs[] = {",
+            "                new IntegratedComposition(new IntegratedBinaryPacking(),",
+            "                        new IntegratedVariableByte()) };"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "IntegratedIntegerCODEC"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "IntegratedIntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegratedIntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.47196173667907715,
+          "generation_timestamp": "2026-03-17T05:50:03.754637",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    codecs: object = ",
+            ""
+          ]
+        },
+        "24-24:bcodecs": {
+          "start": 24,
+          "end": 24,
+          "enum_constant": false,
+          "body": [
+            "static IntegratedByteIntegerCODEC bcodecs[] = { new IntegratedVariableByte() };"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "IntegratedByteIntegerCODEC"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "IntegratedByteIntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegratedByteIntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.me.lemire.integercompression.differential.IntegratedVariableByte import IntegratedVariableByte",
+            "    from src.main.me.lemire.integercompression.differential.IntegratedByteIntegerCODEC import IntegratedByteIntegerCODEC",
+            "    bcodecs: List[IntegratedByteIntegerCODEC] = [ IntegratedVariableByte() ]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.46433568000793457,
+          "generation_timestamp": "2026-03-17T05:50:03.260587",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    bcodecs: object = ",
+            ""
+          ]
+        },
+        "25-28:regcodecs": {
+          "start": 25,
+          "end": 28,
+          "enum_constant": false,
+          "body": [
+            "static IntegerCODEC regcodecs[] = {",
+            "                new Composition(FastPFOR128.FastPFOR1281(), new VariableByte()),",
+            "                new Composition(FastPFOR.FastPFOR1(), new VariableByte()),",
+            "                new Composition(new BinaryPacking(), new VariableByte()) };"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "IntegerCODEC"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "IntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.me.lemire.integercompression.Composition import Composition",
+            "    from src.main.me.lemire.integercompression.VariableByte import VariableByte",
+            "    from src.main.me.lemire.integercompression.FastPFOR128 import FastPFOR128",
+            "    from src.main.me.lemire.integercompression.BinaryPacking import BinaryPacking",
+            "    from src.main.me.lemire.integercompression.FastPFOR import FastPFOR",
+            "    regcodecs: List[Any] = [",
+            "                Composition(FastPFOR128().FastPFOR128(), VariableByte()),",
+            "                Composition(FastPFOR().FastPFOR(), VariableByte()),",
+            "                Composition(BinaryPacking(), VariableByte()) ",
+            "               ]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.5772264003753662,
+          "generation_timestamp": "2026-03-17T05:50:02.771805",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    regcodecs: object = ",
+            ""
+          ]
+        },
+        "29-29:regbcodecs": {
+          "start": 29,
+          "end": 29,
+          "enum_constant": false,
+          "body": [
+            "static ByteIntegerCODEC regbcodecs[] = { new VariableByte() };"
+          ],
+          "modifiers": [
+            "static"
+          ],
+          "types": [
+            "ByteIntegerCODEC"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "ByteIntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ByteIntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.me.lemire.integercompression.VariableByte import VariableByte",
+            "    regbcodecs: List[VariableByte] = [VariableByte()]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.6060960292816162,
+          "generation_timestamp": "2026-03-17T05:50:02.140921",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    regbcodecs: object = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class BenchmarkCSV:\n\n"
+    },
+    "118-120:Format": {
+      "start": 118,
+      "end": 120,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": true,
+      "modifiers": [
+        "private"
+      ],
+      "nested_inside": "20-314:BenchmarkCSV",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {},
+      "fields": {
+        "119-119:ONEARRAYPERLINE": {
+          "start": 119,
+          "end": 119,
+          "enum_constant": true,
+          "enum_constant_name": "ONEARRAYPERLINE",
+          "enum_constant_args": null,
+          "body": [
+            "ONEARRAYPERLINE"
+          ],
+          "modifiers": [],
+          "types": [],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    ONEARRAYPERLINE: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.8165843486785889,
+          "generation_timestamp": "2026-03-17T05:50:01.475463",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    ONEARRAYPERLINE: object = ",
+            ""
+          ]
+        },
+        "119-119:ONEARRAYPERFILE": {
+          "start": 119,
+          "end": 119,
+          "enum_constant": true,
+          "enum_constant_name": "ONEARRAYPERFILE",
+          "enum_constant_args": null,
+          "body": [
+            "ONEARRAYPERFILE"
+          ],
+          "modifiers": [],
+          "types": [],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    ONEARRAYPERFILE: object = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.5613906383514404,
+          "generation_timestamp": "2026-03-17T05:50:00.618751",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    ONEARRAYPERFILE: object = ",
+            ""
+          ]
+        },
+        "119-119:ONEINTPERLINE": {
+          "start": 119,
+          "end": 119,
+          "enum_constant": true,
+          "enum_constant_name": "ONEINTPERLINE",
+          "enum_constant_args": null,
+          "body": [
+            "ONEINTPERLINE"
+          ],
+          "modifiers": [],
+          "types": [],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    ONEINTPERLINE: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.7395362854003906,
+          "generation_timestamp": "2026-03-17T05:50:00.029357",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    ONEINTPERLINE: object = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class Format(enum.Enum):\n\n"
+    },
+    "122-124:CompressionMode": {
+      "start": 122,
+      "end": 124,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": true,
+      "modifiers": [
+        "private"
+      ],
+      "nested_inside": "20-314:BenchmarkCSV",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {},
+      "fields": {
+        "123-123:AS_IS": {
+          "start": 123,
+          "end": 123,
+          "enum_constant": true,
+          "enum_constant_name": "AS_IS",
+          "enum_constant_args": null,
+          "body": [
+            "AS_IS"
+          ],
+          "modifiers": [],
+          "types": [],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    AS_IS = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.850184440612793,
+          "generation_timestamp": "2026-03-17T05:49:59.224118",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    AS_IS: object = ",
+            ""
+          ]
+        },
+        "123-123:DELTA": {
+          "start": 123,
+          "end": 123,
+          "enum_constant": true,
+          "enum_constant_name": "DELTA",
+          "enum_constant_args": null,
+          "body": [
+            "DELTA"
+          ],
+          "modifiers": [],
+          "types": [],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.9402449131011963,
+          "generation_timestamp": "2026-03-17T05:49:58.333167",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    DELTA: object = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class CompressionMode(enum.Enum):\n\n"
+    }
+  },
+  "import_map": {
+    "*": "java.io.*",
+    "IntegratedBinaryPacking": "me.lemire.integercompression.differential.IntegratedBinaryPacking",
+    "IntegratedByteIntegerCODEC": "me.lemire.integercompression.differential.IntegratedByteIntegerCODEC",
+    "IntegratedComposition": "me.lemire.integercompression.differential.IntegratedComposition",
+    "IntegratedIntegerCODEC": "me.lemire.integercompression.differential.IntegratedIntegerCODEC",
+    "IntegratedVariableByte": "me.lemire.integercompression.differential.IntegratedVariableByte",
+    "ArrayList": "java.util.ArrayList",
+    "Arrays": "java.util.Arrays"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO, SEEK_CUR\nimport pytest",
+    "from io import TextIOWrapper\nimport codecs",
+    "from io import TextIOWrapper, open\nfrom typing import List",
+    "from typing import Any, Optional",
+    "from typing import List",
+    "from typing import List, Any",
+    "from typing import List, Tuple",
+    "import enum"
+  ]
+}

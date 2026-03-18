@@ -1,0 +1,1263 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/main/java/me/lemire/integercompression/DeltaZigzagVariableByte.java",
+  "imports": {
+    "8-8:import java.nio.ByteBuffer;": {
+      "start": 8,
+      "end": 8,
+      "body": "import java.nio.ByteBuffer;"
+    },
+    "9-9:import java.nio.IntBuffer;": {
+      "start": 9,
+      "end": 9,
+      "body": "import java.nio.IntBuffer;"
+    }
+  },
+  "classes": {
+    "16-141:DeltaZigzagVariableByte": {
+      "start": 16,
+      "end": 141,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [
+        "IntegerCODEC"
+      ],
+      "extends": [],
+      "methods": {
+        "18-21:toString": {
+          "start": 18,
+          "end": 21,
+          "body": [
+            "@Override",
+            "        public String toString() {",
+            "                return DeltaZigzagVariableByte.class.getSimpleName();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "DeltaZigzagVariableByte"
+          ],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "getSimpleName()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 18:54:29",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DeltaZigzagVariableByte": {
+                "identifier": "DeltaZigzagVariableByte",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:54:29",
+                "source_type": "DeltaZigzagVariableByte",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagVariableByte",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        return self.__class__.__name__"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test24": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "18-21:toString"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 31.03378438949585,
+          "generation_timestamp": "2025-08-13T15:08:21.246346",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "23-99:compress0": {
+          "start": 23,
+          "end": 99,
+          "body": [
+            "@Override",
+            "        public void compress0(int[] inBuf, IntWrapper inPos, int inLen,",
+            "                              int[] outBuf, IntWrapper outPos) {",
+            "                if (inLen == 0) {",
+            "                        return;",
+            "                }",
+            "",
+            "                ByteBuffer byteBuf = makeBuffer(inLen * 5 + 3);",
+            "                DeltaZigzagEncoding.Encoder ctx = new DeltaZigzagEncoding.Encoder(0);",
+            "",
+            "                // Delta+Zigzag+VariableByte encoding.",
+            "                int ip = inPos.get();",
+            "                final int inPosLast = ip + inLen;",
+            "                for (; ip < inPosLast; ++ip) {",
+            "                        // Filter with delta+zigzag encoding.",
+            "                        int n = ctx.encodeInt(inBuf[ip]);",
+            "                        // Variable byte encoding.",
+            "                        switch (Integer.numberOfLeadingZeros(n)) {",
+            "                        case 0:",
+            "                        case 1:",
+            "                        case 2:",
+            "                        case 3:",
+            "                                byteBuf.put((byte) (((n >>> 28) & 0x7F) | 0x80));",
+            "                                // through.",
+            "                                //$FALL-THROUGH$",
+            "                        case 4:",
+            "                        case 5:",
+            "                        case 6:",
+            "                        case 7:",
+            "                        case 8:",
+            "                        case 9:",
+            "                        case 10:",
+            "                                byteBuf.put((byte) (((n >>> 21) & 0x7F) | 0x80));",
+            "                                // through.",
+            "                                //$FALL-THROUGH$",
+            "                        case 11:",
+            "                        case 12:",
+            "                        case 13:",
+            "                        case 14:",
+            "                        case 15:",
+            "                        case 16:",
+            "                        case 17:",
+            "                                byteBuf.put((byte) (((n >>> 14) & 0x7F) | 0x80));",
+            "                                // through.",
+            "                                //$FALL-THROUGH$",
+            "                        case 18:",
+            "                        case 19:",
+            "                        case 20:",
+            "                        case 21:",
+            "                        case 22:",
+            "                        case 23:",
+            "                        case 24:",
+            "                                byteBuf.put((byte) (((n >>> 7) & 0x7F) | 0x80));",
+            "                                // through.",
+            "                                //$FALL-THROUGH$",
+            "                        default:",
+            "                                byteBuf.put((byte) (n & 0x7F));",
+            "                        }",
+            "                }",
+            "",
+            "                // Padding buffer to considerable as IntBuffer.",
+            "                for (int i = (4 - (byteBuf.position() % 4)) % 4; i > 0; --i) {",
+            "                        byteBuf.put((byte) (0x80));",
+            "                }",
+            "",
+            "                int outLen = byteBuf.position() / 4;",
+            "                byteBuf.flip();",
+            "                IntBuffer intBuf = byteBuf.asIntBuffer();",
+            "                /*",
+            "                 * System.out.println(String.format(",
+            "                 * \"inLen=%d pos=%d limit=%d outLen=%d outBuf.len=%d\", inLen,",
+            "                 * intBuf.position(), intBuf.limit(), outLen, outBuf.length));",
+            "                 */",
+            "                intBuf.get(outBuf, outPos.get(), outLen);",
+            "                inPos.add(inLen);",
+            "                outPos.add(outLen);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "ByteBuffer",
+            "DeltaZigzagEncoding.Encoder",
+            "DeltaZigzagEncoding",
+            "Encoder",
+            "int",
+            "byte",
+            "IntBuffer"
+          ],
+          "signature": "compress0( int[] inBuf,  IntWrapper inPos,  int inLen,  int[] outBuf,  IntWrapper outPos)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "inPos"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inLen"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "outPos"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+              "16-141:DeltaZigzagVariableByte",
+              "138-140:makeBuffer"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "30-63:Encoder",
+              "31-33:Encoder"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "30-63:Encoder",
+              "35-39:encodeInt"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "numberOfLeadingZeros(int)"
+            ],
+            [
+              "library",
+              "java.nio.ByteBuffer",
+              "put(byte)"
+            ],
+            [
+              "library",
+              "java.nio.ByteBuffer",
+              "position()"
+            ],
+            [
+              "library",
+              "java.nio.ByteBuffer",
+              "flip()"
+            ],
+            [
+              "library",
+              "java.nio.ByteBuffer",
+              "asIntBuffer()"
+            ],
+            [
+              "library",
+              "java.nio.IntBuffer",
+              "get(int[],int,int)"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "45-47:add"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 18:54:29",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "ByteBuffer": {
+                "identifier": "ByteBuffer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:14",
+                "source_type": "ByteBuffer",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport array",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DeltaZigzagEncoding.Encoder": {
+                "identifier": "DeltaZigzagEncoding.Encoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:32",
+                "source_type": "DeltaZigzagEncoding.Encoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding.Encoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DeltaZigzagEncoding": {
+                "identifier": "DeltaZigzagEncoding",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:32",
+                "source_type": "DeltaZigzagEncoding",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Encoder": {
+                "identifier": "Encoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:32",
+                "source_type": "Encoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Encoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:32",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "byte": {
+                "identifier": "byte",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:32",
+                "source_type": "byte",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IntBuffer": {
+                "identifier": "IntBuffer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:57:43",
+                "source_type": "IntBuffer",
+                "generation": "",
+                "imports": "# No imports needed for this case",
+                "translated_target_type": "list",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:54:55",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|IntWrapper|inPos": {
+                "identifier": "|IntWrapper|inPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:55:39",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|inLen": {
+                "identifier": "|int|inLen",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:55:39",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:56:11",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|IntWrapper|outPos": {
+                "identifier": "|IntWrapper|outPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:56:51",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "out_of_context",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test19": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "23-99:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test05": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 53, in test05\n    self.assertAlmostEqual(-1.68669824e9, intWrapper0.floatValue(), 0.01)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 918, in assertAlmostEqual\n    if round(diff, places) == 0:\n       ^^^^^^^^^^^^^^^^^^^\nTypeError: 'float' object cannot be interpreted as an integer",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "23-99:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "54-57:floatValue"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test17": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 129, in test17\n    self.assertEqual(5, intWrapper0.intValue())\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 866, in _baseAssertEqual\n    raise self.failureException(msg)\nAssertionError: 5 != 0",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "23-99:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "73-76:intValue"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test23": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 186, in test23\n    self.assertEqual(11, intWrapper0.longValue())\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 866, in _baseAssertEqual\n    raise self.failureException(msg)\nAssertionError: 11 != 0",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "23-99:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "78-81:longValue"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test04": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 88, in test04\n    deltaZigzagVariableByte0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/DeltaZigzagVariableByte.py\", line 59, in uncompress0\n    outBuf[op] = ctx.decodeInt(vbcNum)\n    ~~~~~~^^^^\nIndexError: list assignment index out of range\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 93, in test04\n    assert str(e) == \"list index out of range\"\nAssertionError: assert 'list assignm... out of range' == 'list index out of range'\n  \n  - list index out of range\n  + list assignment index out of range\n  ?     +++++++++++",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "23-99:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "101-129:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 0,
+          "generation_timestamp": "2025-08-14T06:33:46.877022",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def compress0(self, inBuf: Tuple[List[int], int], inPos: \"IntWrapper\", inLen: int, outBuf: Tuple[List[int], int], outPos: \"IntWrapper\") -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "101-129:uncompress0": {
+          "start": 101,
+          "end": 129,
+          "body": [
+            "@Override",
+            "        public void uncompress0(int[] inBuf, IntWrapper inPos, int inLen,",
+            "                                int[] outBuf, IntWrapper outPos) {",
+            "                DeltaZigzagEncoding.Decoder ctx = new DeltaZigzagEncoding.Decoder(0);",
+            "",
+            "                int ip = inPos.get();",
+            "                int op = outPos.get();",
+            "                int vbcNum = 0, vbcShift = 24; // Variable Byte Context.",
+            "                final int inPosLast = ip + inLen;",
+            "                while (ip < inPosLast) {",
+            "                        // Fetch a byte value.",
+            "                        int n = (inBuf[ip] >>> vbcShift) & 0xFF;",
+            "                        if (vbcShift > 0) {",
+            "                                vbcShift -= 8;",
+            "                        } else {",
+            "                                vbcShift = 24;",
+            "                                ip++;",
+            "                        }",
+            "                        // Decode variable byte and delta+zigzag.",
+            "                        vbcNum = (vbcNum << 7) + (n & 0x7F);",
+            "                        if ((n & 0x80) == 0) {",
+            "                                outBuf[op++] = ctx.decodeInt(vbcNum);",
+            "                                vbcNum = 0;",
+            "                        }",
+            "                }",
+            "",
+            "                outPos.set(op);",
+            "                inPos.set(inPosLast);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DeltaZigzagEncoding.Decoder",
+            "DeltaZigzagEncoding",
+            "Decoder",
+            "int"
+          ],
+          "signature": "uncompress0( int[] inBuf,  IntWrapper inPos,  int inLen,  int[] outBuf,  IntWrapper outPos)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "inPos"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inLen"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "outPos"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "65-93:Decoder",
+              "66-68:Decoder"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+              "65-93:Decoder",
+              "70-75:decodeInt"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "89-91:set"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 18:57:56",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DeltaZigzagEncoding.Decoder": {
+                "identifier": "DeltaZigzagEncoding.Decoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:58:18",
+                "source_type": "DeltaZigzagEncoding.Decoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding.Decoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DeltaZigzagEncoding": {
+                "identifier": "DeltaZigzagEncoding",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:58:18",
+                "source_type": "DeltaZigzagEncoding",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DeltaZigzagEncoding",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Decoder": {
+                "identifier": "Decoder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:58:18",
+                "source_type": "Decoder",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Decoder",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 18:58:18",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:57:56",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|IntWrapper|inPos": {
+                "identifier": "|IntWrapper|inPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:58:07",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|inLen": {
+                "identifier": "|int|inLen",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:58:07",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:58:07",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|IntWrapper|outPos": {
+                "identifier": "|IntWrapper|outPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:58:18",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def uncompress0(self, inBuf: Tuple[List[int], int], inPos: \"IntWrapper\", inLen: int, outBuf: Tuple[List[int], int], outPos: \"IntWrapper\") -> None:",
+            "        from src.main.me.lemire.integercompression.DeltaZigzagEncoding import Decoder",
+            "        ctx = Decoder(0)",
+            "",
+            "        ip = inPos.get()",
+            "        op = outPos.get()",
+            "        vbcNum = 0",
+            "        vbcShift = 24",
+            "        inPosLast = ip + inLen",
+            "",
+            "        while ip < inPosLast:",
+            "            n = (inBuf[ip] >> vbcShift) & 0xFF",
+            "            ",
+            "            if vbcShift > 0:",
+            "                vbcShift -= 8",
+            "            else:",
+            "                vbcShift = 24",
+            "                ip += 1",
+            "                ",
+            "            vbcNum = (vbcNum << 7) + (n & 0x7F)",
+            "            ",
+            "            if (n & 0x80) == 0:",
+            "                outBuf[op] = ctx.decodeInt(vbcNum)",
+            "                op += 1",
+            "                vbcNum = 0",
+            "                ",
+            "        outPos.set_(op)",
+            "        inPos.set_(inPosLast)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest_test01_decomposed_mocker_3_DeltaZigzagVariableByte_uncompress0.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1375, in patched\n    with self.decoration_helper(patched,\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/contextlib.py\", line 137, in __enter__\n    return next(self.gen)\n           ^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1357, in decoration_helper\n    arg = exit_stack.enter_context(patching)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/contextlib.py\", line 517, in enter_context\n    result = _enter(cm)\n             ^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1446, in __enter__\n    original, local = self.get_original()\n                      ^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1419, in get_original\n    raise AttributeError(\nAttributeError: <class 'src.main.me.lemire.integercompression.IntWrapper.IntWrapper'> does not have the attribute 'set'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "101-129:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "49-52:doubleValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "54-57:floatValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test01": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "101-129:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "54-57:floatValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "78-81:longValue"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test03": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 71, in test03\n    (-60).to_bytes(1, \"big\", signed=True)[0], intWrapper0.byteValue(), \"message\"\n                                              ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'IntWrapper' object has no attribute 'byteValue'",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "101-129:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test04": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 88, in test04\n    deltaZigzagVariableByte0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/DeltaZigzagVariableByte.py\", line 59, in uncompress0\n    outBuf[op] = ctx.decodeInt(vbcNum)\n    ~~~~~~^^^^\nIndexError: list assignment index out of range\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 93, in test04\n    assert str(e) == \"list index out of range\"\nAssertionError: assert 'list assignm... out of range' == 'list index out of range'\n  \n  - list index out of range\n  + list assignment index out of range\n  ?     +++++++++++",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "23-99:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "101-129:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test12": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "101-129:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "66-68:Decoder"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagEncoding",
+                  "class_name": "65-93:Decoder",
+                  "fragment_name": "70-75:decodeInt"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 167.63689827919006,
+          "generation_timestamp": "2025-08-14T10:49:34.655204",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def uncompress0(self, inBuf: Tuple[List[int], int], inPos: \"IntWrapper\", inLen: int, outBuf: Tuple[List[int], int], outPos: \"IntWrapper\") -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "138-140:makeBuffer": {
+          "start": 138,
+          "end": 140,
+          "body": [
+            "protected ByteBuffer makeBuffer(int sizeInBytes) {",
+            "                return ByteBuffer.allocateDirect(sizeInBytes);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "ByteBuffer"
+          ],
+          "body_types": [],
+          "signature": "makeBuffer( int sizeInBytes)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "sizeInBytes"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.nio.ByteBuffer",
+              "allocateDirect(int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "ByteBuffer": {
+                "identifier": "ByteBuffer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 18:58:28",
+                "source_type": "ByteBuffer",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport array",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|int|sizeInBytes": {
+                "identifier": "|int|sizeInBytes",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 18:58:40",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _makeBuffer(self, sizeInBytes: int) -> BytesIO:",
+            "        return BytesIO()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest_test08_decomposed_mocker_1_DeltaZigzagVariableByte_makeBuffer.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest_test08_decomposed_mocker_1_DeltaZigzagVariableByte_makeBuffer.py\", line 40, in test_mocking\n    with self.assertRaises(type(e)):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 262, in __exit__\n    self._raiseFailure(\"{} not raised\".format(exc_name))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 199, in _raiseFailure\n    raise self.test_case.failureException(msg)\nAssertionError: ValueError not raised"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test06": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 51, in test06\n    self.assertEqual(byteBuffer.limit(), 0, \"Expected limit of ByteBuffer to be 0\")\n                     ^^^^^^^^^^^^^^^^\nAttributeError: '_io.BytesIO' object has no attribute 'limit'",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "138-140:makeBuffer"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py::DeltaZigzagVariableByte_ESTest::test08": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/DeltaZigzagVariableByte_ESTest.py\", line 63, in test08\n    with pytest.raises(\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/site-packages/_pytest/raises.py\", line 712, in __exit__\n    fail(f\"DID NOT RAISE {self.expected_exceptions[0]!r}\")\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/site-packages/_pytest/outcomes.py\", line 177, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: DID NOT RAISE <class 'ValueError'>",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.DeltaZigzagVariableByte",
+                  "class_name": "16-141:DeltaZigzagVariableByte",
+                  "fragment_name": "138-140:makeBuffer"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 148.6897838115692,
+          "generation_timestamp": "2025-08-13T15:11:35.137494",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _makeBuffer(self, sizeInBytes: int) -> BytesIO:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class DeltaZigzagVariableByte(IntegerCODEC):\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO\nimport array",
+    "from src.main.me.lemire.integercompression.IntegerCODEC import IntegerCODEC",
+    "from typing import List, Tuple"
+  ]
+}

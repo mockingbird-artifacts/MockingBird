@@ -1,0 +1,332 @@
+{
+    "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/examples/vector/Example.java",
+    "imports": {
+        "5-5:import java.util.Arrays;": {
+            "start": 5,
+            "end": 5,
+            "body": "import java.util.Arrays;"
+        },
+        "6-6:import me.lemire.integercompression.FastPFOR;": {
+            "start": 6,
+            "end": 6,
+            "body": "import me.lemire.integercompression.FastPFOR;"
+        },
+        "7-7:import me.lemire.integercompression.IntWrapper;": {
+            "start": 7,
+            "end": 7,
+            "body": "import me.lemire.integercompression.IntWrapper;"
+        },
+        "8-8:import me.lemire.integercompression.Composition;": {
+            "start": 8,
+            "end": 8,
+            "body": "import me.lemire.integercompression.Composition;"
+        },
+        "9-9:import me.lemire.integercompression.IntegerCODEC;": {
+            "start": 9,
+            "end": 9,
+            "body": "import me.lemire.integercompression.IntegerCODEC;"
+        },
+        "10-10:import me.lemire.integercompression.VariableByte;": {
+            "start": 10,
+            "end": 10,
+            "body": "import me.lemire.integercompression.VariableByte;"
+        },
+        "11-11:import me.lemire.integercompression.vector.VectorFastPFOR;": {
+            "start": 11,
+            "end": 11,
+            "body": "import me.lemire.integercompression.vector.VectorFastPFOR;"
+        }
+    },
+    "classes": {
+        "13-67:Example": {
+            "start": 13,
+            "end": 67,
+            "is_abstract": false,
+            "is_interface": false,
+            "is_enum": false,
+            "modifiers": [
+                "public"
+            ],
+            "nested_inside": "",
+            "nests": [],
+            "implements": [],
+            "extends": [],
+            "methods": {
+                "14-66:main": {
+                    "start": 14,
+                    "end": 66,
+                    "body": [
+                        "public static void main(String[] args) {",
+                        "    if (args.length == 0)",
+                        "      throw new IllegalArgumentException();",
+                        "",
+                        "    // pass 0 for Vector compressor , non-zero for default compressor",
+                        "    int compressorToUse = Integer.parseInt(args[0]);",
+                        "",
+                        "    final int N = 1310720;",
+                        "    int[] data = new int[N];",
+                        "",
+                        "    // 2-bit data",
+                        "    for (int k = 0; k < N; k += 1)",
+                        "      data[k] = 3;",
+                        "",
+                        "    // a few large values",
+                        "    for (int k = 0; k < N; k += 5)",
+                        "      data[k] = 100;",
+                        "    for (int k = 0; k < N; k += 533)",
+                        "      data[k] = 10000;",
+                        "",
+                        "    int[] compressed = new int[N + 1024];",
+                        "",
+                        "    IntegerCODEC codec = new Composition(",
+                        "        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),",
+                        "        new VariableByte());",
+                        "",
+                        "    IntWrapper inputoffset = new IntWrapper(0);",
+                        "    IntWrapper outputoffset = new IntWrapper(0);",
+                        "",
+                        "    codec.compress(data, inputoffset, data.length, compressed, outputoffset);",
+                        "",
+                        "    System.out.println(\"compressed unsorted integers from \" +",
+                        "                       data.length * 4 / 1024 + \"KB to \" +",
+                        "                       outputoffset.intValue() * 4 / 1024 + \"KB\");",
+                        "",
+                        "    compressed = Arrays.copyOf(compressed, outputoffset.intValue());",
+                        "",
+                        "    int[] recovered = new int[N];",
+                        "    IntWrapper recoffset = new IntWrapper(0);",
+                        "",
+                        "    codec.uncompress(compressed, new IntWrapper(0), compressed.length,",
+                        "                     recovered, recoffset);",
+                        "",
+                        "    System.out.println(\"compressed length = \" + compressed.length +",
+                        "                       \", uncompressed length = \" + recoffset.intValue());",
+                        "",
+                        "    if (Arrays.equals(data, recovered))",
+                        "      System.out.println(\"data is recovered without loss\");",
+                        "    else",
+                        "      throw new RuntimeException(\"bug\"); // could use assert",
+                        "",
+                        "    System.out.println();",
+                        "  }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "public",
+                        "static"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "IllegalArgumentException",
+                        "int",
+                        "int[]",
+                        "IntegerCODEC",
+                        "Composition",
+                        "VectorFastPFOR",
+                        "FastPFOR",
+                        "VariableByte",
+                        "IntWrapper",
+                        "RuntimeException"
+                    ],
+                    "signature": "main( String[] args)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "String[]",
+                            "name": "args"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "IllegalArgumentException": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "int": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "int[]": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "IntegerCODEC": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "Composition": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "VectorFastPFOR": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "FastPFOR": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "VariableByte": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "IntWrapper": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "RuntimeException": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {
+                            "|String[]|args": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            },
+            "fields": {}
+        }
+    },
+    "import_map": {
+        "Arrays": "java.util.Arrays",
+        "FastPFOR": "me.lemire.integercompression.FastPFOR",
+        "IntWrapper": "me.lemire.integercompression.IntWrapper",
+        "Composition": "me.lemire.integercompression.Composition",
+        "IntegerCODEC": "me.lemire.integercompression.IntegerCODEC",
+        "VariableByte": "me.lemire.integercompression.VariableByte",
+        "VectorFastPFOR": "me.lemire.integercompression.vector.VectorFastPFOR"
+    }
+}

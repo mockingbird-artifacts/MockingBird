@@ -1,0 +1,2293 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/main/java/me/lemire/integercompression/differential/XorBinaryPacking.java",
+  "imports": {
+    "7-7:import me.lemire.integercompression.BitPacking;": {
+      "start": 7,
+      "end": 7,
+      "body": "import me.lemire.integercompression.BitPacking;"
+    },
+    "8-8:import me.lemire.integercompression.IntWrapper;": {
+      "start": 8,
+      "end": 8,
+      "body": "import me.lemire.integercompression.IntWrapper;"
+    }
+  },
+  "classes": {
+    "18-139:XorBinaryPacking": {
+      "start": 18,
+      "end": 139,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [
+        "IntegratedIntegerCODEC"
+      ],
+      "extends": [],
+      "methods": {
+        "22-61:compress0": {
+          "start": 22,
+          "end": 61,
+          "body": [
+            "@Override",
+            "        public void compress0(final int[] inBuf, final IntWrapper inPos,",
+            "                              int inLen, final int[] outBuf, final IntWrapper outPos) {",
+            "                inLen = inLen - inLen % BLOCK_LENGTH;",
+            "                if (inLen == 0)",
+            "                        return;",
+            "",
+            "                outBuf[outPos.get()] = inLen;",
+            "                outPos.increment();",
+            "",
+            "                int context = 0;",
+            "                final int[] work = new int[32];",
+            "",
+            "                int op = outPos.get();",
+            "                int ip = inPos.get();",
+            "                final int inPosLast = ip + inLen;",
+            "                for (; ip < inPosLast; ip += BLOCK_LENGTH) {",
+            "                        final int bits1 = xorMaxBits(inBuf, ip + 0, 32, context);",
+            "                        final int bits2 = xorMaxBits(inBuf, ip + 32, 32,",
+            "                                inBuf[ip + 31]);",
+            "                        final int bits3 = xorMaxBits(inBuf, ip + 64, 32,",
+            "                                inBuf[ip + 63]);",
+            "                        final int bits4 = xorMaxBits(inBuf, ip + 96, 32,",
+            "                                inBuf[ip + 95]);",
+            "                        outBuf[op++] = (bits1 << 24) | (bits2 << 16)",
+            "                                | (bits3 << 8) | (bits4 << 0);",
+            "                        op += xorPack(inBuf, ip + 0, outBuf, op, bits1,",
+            "                                context, work);",
+            "                        op += xorPack(inBuf, ip + 32, outBuf, op, bits2,",
+            "                                inBuf[ip + 31], work);",
+            "                        op += xorPack(inBuf, ip + 64, outBuf, op, bits3,",
+            "                                inBuf[ip + 63], work);",
+            "                        op += xorPack(inBuf, ip + 96, outBuf, op, bits4,",
+            "                                inBuf[ip + 95], work);",
+            "                        context = inBuf[ip + 127];",
+            "                }",
+            "",
+            "                inPos.add(inLen);",
+            "                outPos.set(op);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "int[]"
+          ],
+          "signature": "compress0(final int[] inBuf, final IntWrapper inPos,  int inLen, final int[] outBuf, final IntWrapper outPos)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "final",
+              "type": "IntWrapper",
+              "name": "inPos"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inLen"
+            },
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "final",
+              "type": "IntWrapper",
+              "name": "outPos"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "69-71:increment"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+              "18-139:XorBinaryPacking",
+              "104-113:xorMaxBits"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+              "18-139:XorBinaryPacking",
+              "115-126:xorPack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "45-47:add"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "89-91:set"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 23:12:11",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:12:31",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:12:31",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[int, int]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|int[]|inBuf": {
+                "identifier": "final|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:11",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[int, int]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|IntWrapper|inPos": {
+                "identifier": "final|IntWrapper|inPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:21",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|inLen": {
+                "identifier": "|int|inLen",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:21",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int[]|outBuf": {
+                "identifier": "final|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:21",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[int, int]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|IntWrapper|outPos": {
+                "identifier": "final|IntWrapper|outPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:31",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "out_of_context",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress0": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 38, in testcompressAndUncompress0\n    self.assertEqual(data, decompBuf)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 863, in _baseAssertEqual\n    if not first == second:\n           ^^^^^^^^^^^^^^^\nValueError: operands could not be broadcast together with shapes (0,) (124,)",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress1": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 42, in testcompressAndUncompress1\n    self.__checkCompressAndUncompress(\"compressAndUncompress1\", data)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 46, in testcompressAndUncompress2\n    self.__checkCompressAndUncompress(\"compressAndUncompress2\", data)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress3": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 50, in testcompressAndUncompress3\n    XorBinaryPackingTest.__checkCompressAndUncompress(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress4": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 56, in testcompressAndUncompress4\n    XorBinaryPackingTest.__checkCompressAndUncompress(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress5": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 62, in testcompressAndUncompress5\n    self.__checkCompressAndUncompress(\"compressAndUncompress5\", data)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/BasicTest.py::BasicTest::testcheckXorBinaryPacking": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/BasicTest.py\", line 107, in testcheckXorBinaryPacking\n    self.__testZeroInZeroOut(XorBinaryPacking())\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/BasicTest.py\", line 203, in __testZeroInZeroOut\n    self.assertEqual(i1.intValue(), 0)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test10": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test04": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 93, in test04\n    xorBinaryPacking0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 46, in uncompress0\n    self.__xorUnpack(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 102, in __xorUnpack\n    outBuf[p] = context = work[i] ^ context\n    ~~~~~~^^^\nIndexError: list assignment index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 0,
+          "generation_timestamp": "2025-08-14T11:32:07.993514",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def compress0(self, inBuf: List[Tuple[int, int]], inPos: \"IntWrapper\", inLen: int, outBuf: List[Tuple[int, int]], outPos: \"IntWrapper\") -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "63-97:uncompress0": {
+          "start": 63,
+          "end": 97,
+          "body": [
+            "@Override",
+            "        public void uncompress0(int[] inBuf, IntWrapper inPos, int inLen,",
+            "                                int[] outBuf, IntWrapper outPos) {",
+            "                if (inLen == 0)",
+            "                        return;",
+            "",
+            "                final int outLen = inBuf[inPos.get()];",
+            "                inPos.increment();",
+            "",
+            "                int context = 0;",
+            "                final int[] work = new int[32];",
+            "",
+            "                int ip = inPos.get();",
+            "                int op = outPos.get();",
+            "                final int outPosLast = op + outLen;",
+            "                for (; op < outPosLast; op += BLOCK_LENGTH) {",
+            "                        final int bits1 = (inBuf[ip] >>> 24);",
+            "                        final int bits2 = (inBuf[ip] >>> 16) & 0xFF;",
+            "                        final int bits3 = (inBuf[ip] >>> 8) & 0xFF;",
+            "                        final int bits4 = (inBuf[ip] >>> 0) & 0xFF;",
+            "                        ++ip;",
+            "                        ip += xorUnpack(inBuf, ip, outBuf, op + 0, bits1,",
+            "                                context, work);",
+            "                        ip += xorUnpack(inBuf, ip, outBuf, op + 32, bits2,",
+            "                                outBuf[op + 31], work);",
+            "                        ip += xorUnpack(inBuf, ip, outBuf, op + 64, bits3,",
+            "                                outBuf[op + 63], work);",
+            "                        ip += xorUnpack(inBuf, ip, outBuf, op + 96, bits4,",
+            "                                outBuf[op + 95], work);",
+            "                        context = outBuf[op + 127];",
+            "                }",
+            "",
+            "                outPos.add(outLen);",
+            "                inPos.set(ip);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "int[]"
+          ],
+          "signature": "uncompress0( int[] inBuf,  IntWrapper inPos,  int inLen,  int[] outBuf,  IntWrapper outPos)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "inPos"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "inLen"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "",
+              "type": "IntWrapper",
+              "name": "outPos"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "69-71:increment"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+              "18-139:XorBinaryPacking",
+              "128-138:xorUnpack"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "45-47:add"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "89-91:set"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 23:12:41",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:13:00",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "int[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:13:00",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[]|inBuf": {
+                "identifier": "|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:41",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|IntWrapper|inPos": {
+                "identifier": "|IntWrapper|inPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:50",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|inLen": {
+                "identifier": "|int|inLen",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:50",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int[]|outBuf": {
+                "identifier": "|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:12:50",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|IntWrapper|outPos": {
+                "identifier": "|IntWrapper|outPos",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:00",
+                "source_type": "IntWrapper",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntWrapper",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def uncompress0(self, inBuf: Tuple[List[int], int], inPos: \"IntWrapper\", inLen: int, outBuf: Tuple[List[int], int], outPos: \"IntWrapper\") -> None:",
+            "        if inLen > 0:",
+            "            outPos.set_(inPos.get())",
+            "            outBuf[outPos.get()] = inBuf[inPos.get()]",
+            "            inPos.increment()",
+            "            outPos.increment()",
+            "            while inPos.get() < inLen:",
+            "                validBits = inBuf[inPos.get()] & 0xFF",
+            "                if validBits > 32:",
+            "                    raise Exception(\"Too many bits\")",
+            "                self.__xorUnpack(inBuf, inPos.increment(), outBuf, outPos.get(), validBits, outBuf[outPos.get()-1], outBuf)",
+            "                outPos.add(validBits)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/XorBinaryPackingTest_compressAndUncompress3_decomposed_mocker_49_XorBinaryPacking_uncompress0.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1375, in patched\n    with self.decoration_helper(patched,\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/contextlib.py\", line 137, in __enter__\n    return next(self.gen)\n           ^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1357, in decoration_helper\n    arg = exit_stack.enter_context(patching)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/contextlib.py\", line 517, in enter_context\n    result = _enter(cm)\n             ^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1446, in __enter__\n    original, local = self.get_original()\n                      ^^^^^^^^^^^^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1419, in get_original\n    raise AttributeError(\nAttributeError: <class 'src.main.me.lemire.integercompression.IntWrapper.IntWrapper'> does not have the attribute 'set'"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress0": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 38, in testcompressAndUncompress0\n    self.assertEqual(data, decompBuf)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 863, in _baseAssertEqual\n    if not first == second:\n           ^^^^^^^^^^^^^^^\nValueError: operands could not be broadcast together with shapes (0,) (124,)",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress1": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 42, in testcompressAndUncompress1\n    self.__checkCompressAndUncompress(\"compressAndUncompress1\", data)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 46, in testcompressAndUncompress2\n    self.__checkCompressAndUncompress(\"compressAndUncompress2\", data)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress3": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 50, in testcompressAndUncompress3\n    XorBinaryPackingTest.__checkCompressAndUncompress(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress4": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 56, in testcompressAndUncompress4\n    XorBinaryPackingTest.__checkCompressAndUncompress(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/XorBinaryPackingTest.py::XorBinaryPackingTest::testcompressAndUncompress5": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 62, in testcompressAndUncompress5\n    self.__checkCompressAndUncompress(\"compressAndUncompress5\", data)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest.py\", line 23, in __checkCompressAndUncompress\n    self.assertEqual(data, decompBuf)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "133-139:compress1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.test.me.lemire.integercompression.UtilsTest",
+                  "class_name": "19-184:UtilsTest",
+                  "fragment_name": "141-147:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test00": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test02": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 57, in test02\n    xorBinaryPacking0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 43, in uncompress0\n    validBits = inBuf[inPos.get()] & 0xFF\n                ~~~~~^^^^^^^^^^^^^\nIndexError: list index out of range\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 61, in test02\n    assert str(e) == \"Index 4 out of bounds for length 4\"\nAssertionError: assert 'list index out of range' == 'Index 4 out ... for length 4'\n  \n  - Index 4 out of bounds for length 4\n  + list index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "45-47:add"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test03": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 75, in test03\n    with pytest.raises(IndexError):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/site-packages/_pytest/raises.py\", line 712, in __exit__\n    fail(f\"DID NOT RAISE {self.expected_exceptions[0]!r}\")\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/site-packages/_pytest/outcomes.py\", line 177, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: DID NOT RAISE <class 'IndexError'>",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test05": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 98, in test05\n    pytest.fail(\"Expecting exception: NullPointerException\")\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/site-packages/_pytest/outcomes.py\", line 177, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expecting exception: NullPointerException",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test08": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 125, in test08\n    xorBinaryPacking0.uncompress0(intArray0, intWrapper0, inLen, outBuf, outPos)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 46, in uncompress0\n    self.__xorUnpack(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 102, in __xorUnpack\n    outBuf[p] = context = work[i] ^ context\n    ~~~~~~^^^\nIndexError: list assignment index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test10": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test11": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test04": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 93, in test04\n    xorBinaryPacking0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 46, in uncompress0\n    self.__xorUnpack(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 102, in __xorUnpack\n    outBuf[p] = context = work[i] ^ context\n    ~~~~~~^^^\nIndexError: list assignment index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 154.77505016326904,
+          "generation_timestamp": "2025-08-14T11:34:42.884066",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def uncompress0(self, inBuf: Tuple[List[int], int], inPos: \"IntWrapper\", inLen: int, outBuf: Tuple[List[int], int], outPos: \"IntWrapper\") -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "99-102:toString": {
+          "start": 99,
+          "end": 102,
+          "body": [
+            "@Override",
+            "        public String toString() {",
+            "                return this.getClass().getSimpleName();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "getClass()"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getSimpleName()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 23:13:11",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        return self.__class__.__name__"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test13": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "99-102:toString"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 35.8613007068634,
+          "generation_timestamp": "2025-08-14T01:01:32.315319",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "104-113:xorMaxBits": {
+          "start": 104,
+          "end": 113,
+          "body": [
+            "private static int xorMaxBits(final int[] buf, final int offset,",
+            "                final int length, final int context) {",
+            "                int mask = buf[offset] ^ context;",
+            "                final int M = offset + length;",
+            "                for (int i = offset + 1, prev = offset; i < M; ++i, ++prev) {",
+            "                        mask |= buf[i] ^ buf[prev];",
+            "                }",
+            "",
+            "                return 32 - Integer.numberOfLeadingZeros(mask);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "xorMaxBits(final int[] buf, final int offset, final int length, final int context)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "buf"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "offset"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "context"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Integer",
+              "numberOfLeadingZeros(int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 23:13:11",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:13:15",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|int[]|buf": {
+                "identifier": "final|int[]|buf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:11",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|offset": {
+                "identifier": "final|int|offset",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:15",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "final|int|length",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:15",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|context": {
+                "identifier": "final|int|context",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:15",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __xorMaxBits(buf: List[int], offset: int, length: int, context: int) -> int:",
+            "        mask = buf[offset] ^ context",
+            "        M = offset + length",
+            "        for i in range(offset + 1, M):",
+            "            mask |= buf[i] ^ buf[i - 1]",
+            "        return 32 - (mask.bit_length())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/me/lemire/integercompression/XorBinaryPackingTest_compressAndUncompress3_decomposed_mocker_26_XorBinaryPacking_xorMaxBits.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/XorBinaryPackingTest_compressAndUncompress3_decomposed_mocker_26_XorBinaryPacking_xorMaxBits.py\", line 42, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":1478493964,\\\"type\\\":\\\"java.lang.Integer\\\",\\\"value\\\":\\\"2\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 135.50876760482788,
+          "generation_timestamp": "2025-08-14T01:04:41.041255",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __xorMaxBits(buf: List[int], offset: int, length: int, context: int) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "115-126:xorPack": {
+          "start": 115,
+          "end": 126,
+          "body": [
+            "private static int xorPack(final int[] inBuf, final int inOff,",
+            "                final int[] outBuf, final int outOff, final int validBits,",
+            "                final int context, final int[] work) {",
+            "                work[0] = inBuf[inOff] ^ context;",
+            "                for (int i = 1, p = inOff + 1; i < 32; ++i, ++p) {",
+            "                        work[i] = inBuf[p] ^ inBuf[p - 1];",
+            "                }",
+            "                BitPacking.fastpackwithoutmask(work, 0, outBuf, outOff,",
+            "                        validBits);",
+            "",
+            "                return validBits;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "xorPack(final int[] inBuf, final int inOff, final int[] outBuf, final int outOff, final int validBits, final int context, final int[] work)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "inOff"
+            },
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "outOff"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "validBits"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "context"
+            },
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "work"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "1706-1812:fastpackwithoutmask"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 23:13:15",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:13:53",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|int[]|inBuf": {
+                "identifier": "final|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:15",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|inOff": {
+                "identifier": "final|int|inOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:24",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int[]|outBuf": {
+                "identifier": "final|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:24",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|outOff": {
+                "identifier": "final|int|outOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:41",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|validBits": {
+                "identifier": "final|int|validBits",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:41",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|context": {
+                "identifier": "final|int|context",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:41",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int[]|work": {
+                "identifier": "final|int[]|work",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:41",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __xorPack(inBuf: Tuple[List[int], int], inOff: int, outBuf: Tuple[List[int], int], outOff: int, validBits: int, context: int, work: Tuple[List[int], int]) -> int:",
+            "        from src.main.me.lemire.integercompression.BitPacking import BitPacking",
+            "        work[0] = inBuf[inOff] ^ context",
+            "        for i in range(1, 32):",
+            "            work[i] = inBuf[inOff + i] ^ inBuf[inOff + i - 1]",
+            "        BitPacking.fastpackwithoutmask(work, 0, outBuf, outOff, validBits)",
+            "        return validBits"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 31.198823928833008,
+          "generation_timestamp": "2025-08-14T01:05:12.354691",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __xorPack(inBuf: Tuple[List[int], int], inOff: int, outBuf: Tuple[List[int], int], outOff: int, validBits: int, context: int, work: Tuple[List[int], int]) -> int:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "128-138:xorUnpack": {
+          "start": 128,
+          "end": 138,
+          "body": [
+            "private static int xorUnpack(final int[] inBuf, final int inOff,",
+            "                final int[] outBuf, final int outOff, final int validBits,",
+            "                int context, final int[] work) {",
+            "",
+            "                BitPacking.fastunpack(inBuf, inOff, work, 0, validBits);",
+            "                outBuf[outOff] = context = work[0] ^ context;",
+            "                for (int i = 1, p = outOff + 1; i < 32; ++i, ++p) {",
+            "                        outBuf[p] = context = work[i] ^ context;",
+            "                }",
+            "                return validBits;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "xorUnpack(final int[] inBuf, final int inOff, final int[] outBuf, final int outOff, final int validBits,  int context, final int[] work)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "inBuf"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "inOff"
+            },
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "outBuf"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "outOff"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "validBits"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "context"
+            },
+            {
+              "modifier": "final",
+              "type": "int[]",
+              "name": "work"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+              "26-4671:BitPacking",
+              "3021-3127:fastunpack"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-12 23:13:53",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-12 23:14:15",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|int[]|inBuf": {
+                "identifier": "final|int[]|inBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:13:53",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|inOff": {
+                "identifier": "final|int|inOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:14:01",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int[]|outBuf": {
+                "identifier": "final|int[]|outBuf",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:14:01",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int, List[int], int, int, int, List[int]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|outOff": {
+                "identifier": "final|int|outOff",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:14:08",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|validBits": {
+                "identifier": "final|int|validBits",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:14:08",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "|int|context": {
+                "identifier": "|int|context",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:14:08",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int[]|work": {
+                "identifier": "final|int[]|work",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-12 23:14:08",
+                "source_type": "int[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[List[int], int, List[int], int, int, int, List[int]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __xorUnpack(inBuf: Tuple[List[int], int], inOff: int, outBuf: Tuple[List[int], int, List[int], int, int, int, List[int]], outOff: int, validBits: int, context: int, work: Tuple[List[int], int, List[int], int, int, int, List[int]]) -> int:",
+            "        from src.main.me.lemire.integercompression.BitPacking import BitPacking",
+            "        BitPacking.fastunpack(inBuf, inOff, work, 0, validBits)",
+            "        outBuf[outOff] = context = work[0] ^ context",
+            "        for i in range(1, 32):",
+            "            p = outOff + i",
+            "            outBuf[p] = context = work[i] ^ context",
+            "        return validBits"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test02": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 57, in test02\n    xorBinaryPacking0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 43, in uncompress0\n    validBits = inBuf[inPos.get()] & 0xFF\n                ~~~~~^^^^^^^^^^^^^\nIndexError: list index out of range\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 61, in test02\n    assert str(e) == \"Index 4 out of bounds for length 4\"\nAssertionError: assert 'list index out of range' == 'Index 4 out ... for length 4'\n  \n  - Index 4 out of bounds for length 4\n  + list index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "45-47:add"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test08": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 125, in test08\n    xorBinaryPacking0.uncompress0(intArray0, intWrapper0, inLen, outBuf, outPos)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 46, in uncompress0\n    self.__xorUnpack(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 102, in __xorUnpack\n    outBuf[p] = context = work[i] ^ context\n    ~~~~~~^^^\nIndexError: list assignment index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            },
+            "src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py::XorBinaryPacking_ESTest::test04": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/test/me/lemire/integercompression/differential/XorBinaryPacking_ESTest.py\", line 93, in test04\n    xorBinaryPacking0.uncompress0(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 46, in uncompress0\n    self.__xorUnpack(\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/JavaFastPFOR/src/main/me/lemire/integercompression/differential/XorBinaryPacking.py\", line 102, in __xorUnpack\n    outBuf[p] = context = work[i] ^ context\n    ~~~~~~^^^\nIndexError: list assignment index out of range",
+              "covered_methods": [
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.BitPacking",
+                  "class_name": "26-4671:BitPacking",
+                  "fragment_name": "3021-3127:fastunpack"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "21-23:IntWrapper"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "24-26:IntWrapper1"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "62-64:get"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "69-71:increment"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+                  "class_name": "14-97:IntWrapper",
+                  "fragment_name": "89-91:set"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "22-61:compress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "63-97:uncompress0"
+                },
+                {
+                  "schema_name": "JavaFastPFOR.src.main.me.lemire.integercompression.differential.XorBinaryPacking",
+                  "class_name": "18-139:XorBinaryPacking",
+                  "fragment_name": "128-138:xorUnpack"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 40.99406385421753,
+          "generation_timestamp": "2025-08-14T01:05:53.463306",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __xorUnpack(inBuf: Tuple[List[int], int], inOff: int, outBuf: Tuple[List[int], int, List[int], int, int, int, List[int]], outOff: int, validBits: int, context: int, work: Tuple[List[int], int, List[int], int, int, int, List[int]]) -> int:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "20-20:BLOCK_LENGTH": {
+          "start": 20,
+          "end": 20,
+          "enum_constant": false,
+          "body": [
+            "private static final int BLOCK_LENGTH = 128;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-12 23:12:11",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __BLOCK_LENGTH: int = 128"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 25.80372405052185,
+          "generation_timestamp": "2025-08-13T08:54:31.579890",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BLOCK_LENGTH: int = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class XorBinaryPacking(IntegratedIntegerCODEC):\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from src.main.me.lemire.integercompression.differential.IntegratedIntegerCODEC import IntegratedIntegerCODEC",
+    "from typing import List",
+    "from typing import List, Tuple"
+  ]
+}

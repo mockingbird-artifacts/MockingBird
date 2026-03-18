@@ -1,0 +1,468 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-pool/src/test/java/org/apache/commons/pool2/impl/DefaultPooledObjectTest.java",
+  "imports": {
+    "19-19:import static org.junit.jupiter.api.Assertions.assertFalse;": {
+      "start": 19,
+      "end": 19,
+      "body": "import static org.junit.jupiter.api.Assertions.assertFalse;"
+    },
+    "21-21:import org.junit.jupiter.api.Test;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.junit.jupiter.api.Test;"
+    },
+    "23-23:import java.util.ArrayList;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.util.ArrayList;"
+    },
+    "24-24:import java.util.List;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.util.List;"
+    },
+    "25-25:import java.util.concurrent.ExecutorService;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.util.concurrent.ExecutorService;"
+    },
+    "26-26:import java.util.concurrent.Executors;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.concurrent.Executors;"
+    },
+    "27-27:import java.util.concurrent.Future;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.util.concurrent.Future;"
+    },
+    "28-28:import java.util.concurrent.atomic.AtomicBoolean;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.util.concurrent.atomic.AtomicBoolean;"
+    }
+  },
+  "classes": {
+    "31-90:DefaultPooledObjectTest": {
+      "start": 31,
+      "end": 90,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "38-89:testGetIdleTimeMillis": {
+          "start": 38,
+          "end": 89,
+          "body": [
+            "@Test",
+            "    public void testGetIdleTimeMillis() throws Exception {",
+            "        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());",
+            "        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);",
+            "        final ExecutorService executor =",
+            "                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);",
+            "        final Runnable allocateAndDeallocateTask =",
+            "                () -> {",
+            "                    for (int i1 = 0; i1 < 10000; i1++) {",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                    }",
+            "                    dpo.allocate();",
+            "                    for (int i2 = 0; i2 < 10000; i2++) {",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                    }",
+            "                    dpo.deallocate();",
+            "                };",
+            "        final Runnable getIdleTimeTask =",
+            "                () -> {",
+            "                    for (int i = 0; i < 10000; i++) {",
+            "                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {",
+            "                            negativeIdleTimeReturned.set(true);",
+            "                            break;",
+            "                        }",
+            "                    }",
+            "                };",
+            "        final double probabilityOfAllocationTask = 0.7;",
+            "        final List<Future<?>> futures = new ArrayList<>();",
+            "        for (int i = 1; i <= 10000; i++) {",
+            "            final Runnable randomTask =",
+            "                    Math.random() < probabilityOfAllocationTask",
+            "                            ? allocateAndDeallocateTask",
+            "                            : getIdleTimeTask;",
+            "            futures.add(executor.submit(randomTask));",
+            "        }",
+            "        for (final Future<?> future : futures) {",
+            "            future.get();",
+            "        }",
+            "        assertFalse(",
+            "                negativeIdleTimeReturned.get(),",
+            "                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DefaultPooledObject<Object>",
+            "DefaultPooledObject<>",
+            "Object",
+            "AtomicBoolean",
+            "ExecutorService",
+            "Runnable",
+            "int",
+            "double",
+            "List<Future<?>>",
+            "Future<?>",
+            "ArrayList<>"
+          ],
+          "signature": "testGetIdleTimeMillis()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "58-60:DefaultPooledObject"
+            ],
+            [
+              "library",
+              "java.util.concurrent.atomic.AtomicBoolean",
+              "<init>(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "getRuntime()"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "availableProcessors()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.Executors",
+              "newFixedThreadPool(int)"
+            ],
+            [
+              "library",
+              "java.lang.Runnable",
+              "run(org.apache.commons.pool2.impl.DefaultPooledObject,java.util.concurrent.atomic.AtomicBoolean)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "random()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.ExecutorService",
+              "submit(java.lang.Runnable)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.Future",
+              "get()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.util.concurrent.atomic.AtomicBoolean",
+              "get()"
+            ],
+            [
+              "library",
+              "org.junit.jupiter.api.Assertions",
+              "assertFalse(boolean,java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:07:42",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DefaultPooledObject<Object>": {
+                "identifier": "DefaultPooledObject<Object>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:07:55",
+                "source_type": "DefaultPooledObject<Object>",
+                "generation": "I'm sorry for the confusion, but there seems to be a misunderstanding. The Java code provided does not contain any type that needs translation into Python. It appears to be a test case written in JUnit for testing functionality related to `DefaultPooledObject` class from Apache Commons Pool library. \n\nThe `DefaultPooledObject<Object>` is used as an instance of the class, but it's not directly translated into Python because there isn't a direct equivalent in Python. The functionality can be achieved using Python's built-in concurrency features such as `concurrent.futures` module which provides a high-level interface for asynchronously executing callables.\n\nIf you have any other Java code or types that need translation, please provide them and I would be happy to help.\n",
+                "imports": "",
+                "translated_target_type": "DefaultPooledObject",
+                "reasoning": "Custom type DefaultPooledObject is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDefaultPooledObject<Object>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "DefaultPooledObject<>": {
+                "identifier": "DefaultPooledObject<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:08:27",
+                "source_type": "DefaultPooledObject<>",
+                "generation": "I'm sorry for the confusion, but there seems to be a misunderstanding. The provided Java code does not use a `DefaultPooledObject` type. It uses an object of an anonymous class that extends `BaseGenericObjectPool.PooledObject<T>` and overrides its `getIdleTime()` method. \n\nIn Python, we don't have the concept of anonymous classes or inner classes like in Java. Instead, we can use a simple class to represent this functionality:\n\nIMPORTS:\n```python\nimport time\nfrom threading import Lock\n```\n\nTRANSLATION:\n```python\nclass DefaultPooledObject:\n    def __init__(self):\n        self._lock = Lock()\n        self._last_access_time = time.time()\n        self._allocated = False\n\n    def allocate(self):\n        with self._lock:\n            if not self._allocated:\n                self._last_access_time = time.time()\n                self._allocated = True\n\n    def deallocate(self):\n        with self._lock:\n            if self._allocated:\n                self._allocated = False\n\n    def getIdleTimeMillis(self):\n        with self._lock:\n            return (time.time() - self._last_access_time) * 1000 if not self._allocated else float('inf')\n```\n\nREASONING:\nIn the Java code, a `DefaultPooledObject` is used to track the idle time of an object in a pool. The `allocate()` and `deallocate()` methods are used to mark when the object is being used or not. The `getIdleTimeMillis()` method returns the amount of time that has passed since the object was last accessed, if it's not currently allocated.\n\nIn Python, we can achieve a similar functionality using threading primitives like locks and condition variables. We create a lock to ensure atomicity when accessing shared state (the `_last_access_time` and `_allocated` fields). The `allocate()` method updates the `_last_access_time` field and sets `_allocated` to True, while the `deallocate()` method just sets `_allocated` back to False. Finally, the `getIdleTimeMillis()` method calculates the difference between the current time and the last access time if the object is not currently allocated. If it is, we return positive infinity (representing an infinite idle time).\n",
+                "imports": "",
+                "translated_target_type": "DefaultPooledObject",
+                "reasoning": "Custom type DefaultPooledObject is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDefaultPooledObject<>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Object": {
+                "identifier": "Object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:09:08",
+                "source_type": "Object",
+                "generation": "I'm sorry for the confusion, but there seems to be a misunderstanding. The provided Java code does not use any specific type from the Object class or its subclasses. It uses DefaultPooledObject which is a custom class defined in the code and it doesn't seem to have any direct equivalent in Python. \n\nIf you could provide more context or clarify what specific part of this code you want me to translate, I would be happy to help further.\n",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "In Python, the equivalent of Java's Object class is the `Any` type from the `typing` module. This type can be used to annotate any object type in Python. It is a special type that can stand for any other type, and it is also considered as its own type. In this case, we are using it because the Java code's equals method takes an Object parameter, which could be of any type in Java. The `Any` type in Python can represent any object type, so it serves a similar purpose.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nObject\n```\n\nJAVA TYPE DESCRIPTION:\nClass Object is the root of the class hierarchy.\n Every class has Object as a superclass. All objects,\n including arrays, implement the methods of this class.\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "AtomicBoolean": {
+                "identifier": "AtomicBoolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:09:30",
+                "source_type": "AtomicBoolean",
+                "generation": "I'm sorry for the confusion, but there seems to be a misunderstanding. The provided Java code does not use an AtomicBoolean type directly. Instead, it uses a boolean variable with a lock to ensure atomicity. This is equivalent in Python as well. Here's how you can translate this:\n\nIMPORTS:\n```python\nfrom threading import Thread, Lock\nimport time\n```\n\nTRANSLATION:\n```python\nnegativeIdleTimeReturned = False\nlock = Lock()\n```\n\nREASONING: In Python, the equivalent of Java's AtomicBoolean is a boolean variable with a lock to ensure atomicity. The 'Lock' class from threading module in Python provides a simple way to achieve this. Here, we use a boolean variable 'negativeIdleTimeReturned' and a Lock object 'lock'. This combination ensures that the operations on these variables are atomic.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type AtomicBoolean has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nAtomicBoolean\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "ExecutorService": {
+                "identifier": "ExecutorService",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:09:55",
+                "source_type": "ExecutorService",
+                "generation": "I'm sorry for the confusion, but there seems to be a misunderstanding. The provided Java code does not use an `ExecutorService` directly. Instead, it uses `Executors.newFixedThreadPool()` which returns an instance of `ExecutorService`. \n\nIn Python, we can use `concurrent.futures.ThreadPoolExecutor` to achieve similar functionality as the `ExecutorService` in Java. Here's how you might translate that:\n\nIMPORTS:\n```python\nfrom concurrent.futures import ThreadPoolExecutor\n```\n\nTRANSLATION:\n```python\nThreadPoolExecutor\n```\n\nREASONING: In Python, the equivalent of Java's `ExecutorService` is `concurrent.futures.ThreadPoolExecutor`. This type provides a high-level interface for asynchronously executing callables and has methods to manage termination and methods that can produce a Future for tracking progress of one or more asynchronous tasks.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type ExecutorService has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nExecutorService\n```\n\nJAVA TYPE DESCRIPTION:\nAn Executor that provides methods to manage termination and\n methods that can produce a Future for tracking progress of\n one or more asynchronous tasks.\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Runnable": {
+                "identifier": "Runnable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:10:10",
+                "source_type": "Runnable",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom concurrent.futures import ThreadPoolExecutor, as_completed\nimport random\n```\n\nPYTHON TRANSLATION:\n```python\nThreadPoolExecutor\n```\n\nREASONING:\nIn the given Java code, a `Runnable` is used to represent an operation that does not return a result. In Python, we can use the `concurrent.futures.ThreadPoolExecutor` class which is equivalent to Java's `Runnable` interface. This class allows us to execute tasks concurrently in separate threads and retrieve their results when they are ready.\n",
+                "imports": "from concurrent.futures import ThreadPoolExecutor, as_completed\nimport random",
+                "translated_target_type": "ThreadPoolExecutor",
+                "reasoning": "In the given Java code, a `Runnable` is used to represent an operation that does not return a result. In Python, we can use the `concurrent.futures.ThreadPoolExecutor` class which is equivalent to Java's `Runnable` interface. This class allows us to execute tasks concurrently in separate threads and retrieve their results when they are ready.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nRunnable\n```\n\nJAVA TYPE DESCRIPTION:\nRepresents an operation that does not return a result.\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:10:26",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "double": {
+                "identifier": "double",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:10:26",
+                "source_type": "double",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "float",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "List<Future<?>>": {
+                "identifier": "List<Future<?>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:10:26",
+                "source_type": "List<Future<?>>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\nfrom concurrent.futures import Future\n```\n\nPYTHON TRANSLATION:\n```python\nList[Future]\n```\n\nREASONING:\nIn Python, the equivalent type for `List<Future<?>>` in Java is `List[Future]`. The `concurrent.futures` module provides a high-level interface for asynchronously executing callables and has a class named `Future` which represents the result of an asynchronous computation.\n",
+                "imports": "from typing import List, Tuple\nfrom concurrent.futures import Future",
+                "translated_target_type": "List[Future]",
+                "reasoning": "In Python, the equivalent type for `List<Future<?>>` in Java is `List[Future]`. The `concurrent.futures` module provides a high-level interface for asynchronously executing callables and has a class named `Future` which represents the result of an asynchronous computation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nList<Future<?>>\n```\n\nJAVA TYPE DESCRIPTION:\nAn ordered collection, where the user has precise control over where in the\n list each element is inserted.  The user can access elements by their integer\n index (position in the list), and search for elements in the list.\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Future<?>": {
+                "identifier": "Future<?>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:11:00",
+                "source_type": "Future<?>",
+                "generation": "I'm sorry for the confusion, but there is no equivalent type in Python for `Future<?>`. In Java, `Future<?>` is a wildcard generic type that represents an unknown type of object. However, Python does not have a direct equivalent to this as it uses dynamic typing and doesn't support generics with wildcards like Java does.\n\nIf you need to represent a future result in Python, you can use the `concurrent.futures` module which provides a `Future` class that represents an asynchronous computation. However, unlike Java, Python does not have a direct equivalent for `Future<?>` because it uses dynamic typing and doesn't support generics with wildcards like Java does.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Future<?> has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nFuture<?>\n```\n\nJAVA TYPE DESCRIPTION:\nA Future represents the result of an asynchronous\n computation.  Methods are provided to check if the computation is\n complete, to wait for its completion, and to retrieve the result of\n the computation.  The result can only be retrieved using method\n get when the computation has completed, blocking if\n necessary until it is ready.  Cancellation is performed by the\n cancel method.  Additional methods are provided to\n determine if the task completed normally or was cancelled. Once a\n computation has completed, the computation cannot be cancelled.\n If you would like to use a Future for the sake\n of cancellability but not provide a usable result, you can\n declare types of the form Future<?> and\n return null as a result of the underlying task.\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "ArrayList<>": {
+                "identifier": "ArrayList<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:11:29",
+                "source_type": "ArrayList<>",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Any\nfrom concurrent.futures import Future\nimport threading\n```\n\nPYTHON TRANSLATION:\n```python\nList[Future[Any]]\n```\n\nREASONING: \nIn Python, the equivalent of `ArrayList<>` is `List[]`. The type parameter in Java's `ArrayList<>` corresponds to the element type in Python's list. In this case, it seems like the elements are of type `Future[Any]` which is a Future object that can hold any type of result.\n",
+                "imports": "from typing import List, Any\nfrom concurrent.futures import Future\nimport threading",
+                "translated_target_type": "List[Future[Any]]",
+                "reasoning": "In Python, the equivalent of `ArrayList<>` is `List[]`. The type parameter in Java's `ArrayList<>` corresponds to the element type in Python's list. In this case, it seems like the elements are of type `Future[Any]` which is a Future object that can hold any type of result.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nArrayList<>\n```\n\nJAVA TYPE DESCRIPTION:\nResizable-array implementation of the List interface.  Implements\n all optional list operations, and permits all elements, including\n null.  In addition to implementing the List interface,\n this class provides methods to manipulate the size of the array that is\n used internally to store the list.  (This class is roughly equivalent to\n Vector, except that it is unsynchronized.)\n\n\nJAVA CODE:\n```\n    @Test\n    public void testGetIdleTimeMillis() throws Exception {\n        final DefaultPooledObject<Object> dpo = new DefaultPooledObject<>(new Object());\n        final AtomicBoolean negativeIdleTimeReturned = new AtomicBoolean(false);\n        final ExecutorService executor =\n                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 3);\n        final Runnable allocateAndDeallocateTask =\n                () -> {\n                    for (int i1 = 0; i1 < 10000; i1++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.allocate();\n                    for (int i2 = 0; i2 < 10000; i2++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                    dpo.deallocate();\n                };\n        final Runnable getIdleTimeTask =\n                () -> {\n                    for (int i = 0; i < 10000; i++) {\n                        if (dpo.getIdleDuration().isNegative() || dpo.getIdleTime().isNegative()) {\n                            negativeIdleTimeReturned.set(true);\n                            break;\n                        }\n                    }\n                };\n        final double probabilityOfAllocationTask = 0.7;\n        final List<Future<?>> futures = new ArrayList<>();\n        for (int i = 1; i <= 10000; i++) {\n            final Runnable randomTask =\n                    Math.random() < probabilityOfAllocationTask\n                            ? allocateAndDeallocateTask\n                            : getIdleTimeTask;\n            futures.add(executor.submit(randomTask));\n        }\n        for (final Future<?> future : futures) {\n            future.get();\n        }\n        assertFalse(\n                negativeIdleTimeReturned.get(),\n                \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\");\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testGetIdleTimeMillis(self) -> None:",
+            "        from src.main.org.apache.commons.pool2.impl.DefaultPooledObject import DefaultPooledObject",
+            "        dpo = DefaultPooledObject(object())",
+            "        negativeIdleTimeReturned = threading.Event()",
+            "        executor = ThreadPoolExecutor(max_workers=Runtime().availableProcessors() * 3)",
+            "        ",
+            "        def allocateAndDeallocateTask():",
+            "            for _ in range(10000):",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "            dpo.allocate()",
+            "            for _ in range(10000):",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "            dpo.deallocate()",
+            "        ",
+            "        def getIdleTimeTask():",
+            "            for _ in range(10000):",
+            "                if dpo.getIdleDuration().isNegative() or dpo.getIdleTime().isNegative():",
+            "                    negativeIdleTimeReturned.set()",
+            "                    break",
+            "        ",
+            "        probabilityOfAllocationTask = 0.7",
+            "        futures = []",
+            "        for _ in range(1, 10001):",
+            "            randomTask = allocateAndDeallocateTask if random.random() < probabilityOfAllocationTask else getIdleTimeTask",
+            "            futures.append(executor.submit(randomTask))",
+            "        ",
+            "        for future in as_completed(futures):",
+            "            future.result()",
+            "        ",
+            "        self.assertFalse(negativeIdleTimeReturned.is_set(), \"DefaultPooledObject.getIdleTimeMillis() returned a negative value\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 31.887627601623535,
+          "generation_timestamp": "2026-02-23T14:47:20.489175",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testGetIdleTimeMillis(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class DefaultPooledObjectTest(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "assertFalse": "static org.junit.jupiter.api.Assertions.assertFalse",
+    "Test": "org.junit.jupiter.api.Test",
+    "ArrayList": "java.util.ArrayList",
+    "List": "java.util.List",
+    "ExecutorService": "java.util.concurrent.ExecutorService",
+    "Executors": "java.util.concurrent.Executors",
+    "Future": "java.util.concurrent.Future",
+    "AtomicBoolean": "java.util.concurrent.atomic.AtomicBoolean"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from concurrent.futures import ThreadPoolExecutor, as_completed\nimport random",
+    "from typing import Any",
+    "from typing import List, Any\nfrom concurrent.futures import Future\nimport threading",
+    "from typing import List, Tuple\nfrom concurrent.futures import Future",
+    "import pytest",
+    "import unittest"
+  ]
+}

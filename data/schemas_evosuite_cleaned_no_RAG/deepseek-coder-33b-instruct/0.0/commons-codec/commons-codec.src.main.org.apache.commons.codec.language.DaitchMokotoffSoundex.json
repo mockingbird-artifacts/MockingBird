@@ -1,0 +1,4332 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-codec/src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java",
+  "imports": {
+    "19-19:import org.apache.commons.codec.CharEncoding;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.apache.commons.codec.CharEncoding;"
+    },
+    "20-20:import org.apache.commons.codec.EncoderException;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.apache.commons.codec.EncoderException;"
+    },
+    "21-21:import org.apache.commons.codec.Resources;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.apache.commons.codec.Resources;"
+    },
+    "22-22:import org.apache.commons.codec.StringEncoder;": {
+      "start": 22,
+      "end": 22,
+      "body": "import org.apache.commons.codec.StringEncoder;"
+    },
+    "24-24:import java.util.ArrayList;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.util.ArrayList;"
+    },
+    "25-25:import java.util.Arrays;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.util.Arrays;"
+    },
+    "26-26:import java.util.Collections;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.Collections;"
+    },
+    "27-27:import java.util.Comparator;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.util.Comparator;"
+    },
+    "28-28:import java.util.HashMap;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.util.HashMap;"
+    },
+    "29-29:import java.util.LinkedHashSet;": {
+      "start": 29,
+      "end": 29,
+      "body": "import java.util.LinkedHashSet;"
+    },
+    "30-30:import java.util.List;": {
+      "start": 30,
+      "end": 30,
+      "body": "import java.util.List;"
+    },
+    "31-31:import java.util.Map;": {
+      "start": 31,
+      "end": 31,
+      "body": "import java.util.Map;"
+    },
+    "32-32:import java.util.Scanner;": {
+      "start": 32,
+      "end": 32,
+      "body": "import java.util.Scanner;"
+    },
+    "33-33:import java.util.Set;": {
+      "start": 33,
+      "end": 33,
+      "body": "import java.util.Set;"
+    }
+  },
+  "classes": {
+    "70-559:DaitchMokotoffSoundex": {
+      "start": 70,
+      "end": 559,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [
+        "73-151:Branch",
+        "154-207:Rule"
+      ],
+      "implements": [
+        "StringEncoder"
+      ],
+      "extends": [],
+      "methods": {
+        "247-337:parseRules": {
+          "start": 247,
+          "end": 337,
+          "body": [
+            "private static void parseRules(",
+            "            final Scanner scanner,",
+            "            final String location,",
+            "            final Map<Character, List<Rule>> ruleMapping,",
+            "            final Map<Character, Character> asciiFoldings) {",
+            "        int currentLine = 0;",
+            "        boolean inMultilineComment = false;",
+            "",
+            "        while (scanner.hasNextLine()) {",
+            "            currentLine++;",
+            "            final String rawLine = scanner.nextLine();",
+            "            String line = rawLine;",
+            "",
+            "            if (inMultilineComment) {",
+            "                if (line.endsWith(MULTILINE_COMMENT_END)) {",
+            "                    inMultilineComment = false;",
+            "                }",
+            "                continue;",
+            "            }",
+            "",
+            "            if (line.startsWith(MULTILINE_COMMENT_START)) {",
+            "                inMultilineComment = true;",
+            "            } else {",
+            "                final int cmtI = line.indexOf(COMMENT);",
+            "                if (cmtI >= 0) {",
+            "                    line = line.substring(0, cmtI);",
+            "                }",
+            "",
+            "                line = line.trim();",
+            "",
+            "                if (line.isEmpty()) {",
+            "                    continue; // empty lines can be safely skipped",
+            "                }",
+            "",
+            "                if (line.contains(\"=\")) {",
+            "                    final String[] parts = line.split(\"=\");",
+            "                    if (parts.length != 2) {",
+            "                        throw new IllegalArgumentException(",
+            "                                \"Malformed folding statement split into \"",
+            "                                        + parts.length",
+            "                                        + \" parts: \"",
+            "                                        + rawLine",
+            "                                        + \" in \"",
+            "                                        + location);",
+            "                    }",
+            "                    final String leftCharacter = parts[0];",
+            "                    final String rightCharacter = parts[1];",
+            "",
+            "                    if (leftCharacter.length() != 1 || rightCharacter.length() != 1) {",
+            "                        throw new IllegalArgumentException(",
+            "                                \"Malformed folding statement - \"",
+            "                                        + \"patterns are not single characters: \"",
+            "                                        + rawLine",
+            "                                        + \" in \"",
+            "                                        + location);",
+            "                    }",
+            "",
+            "                    asciiFoldings.put(leftCharacter.charAt(0), rightCharacter.charAt(0));",
+            "                } else {",
+            "                    final String[] parts = line.split(\"\\\\s+\");",
+            "                    if (parts.length != 4) {",
+            "                        throw new IllegalArgumentException(",
+            "                                \"Malformed rule statement split into \"",
+            "                                        + parts.length",
+            "                                        + \" parts: \"",
+            "                                        + rawLine",
+            "                                        + \" in \"",
+            "                                        + location);",
+            "                    }",
+            "                    try {",
+            "                        final String pattern = stripQuotes(parts[0]);",
+            "                        final String replacement1 = stripQuotes(parts[1]);",
+            "                        final String replacement2 = stripQuotes(parts[2]);",
+            "                        final String replacement3 = stripQuotes(parts[3]);",
+            "",
+            "                        final Rule r = new Rule(pattern, replacement1, replacement2, replacement3);",
+            "                        final char patternKey = r.pattern.charAt(0);",
+            "                        List<Rule> rules = ruleMapping.get(patternKey);",
+            "                        if (rules == null) {",
+            "                            rules = new ArrayList<>();",
+            "                            ruleMapping.put(patternKey, rules);",
+            "                        }",
+            "                        rules.add(r);",
+            "                    } catch (final IllegalArgumentException e) {",
+            "                        throw new IllegalStateException(",
+            "                                \"Problem parsing line '\" + currentLine + \"' in \" + location, e);",
+            "                    }",
+            "                }",
+            "            }",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "boolean",
+            "String",
+            "String[]",
+            "IllegalArgumentException",
+            "Rule",
+            "char",
+            "List<Rule>",
+            "ArrayList<>",
+            "IllegalStateException"
+          ],
+          "signature": "parseRules(final Scanner scanner, final String location, final Map<Character, List<Rule>> ruleMapping, final Map<Character, Character> asciiFoldings)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Scanner",
+              "name": "scanner"
+            },
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "location"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<Character, List<Rule>>",
+              "name": "ruleMapping"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<Character, Character>",
+              "name": "asciiFoldings"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Scanner",
+              "nextLine()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "endsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "trim()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "contains(java.lang.CharSequence)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.IllegalArgumentException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "charAt(int)"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "valueOf(char)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "put(java.lang.Object,java.lang.Object)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "339-349:stripQuotes"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "154-207:Rule",
+              "160-169:Rule"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "get(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.IllegalStateException",
+              "<init>(java.lang.String,java.lang.Throwable)"
+            ],
+            [
+              "library",
+              "java.util.Scanner",
+              "hasNextLine()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:07:31",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:08:18",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:08:18",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:08:18",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:08:18",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List, Dict",
+                "translated_target_type": "Dict[str, List]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IllegalArgumentException": {
+                "identifier": "IllegalArgumentException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:08:56",
+                "source_type": "IllegalArgumentException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "ValueError",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Rule": {
+                "identifier": "Rule",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:09:27",
+                "source_type": "Rule",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Rule",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:09:27",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "List<Rule>": {
+                "identifier": "List<Rule>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:09:27",
+                "source_type": "List<Rule>",
+                "generation": "",
+                "imports": "from typing import List, Dict, Tuple",
+                "translated_target_type": "Dict[str, List[Tuple[str, str, str, str]]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ArrayList<>": {
+                "identifier": "ArrayList<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:09:46",
+                "source_type": "ArrayList<>",
+                "generation": "",
+                "imports": "from typing import Dict, List\nfrom collections import defaultdict",
+                "translated_target_type": "Dict[str, List]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IllegalStateException": {
+                "identifier": "IllegalStateException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:10:07",
+                "source_type": "IllegalStateException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main",
+                "translated_target_type": "AssertionError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Scanner|scanner": {
+                "identifier": "final|Scanner|scanner",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:07:42",
+                "source_type": "Scanner",
+                "generation": "",
+                "imports": "from io import StringIO\nimport os",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|String|location": {
+                "identifier": "final|String|location",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:07:57",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|Map<Character, List<Rule>>|ruleMapping": {
+                "identifier": "final|Map<Character, List<Rule>>|ruleMapping",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:07:57",
+                "source_type": "Map<Character, List<Rule>>",
+                "generation": "",
+                "imports": "from typing import Dict, List",
+                "translated_target_type": "Dict[str, List]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|Map<Character, Character>|asciiFoldings": {
+                "identifier": "final|Map<Character, Character>|asciiFoldings",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:08:08",
+                "source_type": "Map<Character, Character>",
+                "generation": "",
+                "imports": "from typing import Dict, List",
+                "translated_target_type": "Dict[str, str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "out_of_context",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": "2025-08-13T06:30:38.137638",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __parseRules(scanner: StringIO, location: str, ruleMapping: Dict[str, List], asciiFoldings: Dict[str, str]) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "339-349:stripQuotes": {
+          "start": 339,
+          "end": 349,
+          "body": [
+            "private static String stripQuotes(String str) {",
+            "        if (str.startsWith(DOUBLE_QUOTE)) {",
+            "            str = str.substring(1);",
+            "        }",
+            "",
+            "        if (str.endsWith(DOUBLE_QUOTE)) {",
+            "            str = str.substring(0, str.length() - 1);",
+            "        }",
+            "",
+            "        return str;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "stripQuotes( String str)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "str"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "endsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int,int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|String|str": {
+                "identifier": "|String|str",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __stripQuotes(str_: str) -> str:",
+            "        if str_ is None:   # Check if the string is not None",
+            "            return \"\"   # Return an empty string if it's None",
+            "        ",
+            "        if str_.startswith(DaitchMokotoffSoundex.__DOUBLE_QUOTE):",
+            "            str_ = str_[1:]",
+            "",
+            "        if str_.endswith(DaitchMokotoffSoundex.__DOUBLE_QUOTE):",
+            "            str_ = str_[:-1]",
+            "",
+            "        return str_"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/DaitchMokotoffSoundex_ESTest_test01_decomposed_mocker_533_DaitchMokotoffSoundex_stripQuotes.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/DaitchMokotoffSoundex_ESTest_test01_decomposed_mocker_533_DaitchMokotoffSoundex_stripQuotes.py\", line 38, in test_mocking\n    method_ret = orig_DaitchMokotoffSoundex_stripQuotes(*method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/DaitchMokotoffSoundex.py\", line 55, in __stripQuotes\n    if str_.startswith(DaitchMokotoffSoundex.__DOUBLE_QUOTE):\n       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: startswith first arg must be str or a tuple of str, not NoneType"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 222.1292233467102,
+          "generation_timestamp": "2025-08-13T06:01:29.642833",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __stripQuotes(str_: str) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "355-357:DaitchMokotoffSoundex": {
+          "start": 355,
+          "end": 357,
+          "body": [
+            "public DaitchMokotoffSoundex(final boolean folding) {",
+            "        this.folding = folding;",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "DaitchMokotoffSoundex(final boolean folding)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "folding"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|boolean|folding": {
+                "identifier": "final|boolean|folding",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, folding: bool) -> None:",
+            "        self.__folding = folding"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 44.21232604980469,
+          "generation_timestamp": "2025-08-13T06:02:14.109052",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, folding: bool) -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "359-361:DaitchMokotoffSoundex1": {
+          "start": 359,
+          "end": 361,
+          "body": [
+            "public static DaitchMokotoffSoundex DaitchMokotoffSoundex1() {",
+            "        return new DaitchMokotoffSoundex(true);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "DaitchMokotoffSoundex"
+          ],
+          "body_types": [
+            "DaitchMokotoffSoundex"
+          ],
+          "signature": "DaitchMokotoffSoundex1()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "355-357:DaitchMokotoffSoundex"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "DaitchMokotoffSoundex": {
+                "identifier": "DaitchMokotoffSoundex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "DaitchMokotoffSoundex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DaitchMokotoffSoundex",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DaitchMokotoffSoundex": {
+                "identifier": "DaitchMokotoffSoundex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "DaitchMokotoffSoundex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DaitchMokotoffSoundex",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def DaitchMokotoffSoundex1() -> \"DaitchMokotoffSoundex\":",
+            "        return DaitchMokotoffSoundex(True)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 41.38276481628418,
+          "generation_timestamp": "2025-08-13T06:02:55.627626",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def DaitchMokotoffSoundex1() -> \"DaitchMokotoffSoundex\":\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "380-394:cleanup": {
+          "start": 380,
+          "end": 394,
+          "body": [
+            "private String cleanup(final String input) {",
+            "        final StringBuilder sb = new StringBuilder();",
+            "        for (char ch : input.toCharArray()) {",
+            "            if (Character.isWhitespace(ch)) {",
+            "                continue;",
+            "            }",
+            "",
+            "            ch = Character.toLowerCase(ch);",
+            "            if (folding && FOLDINGS.containsKey(ch)) {",
+            "                ch = FOLDINGS.get(ch);",
+            "            }",
+            "            sb.append(ch);",
+            "        }",
+            "        return sb.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "StringBuilder",
+            "char"
+          ],
+          "signature": "cleanup(final String input)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "input"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "toCharArray()"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "isWhitespace(char)"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "toLowerCase(char)"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "valueOf(char)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "containsKey(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "get(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "charValue()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(char)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "StringBuilder",
+                "generation": "",
+                "imports": "from typing import List, Dict",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:10:29",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|input": {
+                "identifier": "final|String|input",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:10:21",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __cleanup(self, input_: str) -> str:",
+            "        sb = StringIO()",
+            "        for ch in input_.lower():",
+            "            if ch.isspace():",
+            "                continue",
+            "            if self.__folding and ch in self.__FOLDINGS:",
+            "                ch = self.__FOLDINGS[ch]",
+            "            sb.write(ch)",
+            "        return sb.getvalue()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 56.088568449020386,
+          "generation_timestamp": "2025-08-13T06:04:31.150939",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __cleanup(self, input_: str) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "409-412:encode": {
+          "start": 409,
+          "end": 412,
+          "body": [
+            "@Override",
+            "    public Object encode(final Object obj) throws EncoderException {",
+            "        return encode0(obj);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Object"
+          ],
+          "body_types": [],
+          "signature": "encode(final Object obj)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Object",
+              "name": "obj"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "414-422:encode0"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "437-442:encode1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Object": {
+                "identifier": "Object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:10:29",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|Object|obj": {
+                "identifier": "final|Object|obj",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:10:39",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "is_overload": true
+        },
+        "414-422:encode0": {
+          "start": 414,
+          "end": 422,
+          "body": [
+            "public Object encode0(final Object obj) throws EncoderException {",
+            "        if (!(obj instanceof String)) {",
+            "            throw new EncoderException(",
+            "                    \"Parameter supplied to DaitchMokotoffSoundex encode is not of type\"",
+            "                            + \" java.lang.String\",",
+            "                    null);",
+            "        }",
+            "        return encode1((String) obj);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Object"
+          ],
+          "body_types": [
+            "String",
+            "EncoderException"
+          ],
+          "signature": "encode0(final Object obj)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Object",
+              "name": "obj"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.EncoderException",
+              "25-78:EncoderException",
+              "62-64:EncoderException"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "437-442:encode1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Object": {
+                "identifier": "Object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:10:47",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "EncoderException": {
+                "identifier": "EncoderException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "EncoderException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "EncoderException",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Object|obj": {
+                "identifier": "final|Object|obj",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:10:56",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def encode0(self, obj: Any) -> Any:",
+            "        from src.main.org.apache.commons.codec.EncoderException import EncoderException",
+            "        if not isinstance(obj, str):",
+            "            raise EncoderException(\"Parameter supplied to DaitchMokotoffSoundex encode is not of type java.lang.String\", None)",
+            "        return self.encode1(obj)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "pending",
+          "elapsed_time": 49.012669801712036,
+          "generation_timestamp": "2025-08-13T06:56:12.907620",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def encode0(self, obj: Any) -> Any:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "432-435:encode": {
+          "start": 432,
+          "end": 435,
+          "body": [
+            "@Override",
+            "    public String encode(final String source) {",
+            "        return encode1(source);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "encode(final String source)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "source"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|source": {
+                "identifier": "final|String|source",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "is_overload": true
+        },
+        "437-442:encode1": {
+          "start": 437,
+          "end": 442,
+          "body": [
+            "public String encode1(final String source) {",
+            "        if (source == null) {",
+            "            return null;",
+            "        }",
+            "        return soundex1(source, false)[0];",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "encode1(final String source)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "source"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "484-558:soundex1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|source": {
+                "identifier": "final|String|source",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def encode1(self, source: str) -> str:",
+            "        if source is None:",
+            "            return None",
+            "        return self.__soundex1(source, False)[0]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "pending",
+          "elapsed_time": 44.4711537361145,
+          "generation_timestamp": "2025-08-13T06:43:34.566675",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def encode1(self, source: str) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "463-474:soundex0": {
+          "start": 463,
+          "end": 474,
+          "body": [
+            "public String soundex0(final String source) {",
+            "        final String[] branches = soundex1(source, true);",
+            "        final StringBuilder sb = new StringBuilder();",
+            "        int index = 0;",
+            "        for (final String branch : branches) {",
+            "            sb.append(branch);",
+            "            if (++index < branches.length) {",
+            "                sb.append('|');",
+            "            }",
+            "        }",
+            "        return sb.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "String[]",
+            "StringBuilder",
+            "int",
+            "String"
+          ],
+          "signature": "soundex0(final String source)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "source"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "484-558:soundex1"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(char)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:16",
+                "source_type": "StringBuilder",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[Tuple[str, bool]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:26",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:26",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|source": {
+                "identifier": "final|String|source",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:11:07",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def soundex0(self, source: str) -> str:",
+            "        branches = self.__soundex1(source, True)",
+            "        sb = []",
+            "        index = 0",
+            "        for branch in branches:",
+            "            sb.append(branch)",
+            "            if index < len(branches)-1:",
+            "                sb.append('|')",
+            "            index += 1",
+            "        return ''.join(sb)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "pending",
+          "elapsed_time": 43.82040357589722,
+          "generation_timestamp": "2025-08-13T06:45:46.130162",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def soundex0(self, source: str) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "484-558:soundex1": {
+          "start": 484,
+          "end": 558,
+          "body": [
+            "private String[] soundex1(final String source, final boolean branching) {",
+            "        if (source == null) {",
+            "            return null;",
+            "        }",
+            "",
+            "        final String input = cleanup(source);",
+            "",
+            "        final Set<Branch> currentBranches = new LinkedHashSet<>();",
+            "        currentBranches.add(new Branch());",
+            "",
+            "        char lastChar = '\\0';",
+            "        for (int index = 0; index < input.length(); index++) {",
+            "            final char ch = input.charAt(index);",
+            "",
+            "            if (Character.isWhitespace(ch)) {",
+            "                continue;",
+            "            }",
+            "",
+            "            final String inputContext = input.substring(index);",
+            "            final List<Rule> rules = RULES.get(ch);",
+            "            if (rules == null) {",
+            "                continue;",
+            "            }",
+            "",
+            "            final List<Branch> nextBranches =",
+            "                    branching ? new ArrayList<Branch>() : Collections.<Branch>emptyList();",
+            "",
+            "            for (final Rule rule : rules) {",
+            "                if (rule.matches(inputContext)) {",
+            "                    if (branching) {",
+            "                        nextBranches.clear();",
+            "                    }",
+            "                    final String[] replacements =",
+            "                            rule.getReplacements(inputContext, lastChar == '\\0');",
+            "                    final boolean branchingRequired = replacements.length > 1 && branching;",
+            "",
+            "                    for (final Branch branch : currentBranches) {",
+            "                        for (final String nextReplacement : replacements) {",
+            "                            final Branch nextBranch =",
+            "                                    branchingRequired ? branch.createBranch() : branch;",
+            "",
+            "                            final boolean force =",
+            "                                    (lastChar == 'm' && ch == 'n')",
+            "                                            || (lastChar == 'n' && ch == 'm');",
+            "",
+            "                            nextBranch.processNextReplacement(nextReplacement, force);",
+            "",
+            "                            if (!branching) {",
+            "                                break;",
+            "                            }",
+            "                            nextBranches.add(nextBranch);",
+            "                        }",
+            "                    }",
+            "",
+            "                    if (branching) {",
+            "                        currentBranches.clear();",
+            "                        currentBranches.addAll(nextBranches);",
+            "                    }",
+            "                    index += rule.getPatternLength() - 1;",
+            "                    break;",
+            "                }",
+            "            }",
+            "",
+            "            lastChar = ch;",
+            "        }",
+            "",
+            "        final String[] result = new String[currentBranches.size()];",
+            "        int index = 0;",
+            "        for (final Branch branch : currentBranches) {",
+            "            branch.finish();",
+            "            result[index++] = branch.toString();",
+            "        }",
+            "",
+            "        return result;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "String[]"
+          ],
+          "body_types": [
+            "String",
+            "Set<Branch>",
+            "LinkedHashSet<>",
+            "Branch",
+            "char",
+            "int",
+            "List<Rule>",
+            "List<Branch>",
+            "ArrayList<Branch>",
+            "Rule",
+            "String[]",
+            "boolean"
+          ],
+          "signature": "soundex1(final String source, final boolean branching)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "source"
+            },
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "branching"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "70-559:DaitchMokotoffSoundex",
+              "380-394:cleanup"
+            ],
+            [
+              "library",
+              "java.util.LinkedHashSet",
+              "<init>()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "78-82:Branch"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "charAt(int)"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "isWhitespace(char)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int)"
+            ],
+            [
+              "library",
+              "java.lang.Character",
+              "valueOf(char)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "get(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.ArrayList",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.Collections",
+              "emptyList()"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "154-207:Rule",
+              "194-196:matches"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "clear()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "154-207:Rule",
+              "175-188:getReplacements"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "iterator()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "89-94:createBranch"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "127-142:processNextReplacement"
+            ],
+            [
+              "library",
+              "java.util.List",
+              "add(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "clear()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "addAll(java.util.Collection)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "154-207:Rule",
+              "171-173:getPatternLength"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "size()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "109-114:finish"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "144-150:toString"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:11:26",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List, Set",
+                "translated_target_type": "List[Set[str]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:35",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Set<Branch>": {
+                "identifier": "Set<Branch>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:11:46",
+                "source_type": "Set<Branch>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "LinkedHashSet<>": {
+                "identifier": "LinkedHashSet<>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:12:13",
+                "source_type": "LinkedHashSet<>",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[Branch]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Branch": {
+                "identifier": "Branch",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:12:28",
+                "source_type": "Branch",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Branch",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:12:28",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:12:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "List<Rule>": {
+                "identifier": "List<Rule>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:12:28",
+                "source_type": "List<Rule>",
+                "generation": "",
+                "imports": "from typing import List, Set, Tuple",
+                "translated_target_type": "List[Rule]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "List<Branch>": {
+                "identifier": "List<Branch>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:12:37",
+                "source_type": "List<Branch>",
+                "generation": "",
+                "imports": "from typing import List, Set\nfrom collections import deque",
+                "translated_target_type": "List[Branch]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ArrayList<Branch>": {
+                "identifier": "ArrayList<Branch>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:13:05",
+                "source_type": "ArrayList<Branch>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Rule": {
+                "identifier": "Rule",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:13:28",
+                "source_type": "Rule",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Rule",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:13:28",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List, Set",
+                "translated_target_type": "List[Set[str]]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:13:36",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|source": {
+                "identifier": "final|String|source",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:11:35",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|boolean|branching": {
+                "identifier": "final|boolean|branching",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:11:35",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "out_of_context",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": "2025-08-13T06:42:10.350721",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __soundex1(self, source: str, branching: bool) -> List[Set[str]]:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "209-209:COMMENT": {
+          "start": 209,
+          "end": 209,
+          "enum_constant": false,
+          "body": [
+            "private static final String COMMENT = \"//\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:02",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __COMMENT: str = \"//\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 42.47566771507263,
+          "generation_timestamp": "2025-08-11T08:52:54.280157",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __COMMENT: str = ",
+            ""
+          ]
+        },
+        "210-210:DOUBLE_QUOTE": {
+          "start": 210,
+          "end": 210,
+          "enum_constant": false,
+          "body": [
+            "private static final String DOUBLE_QUOTE = \"\\\"\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:02",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __DOUBLE_QUOTE: str = \"\\\"\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 37.794570207595825,
+          "generation_timestamp": "2025-08-11T08:52:11.691085",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DOUBLE_QUOTE: str = ",
+            ""
+          ]
+        },
+        "212-212:MULTILINE_COMMENT_END": {
+          "start": 212,
+          "end": 212,
+          "enum_constant": false,
+          "body": [
+            "private static final String MULTILINE_COMMENT_END = \"*/\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:02",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __MULTILINE_COMMENT_END: str = \"*/\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 39.28131294250488,
+          "generation_timestamp": "2025-08-11T08:51:33.787939",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __MULTILINE_COMMENT_END: str = ",
+            ""
+          ]
+        },
+        "214-214:MULTILINE_COMMENT_START": {
+          "start": 214,
+          "end": 214,
+          "enum_constant": false,
+          "body": [
+            "private static final String MULTILINE_COMMENT_START = \"/*\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:02",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __MULTILINE_COMMENT_START: str = \"/*\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 35.21967148780823,
+          "generation_timestamp": "2025-08-11T08:50:54.390419",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __MULTILINE_COMMENT_START: str = ",
+            ""
+          ]
+        },
+        "217-217:RESOURCE_FILE": {
+          "start": 217,
+          "end": 217,
+          "enum_constant": false,
+          "body": [
+            "private static final String RESOURCE_FILE = \"org/apache/commons/codec/language/dmrules.txt\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:02",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __RESOURCE_FILE: str = \"org/apache/commons/codec/language/dmrules.txt\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 35.9353346824646,
+          "generation_timestamp": "2025-08-11T08:50:19.063771",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __RESOURCE_FILE: str = ",
+            ""
+          ]
+        },
+        "220-220:MAX_LENGTH": {
+          "start": 220,
+          "end": 220,
+          "enum_constant": false,
+          "body": [
+            "private static final int MAX_LENGTH = 6;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:02",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __MAX_LENGTH: int = 6"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 34.611732959747314,
+          "generation_timestamp": "2025-08-11T08:49:43.026268",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __MAX_LENGTH: int = ",
+            ""
+          ]
+        },
+        "223-223:RULES": {
+          "start": 223,
+          "end": 223,
+          "enum_constant": false,
+          "body": [
+            "private static final Map<Character, List<Rule>> RULES = new HashMap<>();"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "Map<Character, List<Rule>>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Map<Character, List<Rule>>": {
+                "identifier": "Map<Character, List<Rule>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:12",
+                "source_type": "Map<Character, List<Rule>>",
+                "generation": "",
+                "imports": "from typing import Dict, List\nfrom collections import defaultdict",
+                "translated_target_type": "Dict[str, List[Rule]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.apache.commons.codec.language.bm.Rule import Rule",
+            "    __RULES: Dict[str, List[Rule]] = defaultdict(list)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 44.22440242767334,
+          "generation_timestamp": "2025-08-11T08:49:08.309068",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __RULES: Dict[str, List[Rule]] = ",
+            ""
+          ]
+        },
+        "226-226:FOLDINGS": {
+          "start": 226,
+          "end": 226,
+          "enum_constant": false,
+          "body": [
+            "private static final Map<Character, Character> FOLDINGS = new HashMap<>();"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "Map<Character, Character>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Map<Character, Character>": {
+                "identifier": "Map<Character, Character>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:22",
+                "source_type": "Map<Character, Character>",
+                "generation": "",
+                "imports": "from typing import Dict, Tuple",
+                "translated_target_type": "Dict[str, str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __FOLDINGS: Dict[str, str] = {}"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 47.9461452960968,
+          "generation_timestamp": "2025-08-11T08:48:23.948917",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FOLDINGS: Dict[str, str] = ",
+            ""
+          ]
+        },
+        "352-352:folding": {
+          "start": 352,
+          "end": 352,
+          "enum_constant": false,
+          "body": [
+            "private final boolean folding;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:07:31",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __folding: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __folding: bool = False"
+          ]
+        }
+      },
+      "static_initializers": {
+        "228-245:run_static_init": {
+          "start": 228,
+          "end": 245,
+          "body": [
+            "static {",
+            "        try (final Scanner scanner =",
+            "                new Scanner(Resources.getInputStream(RESOURCE_FILE), CharEncoding.UTF_8)) {",
+            "            parseRules(scanner, RESOURCE_FILE, RULES, FOLDINGS);",
+            "        }",
+            "",
+            "        for (final Map.Entry<Character, List<Rule>> rule : RULES.entrySet()) {",
+            "            final List<Rule> ruleList = rule.getValue();",
+            "            Collections.sort(",
+            "                    ruleList,",
+            "                    new Comparator<Rule>() {",
+            "                        @Override",
+            "                        public int compare(final Rule rule1, final Rule rule2) {",
+            "                            return rule2.getPatternLength() - rule1.getPatternLength();",
+            "                        }",
+            "                    });",
+            "        }",
+            "    }"
+          ],
+          "type_translations": {},
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 111.4030544757843,
+          "generation_timestamp": "2025-08-11T08:47:35.884926",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": []
+        }
+      },
+      "python_class_declaration": "class DaitchMokotoffSoundex(StringEncoder):\n\n"
+    },
+    "73-151:Branch": {
+      "start": 73,
+      "end": 151,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "nested_inside": "70-559:DaitchMokotoffSoundex",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "78-82:Branch": {
+          "start": 78,
+          "end": 82,
+          "body": [
+            "private Branch() {",
+            "            builder = new StringBuilder();",
+            "            lastReplacement = null;",
+            "            cachedString = null;",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [
+            "StringBuilder"
+          ],
+          "signature": "Branch()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "78-82:Branch"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:13:58",
+                "source_type": "StringBuilder",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:",
+            "        self.__builder = []   # type: List[str]",
+            "        self.__cachedString = ''",
+            "        self.__lastReplacement = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testEncodeIgnoreApostrophes_decomposed_mocker_176_DaitchMokotoffSoundex$Branch_<init>.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testEncodeIgnoreApostrophes_decomposed_mocker_176_DaitchMokotoffSoundex$Branch_<init>.py\", line 47, in test_mocking\n    self.assertTrue(recursive_equal(obj, convert_to_python(json.loads(\"{\\\"memory_address\\\":1657521272,\\\"type\\\":\\\"src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch\\\",\\\"instance_fields\\\":{\\\"lastReplacement\\\":{\\\"modifier\\\":\\\"private\\\",\\\"type\\\":\\\"null\\\",\\\"value\\\":\\\"null\\\"},\\\"builder\\\":{\\\"modifier\\\":\\\"private\\\",\\\"memory_address\\\":1413020227,\\\"type\\\":\\\"java.lang.StringBuilder\\\",\\\"value\\\":\\\"\\\"},\\\"cachedString\\\":{\\\"modifier\\\":\\\"private\\\",\\\"type\\\":\\\"null\\\",\\\"value\\\":\\\"null\\\"}},\\\"static_fields\\\":{}}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 198.09155297279358,
+          "generation_timestamp": "2025-08-13T06:07:49.375799",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "89-94:createBranch": {
+          "start": 89,
+          "end": 94,
+          "body": [
+            "public Branch createBranch() {",
+            "            final Branch branch = new Branch();",
+            "            branch.builder.append(toString());",
+            "            branch.lastReplacement = this.lastReplacement;",
+            "            return branch;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Branch"
+          ],
+          "body_types": [
+            "Branch"
+          ],
+          "signature": "createBranch()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "78-82:Branch"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "144-150:toString"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Branch": {
+                "identifier": "Branch",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:14:14",
+                "source_type": "Branch",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Branch",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Branch": {
+                "identifier": "Branch",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:14:14",
+                "source_type": "Branch",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Branch",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def createBranch(self) -> \"Branch\":",
+            "        branch = Branch()",
+            "        branch.__builder += self.toString()   # Assuming that toString returns a string",
+            "        branch.__lastReplacement = self.__lastReplacement",
+            "        return branch"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/DaitchMokotoffSoundex_ESTest_test09_decomposed_mocker_1558_DaitchMokotoffSoundex$Branch_createBranch.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/DaitchMokotoffSoundex_ESTest_test09_decomposed_mocker_1558_DaitchMokotoffSoundex$Branch_createBranch.py\", line 48, in test_mocking\n    method_ret = instance_initial.orig_Branch_createBranch()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/DaitchMokotoffSoundex.py\", line 97, in createBranch\n    branch.__builder += self.toString()  # Assuming that toString returns a string\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: unsupported operand type(s) for +=: '_io.StringIO' and 'str'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 190.82631468772888,
+          "generation_timestamp": "2025-08-13T06:21:53.477912",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def createBranch(self) -> \"Branch\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "96-106:equals": {
+          "start": 96,
+          "end": 106,
+          "body": [
+            "@Override",
+            "        public boolean equals(final Object other) {",
+            "            if (this == other) {",
+            "                return true;",
+            "            }",
+            "            if (!(other instanceof Branch)) {",
+            "                return false;",
+            "            }",
+            "",
+            "            return toString().equals(((Branch) other).toString());",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "Branch"
+          ],
+          "signature": "equals(final Object other)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Object",
+              "name": "other"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "144-150:toString"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:14:14",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Branch": {
+                "identifier": "Branch",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "Branch",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Branch",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Object|other": {
+                "identifier": "final|Object|other",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:14:28",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def equals(self, other: Optional[Any]) -> bool:",
+            "        if self is other:",
+            "            return True",
+            "        if not isinstance(other, Branch):",
+            "            return False",
+            "    ",
+            "        return self.toString() == other.toString()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 60.305065870285034,
+          "generation_timestamp": "2025-08-13T06:22:53.898840",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def equals(self, other: Optional[Any]) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "109-114:finish": {
+          "start": 109,
+          "end": 114,
+          "body": [
+            "public void finish() {",
+            "            while (builder.length() < MAX_LENGTH) {",
+            "                builder.append('0');",
+            "                cachedString = null;",
+            "            }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "finish()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(char)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "length()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def finish(self) -> None:",
+            "        while self.__builder.getvalue().__len__() < Branch._Branch__MAX_LENGTH:",
+            "                    self.__builder.write('0')",
+            "                    self.__cachedString = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testSoundexBasic2_decomposed_mocker_847_DaitchMokotoffSoundex$Branch_finish.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testSoundexBasic2_decomposed_mocker_847_DaitchMokotoffSoundex$Branch_finish.py\", line 37, in test_mocking\n    instance_initial.orig_Branch_finish()\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/DaitchMokotoffSoundex.py\", line 104, in finish\n    while self.__builder.getvalue().__len__() < Branch._Branch__MAX_LENGTH:\n                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'Branch' has no attribute '_Branch__MAX_LENGTH'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 217.52157163619995,
+          "generation_timestamp": "2025-08-13T06:11:27.049493",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def finish(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "116-119:hashCode": {
+          "start": 116,
+          "end": 119,
+          "body": [
+            "@Override",
+            "        public int hashCode() {",
+            "            return toString().hashCode();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "hashCode()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "73-151:Branch",
+              "144-150:toString"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "hashCode()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def hashCode(self) -> int:",
+            "        return hash(self.__str__())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testSoundexBasic3_decomposed_mocker_75_DaitchMokotoffSoundex$Branch_hashCode.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testSoundexBasic3_decomposed_mocker_75_DaitchMokotoffSoundex$Branch_hashCode.py\", line 43, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":908218259,\\\"type\\\":\\\"java.lang.Integer\\\",\\\"value\\\":\\\"1689335\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 186.63817954063416,
+          "generation_timestamp": "2025-08-13T06:26:00.650238",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def hashCode(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "127-142:processNextReplacement": {
+          "start": 127,
+          "end": 142,
+          "body": [
+            "public void processNextReplacement(final String replacement, final boolean forceAppend) {",
+            "            final boolean append =",
+            "                    lastReplacement == null",
+            "                            || !lastReplacement.endsWith(replacement)",
+            "                            || forceAppend;",
+            "",
+            "            if (append && builder.length() < MAX_LENGTH) {",
+            "                builder.append(replacement);",
+            "                if (builder.length() > MAX_LENGTH) {",
+            "                    builder.delete(MAX_LENGTH, builder.length());",
+            "                }",
+            "                cachedString = null;",
+            "            }",
+            "",
+            "            lastReplacement = replacement;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "boolean"
+          ],
+          "signature": "processNextReplacement(final String replacement, final boolean forceAppend)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "replacement"
+            },
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "forceAppend"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "endsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "delete(int,int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|replacement": {
+                "identifier": "final|String|replacement",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|boolean|forceAppend": {
+                "identifier": "final|boolean|forceAppend",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def processNextReplacement(self, replacement: str, forceAppend: bool) -> None:",
+            "        append = (self.__lastReplacement is None or not self.__lastReplacement.endswith(replacement)) or forceAppend",
+            "        if append and len(self.__builder.getvalue()) < DaitchMokotoffSoundex._DaitchMokotoffSoundex__MAX_LENGTH:",
+            "            self.__builder.write(replacement)",
+            "            if len(self.__builder.getvalue()) > DaitchMokotoffSoundex._DaitchMokotoffSoundex__MAX_LENGTH:",
+            "                self.__builder = StringIO(self.__builder.getvalue()[:DaitchMokotoffSoundex._DaitchMokotoffSoundex__MAX_LENGTH])",
+            "            self.__cachedString = None",
+            "        self.__lastReplacement = replacement"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testEncodeIgnoreHyphens_decomposed_mocker_1031_DaitchMokotoffSoundex$Branch_processNextReplacement.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/DaitchMokotoffSoundexTest_testEncodeIgnoreHyphens_decomposed_mocker_1031_DaitchMokotoffSoundex$Branch_processNextReplacement.py\", line 40, in test_mocking\n    instance_initial.orig_Branch_processNextReplacement(*method_args)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/DaitchMokotoffSoundex.py\", line 118, in processNextReplacement\n    and len(self.__builder.getvalue())\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: '<' not supported between instances of 'int' and 'NoneType'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 242.3195583820343,
+          "generation_timestamp": "2025-08-13T06:15:29.541023",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def processNextReplacement(self, replacement: str, forceAppend: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "144-150:toString": {
+          "start": 144,
+          "end": 150,
+          "body": [
+            "@Override",
+            "        public String toString() {",
+            "            if (cachedString == null) {",
+            "                cachedString = builder.toString();",
+            "            }",
+            "            return cachedString;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        if self.__cachedString is None:",
+            "            self.__cachedString = self.__builder.getvalue()",
+            "        return self.__cachedString"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 192.65412712097168,
+          "generation_timestamp": "2025-08-13T06:18:42.490528",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "74-74:builder": {
+          "start": 74,
+          "end": 74,
+          "enum_constant": false,
+          "body": [
+            "private final StringBuilder builder;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "StringBuilder"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:13:37",
+                "source_type": "StringBuilder",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __builder: StringIO = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __builder: StringIO = None"
+          ]
+        },
+        "75-75:cachedString": {
+          "start": 75,
+          "end": 75,
+          "enum_constant": false,
+          "body": [
+            "private String cachedString;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:13:49",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __cachedString: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __cachedString: str = ''"
+          ]
+        },
+        "76-76:lastReplacement": {
+          "start": 76,
+          "end": 76,
+          "enum_constant": false,
+          "body": [
+            "private String lastReplacement;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:13:49",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __lastReplacement: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __lastReplacement: str = ''"
+          ]
+        }
+      },
+      "python_class_declaration": "class Branch:\n\n"
+    },
+    "154-207:Rule": {
+      "start": 154,
+      "end": 207,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "nested_inside": "70-559:DaitchMokotoffSoundex",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "160-169:Rule": {
+          "start": 160,
+          "end": 169,
+          "body": [
+            "protected Rule(",
+            "                final String pattern,",
+            "                final String replacementAtStart,",
+            "                final String replacementBeforeVowel,",
+            "                final String replacementDefault) {",
+            "            this.pattern = pattern;",
+            "            this.replacementAtStart = replacementAtStart.split(\"\\\\|\");",
+            "            this.replacementBeforeVowel = replacementBeforeVowel.split(\"\\\\|\");",
+            "            this.replacementDefault = replacementDefault.split(\"\\\\|\");",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "Rule(final String pattern, final String replacementAtStart, final String replacementBeforeVowel, final String replacementDefault)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "pattern"
+            },
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "replacementAtStart"
+            },
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "replacementBeforeVowel"
+            },
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "replacementDefault"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "split(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|String|pattern": {
+                "identifier": "final|String|pattern",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:11",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|String|replacementAtStart": {
+                "identifier": "final|String|replacementAtStart",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:12",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|String|replacementBeforeVowel": {
+                "identifier": "final|String|replacementBeforeVowel",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:12",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|String|replacementDefault": {
+                "identifier": "final|String|replacementDefault",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:12",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, pattern: str, replacementAtStart: str, replacementBeforeVowel: str, replacementDefault: str) -> None:",
+            "        self.__pattern = pattern",
+            "        self.__replacementAtStart = replacementAtStart.split(\"|\")",
+            "        self.__replacementBeforeVowel = replacementBeforeVowel.split(\"|\")",
+            "        self.__replacementDefault = replacementDefault.split(\"|\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 172.5574073791504,
+          "generation_timestamp": "2025-08-13T06:28:53.346593",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, pattern: str, replacementAtStart: str, replacementBeforeVowel: str, replacementDefault: str) -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "171-173:getPatternLength": {
+          "start": 171,
+          "end": 173,
+          "body": [
+            "public int getPatternLength() {",
+            "            return pattern.length();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "getPatternLength()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:15:12",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getPatternLength(self) -> int:",
+            "        return len(self.__pattern)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 166.22477269172668,
+          "generation_timestamp": "2025-08-13T06:33:24.475647",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getPatternLength(self) -> int:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "175-188:getReplacements": {
+          "start": 175,
+          "end": 188,
+          "body": [
+            "public String[] getReplacements(final String context, final boolean atStart) {",
+            "            if (atStart) {",
+            "                return replacementAtStart;",
+            "            }",
+            "",
+            "            final int nextIndex = getPatternLength();",
+            "            final boolean nextCharIsVowel =",
+            "                    nextIndex < context.length() && isVowel(context.charAt(nextIndex));",
+            "            if (nextCharIsVowel) {",
+            "                return replacementBeforeVowel;",
+            "            }",
+            "",
+            "            return replacementDefault;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String[]"
+          ],
+          "body_types": [
+            "int",
+            "boolean"
+          ],
+          "signature": "getReplacements(final String context, final boolean atStart)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "context"
+            },
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "atStart"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "154-207:Rule",
+              "171-173:getPatternLength"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "charAt(int)"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.DaitchMokotoffSoundex",
+              "154-207:Rule",
+              "190-192:isVowel"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:15:12",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|context": {
+                "identifier": "final|String|context",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|boolean|atStart": {
+                "identifier": "final|boolean|atStart",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def getReplacements(self, context: str, atStart: bool)  -> List[str]:",
+            "        if atStart:",
+            "            return self.__replacementAtStart",
+            "        ",
+            "        nextIndex = self.getPatternLength()",
+            "        nextCharIsVowel = nextIndex < len(context) and self.__isVowel(context[nextIndex])",
+            "        if nextCharIsVowel:",
+            "            return self.__replacementBeforeVowel",
+            "        ",
+            "        return self.__replacementDefault"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 127.87844061851501,
+          "generation_timestamp": "2025-08-13T06:36:56.437895",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getReplacements(self, context: str, atStart: bool) -> List[str]:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "190-192:isVowel": {
+          "start": 190,
+          "end": 192,
+          "body": [
+            "private boolean isVowel(final char ch) {",
+            "            return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u';",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isVowel(final char ch)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "char",
+              "name": "ch"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|char|ch": {
+                "identifier": "final|char|ch",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __isVowel(self, ch: str) -> bool:",
+            "        return ch == 'a' or ch == 'e' or ch == 'i' or ch == 'o' or ch == 'u'"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 83.81250405311584,
+          "generation_timestamp": "2025-08-13T06:34:48.427027",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __isVowel(self, ch: str) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "194-196:matches": {
+          "start": 194,
+          "end": 196,
+          "body": [
+            "public boolean matches(final String context) {",
+            "            return context.startsWith(pattern);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "matches(final String context)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "context"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|context": {
+                "identifier": "final|String|context",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def matches(self, context: str) -> bool:",
+            "        return context.startswith(self.__pattern)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 174.81395602226257,
+          "generation_timestamp": "2025-08-13T06:39:51.424814",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def matches(self, context: str) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "198-206:toString": {
+          "start": 198,
+          "end": 206,
+          "body": [
+            "@Override",
+            "        public String toString() {",
+            "            return String.format(",
+            "                    \"%s=(%s,%s,%s)\",",
+            "                    pattern,",
+            "                    Arrays.asList(replacementAtStart),",
+            "                    Arrays.asList(replacementBeforeVowel),",
+            "                    Arrays.asList(replacementDefault));",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.Arrays",
+              "asList(java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 07:15:22",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        return f\"{self.__pattern}=({','.join(self.__replacementAtStart)},{','.join(self.__replacementBeforeVowel)},{','.join(self.__replacementDefault)})\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 39.43845868110657,
+          "generation_timestamp": "2025-08-13T06:42:49.960668",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "155-155:pattern": {
+          "start": 155,
+          "end": 155,
+          "enum_constant": false,
+          "body": [
+            "private final String pattern;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __pattern: str = ''"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __pattern: str = ''"
+          ]
+        },
+        "156-156:replacementAtStart": {
+          "start": 156,
+          "end": 156,
+          "enum_constant": false,
+          "body": [
+            "private final String[] replacementAtStart;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:14:46",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __replacementAtStart: List[str] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __replacementAtStart: List[str] = None"
+          ]
+        },
+        "157-157:replacementBeforeVowel": {
+          "start": 157,
+          "end": 157,
+          "enum_constant": false,
+          "body": [
+            "private final String[] replacementBeforeVowel;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:14:54",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __replacementBeforeVowel: List[str] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __replacementBeforeVowel: List[str] = None"
+          ]
+        },
+        "158-158:replacementDefault": {
+          "start": 158,
+          "end": 158,
+          "enum_constant": false,
+          "body": [
+            "private final String[] replacementDefault;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "String[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 07:15:03",
+                "source_type": "String[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __replacementDefault: List[str] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __replacementDefault: List[str] = None"
+          ]
+        }
+      },
+      "python_class_declaration": "class Rule:\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import StringIO",
+    "from io import StringIO\nimport os",
+    "from src.main.org.apache.commons.codec.StringEncoder import StringEncoder",
+    "from typing import Any",
+    "from typing import Any, Optional",
+    "from typing import Dict, List",
+    "from typing import Dict, List\nfrom collections import defaultdict",
+    "from typing import Dict, Tuple",
+    "from typing import List",
+    "from typing import List, Dict",
+    "from typing import List, Set",
+    "from typing import List, Set\nfrom collections import deque",
+    "from unittest import TestCase, main"
+  ]
+}

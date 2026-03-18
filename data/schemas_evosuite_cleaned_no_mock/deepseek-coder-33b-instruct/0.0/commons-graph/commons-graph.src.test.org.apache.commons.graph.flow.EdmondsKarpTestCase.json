@@ -1,0 +1,980 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/src/test/java/org/apache/commons/graph/flow/EdmondsKarpTestCase.java",
+  "imports": {
+    "22-22:import static org.apache.commons.graph.CommonsGraph.findMaxFlow;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.apache.commons.graph.CommonsGraph.findMaxFlow;"
+    },
+    "23-23:import static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph;"
+    },
+    "24-24:import static org.junit.Assert.assertEquals;": {
+      "start": 24,
+      "end": 24,
+      "body": "import static org.junit.Assert.assertEquals;"
+    },
+    "26-26:import org.apache.commons.graph.builder.AbstractGraphConnection;": {
+      "start": 26,
+      "end": 26,
+      "body": "import org.apache.commons.graph.builder.AbstractGraphConnection;"
+    },
+    "27-27:import org.apache.commons.graph.model.BaseLabeledVertex;": {
+      "start": 27,
+      "end": 27,
+      "body": "import org.apache.commons.graph.model.BaseLabeledVertex;"
+    },
+    "28-28:import org.apache.commons.graph.model.BaseLabeledWeightedEdge;": {
+      "start": 28,
+      "end": 28,
+      "body": "import org.apache.commons.graph.model.BaseLabeledWeightedEdge;"
+    },
+    "29-29:import org.apache.commons.graph.model.BaseWeightedEdge;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.graph.model.BaseWeightedEdge;"
+    },
+    "30-30:import org.apache.commons.graph.model.DirectedMutableGraph;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.graph.model.DirectedMutableGraph;"
+    },
+    "31-31:import org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations;"
+    },
+    "32-32:import org.junit.Test;": {
+      "start": 32,
+      "end": 32,
+      "body": "import org.junit.Test;"
+    }
+  },
+  "classes": {
+    "38-175:EdmondsKarpTestCase": {
+      "start": 38,
+      "end": 175,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "40-105:testFindMaxFlowAndVerify": {
+          "start": 40,
+          "end": 105,
+          "body": [
+            "@Test",
+            "    public void testFindMaxFlowAndVerify() {",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");",
+            "        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");",
+            "",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =",
+            "                newDirectedMutableGraph(",
+            "                        new AbstractGraphConnection<",
+            "                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {",
+            "",
+            "                            public void connect0() {",
+            "                                addVertex(a);",
+            "                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));",
+            "                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));",
+            "                                BaseLabeledVertex d = addVertex(new BaseLabeledVertex(\"D\"));",
+            "                                BaseLabeledVertex e = addVertex(new BaseLabeledVertex(\"E\"));",
+            "                                BaseLabeledVertex f = addVertex(new BaseLabeledVertex(\"F\"));",
+            "                                addVertex(g);",
+            "",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))",
+            "                                        .from(a)",
+            "                                        .to(b);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> D\", 3))",
+            "                                        .from(a)",
+            "                                        .to(d);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))",
+            "                                        .from(b)",
+            "                                        .to(c);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> A\", 3))",
+            "                                        .from(c)",
+            "                                        .to(a);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> D\", 1))",
+            "                                        .from(c)",
+            "                                        .to(d);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> E\", 2))",
+            "                                        .from(c)",
+            "                                        .to(e);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> E\", 2))",
+            "                                        .from(d)",
+            "                                        .to(e);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> F\", 6))",
+            "                                        .from(d)",
+            "                                        .to(f);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> B\", 1))",
+            "                                        .from(e)",
+            "                                        .to(b);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> G\", 1))",
+            "                                        .from(e)",
+            "                                        .to(g);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"F -> G\", 9))",
+            "                                        .from(f)",
+            "                                        .to(g);",
+            "                            }",
+            "                        });",
+            "",
+            "        final Integer expected = 5;",
+            "",
+            "        Integer actual =",
+            "                findMaxFlow(graph)",
+            "                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                        .from(a)",
+            "                        .to(g)",
+            "                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "",
+            "        assertEquals(expected, actual);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "void",
+            "Integer",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testFindMaxFlowAndVerify()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "187-190:newDirectedMutableGraph"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DirectedMutableGraph",
+                "reasoning": "Custom type DirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AbstractGraphConnection",
+                "reasoning": "Custom type AbstractGraphConnection is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Integer": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 81.12344861030579,
+          "generation_timestamp": "2025-11-09T20:53:38.258621",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testFindMaxFlowAndVerify(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "107-119:testNullGraph": {
+          "start": 107,
+          "end": 119,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullGraph() {",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");",
+            "        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");",
+            "",
+            "        findMaxFlow(",
+            "                        (DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>)",
+            "                                null)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                .from(a)",
+            "                .to(g)",
+            "                .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testNullGraph()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DirectedMutableGraph",
+                "reasoning": "Custom type DirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullGraph(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations import IntegerWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        with pytest.raises(ValueError):",
+            "            CommonsGraph.findMaxFlow(None).whereEdgesHaveWeights(BaseWeightedEdge()).from_(BaseLabeledVertex(\"A\")).to(BaseLabeledVertex(\"G\")).applyingEdmondsKarp(IntegerWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.641243934631348,
+          "generation_timestamp": "2025-11-09T20:53:52.038997",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullGraph(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "121-135:testNullVertices": {
+          "start": 121,
+          "end": 135,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullVertices() {",
+            "",
+            "        final BaseLabeledVertex a = null;",
+            "        final BaseLabeledVertex g = null;",
+            "",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =",
+            "                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>();",
+            "",
+            "        findMaxFlow(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                .from(a)",
+            "                .to(g)",
+            "                .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testNullVertices()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DirectedMutableGraph",
+                "reasoning": "Custom type DirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullVertices(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations import IntegerWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        with pytest.raises(ValueError):",
+            "            CommonsGraph.findMaxFlow(None).whereEdgesHaveWeights(BaseWeightedEdge()).from_(None).to(None).applyingEdmondsKarp(IntegerWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 15.133209466934204,
+          "generation_timestamp": "2025-11-09T20:54:07.272414",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullVertices(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "137-174:testSparse": {
+          "start": 137,
+          "end": 174,
+          "body": [
+            "@Test",
+            "    public void testSparse() {",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");",
+            "        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");",
+            "",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =",
+            "                newDirectedMutableGraph(",
+            "                        new AbstractGraphConnection<",
+            "                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {",
+            "",
+            "                            public void connect0() {",
+            "                                addVertex(a);",
+            "                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));",
+            "                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));",
+            "                                addVertex(new BaseLabeledVertex(\"D\"));",
+            "                                addVertex(new BaseLabeledVertex(\"E\"));",
+            "                                addVertex(new BaseLabeledVertex(\"F\"));",
+            "                                addVertex(g);",
+            "",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))",
+            "                                        .from(a)",
+            "                                        .to(b);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))",
+            "                                        .from(b)",
+            "                                        .to(c);",
+            "                            }",
+            "                        });",
+            "",
+            "        final Integer expected = 0;",
+            "",
+            "        Integer actual =",
+            "                findMaxFlow(graph)",
+            "                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                        .from(a)",
+            "                        .to(g)",
+            "                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "        assertEquals(actual, expected);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "void",
+            "Integer",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testSparse()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "187-190:newDirectedMutableGraph"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DirectedMutableGraph",
+                "reasoning": "Custom type DirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AbstractGraphConnection",
+                "reasoning": "Custom type AbstractGraphConnection is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Integer": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 84.45213222503662,
+          "generation_timestamp": "2025-11-09T20:55:31.872577",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testSparse(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class EdmondsKarpTestCase(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "findMaxFlow": "static org.apache.commons.graph.CommonsGraph.findMaxFlow",
+    "newDirectedMutableGraph": "static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph",
+    "assertEquals": "static org.junit.Assert.assertEquals",
+    "AbstractGraphConnection": "org.apache.commons.graph.builder.AbstractGraphConnection",
+    "BaseLabeledVertex": "org.apache.commons.graph.model.BaseLabeledVertex",
+    "BaseLabeledWeightedEdge": "org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+    "BaseWeightedEdge": "org.apache.commons.graph.model.BaseWeightedEdge",
+    "DirectedMutableGraph": "org.apache.commons.graph.model.DirectedMutableGraph",
+    "IntegerWeightBaseOperations": "org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations",
+    "Test": "org.junit.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "import pytest",
+    "import unittest"
+  ]
+}

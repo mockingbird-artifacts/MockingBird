@@ -1,0 +1,1063 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/src/test/java/org/apache/commons/graph/flow/EdmondsKarpTestCase.java",
+  "imports": {
+    "22-22:import static org.apache.commons.graph.CommonsGraph.findMaxFlow;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.apache.commons.graph.CommonsGraph.findMaxFlow;"
+    },
+    "23-23:import static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph;"
+    },
+    "24-24:import static org.junit.Assert.assertEquals;": {
+      "start": 24,
+      "end": 24,
+      "body": "import static org.junit.Assert.assertEquals;"
+    },
+    "26-26:import org.apache.commons.graph.builder.AbstractGraphConnection;": {
+      "start": 26,
+      "end": 26,
+      "body": "import org.apache.commons.graph.builder.AbstractGraphConnection;"
+    },
+    "27-27:import org.apache.commons.graph.model.BaseLabeledVertex;": {
+      "start": 27,
+      "end": 27,
+      "body": "import org.apache.commons.graph.model.BaseLabeledVertex;"
+    },
+    "28-28:import org.apache.commons.graph.model.BaseLabeledWeightedEdge;": {
+      "start": 28,
+      "end": 28,
+      "body": "import org.apache.commons.graph.model.BaseLabeledWeightedEdge;"
+    },
+    "29-29:import org.apache.commons.graph.model.BaseWeightedEdge;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.graph.model.BaseWeightedEdge;"
+    },
+    "30-30:import org.apache.commons.graph.model.DirectedMutableGraph;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.graph.model.DirectedMutableGraph;"
+    },
+    "31-31:import org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations;"
+    },
+    "32-32:import org.junit.Test;": {
+      "start": 32,
+      "end": 32,
+      "body": "import org.junit.Test;"
+    }
+  },
+  "classes": {
+    "38-175:EdmondsKarpTestCase": {
+      "start": 38,
+      "end": 175,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "40-105:testFindMaxFlowAndVerify": {
+          "start": 40,
+          "end": 105,
+          "body": [
+            "@Test",
+            "    public void testFindMaxFlowAndVerify() {",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");",
+            "        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");",
+            "",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =",
+            "                newDirectedMutableGraph(",
+            "                        new AbstractGraphConnection<",
+            "                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {",
+            "",
+            "                            public void connect0() {",
+            "                                addVertex(a);",
+            "                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));",
+            "                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));",
+            "                                BaseLabeledVertex d = addVertex(new BaseLabeledVertex(\"D\"));",
+            "                                BaseLabeledVertex e = addVertex(new BaseLabeledVertex(\"E\"));",
+            "                                BaseLabeledVertex f = addVertex(new BaseLabeledVertex(\"F\"));",
+            "                                addVertex(g);",
+            "",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))",
+            "                                        .from(a)",
+            "                                        .to(b);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> D\", 3))",
+            "                                        .from(a)",
+            "                                        .to(d);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))",
+            "                                        .from(b)",
+            "                                        .to(c);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> A\", 3))",
+            "                                        .from(c)",
+            "                                        .to(a);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> D\", 1))",
+            "                                        .from(c)",
+            "                                        .to(d);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> E\", 2))",
+            "                                        .from(c)",
+            "                                        .to(e);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> E\", 2))",
+            "                                        .from(d)",
+            "                                        .to(e);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> F\", 6))",
+            "                                        .from(d)",
+            "                                        .to(f);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> B\", 1))",
+            "                                        .from(e)",
+            "                                        .to(b);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> G\", 1))",
+            "                                        .from(e)",
+            "                                        .to(g);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"F -> G\", 9))",
+            "                                        .from(f)",
+            "                                        .to(g);",
+            "                            }",
+            "                        });",
+            "",
+            "        final Integer expected = 5;",
+            "",
+            "        Integer actual =",
+            "                findMaxFlow(graph)",
+            "                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                        .from(a)",
+            "                        .to(g)",
+            "                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "",
+            "        assertEquals(expected, actual);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "void",
+            "Integer",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testFindMaxFlowAndVerify()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "187-190:newDirectedMutableGraph"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 19:47:58",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:47:58",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:00",
+                "source_type": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom collections import defaultdict\n```\n\nPYTHON TRANSLATION:\n```\ndefaultdict\n```\n\nREASONING:\nThe Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, a similar structure can be represented using a `defaultdict` from the `collections` module, which can be used to store adjacency lists for the graph.",
+                "imports": "from collections import defaultdict",
+                "translated_target_type": "defaultdict",
+                "reasoning": "The Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, a similar structure can be represented using a `defaultdict` from the `collections` module, which can be used to store adjacency lists for the graph.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindMaxFlowAndVerify() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                BaseLabeledVertex d = addVertex(new BaseLabeledVertex(\"D\"));\n                                BaseLabeledVertex e = addVertex(new BaseLabeledVertex(\"E\"));\n                                BaseLabeledVertex f = addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> D\", 3))\n                                        .from(a)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> A\", 3))\n                                        .from(c)\n                                        .to(a);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> D\", 1))\n                                        .from(c)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> E\", 2))\n                                        .from(c)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> E\", 2))\n                                        .from(d)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> F\", 6))\n                                        .from(d)\n                                        .to(f);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> B\", 1))\n                                        .from(e)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> G\", 1))\n                                        .from(e)\n                                        .to(g);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"F -> G\", 9))\n                                        .from(f)\n                                        .to(g);\n                            }\n                        });\n\n        final Integer expected = 5;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'networkx'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "BaseLabeledWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:08",
+                "source_type": "BaseLabeledWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Generic, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nBaseLabeledWeightedEdge[TypeVar('T')]\n```\n\nREASONING:\nThe Java type `BaseLabeledWeightedEdge<Integer>` is a generic class that takes a type parameter, in this case, `Integer`. In Python, we can use the `TypeVar` from the `typing` module to create a generic type variable. The equivalent type in Python would be `BaseLabeledWeightedEdge[TypeVar('T')]`, where `T` is a placeholder for any type.",
+                "imports": "from typing import Tuple",
+                "translated_target_type": "Tuple[str, int]",
+                "reasoning": "The `BaseLabeledWeightedEdge<Integer>` in Java represents an edge with a label (string) and a weight (integer). In Python, the equivalent type that maintains the same functionality is a tuple containing a string and an integer.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindMaxFlowAndVerify() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                BaseLabeledVertex d = addVertex(new BaseLabeledVertex(\"D\"));\n                                BaseLabeledVertex e = addVertex(new BaseLabeledVertex(\"E\"));\n                                BaseLabeledVertex f = addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> D\", 3))\n                                        .from(a)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> A\", 3))\n                                        .from(c)\n                                        .to(a);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> D\", 1))\n                                        .from(c)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> E\", 2))\n                                        .from(c)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> E\", 2))\n                                        .from(d)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> F\", 6))\n                                        .from(d)\n                                        .to(f);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> B\", 1))\n                                        .from(e)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> G\", 1))\n                                        .from(e)\n                                        .to(g);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"F -> G\", 9))\n                                        .from(f)\n                                        .to(g);\n                            }\n                        });\n\n        final Integer expected = 5;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:17",
+                "source_type": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "generation": "[TOOL_CALLS]PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nAbstractGraphConnection[BaseLabeledVertex, BaseLabeledWeightedEdge[int]]\n```\n\nREASONING:\nThe Java type `AbstractGraphConnection<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` can be translated to Python using the `typing` module. The `TypeVar` and `Generic` classes are used to define generic types in Python. The `BaseLabeledVertex` and `BaseLabeledWeightedEdge[int]` types are assumed to be defined elsewhere in the Python codebase, similar to their Java counterparts. The `Integer` type in Java corresponds to the `int` type in Python.",
+                "imports": "",
+                "translated_target_type": "AbstractGraphConnection",
+                "reasoning": "Custom type AbstractGraphConnection is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nAbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindMaxFlowAndVerify() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                BaseLabeledVertex d = addVertex(new BaseLabeledVertex(\"D\"));\n                                BaseLabeledVertex e = addVertex(new BaseLabeledVertex(\"E\"));\n                                BaseLabeledVertex f = addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> D\", 3))\n                                        .from(a)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> A\", 3))\n                                        .from(c)\n                                        .to(a);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> D\", 1))\n                                        .from(c)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> E\", 2))\n                                        .from(c)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> E\", 2))\n                                        .from(d)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> F\", 6))\n                                        .from(d)\n                                        .to(f);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> B\", 1))\n                                        .from(e)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> G\", 1))\n                                        .from(e)\n                                        .to(g);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"F -> G\", 9))\n                                        .from(f)\n                                        .to(g);\n                            }\n                        });\n\n        final Integer expected = 5;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'Integer' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:23",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Integer": {
+                "identifier": "Integer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:23",
+                "source_type": "Integer",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "BaseWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:27",
+                "source_type": "BaseWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nT = TypeVar('T')\nclass BaseWeightedEdge(Generic[T]):\n    pass\n```\n\nREASONING:\nThe Java type `BaseWeightedEdge<Integer>` is a generic class that takes a type parameter. In Python, we can achieve similar functionality using the `Generic` class from the `typing` module. The `TypeVar` is used to define a type variable `T` which can be any type, and `BaseWeightedEdge` is defined as a generic class that takes this type variable. This maintains the same functionality as the Java type.",
+                "imports": "from typing import Type",
+                "translated_target_type": "Type[int]",
+                "reasoning": "The `BaseWeightedEdge<Integer>` in Java represents a generic edge with a weight of type `Integer`. In Python, the equivalent type would be `Type[int]`, which indicates a type that represents integers.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testFindMaxFlowAndVerify() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                BaseLabeledVertex d = addVertex(new BaseLabeledVertex(\"D\"));\n                                BaseLabeledVertex e = addVertex(new BaseLabeledVertex(\"E\"));\n                                BaseLabeledVertex f = addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> D\", 3))\n                                        .from(a)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> A\", 3))\n                                        .from(c)\n                                        .to(a);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> D\", 1))\n                                        .from(c)\n                                        .to(d);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"C -> E\", 2))\n                                        .from(c)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> E\", 2))\n                                        .from(d)\n                                        .to(e);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"D -> F\", 6))\n                                        .from(d)\n                                        .to(f);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> B\", 1))\n                                        .from(e)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"E -> G\", 1))\n                                        .from(e)\n                                        .to(g);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"F -> G\", 9))\n                                        .from(f)\n                                        .to(g);\n                            }\n                        });\n\n        final Integer expected = 5;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n\n        assertEquals(expected, actual);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "IntegerWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:33",
+                "source_type": "IntegerWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntegerWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testFindMaxFlowAndVerify(self) -> None:",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.main.org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations import IntegerWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.builder.AbstractGraphConnection import AbstractGraphConnection",
+            "        a = BaseLabeledVertex(\"A\")",
+            "        g = BaseLabeledVertex(\"G\")",
+            "",
+            "        graph = CommonsGraph.newDirectedMutableGraph(",
+            "            AbstractGraphConnection(",
+            "                lambda: [",
+            "                    a,",
+            "                    BaseLabeledVertex(\"B\"),",
+            "                    BaseLabeledVertex(\"C\"),",
+            "                    BaseLabeledVertex(\"D\"),",
+            "                    BaseLabeledVertex(\"E\"),",
+            "                    BaseLabeledVertex(\"F\"),",
+            "                    g",
+            "                ],",
+            "                [",
+            "                    (\"A -> B\", 3, a, BaseLabeledVertex(\"B\")),",
+            "                    (\"A -> D\", 3, a, BaseLabeledVertex(\"D\")),",
+            "                    (\"B -> C\", 4, BaseLabeledVertex(\"B\"), BaseLabeledVertex(\"C\")),",
+            "                    (\"C -> A\", 3, BaseLabeledVertex(\"C\"), a),",
+            "                    (\"C -> D\", 1, BaseLabeledVertex(\"C\"), BaseLabeledVertex(\"D\")),",
+            "                    (\"C -> E\", 2, BaseLabeledVertex(\"C\"), BaseLabeledVertex(\"E\")),",
+            "                    (\"D -> E\", 2, BaseLabeledVertex(\"D\"), BaseLabeledVertex(\"E\")),",
+            "                    (\"D -> F\", 6, BaseLabeledVertex(\"D\"), BaseLabeledVertex(\"F\")),",
+            "                    (\"E -> B\", 1, BaseLabeledVertex(\"E\"), BaseLabeledVertex(\"B\")),",
+            "                    (\"E -> G\", 1, BaseLabeledVertex(\"E\"), g),",
+            "                    (\"F -> G\", 9, BaseLabeledVertex(\"F\"), g)",
+            "                ]",
+            "            )",
+            "        )",
+            "",
+            "        expected = 5",
+            "",
+            "        actual = CommonsGraph.findMaxFlow(graph).whereEdgesHaveWeights(Type[int]()).from_(a).to(g).applyingEdmondsKarp(IntegerWeightBaseOperations())",
+            "",
+            "        self.assertEqual(actual, expected)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.99064302444458,
+          "generation_timestamp": "2025-11-02T04:26:33.951719",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testFindMaxFlowAndVerify(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "107-119:testNullGraph": {
+          "start": 107,
+          "end": 119,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullGraph() {",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");",
+            "        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");",
+            "",
+            "        findMaxFlow(",
+            "                        (DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>)",
+            "                                null)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                .from(a)",
+            "                .to(g)",
+            "                .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testNullGraph()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 19:48:33",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:33",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:36",
+                "source_type": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Dict, Tuple\n```\n\nPYTHON TRANSLATION:\n```\nDict[Tuple[str, str], int]\n```\n\nREASONING:\nThe Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, we can represent this using a dictionary where the keys are tuples of strings (representing the vertices) and the values are integers (representing the weights of the edges).",
+                "imports": "from typing import Dict, Tuple",
+                "translated_target_type": "Dict[Tuple[str, str], int]",
+                "reasoning": "The Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, we can represent this using a dictionary where the keys are tuples of strings (representing the vertices) and the values are integers (representing the weights of the edges).",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullGraph() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        findMaxFlow(\n                        (DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>)\n                                null)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                .from(a)\n                .to(g)\n                .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'networkx'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "BaseLabeledWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:42",
+                "source_type": "BaseLabeledWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Generic, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nGeneric[TypeVar('T')]\n```\n\nREASONING:\nThe Java type `BaseLabeledWeightedEdge<Integer>` is a generic class that takes an integer as a type parameter. In Python, we can represent this using a generic type variable with the `TypeVar` class from the `typing` module. The `Generic` class is used to create a generic type that can be parameterized with a type variable.",
+                "imports": "from typing import Generic, TypeVar",
+                "translated_target_type": "Generic[TypeVar('T')]",
+                "reasoning": "The Java type `BaseLabeledWeightedEdge<Integer>` is a generic class that takes an integer as a type parameter. In Python, we can represent this using a generic type variable with the `TypeVar` class from the `typing` module. The `Generic` class is used to create a generic type that can be parameterized with a type variable.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullGraph() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        findMaxFlow(\n                        (DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>)\n                                null)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                .from(a)\n                .to(g)\n                .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nTypeVar('T') is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "BaseWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:50",
+                "source_type": "BaseWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Generic, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nGeneric[TypeVar('T')]\n```\n\nREASONING:\nThe `BaseWeightedEdge<Integer>` in Java represents a generic edge with a weight of type `Integer`. In Python, we can use the `Generic` and `TypeVar` from the `typing` module to create a generic type that can represent any type, similar to how `Integer` is used in Java.",
+                "imports": "from typing import Generic, TypeVar",
+                "translated_target_type": "Generic[TypeVar('T')]",
+                "reasoning": "The `BaseWeightedEdge<Integer>` in Java represents a generic edge with a weight of type `Integer`. In Python, we can use the `Generic` and `TypeVar` from the `typing` module to create a generic type that can represent any type, similar to how `Integer` is used in Java.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullGraph() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        findMaxFlow(\n                        (DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>)\n                                null)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                .from(a)\n                .to(g)\n                .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nTypeVar('T') is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "IntegerWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:53",
+                "source_type": "IntegerWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntegerWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullGraph(self) -> None:",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge import BaseLabeledWeightedEdge",
+            "        from src.main.org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations import IntegerWeightBaseOperations",
+            "        a = BaseLabeledVertex(\"A\")",
+            "        g = BaseLabeledVertex(\"G\")",
+            "",
+            "        with pytest.raises(ValueError, match=\"Max flow can not be calculated on null graph\"):",
+            "            CommonsGraph.findMaxFlow(None).whereEdgesHaveWeights(BaseLabeledWeightedEdge()).from_(a).to(g).applyingEdmondsKarp(IntegerWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 4.296334505081177,
+          "generation_timestamp": "2025-11-02T04:26:38.494991",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullGraph(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "121-135:testNullVertices": {
+          "start": 121,
+          "end": 135,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullVertices() {",
+            "",
+            "        final BaseLabeledVertex a = null;",
+            "        final BaseLabeledVertex g = null;",
+            "",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =",
+            "                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>();",
+            "",
+            "        findMaxFlow(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                .from(a)",
+            "                .to(g)",
+            "                .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testNullVertices()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 19:48:53",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:53",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:48:57",
+                "source_type": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom collections import defaultdict\n```\n\nPYTHON TRANSLATION:\n```\ndefaultdict\n```\n\nREASONING:\nThe Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, a similar structure can be represented using a `defaultdict` from the `collections` module, which can be used to store adjacency lists for a graph.",
+                "imports": "from collections import defaultdict",
+                "translated_target_type": "defaultdict",
+                "reasoning": "The Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, a similar structure can be represented using a `defaultdict` from the `collections` module, which can be used to store adjacency lists for a graph.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullVertices() {\n\n        final BaseLabeledVertex a = null;\n        final BaseLabeledVertex g = null;\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>();\n\n        findMaxFlow(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                .from(a)\n                .to(g)\n                .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'networkx'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "BaseLabeledWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:04",
+                "source_type": "BaseLabeledWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Generic, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nGeneric[TypeVar('T')]\n```\n\nREASONING:\nThe Java type `BaseLabeledWeightedEdge<Integer>` represents a generic edge with a label and a weight of type `Integer`. In Python, we can represent this using a generic type variable `T` from the `typing` module. This maintains the same functionality by allowing the edge to be parameterized with any type.",
+                "imports": "from typing import Generic, TypeVar",
+                "translated_target_type": "Generic[TypeVar('T')]",
+                "reasoning": "The Java type `BaseLabeledWeightedEdge<Integer>` represents a generic edge with a label and a weight of type `Integer`. In Python, we can represent this using a generic type variable `T` from the `typing` module. This maintains the same functionality by allowing the edge to be parameterized with any type.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullVertices() {\n\n        final BaseLabeledVertex a = null;\n        final BaseLabeledVertex g = null;\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>();\n\n        findMaxFlow(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                .from(a)\n                .to(g)\n                .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nTypeVar('T') is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "BaseWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:12",
+                "source_type": "BaseWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Generic, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nGeneric[TypeVar('T')]\n```\n\nREASONING:\nThe `BaseWeightedEdge<Integer>` in Java represents a generic edge with a weight of type `Integer`. In Python, we can use the `Generic` and `TypeVar` from the `typing` module to create a generic type that can represent any type, similar to how `Integer` is used in Java.",
+                "imports": "from typing import Generic, TypeVar",
+                "translated_target_type": "Generic[TypeVar('T')]",
+                "reasoning": "The `BaseWeightedEdge<Integer>` in Java represents a generic edge with a weight of type `Integer`. In Python, we can use the `Generic` and `TypeVar` from the `typing` module to create a generic type that can represent any type, similar to how `Integer` is used in Java.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test(expected = NullPointerException.class)\n    public void testNullVertices() {\n\n        final BaseLabeledVertex a = null;\n        final BaseLabeledVertex g = null;\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>();\n\n        findMaxFlow(graph)\n                .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                .from(a)\n                .to(g)\n                .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nTypeVar('T') is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "IntegerWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:15",
+                "source_type": "IntegerWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntegerWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullVertices(self) -> None:",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.main.org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations import IntegerWeightBaseOperations",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        a = None",
+            "        g = None",
+            "",
+            "        graph = defaultdict(list)",
+            "",
+            "        with pytest.raises(NullPointerException):",
+            "            CommonsGraph.findMaxFlow(graph).whereEdgesHaveWeights(BaseWeightedEdge()).from_(a).to(g).applyingEdmondsKarp(IntegerWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 3.8700881004333496,
+          "generation_timestamp": "2025-11-02T04:26:42.604538",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullVertices(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "137-174:testSparse": {
+          "start": 137,
+          "end": 174,
+          "body": [
+            "@Test",
+            "    public void testSparse() {",
+            "        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");",
+            "        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");",
+            "",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =",
+            "                newDirectedMutableGraph(",
+            "                        new AbstractGraphConnection<",
+            "                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {",
+            "",
+            "                            public void connect0() {",
+            "                                addVertex(a);",
+            "                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));",
+            "                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));",
+            "                                addVertex(new BaseLabeledVertex(\"D\"));",
+            "                                addVertex(new BaseLabeledVertex(\"E\"));",
+            "                                addVertex(new BaseLabeledVertex(\"F\"));",
+            "                                addVertex(g);",
+            "",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))",
+            "                                        .from(a)",
+            "                                        .to(b);",
+            "                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))",
+            "                                        .from(b)",
+            "                                        .to(c);",
+            "                            }",
+            "                        });",
+            "",
+            "        final Integer expected = 0;",
+            "",
+            "        Integer actual =",
+            "                findMaxFlow(graph)",
+            "                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())",
+            "                        .from(a)",
+            "                        .to(g)",
+            "                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());",
+            "        assertEquals(actual, expected);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "BaseLabeledWeightedEdge<Integer>",
+            "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+            "void",
+            "Integer",
+            "BaseWeightedEdge<Integer>",
+            "IntegerWeightBaseOperations"
+          ],
+          "signature": "testSparse()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "187-190:newDirectedMutableGraph"
+            ],
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "124-128:findMaxFlow"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FlowWeightedEdgesBuilder",
+              "30-39:FlowWeightedEdgesBuilder",
+              "38-38:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.FromHeadBuilder",
+              "29-38:FromHeadBuilder",
+              "37-37:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.ToTailBuilder",
+              "29-38:ToTailBuilder",
+              "37-37:to"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.flow.MaxFlowAlgorithmSelector",
+              "31-50:MaxFlowAlgorithmSelector",
+              "40-40:applyingEdmondsKarp"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-31 19:49:15",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:15",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:19",
+                "source_type": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom collections import defaultdict\n```\n\nPYTHON TRANSLATION:\n```\ndefaultdict\n```\n\nREASONING:\nThe Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, a similar structure can be represented using a `defaultdict` from the `collections` module, which can be used to store adjacency lists for the graph.",
+                "imports": "from collections import defaultdict",
+                "translated_target_type": "defaultdict",
+                "reasoning": "The Java type `DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` represents a directed graph with labeled vertices and weighted edges. In Python, a similar structure can be represented using a `defaultdict` from the `collections` module, which can be used to store adjacency lists for the graph.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testSparse() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                addVertex(new BaseLabeledVertex(\"D\"));\n                                addVertex(new BaseLabeledVertex(\"E\"));\n                                addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                            }\n                        });\n\n        final Integer expected = 0;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n        assertEquals(actual, expected);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'networkx'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "BaseLabeledWeightedEdge<Integer>": {
+                "identifier": "BaseLabeledWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:29",
+                "source_type": "BaseLabeledWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Generic, TypeVar\n```\n\nPYTHON TRANSLATION:\n```\nBaseLabeledWeightedEdge[TypeVar('T')]\n```\n\nREASONING:\nThe Java type `BaseLabeledWeightedEdge<Integer>` is a generic class that takes a type parameter, in this case, `Integer`. In Python, we can use the `typing` module to define a generic type. The `TypeVar` is used to create a generic type variable, and `Generic` is used to create a generic class. Therefore, the equivalent type in Python would be `BaseLabeledWeightedEdge[TypeVar('T')]`, where `T` is a type variable that can be replaced with any type, similar to how `Integer` is used in the Java code.",
+                "imports": "from typing import Tuple",
+                "translated_target_type": "Tuple[str, int]",
+                "reasoning": "The `BaseLabeledWeightedEdge<Integer>` in Java represents an edge with a label (string) and a weight (integer). In Python, the equivalent type that maintains the same functionality is a tuple containing a string and an integer.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseLabeledWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testSparse() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                addVertex(new BaseLabeledVertex(\"D\"));\n                                addVertex(new BaseLabeledVertex(\"E\"));\n                                addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                            }\n                        });\n\n        final Integer expected = 0;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n        assertEquals(actual, expected);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>": {
+                "identifier": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:39",
+                "source_type": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nAbstractGraphConnection[BaseLabeledVertex, BaseLabeledWeightedEdge]\n```\n\nREASONING:\nThe Java type `AbstractGraphConnection<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>` can be translated to Python using the `typing` module. In Python, `Integer` is equivalent to `int`. The `AbstractGraphConnection` class is assumed to be a generic class that can be parameterized with vertex and edge types, similar to Java's generics. The `BaseLabeledWeightedEdge` class is not subscriptable in Python, so it should be used without the type parameter.",
+                "imports": "",
+                "translated_target_type": "AbstractGraphConnection",
+                "reasoning": "Custom type AbstractGraphConnection is an application-level type which does not require any translation.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nAbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testSparse() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                addVertex(new BaseLabeledVertex(\"D\"));\n                                addVertex(new BaseLabeledVertex(\"E\"));\n                                addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                            }\n                        });\n\n        final Integer expected = 0;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n        assertEquals(actual, expected);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: type 'BaseLabeledWeightedEdge' is not subscriptable\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:45",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Integer": {
+                "identifier": "Integer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:45",
+                "source_type": "Integer",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Integer>": {
+                "identifier": "BaseWeightedEdge<Integer>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:50",
+                "source_type": "BaseWeightedEdge<Integer>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import TypeVar, Generic\n```\n\nPYTHON TRANSLATION:\n```\nBaseWeightedEdge = Generic[TypeVar('T')]\n```\n\nREASONING:\nThe Java type `BaseWeightedEdge<Integer>` is a generic class that takes a type parameter. In Python, we can achieve similar functionality using the `Generic` class from the `typing` module. The `TypeVar` is used to define a type variable `T`, and the class `BaseWeightedEdge` is defined to be generic over `T`. This maintains the same functionality as the Java type.",
+                "imports": "from typing import Type",
+                "translated_target_type": "Type[int]",
+                "reasoning": "The `BaseWeightedEdge<Integer>` in Java represents a generic edge with a weight of type `Integer`. In Python, the equivalent type would be `Type[int]`, which indicates a type that represents integers.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nBaseWeightedEdge<Integer>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    @Test\n    public void testSparse() {\n        final BaseLabeledVertex a = new BaseLabeledVertex(\"A\");\n        final BaseLabeledVertex g = new BaseLabeledVertex(\"G\");\n\n        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>> graph =\n                newDirectedMutableGraph(\n                        new AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Integer>>() {\n\n                            public void connect0() {\n                                addVertex(a);\n                                BaseLabeledVertex b = addVertex(new BaseLabeledVertex(\"B\"));\n                                BaseLabeledVertex c = addVertex(new BaseLabeledVertex(\"C\"));\n                                addVertex(new BaseLabeledVertex(\"D\"));\n                                addVertex(new BaseLabeledVertex(\"E\"));\n                                addVertex(new BaseLabeledVertex(\"F\"));\n                                addVertex(g);\n\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"A -> B\", 3))\n                                        .from(a)\n                                        .to(b);\n                                addEdge(new BaseLabeledWeightedEdge<Integer>(\"B -> C\", 4))\n                                        .from(b)\n                                        .to(c);\n                            }\n                        });\n\n        final Integer expected = 0;\n\n        Integer actual =\n                findMaxFlow(graph)\n                        .whereEdgesHaveWeights(new BaseWeightedEdge<Integer>())\n                        .from(a)\n                        .to(g)\n                        .applyingEdmondsKarp(new IntegerWeightBaseOperations());\n        assertEquals(actual, expected);\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "IntegerWeightBaseOperations": {
+                "identifier": "IntegerWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-31 19:49:54",
+                "source_type": "IntegerWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "IntegerWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testSparse(self) -> None:",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.main.org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations import IntegerWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.builder.AbstractGraphConnection import AbstractGraphConnection",
+            "        a = BaseLabeledVertex(\"A\")",
+            "        g = BaseLabeledVertex(\"G\")",
+            "",
+            "        graph = CommonsGraph.newDirectedMutableGraph(",
+            "            AbstractGraphConnection(",
+            "                lambda: [",
+            "                    a,",
+            "                    BaseLabeledVertex(\"B\"),",
+            "                    BaseLabeledVertex(\"C\"),",
+            "                    BaseLabeledVertex(\"D\"),",
+            "                    BaseLabeledVertex(\"E\"),",
+            "                    BaseLabeledVertex(\"F\"),",
+            "                    g",
+            "                ],",
+            "                [",
+            "                    (\"A -> B\", 3),",
+            "                    (\"B -> C\", 4)",
+            "                ]",
+            "            )",
+            "        )",
+            "",
+            "        expected = 0",
+            "        actual = CommonsGraph.findMaxFlow(graph).whereEdgesHaveWeights(Type[int]()).from_(a).to(g).applyingEdmondsKarp(IntegerWeightBaseOperations())",
+            "",
+            "        self.assertEqual(actual, expected)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 6.708694934844971,
+          "generation_timestamp": "2025-11-02T04:26:49.562865",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testSparse(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class EdmondsKarpTestCase(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "findMaxFlow": "static org.apache.commons.graph.CommonsGraph.findMaxFlow",
+    "newDirectedMutableGraph": "static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph",
+    "assertEquals": "static org.junit.Assert.assertEquals",
+    "AbstractGraphConnection": "org.apache.commons.graph.builder.AbstractGraphConnection",
+    "BaseLabeledVertex": "org.apache.commons.graph.model.BaseLabeledVertex",
+    "BaseLabeledWeightedEdge": "org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+    "BaseWeightedEdge": "org.apache.commons.graph.model.BaseWeightedEdge",
+    "DirectedMutableGraph": "org.apache.commons.graph.model.DirectedMutableGraph",
+    "IntegerWeightBaseOperations": "org.apache.commons.graph.weight.primitive.IntegerWeightBaseOperations",
+    "Test": "org.junit.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from collections import defaultdict",
+    "from typing import Tuple",
+    "from typing import Type",
+    "import pytest",
+    "import unittest"
+  ]
+}

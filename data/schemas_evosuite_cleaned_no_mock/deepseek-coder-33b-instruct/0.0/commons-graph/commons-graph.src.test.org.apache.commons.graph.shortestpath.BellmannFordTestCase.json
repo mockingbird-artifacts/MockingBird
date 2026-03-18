@@ -1,0 +1,1234 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/src/test/java/org/apache/commons/graph/shortestpath/BellmannFordTestCase.java",
+  "imports": {
+    "22-22:import static org.apache.commons.graph.CommonsGraph.findShortestPath;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.apache.commons.graph.CommonsGraph.findShortestPath;"
+    },
+    "23-23:import static org.junit.Assert.assertEquals;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.junit.Assert.assertEquals;"
+    },
+    "24-24:import static org.junit.Assert.fail;": {
+      "start": 24,
+      "end": 24,
+      "body": "import static org.junit.Assert.fail;"
+    },
+    "26-26:import org.apache.commons.graph.Graph;": {
+      "start": 26,
+      "end": 26,
+      "body": "import org.apache.commons.graph.Graph;"
+    },
+    "27-27:import org.apache.commons.graph.WeightedPath;": {
+      "start": 27,
+      "end": 27,
+      "body": "import org.apache.commons.graph.WeightedPath;"
+    },
+    "28-28:import org.apache.commons.graph.model.BaseLabeledVertex;": {
+      "start": 28,
+      "end": 28,
+      "body": "import org.apache.commons.graph.model.BaseLabeledVertex;"
+    },
+    "29-29:import org.apache.commons.graph.model.BaseLabeledWeightedEdge;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.graph.model.BaseLabeledWeightedEdge;"
+    },
+    "30-30:import org.apache.commons.graph.model.BaseWeightedEdge;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.graph.model.BaseWeightedEdge;"
+    },
+    "31-31:import org.apache.commons.graph.model.DirectedMutableGraph;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.graph.model.DirectedMutableGraph;"
+    },
+    "32-32:import org.apache.commons.graph.model.InMemoryWeightedPath;": {
+      "start": 32,
+      "end": 32,
+      "body": "import org.apache.commons.graph.model.InMemoryWeightedPath;"
+    },
+    "33-33:import org.apache.commons.graph.model.UndirectedMutableGraph;": {
+      "start": 33,
+      "end": 33,
+      "body": "import org.apache.commons.graph.model.UndirectedMutableGraph;"
+    },
+    "34-34:import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;": {
+      "start": 34,
+      "end": 34,
+      "body": "import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;"
+    },
+    "35-35:import org.junit.Test;": {
+      "start": 35,
+      "end": 35,
+      "body": "import org.junit.Test;"
+    }
+  },
+  "classes": {
+    "37-166:BellmannFordTestCase": {
+      "start": 37,
+      "end": 166,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "43-96:testFindShortestPathAndVerify": {
+          "start": 43,
+          "end": 96,
+          "body": [
+            "@Test",
+            "    public void testFindShortestPathAndVerify() {",
+            "        DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                new DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "        BaseLabeledVertex one = new BaseLabeledVertex(\"1\");",
+            "        BaseLabeledVertex two = new BaseLabeledVertex(\"2\");",
+            "        BaseLabeledVertex three = new BaseLabeledVertex(\"3\");",
+            "        BaseLabeledVertex four = new BaseLabeledVertex(\"4\");",
+            "        BaseLabeledVertex five = new BaseLabeledVertex(\"5\");",
+            "",
+            "        graph.addVertex(one);",
+            "        graph.addVertex(two);",
+            "        graph.addVertex(three);",
+            "        graph.addVertex(four);",
+            "        graph.addVertex(five);",
+            "",
+            "        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 2\", 6D), two);",
+            "        graph.addEdge(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 4\", 7D), four);",
+            "",
+            "        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 3\", 5D), three);",
+            "        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 5\", -4D), five);",
+            "        graph.addEdge(two, new BaseLabeledWeightedEdge<Double>(\"2 -> 4\", 8D), four);",
+            "",
+            "        graph.addEdge(three, new BaseLabeledWeightedEdge<Double>(\"3 -> 2\", -2D), two);",
+            "",
+            "        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 3\", -3D), three);",
+            "        graph.addEdge(four, new BaseLabeledWeightedEdge<Double>(\"4 -> 5\", 9D), five);",
+            "",
+            "        graph.addEdge(five, new BaseLabeledWeightedEdge<Double>(\"5 -> 3\", 7D), three);",
+            "        graph.addEdge(five, new BaseLabeledWeightedEdge<Double>(\"5 -> 1\", 2D), one);",
+            "",
+            "        InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> expected =",
+            "                new InMemoryWeightedPath<",
+            "                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>(",
+            "                        one,",
+            "                        three,",
+            "                        new DoubleWeightBaseOperations(),",
+            "                        new BaseWeightedEdge<Double>());",
+            "        expected.addConnectionInTail(one, new BaseLabeledWeightedEdge<Double>(\"1 -> 4\", 7D), four);",
+            "        expected.addConnectionInTail(",
+            "                four, new BaseLabeledWeightedEdge<Double>(\"4 -> 3\", -3D), three);",
+            "",
+            "        AllVertexPairsShortestPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "                allVertexPairsShortestPath =",
+            "                        findShortestPath(graph)",
+            "                                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                                .from(one)",
+            "                                .applyingBelmannFord(new DoubleWeightBaseOperations());",
+            "",
+            "        WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> actual =",
+            "                allVertexPairsShortestPath.findShortestPath(one, three);",
+            "        assertEquals(expected, actual);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseLabeledVertex",
+            "InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "DoubleWeightBaseOperations",
+            "BaseWeightedEdge<Double>",
+            "AllVertexPairsShortestPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>"
+          ],
+          "signature": "testFindShortestPathAndVerify()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "library",
+              "java.lang.Double",
+              "valueOf(double)"
+            ],
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+              "29-75:BaseLabeledWeightedEdge",
+              "35-38:BaseLabeledWeightedEdge"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.model.InMemoryWeightedPath",
+              "38-131:InMemoryWeightedPath",
+              "57-64:InMemoryWeightedPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.model.InMemoryWeightedPath",
+              "38-131:InMemoryWeightedPath",
+              "74-78:addConnectionInTail"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "38-39:applyingBelmannFord"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.AllVertexPairsShortestPath",
+              "39-145:AllVertexPairsShortestPath",
+              "91-102:findShortestPath"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "assertEquals(java.lang.Object,java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DirectedMutableGraph",
+                "reasoning": "Custom type DirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "InMemoryWeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "InMemoryWeightedPath",
+                "reasoning": "Custom type InMemoryWeightedPath is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "InMemoryWeightedPath<\n                        BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "InMemoryWeightedPath",
+                "reasoning": "Custom type InMemoryWeightedPath is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DoubleWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "AllVertexPairsShortestPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AllVertexPairsShortestPath",
+                "reasoning": "Custom type AllVertexPairsShortestPath is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WeightedPath",
+                "reasoning": "Custom type WeightedPath is an application-level type which does not require any translation.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testFindShortestPathAndVerify(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.model.DirectedMutableGraph import DirectedMutableGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge import BaseLabeledWeightedEdge",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.model.InMemoryWeightedPath import InMemoryWeightedPath",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        graph = DirectedMutableGraph()",
+            "        one = BaseLabeledVertex(\"1\")",
+            "        two = BaseLabeledVertex(\"2\")",
+            "        three = BaseLabeledVertex(\"3\")",
+            "        four = BaseLabeledVertex(\"4\")",
+            "        five = BaseLabeledVertex(\"5\")",
+            "        ",
+            "        graph.add_vertex(one)",
+            "        graph.add_vertex(two)",
+            "        graph.add_vertex(three)",
+            "        graph.add_vertex(four)",
+            "        graph.add_vertex(five)",
+            "        ",
+            "        graph.add_edge(one, BaseLabeledWeightedEdge(\"1 -> 2\", 6), two)",
+            "        graph.add_edge(one, BaseLabeledWeightedEdge(\"1 -> 4\", 7), four)",
+            "        ",
+            "        graph.add_edge(two, BaseLabeledWeightedEdge(\"2 -> 3\", 5), three)",
+            "        graph.add_edge(two, BaseLabeledWeightedEdge(\"2 -> 5\", -4), five)",
+            "        graph.add_edge(two, BaseLabeledWeightedEdge(\"2 -> 4\", 8), four)",
+            "        ",
+            "        graph.add_edge(three, BaseLabeledWeightedEdge(\"3 -> 2\", -2), two)",
+            "        ",
+            "        graph.add_edge(four, BaseLabeledWeightedEdge(\"4 -> 3\", -3), three)",
+            "        graph.add_edge(four, BaseLabeledWeightedEdge(\"4 -> 5\", 9), five)",
+            "        ",
+            "        graph.add_edge(five, BaseLabeledWeightedEdge(\"5 -> 3\", 7), three)",
+            "        graph.add_edge(five, BaseLabeledWeightedEdge(\"5 -> 1\", 2), one)",
+            "        ",
+            "        expected = InMemoryWeightedPath(one, three, DoubleWeightBaseOperations(), BaseWeightedEdge())",
+            "        expected.add_connection_in_tail(one, BaseLabeledWeightedEdge(\"1 -> 4\", 7), four)",
+            "        expected.add_connection_in_tail(four, BaseLabeledWeightedEdge(\"4 -> 3\", -3), three)",
+            "        ",
+            "        all_vertex_pairs_shortest_path = CommonsGraph.findShortestPath(graph).whereEdgesHaveWeights(BaseWeightedEdge()).from_(one).applyingBelmannFord(DoubleWeightBaseOperations())",
+            "        actual = all_vertex_pairs_shortest_path.findShortestPath(one, three)",
+            "        self.assertEqual(expected, actual)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/apache/commons/graph/shortestpath/BellmannFordTestCase.py::BellmannFordTestCase::testFindShortestPathAndVerify": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-graph/src/test/org/apache/commons/graph/shortestpath/BellmannFordTestCase.py\", line 41, in testFindShortestPathAndVerify\n    graph.add_vertex(one)\n    ^^^^^^^^^^^^^^^^\nAttributeError: 'DirectedMutableGraph' object has no attribute 'add_vertex'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-graph.src.main.org.apache.commons.graph.utils.Assertions",
+                  "class_name": "25-95:Assertions",
+                  "fragment_name": "64-70:checkNotNull"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+                  "class_name": "30-70:BaseLabeledVertex",
+                  "fragment_name": "35-37:BaseLabeledVertex"
+                },
+                {
+                  "schema_name": "commons-graph.src.test.org.apache.commons.graph.shortestpath.BellmannFordTestCase",
+                  "class_name": "37-166:BellmannFordTestCase",
+                  "fragment_name": "43-96:testFindShortestPathAndVerify"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 19.484541416168213,
+          "generation_timestamp": "2025-11-09T21:17:00.073937",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testFindShortestPathAndVerify(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "98-123:testNotConnectGraph": {
+          "start": 98,
+          "end": 123,
+          "body": [
+            "@Test(expected = PathNotFoundException.class)",
+            "    public void testNotConnectGraph() {",
+            "        BaseLabeledVertex a = null;",
+            "        BaseLabeledVertex b = null;",
+            "        AllVertexPairsShortestPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "                allVertexPairsShortestPath = null;",
+            "        try {",
+            "            UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                    new UndirectedMutableGraph<",
+            "                            BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "            a = new BaseLabeledVertex(\"a\");",
+            "            b = new BaseLabeledVertex(\"b\");",
+            "            graph.addVertex(a);",
+            "            graph.addVertex(b);",
+            "",
+            "            allVertexPairsShortestPath =",
+            "                    findShortestPath(graph)",
+            "                            .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                            .from(a)",
+            "                            .applyingBelmannFord(new DoubleWeightBaseOperations());",
+            "        } catch (PathNotFoundException e) {",
+            "            fail(e.getMessage());",
+            "        }",
+            "        allVertexPairsShortestPath.findShortestPath(a, b);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = PathNotFoundException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "AllVertexPairsShortestPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "BaseLabeledWeightedEdge<Double>",
+            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "UndirectedMutableGraph<\n                            BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseWeightedEdge<Double>",
+            "DoubleWeightBaseOperations",
+            "PathNotFoundException"
+          ],
+          "signature": "testNotConnectGraph()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "38-39:applyingBelmannFord"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "fail(java.lang.String)"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.AllVertexPairsShortestPath",
+              "39-145:AllVertexPairsShortestPath",
+              "91-102:findShortestPath"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "AllVertexPairsShortestPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AllVertexPairsShortestPath",
+                "reasoning": "Custom type AllVertexPairsShortestPath is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "UndirectedMutableGraph<\n                            BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DoubleWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              },
+              "PathNotFoundException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type PathNotFoundException has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNotConnectGraph(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.shortestpath.PathNotFoundException import PathNotFoundException",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.model.UndirectedMutableGraph import UndirectedMutableGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        graph = UndirectedMutableGraph()",
+            "        a = BaseLabeledVertex(\"a\")",
+            "        b = BaseLabeledVertex(\"b\")",
+            "        graph.addVertex(a)",
+            "        graph.addVertex(b)",
+            "",
+            "        all_vertex_pairs_shortest_path = CommonsGraph.findShortestPath(graph).whereEdgesHaveWeights(BaseWeightedEdge()).from_(a).applyingBelmannFord(DoubleWeightBaseOperations())",
+            "        ",
+            "        with pytest.raises(PathNotFoundException):",
+            "            all_vertex_pairs_shortest_path.findShortestPath(a, b)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 6.298682928085327,
+          "generation_timestamp": "2025-11-09T20:52:05.669796",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNotConnectGraph(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "125-131:testNullGraph": {
+          "start": 125,
+          "end": 131,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullGraph() {",
+            "        findShortestPath((Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>) null)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(null)",
+            "                .applyingBelmannFord(new DoubleWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseWeightedEdge<Double>",
+            "DoubleWeightBaseOperations"
+          ],
+          "signature": "testNullGraph()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "38-39:applyingBelmannFord"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Graph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Graph",
+                "reasoning": "Custom type Graph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DoubleWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullGraph(self) -> None:",
+            "        from src.main.org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations import DoubleWeightBaseOperations",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseWeightedEdge import BaseWeightedEdge",
+            "        with pytest.raises(ValueError):",
+            "            CommonsGraph().findShortestPath(None).whereEdgesHaveWeights(BaseWeightedEdge()).from_(None).applyingBelmannFord(DoubleWeightBaseOperations())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 2.817824602127075,
+          "generation_timestamp": "2025-11-09T20:52:08.595848",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullGraph(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "133-154:testNullMonoid": {
+          "start": 133,
+          "end": 154,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullMonoid() {",
+            "        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph = null;",
+            "        BaseLabeledVertex a = null;",
+            "        try {",
+            "            graph =",
+            "                    new UndirectedMutableGraph<",
+            "                            BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "            a = new BaseLabeledVertex(\"a\");",
+            "            final BaseLabeledVertex b = new BaseLabeledVertex(\"b\");",
+            "            graph.addVertex(a);",
+            "            graph.addVertex(b);",
+            "        } catch (NullPointerException e) {",
+            "            fail(e.getMessage());",
+            "        }",
+            "",
+            "        findShortestPath(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(a)",
+            "                .applyingBelmannFord(null);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseLabeledVertex",
+            "UndirectedMutableGraph<\n                            BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "NullPointerException",
+            "BaseWeightedEdge<Double>"
+          ],
+          "signature": "testNullMonoid()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.test.org.apache.commons.graph.model.BaseLabeledVertex",
+              "30-70:BaseLabeledVertex",
+              "35-37:BaseLabeledVertex"
+            ],
+            [
+              "library",
+              "java.lang.NullPointerException",
+              "getMessage()"
+            ],
+            [
+              "library",
+              "org.junit.Assert",
+              "fail(java.lang.String)"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "38-39:applyingBelmannFord"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledVertex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BaseLabeledVertex has been translated to \"object\"",
+                "prompt": ""
+              },
+              "UndirectedMutableGraph<\n                            BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "NullPointerException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pytest",
+                "translated_target_type": "AttributeError",
+                "reasoning": "In Python, the equivalent of a NullPointerException in Java is an AttributeError. This is because Python does not have null values and will raise an AttributeError when you try to access or call something that doesn't exist. In this case, `fastBufferedOutputStream0` is None (because it was initialized with None), so trying to access its `flush()` method raises an AttributeError.",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullMonoid(self) -> None:",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledWeightedEdge import BaseLabeledWeightedEdge",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        from src.test.org.apache.commons.graph.model.BaseLabeledVertex import BaseLabeledVertex",
+            "        from src.main.org.apache.commons.graph.model.UndirectedMutableGraph import UndirectedMutableGraph",
+            "        graph = None",
+            "        a = None",
+            "        try:",
+            "            graph = UndirectedMutableGraph()",
+            "            a = BaseLabeledVertex(\"a\")",
+            "            b = BaseLabeledVertex(\"b\")",
+            "            graph.addVertex(a)",
+            "            graph.addVertex(b)",
+            "        except NullPointerException as e:",
+            "            pytest.fail(e.getMessage())",
+            "        ",
+            "        CommonsGraph.findShortestPath(graph).whereEdgesHaveWeights(BaseLabeledWeightedEdge()).from_(a).applyingBelmannFord(None)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 5.519096851348877,
+          "generation_timestamp": "2025-11-09T20:52:14.231443",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullMonoid(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "156-165:testNullVertices": {
+          "start": 156,
+          "end": 165,
+          "body": [
+            "@Test(expected = NullPointerException.class)",
+            "    public void testNullVertices() {",
+            "        UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph =",
+            "                new UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>();",
+            "",
+            "        findShortestPath(graph)",
+            "                .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                .from(null)",
+            "                .applyingBelmannFord(new DoubleWeightBaseOperations());",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test(expected = NullPointerException.class)"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseWeightedEdge<Double>",
+            "DoubleWeightBaseOperations"
+          ],
+          "signature": "testNullVertices()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-graph.src.main.org.apache.commons.graph.CommonsGraph",
+              "53-361:CommonsGraph",
+              "139-143:findShortestPath"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathWeightedEdgesBuilder",
+              "24-28:PathWeightedEdgesBuilder",
+              "26-27:whereEdgesHaveWeights"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.PathSourceSelector",
+              "29-47:PathSourceSelector",
+              "46-46:from"
+            ],
+            [
+              "commons-graph.src.main.org.apache.commons.graph.shortestpath.TargetSourceSelector",
+              "29-47:TargetSourceSelector",
+              "38-39:applyingBelmannFord"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "UndirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "UndirectedMutableGraph",
+                "reasoning": "Custom type UndirectedMutableGraph is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledWeightedEdge",
+                "reasoning": "Custom type BaseLabeledWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseWeightedEdge",
+                "reasoning": "Custom type BaseWeightedEdge is an application-level type which does not require any translation.",
+                "prompt": ""
+              },
+              "DoubleWeightBaseOperations": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DoubleWeightBaseOperations has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def testNullVertices(self) -> None:",
+            "        from src.main.org.apache.commons.graph.CommonsGraph import CommonsGraph",
+            "        with pytest.raises(ValueError):",
+            "            CommonsGraph().findShortestPath(None).whereEdgesHaveWeights(None).from_(None).applyingBelmannFord(None)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 2.6876304149627686,
+          "generation_timestamp": "2025-11-09T20:52:17.032480",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def testNullVertices(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class BellmannFordTestCase(unittest.TestCase):\n\n"
+    }
+  },
+  "import_map": {
+    "findShortestPath": "static org.apache.commons.graph.CommonsGraph.findShortestPath",
+    "assertEquals": "static org.junit.Assert.assertEquals",
+    "fail": "static org.junit.Assert.fail",
+    "Graph": "org.apache.commons.graph.Graph",
+    "WeightedPath": "org.apache.commons.graph.WeightedPath",
+    "BaseLabeledVertex": "org.apache.commons.graph.model.BaseLabeledVertex",
+    "BaseLabeledWeightedEdge": "org.apache.commons.graph.model.BaseLabeledWeightedEdge",
+    "BaseWeightedEdge": "org.apache.commons.graph.model.BaseWeightedEdge",
+    "DirectedMutableGraph": "org.apache.commons.graph.model.DirectedMutableGraph",
+    "InMemoryWeightedPath": "org.apache.commons.graph.model.InMemoryWeightedPath",
+    "UndirectedMutableGraph": "org.apache.commons.graph.model.UndirectedMutableGraph",
+    "DoubleWeightBaseOperations": "org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations",
+    "Test": "org.junit.Test"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO\nimport pytest",
+    "import pytest",
+    "import unittest"
+  ]
+}

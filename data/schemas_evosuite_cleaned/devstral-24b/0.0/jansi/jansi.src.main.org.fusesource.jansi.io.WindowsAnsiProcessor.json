@@ -1,0 +1,5237 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/io/WindowsAnsiProcessor.java",
+  "imports": {
+    "18-18:import org.fusesource.jansi.internal.Kernel32;": {
+      "start": 18,
+      "end": 18,
+      "body": "import org.fusesource.jansi.internal.Kernel32;"
+    },
+    "19-19:import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO;"
+    },
+    "20-20:import org.fusesource.jansi.internal.Kernel32.COORD;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.fusesource.jansi.internal.Kernel32.COORD;"
+    },
+    "22-22:import java.io.IOException;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.IOException;"
+    },
+    "23-23:import java.io.OutputStream;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.io.OutputStream;"
+    },
+    "25-25:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_BLUE;": {
+      "start": 25,
+      "end": 25,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_BLUE;"
+    },
+    "26-26:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_GREEN;": {
+      "start": 26,
+      "end": 26,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_GREEN;"
+    },
+    "27-27:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_INTENSITY;": {
+      "start": 27,
+      "end": 27,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_INTENSITY;"
+    },
+    "28-28:import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_RED;": {
+      "start": 28,
+      "end": 28,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.BACKGROUND_RED;"
+    },
+    "29-29:import static org.fusesource.jansi.internal.Kernel32.CHAR_INFO;": {
+      "start": 29,
+      "end": 29,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.CHAR_INFO;"
+    },
+    "30-30:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_BLUE;": {
+      "start": 30,
+      "end": 30,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_BLUE;"
+    },
+    "31-31:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_GREEN;": {
+      "start": 31,
+      "end": 31,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_GREEN;"
+    },
+    "32-32:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_INTENSITY;": {
+      "start": 32,
+      "end": 32,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_INTENSITY;"
+    },
+    "33-33:import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_RED;": {
+      "start": 33,
+      "end": 33,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FOREGROUND_RED;"
+    },
+    "34-34:import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputAttribute;": {
+      "start": 34,
+      "end": 34,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputAttribute;"
+    },
+    "35-35:import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputCharacterW;": {
+      "start": 35,
+      "end": 35,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputCharacterW;"
+    },
+    "36-36:import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;": {
+      "start": 36,
+      "end": 36,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;"
+    },
+    "37-37:import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;": {
+      "start": 37,
+      "end": 37,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetStdHandle;"
+    },
+    "38-38:import static org.fusesource.jansi.internal.Kernel32.SMALL_RECT;": {
+      "start": 38,
+      "end": 38,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SMALL_RECT;"
+    },
+    "39-39:import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;": {
+      "start": 39,
+      "end": 39,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE;"
+    },
+    "40-40:import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;": {
+      "start": 40,
+      "end": 40,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE;"
+    },
+    "41-41:import static org.fusesource.jansi.internal.Kernel32.ScrollConsoleScreenBuffer;": {
+      "start": 41,
+      "end": 41,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.ScrollConsoleScreenBuffer;"
+    },
+    "42-42:import static org.fusesource.jansi.internal.Kernel32.SetConsoleCursorPosition;": {
+      "start": 42,
+      "end": 42,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleCursorPosition;"
+    },
+    "43-43:import static org.fusesource.jansi.internal.Kernel32.SetConsoleTextAttribute;": {
+      "start": 43,
+      "end": 43,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleTextAttribute;"
+    },
+    "44-44:import static org.fusesource.jansi.internal.Kernel32.SetConsoleTitle;": {
+      "start": 44,
+      "end": 44,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.SetConsoleTitle;"
+    }
+  },
+  "classes": {
+    "55-424:WindowsAnsiProcessor": {
+      "start": 55,
+      "end": 424,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "AnsiProcessor"
+      ],
+      "methods": {
+        "100-105:WindowsAnsiProcessor": {
+          "start": 100,
+          "end": 105,
+          "body": [
+            "public WindowsAnsiProcessor(OutputStream ps, long console) throws IOException {",
+            "        super(ps);",
+            "        this.console = console;",
+            "        getConsoleInfo();",
+            "        originalColors = info.attributes;",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "WindowsAnsiProcessor( OutputStream ps,  long console)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "ps"
+            },
+            {
+              "modifier": "",
+              "type": "long",
+              "name": "console"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+              "33-559:AnsiProcessor",
+              "37-39:AnsiProcessor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "|OutputStream|ps": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|long|console": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, ps: object, console: object) -> None:",
+            "        super().__init__(ps)",
+            "        self.__console = console",
+            "        self.__getConsoleInfo()",
+            "        self.__originalColors = self.__info.attributes"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/io/WindowsAnsiProcessor_ESTest.py::WindowsAnsiProcessor_ESTest::test0": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/io/WindowsAnsiProcessor_ESTest.py\", line 23, in test0\n    self.fail(\"Expecting exception: NoClassDefFoundError\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: Expecting exception: NoClassDefFoundError",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "176-177:GetConsoleScreenBufferInfo"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+                  "class_name": "55-424:WindowsAnsiProcessor",
+                  "fragment_name": "100-105:WindowsAnsiProcessor"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+                  "class_name": "55-424:WindowsAnsiProcessor",
+                  "fragment_name": "115-123:getConsoleInfo"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+                  "class_name": "33-559:AnsiProcessor",
+                  "fragment_name": "37-39:AnsiProcessor"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.io.WindowsAnsiProcessor_ESTest",
+                  "class_name": "24-40:WindowsAnsiProcessor_ESTest",
+                  "fragment_name": "26-39:test0"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 14.556809663772583,
+          "generation_timestamp": "2025-11-04T20:37:26.788738",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, ps: object, console: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "107-109:WindowsAnsiProcessor0": {
+          "start": 107,
+          "end": 109,
+          "body": [
+            "public WindowsAnsiProcessor WindowsAnsiProcessor0(OutputStream ps, boolean stdout) throws IOException {",
+            "        return new WindowsAnsiProcessor(ps, GetStdHandle(stdout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE));",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "WindowsAnsiProcessor"
+          ],
+          "body_types": [
+            "WindowsAnsiProcessor"
+          ],
+          "signature": "WindowsAnsiProcessor0( OutputStream ps,  boolean stdout)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "ps"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stdout"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "182-182:GetStdHandle"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "100-105:WindowsAnsiProcessor"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "WindowsAnsiProcessor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "WindowsAnsiProcessor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|OutputStream|ps": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|boolean|stdout": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def WindowsAnsiProcessor0(self, ps: object, stdout: object) -> \"WindowsAnsiProcessor\":",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        return WindowsAnsiProcessor(ps, Kernel32.GetStdHandle(stdout if stdout else Kernel32.STD_ERROR_HANDLE))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.15873098373413,
+          "generation_timestamp": "2025-11-04T20:38:03.920578",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def WindowsAnsiProcessor0(self, ps: object, stdout: object) -> \"WindowsAnsiProcessor\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "111-113:WindowsAnsiProcessor1": {
+          "start": 111,
+          "end": 113,
+          "body": [
+            "public WindowsAnsiProcessor WindowsAnsiProcessor1(OutputStream ps) throws IOException {",
+            "        return WindowsAnsiProcessor0(ps, true);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "WindowsAnsiProcessor"
+          ],
+          "body_types": [],
+          "signature": "WindowsAnsiProcessor1( OutputStream ps)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "ps"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "107-109:WindowsAnsiProcessor0"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "WindowsAnsiProcessor": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WindowsAnsiProcessor",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|OutputStream|ps": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def WindowsAnsiProcessor1(self, ps: object) -> \"WindowsAnsiProcessor\":",
+            "        return self.WindowsAnsiProcessor0(ps, True)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.429710865020752,
+          "generation_timestamp": "2025-11-04T20:38:17.531992",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def WindowsAnsiProcessor1(self, ps: object) -> \"WindowsAnsiProcessor\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "115-123:getConsoleInfo": {
+          "start": 115,
+          "end": 123,
+          "body": [
+            "private void getConsoleInfo() throws IOException {",
+            "        os.flush();",
+            "        if (GetConsoleScreenBufferInfo(console, info) == 0) {",
+            "            throw new IOException(\"Could not get the screen info: \" + Kernel32.getLastErrorMessage());",
+            "        }",
+            "        if (negative) {",
+            "            info.attributes = invertAttributeColors(info.attributes);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IOException"
+          ],
+          "signature": "getConsoleInfo()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.OutputStream",
+              "flush()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "176-177:GetConsoleScreenBufferInfo"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "136-144:invertAttributeColors"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __getConsoleInfo(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self._os.flush()",
+            "        if Kernel32.GetConsoleScreenBufferInfo(self.__console, self.__info) == 0:",
+            "            raise IOException(\"Could not get the screen info: \" + Kernel32.getLastErrorMessage())",
+            "        if self.__negative:",
+            "            self.__info.attributes = self.__invertAttributeColors(self.__info.attributes)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/fusesource/jansi/io/WindowsAnsiProcessor_ESTest.py::WindowsAnsiProcessor_ESTest::test0": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/devstral-24b/0.0/jansi/src/test/org/fusesource/jansi/io/WindowsAnsiProcessor_ESTest.py\", line 23, in test0\n    self.fail(\"Expecting exception: NoClassDefFoundError\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 703, in fail\n    raise self.failureException(msg)\nAssertionError: Expecting exception: NoClassDefFoundError",
+              "covered_methods": [
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+                  "class_name": "26-536:Kernel32",
+                  "fragment_name": "176-177:GetConsoleScreenBufferInfo"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+                  "class_name": "61-395:JansiLoader",
+                  "fragment_name": "73-91:initialize"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+                  "class_name": "55-424:WindowsAnsiProcessor",
+                  "fragment_name": "100-105:WindowsAnsiProcessor"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+                  "class_name": "55-424:WindowsAnsiProcessor",
+                  "fragment_name": "115-123:getConsoleInfo"
+                },
+                {
+                  "schema_name": "jansi.src.main.org.fusesource.jansi.io.AnsiProcessor",
+                  "class_name": "33-559:AnsiProcessor",
+                  "fragment_name": "37-39:AnsiProcessor"
+                },
+                {
+                  "schema_name": "jansi.src.test.org.fusesource.jansi.io.WindowsAnsiProcessor_ESTest",
+                  "class_name": "24-40:WindowsAnsiProcessor_ESTest",
+                  "fragment_name": "26-39:test0"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 15.632375001907349,
+          "generation_timestamp": "2025-11-04T20:02:30.729159",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __getConsoleInfo(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "125-134:applyAttribute": {
+          "start": 125,
+          "end": 134,
+          "body": [
+            "private void applyAttribute() throws IOException {",
+            "        os.flush();",
+            "        short attributes = info.attributes;",
+            "        if (negative) {",
+            "            attributes = invertAttributeColors(attributes);",
+            "        }",
+            "        if (SetConsoleTextAttribute(console, attributes) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short",
+            "IOException"
+          ],
+          "signature": "applyAttribute()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.OutputStream",
+              "flush()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "136-144:invertAttributeColors"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "101-101:SetConsoleTextAttribute"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __applyAttribute(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self._os.flush()",
+            "        attributes = self.__info.attributes",
+            "        if self.__negative:",
+            "            attributes = self.__invertAttributeColors(attributes)",
+            "        if Kernel32.SetConsoleTextAttribute(self.__console, attributes) == 0:",
+            "            raise IOException(Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.089262008666992,
+          "generation_timestamp": "2025-11-04T20:02:45.996575",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __applyAttribute(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "136-144:invertAttributeColors": {
+          "start": 136,
+          "end": 144,
+          "body": [
+            "private short invertAttributeColors(short attributes) {",
+            "        // Swap the the Foreground and Background bits.",
+            "        int fg = 0x000F & attributes;",
+            "        fg <<= 4;",
+            "        int bg = 0X00F0 & attributes;",
+            "        bg >>= 4;",
+            "        attributes = (short) ((attributes & 0xFF00) | fg | bg);",
+            "        return attributes;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "short"
+          ],
+          "body_types": [
+            "int",
+            "short"
+          ],
+          "signature": "invertAttributeColors( short attributes)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "short",
+              "name": "attributes"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|short|attributes": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __invertAttributeColors(self, attributes: int) -> int:",
+            "        # Swap the Foreground and Background bits.",
+            "        fg = 0x000F & attributes",
+            "        fg <<= 4",
+            "        bg = 0x00F0 & attributes",
+            "        bg >>= 4",
+            "        attributes = (attributes & 0xFF00) | fg | bg",
+            "        return attributes"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.029760360717773,
+          "generation_timestamp": "2025-11-04T19:15:56.847940",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __invertAttributeColors(self, attributes: object) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "146-150:applyCursorPosition": {
+          "start": 146,
+          "end": 150,
+          "body": [
+            "private void applyCursorPosition() throws IOException {",
+            "        if (SetConsoleCursorPosition(console, info.cursorPosition.copy()) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IOException"
+          ],
+          "signature": "applyCursorPosition()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "103-123:COORD",
+              "117-122:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "187-187:SetConsoleCursorPosition"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __applyCursorPosition(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        if Kernel32.SetConsoleCursorPosition(self.__console, self.__info.cursorPosition.copy()) == 0:",
+            "            raise IOException(Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.334794521331787,
+          "generation_timestamp": "2025-11-04T20:06:16.546470",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __applyCursorPosition(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "152-182:processEraseScreen": {
+          "start": 152,
+          "end": 182,
+          "body": [
+            "@Override",
+            "    protected void processEraseScreen(int eraseOption) throws IOException {",
+            "        getConsoleInfo();",
+            "        int[] written = new int[1];",
+            "        switch (eraseOption) {",
+            "            case ERASE_SCREEN:",
+            "                COORD topLeft = new COORD();",
+            "                topLeft.x = 0;",
+            "                topLeft.y = info.window.top;",
+            "                int screenLength = info.window.height() * info.size.x;",
+            "                FillConsoleOutputAttribute(console, info.attributes, screenLength, topLeft, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', screenLength, topLeft, written);",
+            "                break;",
+            "            case ERASE_SCREEN_TO_BEGINING:",
+            "                COORD topLeft2 = new COORD();",
+            "                topLeft2.x = 0;",
+            "                topLeft2.y = info.window.top;",
+            "                int lengthToCursor = (info.cursorPosition.y - info.window.top) * info.size.x + info.cursorPosition.x;",
+            "                FillConsoleOutputAttribute(console, info.attributes, lengthToCursor, topLeft2, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', lengthToCursor, topLeft2, written);",
+            "                break;",
+            "            case ERASE_SCREEN_TO_END:",
+            "                int lengthToEnd = (info.window.bottom - info.cursorPosition.y) * info.size.x",
+            "                        + (info.size.x - info.cursorPosition.x);",
+            "                FillConsoleOutputAttribute(console, info.attributes, lengthToEnd, info.cursorPosition.copy(), written);",
+            "                FillConsoleOutputCharacterW(console, ' ', lengthToEnd, info.cursorPosition.copy(), written);",
+            "                break;",
+            "            default:",
+            "                break;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int[]",
+            "int",
+            "COORD"
+          ],
+          "signature": "processEraseScreen( int eraseOption)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "eraseOption"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "84-86:height"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "198-199:FillConsoleOutputAttribute"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "192-193:FillConsoleOutputCharacterW"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "103-123:COORD",
+              "117-122:copy"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent of a Java `int[]` is a list of integers. The type `list[int]` specifies a list where each element is an integer, which corresponds to Java's `int[]`.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|eraseOption": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processEraseScreen(self, eraseOption: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import COORD",
+            "        self.__getConsoleInfo()",
+            "        written = [0]",
+            "        if eraseOption == self._ERASE_SCREEN:",
+            "            topLeft = COORD()",
+            "            topLeft.x = 0",
+            "            topLeft.y = self.__info.window.top",
+            "            screenLength = self.__info.window.height() * self.__info.size.x",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, screenLength, topLeft, written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', screenLength, topLeft, written)",
+            "        elif eraseOption == self._ERASE_SCREEN_TO_BEGINING:",
+            "            topLeft2 = COORD()",
+            "            topLeft2.x = 0",
+            "            topLeft2.y = self.__info.window.top",
+            "            lengthToCursor = (self.__info.cursorPosition.y - self.__info.window.top) * self.__info.size.x + self.__info.cursorPosition.x",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, lengthToCursor, topLeft2, written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', lengthToCursor, topLeft2, written)",
+            "        elif eraseOption == self._ERASE_SCREEN_TO_END:",
+            "            lengthToEnd = (self.__info.window.bottom - self.__info.cursorPosition.y) * self.__info.size.x + (self.__info.size.x - self.__info.cursorPosition.x)",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, lengthToEnd, self.__info.cursorPosition.copy(), written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', lengthToEnd, self.__info.cursorPosition.copy(), written)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 22.82149028778076,
+          "generation_timestamp": "2025-11-04T20:06:39.567937",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processEraseScreen(self, eraseOption: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "184-210:processEraseLine": {
+          "start": 184,
+          "end": 210,
+          "body": [
+            "@Override",
+            "    protected void processEraseLine(int eraseOption) throws IOException {",
+            "        getConsoleInfo();",
+            "        int[] written = new int[1];",
+            "        switch (eraseOption) {",
+            "            case ERASE_LINE:",
+            "                COORD leftColCurrRow = info.cursorPosition.copy();",
+            "                leftColCurrRow.x = 0;",
+            "                FillConsoleOutputAttribute(console, info.attributes, info.size.x, leftColCurrRow, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', info.size.x, leftColCurrRow, written);",
+            "                break;",
+            "            case ERASE_LINE_TO_BEGINING:",
+            "                COORD leftColCurrRow2 = info.cursorPosition.copy();",
+            "                leftColCurrRow2.x = 0;",
+            "                FillConsoleOutputAttribute(console, info.attributes, info.cursorPosition.x, leftColCurrRow2, written);",
+            "                FillConsoleOutputCharacterW(console, ' ', info.cursorPosition.x, leftColCurrRow2, written);",
+            "                break;",
+            "            case ERASE_LINE_TO_END:",
+            "                int lengthToLastCol = info.size.x - info.cursorPosition.x;",
+            "                FillConsoleOutputAttribute(",
+            "                        console, info.attributes, lengthToLastCol, info.cursorPosition.copy(), written);",
+            "                FillConsoleOutputCharacterW(console, ' ', lengthToLastCol, info.cursorPosition.copy(), written);",
+            "                break;",
+            "            default:",
+            "                break;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int[]",
+            "int",
+            "COORD"
+          ],
+          "signature": "processEraseLine( int eraseOption)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "eraseOption"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "103-123:COORD",
+              "117-122:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "198-199:FillConsoleOutputAttribute"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "192-193:FillConsoleOutputCharacterW"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent of a Java `int[]` is a list of integers. The type `list[int]` specifies a list where each element is an integer, which corresponds to Java's `int[]`.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|eraseOption": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processEraseLine(self, eraseOption: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__getConsoleInfo()",
+            "        written = [0]",
+            "        if eraseOption == self._ERASE_LINE:",
+            "            leftColCurrRow = self.__info.cursorPosition.copy()",
+            "            leftColCurrRow.x = 0",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, self.__info.size.x, leftColCurrRow, written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', self.__info.size.x, leftColCurrRow, written)",
+            "        elif eraseOption == self._ERASE_LINE_TO_BEGINING:",
+            "            leftColCurrRow2 = self.__info.cursorPosition.copy()",
+            "            leftColCurrRow2.x = 0",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, self.__info.cursorPosition.x, leftColCurrRow2, written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', self.__info.cursorPosition.x, leftColCurrRow2, written)",
+            "        elif eraseOption == self._ERASE_LINE_TO_END:",
+            "            lengthToLastCol = self.__info.size.x - self.__info.cursorPosition.x",
+            "            Kernel32.FillConsoleOutputAttribute(self.__console, self.__info.attributes, lengthToLastCol, self.__info.cursorPosition.copy(), written)",
+            "            Kernel32.FillConsoleOutputCharacterW(self.__console, ' ', lengthToLastCol, self.__info.cursorPosition.copy(), written)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 21.26400923728943,
+          "generation_timestamp": "2025-11-04T20:07:01.005846",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processEraseLine(self, eraseOption: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "212-217:processCursorLeft": {
+          "start": 212,
+          "end": 217,
+          "body": [
+            "@Override",
+            "    protected void processCursorLeft(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = (short) Math.max(0, info.cursorPosition.x - count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorLeft( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorLeft(self, count: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = max(0, self.__info.cursorPosition.x - count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.267628192901611,
+          "generation_timestamp": "2025-11-04T20:07:15.445275",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorLeft(self, count: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "219-224:processCursorRight": {
+          "start": 219,
+          "end": 224,
+          "body": [
+            "@Override",
+            "    protected void processCursorRight(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = (short) Math.min(info.window.width(), info.cursorPosition.x + count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorRight( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "80-82:width"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorRight(self, count: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = min(self.__info.window.width(), self.__info.cursorPosition.x + count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.5538170337677,
+          "generation_timestamp": "2025-11-04T20:07:30.175831",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorRight(self, count: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "226-231:processCursorDown": {
+          "start": 226,
+          "end": 231,
+          "body": [
+            "@Override",
+            "    protected void processCursorDown(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.y = (short) Math.min(Math.max(0, info.size.y - 1), info.cursorPosition.y + count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorDown( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorDown(self, count: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.y = min(max(0, self.__info.size.y - 1), self.__info.cursorPosition.y + count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.58269190788269,
+          "generation_timestamp": "2025-11-04T20:07:44.955986",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorDown(self, count: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "233-238:processCursorUp": {
+          "start": 233,
+          "end": 238,
+          "body": [
+            "@Override",
+            "    protected void processCursorUp(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, info.cursorPosition.y - count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorUp( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorUp(self, count: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, self.__info.cursorPosition.y - count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.293550729751587,
+          "generation_timestamp": "2025-11-04T20:07:59.433684",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorUp(self, count: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "240-246:processCursorTo": {
+          "start": 240,
+          "end": 246,
+          "body": [
+            "@Override",
+            "    protected void processCursorTo(int row, int col) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, Math.min(info.size.y, info.window.top + row - 1));",
+            "        info.cursorPosition.x = (short) Math.max(0, Math.min(info.window.width(), col - 1));",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorTo( int row,  int col)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "row"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "col"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "80-82:width"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|row": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|col": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorTo(self, row: object, col: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self._WindowsAnsiProcessor__info.cursorPosition.y = max(self._WindowsAnsiProcessor__info.window.top, min(self._WindowsAnsiProcessor__info.size.y, self._WindowsAnsiProcessor__info.window.top + row - 1))",
+            "        self._WindowsAnsiProcessor__info.cursorPosition.x = max(0, min(self._WindowsAnsiProcessor__info.window.width(), col - 1))",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.463396072387695,
+          "generation_timestamp": "2025-11-04T20:08:16.070707",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorTo(self, row: object, col: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "248-253:processCursorToColumn": {
+          "start": 248,
+          "end": 253,
+          "body": [
+            "@Override",
+            "    protected void processCursorToColumn(int x) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = (short) Math.max(0, Math.min(info.window.width(), x - 1));",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorToColumn( int x)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "x"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "80-82:width"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "min(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|x": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorToColumn(self, x: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = max(0, min(self.__info.window.width(), x - 1))",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.592369079589844,
+          "generation_timestamp": "2025-11-04T20:08:30.844781",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorToColumn(self, x: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "255-261:processCursorUpLine": {
+          "start": 255,
+          "end": 261,
+          "body": [
+            "@Override",
+            "    protected void processCursorUpLine(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = 0;",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, info.cursorPosition.y - count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorUpLine( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorUpLine(self, count: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = 0",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, self.__info.cursorPosition.y - count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.619825601577759,
+          "generation_timestamp": "2025-11-04T20:08:45.645163",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorUpLine(self, count: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "263-269:processCursorDownLine": {
+          "start": 263,
+          "end": 269,
+          "body": [
+            "@Override",
+            "    protected void processCursorDownLine(int count) throws IOException {",
+            "        getConsoleInfo();",
+            "        info.cursorPosition.x = 0;",
+            "        info.cursorPosition.y = (short) Math.max(info.window.top, info.cursorPosition.y + count);",
+            "        applyCursorPosition();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processCursorDownLine( int count)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "max(int,int)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processCursorDownLine(self, count: object) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__info.cursorPosition.x = 0",
+            "        self.__info.cursorPosition.y = max(self.__info.window.top, self.__info.cursorPosition.y + count)",
+            "        self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.5895836353302,
+          "generation_timestamp": "2025-11-04T20:09:00.422181",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processCursorDownLine(self, count: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "271-278:processSetForegroundColor1": {
+          "start": 271,
+          "end": 278,
+          "body": [
+            "@Override",
+            "    protected void processSetForegroundColor1(int color, boolean bright) throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x0007) | ANSI_FOREGROUND_COLOR_MAP[color]);",
+            "        if (bright) {",
+            "            info.attributes |= FOREGROUND_INTENSITY;",
+            "        }",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processSetForegroundColor1( int color,  boolean bright)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "color"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "bright"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|color": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|boolean|bright": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetForegroundColor1(self, color: object, bright: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x0007) | self.__ANSI_FOREGROUND_COLOR_MAP[color]",
+            "        if bright:",
+            "            self.__info.attributes |= Kernel32.FOREGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.133362293243408,
+          "generation_timestamp": "2025-11-04T20:03:01.306641",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetForegroundColor1(self, color: object, bright: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "281-284:processSetForegroundColorExt0": {
+          "start": 281,
+          "end": 284,
+          "body": [
+            "protected void processSetForegroundColorExt0(int paletteIndex) throws IOException {",
+            "        int round = Colors.roundColor0(paletteIndex, 16);",
+            "        processSetForegroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetForegroundColorExt0( int paletteIndex)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "paletteIndex"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "84-90:roundColor0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "271-278:processSetForegroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|paletteIndex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetForegroundColorExt0(self, paletteIndex: object) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundColor0(paletteIndex, 16)",
+            "        self._processSetForegroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.636143445968628,
+          "generation_timestamp": "2025-11-04T20:26:34.344716",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetForegroundColorExt0(self, paletteIndex: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "287-290:processSetForegroundColorExt1": {
+          "start": 287,
+          "end": 290,
+          "body": [
+            "protected void processSetForegroundColorExt1(int r, int g, int b) throws IOException {",
+            "        int round = Colors.roundRgbColor(r, g, b, 16);",
+            "        processSetForegroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetForegroundColorExt1( int r,  int g,  int b)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "r"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "g"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "b"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "92-94:roundRgbColor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "271-278:processSetForegroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|r": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|g": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|b": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetForegroundColorExt1(self, r: object, g: object, b: object) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundRgbColor(r, g, b, 16)",
+            "        self._processSetForegroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.891536712646484,
+          "generation_timestamp": "2025-11-04T20:26:50.425419",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetForegroundColorExt1(self, r: object, g: object, b: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "292-299:processSetBackgroundColor1": {
+          "start": 292,
+          "end": 299,
+          "body": [
+            "@Override",
+            "    protected void processSetBackgroundColor1(int color, boolean bright) throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x0070) | ANSI_BACKGROUND_COLOR_MAP[color]);",
+            "        if (bright) {",
+            "            info.attributes |= BACKGROUND_INTENSITY;",
+            "        }",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processSetBackgroundColor1( int color,  boolean bright)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "color"
+            },
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "bright"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|color": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|boolean|bright": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetBackgroundColor1(self, color: object, bright: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x0070) | self.__ANSI_BACKGROUND_COLOR_MAP[color]",
+            "        if bright:",
+            "            self.__info.attributes |= Kernel32.BACKGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.197051763534546,
+          "generation_timestamp": "2025-11-04T20:03:16.689376",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetBackgroundColor1(self, color: object, bright: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "302-305:processSetBackgroundColorExt0": {
+          "start": 302,
+          "end": 305,
+          "body": [
+            "protected void processSetBackgroundColorExt0(int paletteIndex) throws IOException {",
+            "        int round = Colors.roundColor0(paletteIndex, 16);",
+            "        processSetBackgroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetBackgroundColorExt0( int paletteIndex)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "paletteIndex"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "84-90:roundColor0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "292-299:processSetBackgroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|paletteIndex": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetBackgroundColorExt0(self, paletteIndex: object) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundColor0(paletteIndex, 16)",
+            "        self._processSetBackgroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.51337480545044,
+          "generation_timestamp": "2025-11-04T20:27:06.114286",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetBackgroundColorExt0(self, paletteIndex: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "308-311:processSetBackgroundColorExt1": {
+          "start": 308,
+          "end": 311,
+          "body": [
+            "protected void processSetBackgroundColorExt1(int r, int g, int b) throws IOException {",
+            "        int round = Colors.roundRgbColor(r, g, b, 16);",
+            "        processSetBackgroundColor1(round >= 8 ? round - 8 : round, round >= 8);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "processSetBackgroundColorExt1( int r,  int g,  int b)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "r"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "g"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "b"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.Colors",
+              "23-167:Colors",
+              "92-94:roundRgbColor"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "292-299:processSetBackgroundColor1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|r": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|g": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|b": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetBackgroundColorExt1(self, r: object, g: object, b: object) -> None:",
+            "        from src.main.org.fusesource.jansi.io.Colors import Colors",
+            "        round = Colors.roundRgbColor(r, g, b, 16)",
+            "        self._processSetBackgroundColor1(round - 8 if round >= 8 else round, round >= 8)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.826103687286377,
+          "generation_timestamp": "2025-11-04T20:27:22.118428",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetBackgroundColorExt1(self, r: object, g: object, b: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "313-318:processDefaultTextColor": {
+          "start": 313,
+          "end": 318,
+          "body": [
+            "@Override",
+            "    protected void processDefaultTextColor() throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x000F) | (originalColors & 0xF));",
+            "        info.attributes = (short) (info.attributes & ~FOREGROUND_INTENSITY);",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processDefaultTextColor()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processDefaultTextColor(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x000F) | (self.__originalColors & 0xF)",
+            "        self.__info.attributes = self.__info.attributes & ~Kernel32.FOREGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.752906799316406,
+          "generation_timestamp": "2025-11-04T20:03:31.617080",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processDefaultTextColor(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "320-325:processDefaultBackgroundColor": {
+          "start": 320,
+          "end": 325,
+          "body": [
+            "@Override",
+            "    protected void processDefaultBackgroundColor() throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x00F0) | (originalColors & 0xF0));",
+            "        info.attributes = (short) (info.attributes & ~BACKGROUND_INTENSITY);",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processDefaultBackgroundColor()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processDefaultBackgroundColor(self) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        self.__info.attributes = (self.__info.attributes & ~0x00F0) | (self.__originalColors & 0xF0)",
+            "        self.__info.attributes = self.__info.attributes & ~Kernel32.BACKGROUND_INTENSITY",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.689966201782227,
+          "generation_timestamp": "2025-11-04T20:03:46.484808",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processDefaultBackgroundColor(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "327-332:processAttributeReset": {
+          "start": 327,
+          "end": 332,
+          "body": [
+            "@Override",
+            "    protected void processAttributeReset() throws IOException {",
+            "        info.attributes = (short) ((info.attributes & ~0x00FF) | originalColors);",
+            "        this.negative = false;",
+            "        applyAttribute();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processAttributeReset()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processAttributeReset(self) -> None:",
+            "        self.__info.attributes = (self.__info.attributes & ~0x00FF) | self.__originalColors",
+            "        self.__negative = False",
+            "        self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.881629228591919,
+          "generation_timestamp": "2025-11-04T20:04:00.540850",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processAttributeReset(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "334-368:processSetAttribute": {
+          "start": 334,
+          "end": 368,
+          "body": [
+            "@Override",
+            "    protected void processSetAttribute(int attribute) throws IOException {",
+            "        switch (attribute) {",
+            "            case ATTRIBUTE_INTENSITY_BOLD:",
+            "                info.attributes = (short) (info.attributes | FOREGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "            case ATTRIBUTE_INTENSITY_NORMAL:",
+            "                info.attributes = (short) (info.attributes & ~FOREGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "",
+            "                // Yeah, setting the background intensity is not underlining.. but it's best we can do",
+            "                // using the Windows console API",
+            "            case ATTRIBUTE_UNDERLINE:",
+            "                info.attributes = (short) (info.attributes | BACKGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "            case ATTRIBUTE_UNDERLINE_OFF:",
+            "                info.attributes = (short) (info.attributes & ~BACKGROUND_INTENSITY);",
+            "                applyAttribute();",
+            "                break;",
+            "",
+            "            case ATTRIBUTE_NEGATIVE_ON:",
+            "                negative = true;",
+            "                applyAttribute();",
+            "                break;",
+            "            case ATTRIBUTE_NEGATIVE_OFF:",
+            "                negative = false;",
+            "                applyAttribute();",
+            "                break;",
+            "            default:",
+            "                break;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "short"
+          ],
+          "signature": "processSetAttribute( int attribute)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "attribute"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "125-134:applyAttribute"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|attribute": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processSetAttribute(self, attribute: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        if attribute == self._ATTRIBUTE_INTENSITY_BOLD:",
+            "            self.__info.attributes |= Kernel32.FOREGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_INTENSITY_NORMAL:",
+            "            self.__info.attributes &= ~Kernel32.FOREGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_UNDERLINE:",
+            "            self.__info.attributes |= Kernel32.BACKGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_UNDERLINE_OFF:",
+            "            self.__info.attributes &= ~Kernel32.BACKGROUND_INTENSITY",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_NEGATIVE_ON:",
+            "            self.__negative = True",
+            "            self.__applyAttribute()",
+            "        elif attribute == self._ATTRIBUTE_NEGATIVE_OFF:",
+            "            self.__negative = False",
+            "            self.__applyAttribute()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 18.586604356765747,
+          "generation_timestamp": "2025-11-04T20:04:19.298992",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSetAttribute(self, attribute: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "370-375:processSaveCursorPosition": {
+          "start": 370,
+          "end": 375,
+          "body": [
+            "@Override",
+            "    protected void processSaveCursorPosition() throws IOException {",
+            "        getConsoleInfo();",
+            "        savedX = info.cursorPosition.x;",
+            "        savedY = info.cursorPosition.y;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "processSaveCursorPosition()",
+          "parameters": [],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processSaveCursorPosition(self) -> None:",
+            "        self.__getConsoleInfo()",
+            "        self.__savedX = self.__info.cursorPosition.x",
+            "        self.__savedY = self.__info.cursorPosition.y"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.193764209747314,
+          "generation_timestamp": "2025-11-04T20:04:33.664373",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processSaveCursorPosition(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "377-386:processRestoreCursorPosition": {
+          "start": 377,
+          "end": 386,
+          "body": [
+            "@Override",
+            "    protected void processRestoreCursorPosition() throws IOException {",
+            "        // restore only if there was a save operation first",
+            "        if (savedX != -1 && savedY != -1) {",
+            "            os.flush();",
+            "            info.cursorPosition.x = savedX;",
+            "            info.cursorPosition.y = savedY;",
+            "            applyCursorPosition();",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "processRestoreCursorPosition()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.io.OutputStream",
+              "flush()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "146-150:applyCursorPosition"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def _processRestoreCursorPosition(self) -> None:",
+            "        if self.__savedX != -1 and self.__savedY != -1:",
+            "            self._os.flush()",
+            "            self.__info.cursorPosition.x = self.__savedX",
+            "            self.__info.cursorPosition.y = self.__savedY",
+            "            self.__applyCursorPosition()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 14.807854652404785,
+          "generation_timestamp": "2025-11-04T20:09:15.397966",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processRestoreCursorPosition(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "388-402:processInsertLine": {
+          "start": 388,
+          "end": 402,
+          "body": [
+            "@Override",
+            "    protected void processInsertLine(int optionInt) throws IOException {",
+            "        getConsoleInfo();",
+            "        SMALL_RECT scroll = info.window.copy();",
+            "        scroll.top = info.cursorPosition.y;",
+            "        COORD org = new COORD();",
+            "        org.x = 0;",
+            "        org.y = (short) (info.cursorPosition.y + optionInt);",
+            "        CHAR_INFO info = new CHAR_INFO();",
+            "        info.attributes = originalColors;",
+            "        info.unicodeChar = ' ';",
+            "        if (ScrollConsoleScreenBuffer(console, scroll, scroll, org, info) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "SMALL_RECT",
+            "COORD",
+            "short",
+            "CHAR_INFO",
+            "IOException"
+          ],
+          "signature": "processInsertLine( int optionInt)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "optionInt"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "88-95:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "264-269:ScrollConsoleScreenBuffer"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "SMALL_RECT": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "SMALL_RECT",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CHAR_INFO": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CHAR_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|optionInt": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processInsertLine(self, optionInt: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import COORD",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import CHAR_INFO",
+            "        self.__getConsoleInfo()",
+            "        scroll = self.__info.window.copy()",
+            "        scroll.top = self.__info.cursorPosition.y",
+            "        org = COORD()",
+            "        org.x = 0",
+            "        org.y = (short)(self.__info.cursorPosition.y + optionInt)",
+            "        info = CHAR_INFO()",
+            "        info.attributes = self.__originalColors",
+            "        info.unicodeChar = ' '",
+            "        if Kernel32.ScrollConsoleScreenBuffer(self.__console, scroll, scroll, org, info) == 0:",
+            "            raise IOException(Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.8507821559906,
+          "generation_timestamp": "2025-11-04T20:05:31.234994",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processInsertLine(self, optionInt: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "404-418:processDeleteLine": {
+          "start": 404,
+          "end": 418,
+          "body": [
+            "@Override",
+            "    protected void processDeleteLine(int optionInt) throws IOException {",
+            "        getConsoleInfo();",
+            "        SMALL_RECT scroll = info.window.copy();",
+            "        scroll.top = info.cursorPosition.y;",
+            "        COORD org = new COORD();",
+            "        org.x = 0;",
+            "        org.y = (short) (info.cursorPosition.y - optionInt);",
+            "        CHAR_INFO info = new CHAR_INFO();",
+            "        info.attributes = originalColors;",
+            "        info.unicodeChar = ' ';",
+            "        if (ScrollConsoleScreenBuffer(console, scroll, scroll, org, info) == 0) {",
+            "            throw new IOException(Kernel32.getLastErrorMessage());",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "SMALL_RECT",
+            "COORD",
+            "short",
+            "CHAR_INFO",
+            "IOException"
+          ],
+          "signature": "processDeleteLine( int optionInt)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "optionInt"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.io.WindowsAnsiProcessor",
+              "55-424:WindowsAnsiProcessor",
+              "115-123:getConsoleInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "65-96:SMALL_RECT",
+              "88-95:copy"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "264-269:ScrollConsoleScreenBuffer"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "521-524:getLastErrorMessage"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "SMALL_RECT": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "SMALL_RECT",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "COORD": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "COORD",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CHAR_INFO": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CHAR_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|optionInt": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processDeleteLine(self, optionInt: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import COORD",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import CHAR_INFO",
+            "        self.__getConsoleInfo()",
+            "        scroll = self.__info.window.copy()",
+            "        scroll.top = self.__info.cursorPosition.y",
+            "        org = COORD()",
+            "        org.x = 0",
+            "        org.y = self.__info.cursorPosition.y - optionInt",
+            "        info = CHAR_INFO()",
+            "        info.attributes = self.__originalColors",
+            "        info.unicodeChar = ' '",
+            "        if Kernel32.ScrollConsoleScreenBuffer(self.__console, scroll, scroll, org, info) == 0:",
+            "            raise IOException(Kernel32.getLastErrorMessage())"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.630722284317017,
+          "generation_timestamp": "2025-11-04T20:05:48.045207",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processDeleteLine(self, optionInt: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "420-423:processChangeWindowTitle": {
+          "start": 420,
+          "end": 423,
+          "body": [
+            "@Override",
+            "    protected void processChangeWindowTitle(String label) {",
+            "        SetConsoleTitle(label);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "processChangeWindowTitle( String label)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "label"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "227-227:SetConsoleTitle"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|String|label": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _processChangeWindowTitle(self, label: object) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        Kernel32.SetConsoleTitle(label)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.696179151535034,
+          "generation_timestamp": "2025-11-04T20:01:22.023793",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _processChangeWindowTitle(self, label: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "57-57:console": {
+          "start": 57,
+          "end": 57,
+          "enum_constant": false,
+          "body": [
+            "private final long console;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "long"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __console: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __console: int = 0"
+          ]
+        },
+        "59-59:FOREGROUND_BLACK": {
+          "start": 59,
+          "end": 59,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_BLACK = 0;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __FOREGROUND_BLACK: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.926411390304565,
+          "generation_timestamp": "2025-11-04T17:43:14.892878",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __FOREGROUND_BLACK: int = ",
+            ""
+          ]
+        },
+        "60-60:FOREGROUND_YELLOW": {
+          "start": 60,
+          "end": 60,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_YELLOW = (short) (FOREGROUND_RED | FOREGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_YELLOW: int = Kernel32.FOREGROUND_GREEN | Kernel32.FOREGROUND_RED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.047979831695557,
+          "generation_timestamp": "2025-11-04T17:43:01.770358",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __FOREGROUND_YELLOW: int = ",
+            ""
+          ]
+        },
+        "61-61:FOREGROUND_MAGENTA": {
+          "start": 61,
+          "end": 61,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_MAGENTA = (short) (FOREGROUND_BLUE | FOREGROUND_RED);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_MAGENTA: int = Kernel32.FOREGROUND_BLUE | Kernel32.FOREGROUND_RED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.044767141342163,
+          "generation_timestamp": "2025-11-04T17:42:48.521694",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __FOREGROUND_MAGENTA: int = ",
+            ""
+          ]
+        },
+        "62-62:FOREGROUND_CYAN": {
+          "start": 62,
+          "end": 62,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_CYAN = (short) (FOREGROUND_BLUE | FOREGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_CYAN: int = Kernel32.FOREGROUND_BLUE | Kernel32.FOREGROUND_GREEN"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.241079092025757,
+          "generation_timestamp": "2025-11-04T17:42:35.279564",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __FOREGROUND_CYAN: int = ",
+            ""
+          ]
+        },
+        "63-63:FOREGROUND_WHITE": {
+          "start": 63,
+          "end": 63,
+          "enum_constant": false,
+          "body": [
+            "private static final short FOREGROUND_WHITE = (short) (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __FOREGROUND_WHITE: int = (Kernel32.FOREGROUND_RED | Kernel32.FOREGROUND_GREEN | Kernel32.FOREGROUND_BLUE)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.241711616516113,
+          "generation_timestamp": "2025-11-04T17:42:21.837318",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __FOREGROUND_WHITE: int = ",
+            ""
+          ]
+        },
+        "65-65:BACKGROUND_BLACK": {
+          "start": 65,
+          "end": 65,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_BLACK = 0;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __BACKGROUND_BLACK: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.729884624481201,
+          "generation_timestamp": "2025-11-04T17:42:08.400332",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __BACKGROUND_BLACK: int = ",
+            ""
+          ]
+        },
+        "66-66:BACKGROUND_YELLOW": {
+          "start": 66,
+          "end": 66,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_YELLOW = (short) (BACKGROUND_RED | BACKGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_YELLOW: int = Kernel32.BACKGROUND_GREEN | Kernel32.BACKGROUND_RED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.091433763504028,
+          "generation_timestamp": "2025-11-04T17:41:55.475230",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __BACKGROUND_YELLOW: int = ",
+            ""
+          ]
+        },
+        "67-67:BACKGROUND_MAGENTA": {
+          "start": 67,
+          "end": 67,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_MAGENTA = (short) (BACKGROUND_BLUE | BACKGROUND_RED);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_MAGENTA: int = Kernel32.BACKGROUND_BLUE | Kernel32.BACKGROUND_RED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.103729486465454,
+          "generation_timestamp": "2025-11-04T17:41:42.169094",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __BACKGROUND_MAGENTA: int = ",
+            ""
+          ]
+        },
+        "68-68:BACKGROUND_CYAN": {
+          "start": 68,
+          "end": 68,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_CYAN = (short) (BACKGROUND_BLUE | BACKGROUND_GREEN);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_CYAN: int = Kernel32.BACKGROUND_BLUE | Kernel32.BACKGROUND_GREEN"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.202651500701904,
+          "generation_timestamp": "2025-11-04T17:41:28.855941",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __BACKGROUND_CYAN: int = ",
+            ""
+          ]
+        },
+        "69-69:BACKGROUND_WHITE": {
+          "start": 69,
+          "end": 69,
+          "enum_constant": false,
+          "body": [
+            "private static final short BACKGROUND_WHITE = (short) (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __BACKGROUND_WHITE: int = (Kernel32.BACKGROUND_RED | Kernel32.BACKGROUND_GREEN | Kernel32.BACKGROUND_BLUE)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.414247035980225,
+          "generation_timestamp": "2025-11-04T17:41:15.446050",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __BACKGROUND_WHITE: int = ",
+            ""
+          ]
+        },
+        "71-80:ANSI_FOREGROUND_COLOR_MAP": {
+          "start": 71,
+          "end": 80,
+          "enum_constant": false,
+          "body": [
+            "private static final short[] ANSI_FOREGROUND_COLOR_MAP = {",
+            "        FOREGROUND_BLACK,",
+            "        FOREGROUND_RED,",
+            "        FOREGROUND_GREEN,",
+            "        FOREGROUND_YELLOW,",
+            "        FOREGROUND_BLUE,",
+            "        FOREGROUND_MAGENTA,",
+            "        FOREGROUND_CYAN,",
+            "        FOREGROUND_WHITE,",
+            "    };"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `short[]` array is a list of integers. The `short` type in Java is a 16-bit signed integer, which corresponds to the `int` type in Python. Therefore, the equivalent type in Python for `short[]` is `list[int]`.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __ANSI_FOREGROUND_COLOR_MAP: list[int] = [",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_BLACK,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_RED,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_GREEN,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_YELLOW,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_BLUE,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_MAGENTA,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_CYAN,",
+            "        WindowsAnsiProcessor._WindowsAnsiProcessor__FOREGROUND_WHITE,",
+            "    ]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "failed",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 64.20020532608032,
+          "generation_timestamp": "2025-11-04T17:41:01.843747",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __ANSI_FOREGROUND_COLOR_MAP: list[int] = ",
+            ""
+          ]
+        },
+        "82-91:ANSI_BACKGROUND_COLOR_MAP": {
+          "start": 82,
+          "end": 91,
+          "enum_constant": false,
+          "body": [
+            "private static final short[] ANSI_BACKGROUND_COLOR_MAP = {",
+            "        BACKGROUND_BLACK,",
+            "        BACKGROUND_RED,",
+            "        BACKGROUND_GREEN,",
+            "        BACKGROUND_YELLOW,",
+            "        BACKGROUND_BLUE,",
+            "        BACKGROUND_MAGENTA,",
+            "        BACKGROUND_CYAN,",
+            "        BACKGROUND_WHITE,",
+            "    };"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "short[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent type for a Java `short[]` array is a list of integers. The `short` type in Java is a 16-bit signed integer, which corresponds to the `int` type in Python. Therefore, the equivalent type in Python for `short[]` is `list[int]`.",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "    __ANSI_BACKGROUND_COLOR_MAP: list[int] = [",
+            "        0,",
+            "        Kernel32.BACKGROUND_RED,",
+            "        Kernel32.BACKGROUND_GREEN,",
+            "        Kernel32.BACKGROUND_RED | Kernel32.BACKGROUND_GREEN,",
+            "        Kernel32.BACKGROUND_BLUE,",
+            "        Kernel32.BACKGROUND_BLUE | Kernel32.BACKGROUND_RED,",
+            "        Kernel32.BACKGROUND_BLUE | Kernel32.BACKGROUND_GREEN,",
+            "        Kernel32.BACKGROUND_RED | Kernel32.BACKGROUND_GREEN | Kernel32.BACKGROUND_BLUE,",
+            "    ]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 32.051666021347046,
+          "generation_timestamp": "2025-11-04T17:39:57.449715",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __ANSI_BACKGROUND_COLOR_MAP: list[int] = ",
+            ""
+          ]
+        },
+        "93-93:info": {
+          "start": 93,
+          "end": 93,
+          "enum_constant": false,
+          "body": [
+            "private final CONSOLE_SCREEN_BUFFER_INFO info = new CONSOLE_SCREEN_BUFFER_INFO();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "CONSOLE_SCREEN_BUFFER_INFO"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "CONSOLE_SCREEN_BUFFER_INFO": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.fusesource.jansi.internal.Kernel32 import CONSOLE_SCREEN_BUFFER_INFO",
+            "    __info: \"CONSOLE_SCREEN_BUFFER_INFO\" = CONSOLE_SCREEN_BUFFER_INFO()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 13.120123624801636,
+          "generation_timestamp": "2025-11-04T17:39:25.186037",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __info: \"CONSOLE_SCREEN_BUFFER_INFO\" = ",
+            ""
+          ]
+        },
+        "94-94:originalColors": {
+          "start": 94,
+          "end": 94,
+          "enum_constant": false,
+          "body": [
+            "private final short originalColors;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __originalColors: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __originalColors: int = 0"
+          ]
+        },
+        "96-96:negative": {
+          "start": 96,
+          "end": 96,
+          "enum_constant": false,
+          "body": [
+            "private boolean negative;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __negative: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __negative: bool = False"
+          ]
+        },
+        "97-97:savedX": {
+          "start": 97,
+          "end": 97,
+          "enum_constant": false,
+          "body": [
+            "private short savedX = -1;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __savedX: int = -1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.436744689941406,
+          "generation_timestamp": "2025-11-04T17:39:11.867034",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __savedX: int = ",
+            ""
+          ]
+        },
+        "98-98:savedY": {
+          "start": 98,
+          "end": 98,
+          "enum_constant": false,
+          "body": [
+            "private short savedY = -1;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "short"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __savedY: int = -1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.85045838356018,
+          "generation_timestamp": "2025-11-04T17:38:59.250350",
+          "model_name": "devstral-24b",
+          "partial_translation": [
+            "    __savedY: int = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class WindowsAnsiProcessor(AnsiProcessor):\n\n"
+    }
+  },
+  "import_map": {
+    "Kernel32": "org.fusesource.jansi.internal.Kernel32",
+    "CONSOLE_SCREEN_BUFFER_INFO": "org.fusesource.jansi.internal.Kernel32.CONSOLE_SCREEN_BUFFER_INFO",
+    "COORD": "org.fusesource.jansi.internal.Kernel32.COORD",
+    "IOException": "java.io.IOException",
+    "OutputStream": "java.io.OutputStream",
+    "BACKGROUND_BLUE": "static org.fusesource.jansi.internal.Kernel32.BACKGROUND_BLUE",
+    "BACKGROUND_GREEN": "static org.fusesource.jansi.internal.Kernel32.BACKGROUND_GREEN",
+    "BACKGROUND_INTENSITY": "static org.fusesource.jansi.internal.Kernel32.BACKGROUND_INTENSITY",
+    "BACKGROUND_RED": "static org.fusesource.jansi.internal.Kernel32.BACKGROUND_RED",
+    "CHAR_INFO": "static org.fusesource.jansi.internal.Kernel32.CHAR_INFO",
+    "FOREGROUND_BLUE": "static org.fusesource.jansi.internal.Kernel32.FOREGROUND_BLUE",
+    "FOREGROUND_GREEN": "static org.fusesource.jansi.internal.Kernel32.FOREGROUND_GREEN",
+    "FOREGROUND_INTENSITY": "static org.fusesource.jansi.internal.Kernel32.FOREGROUND_INTENSITY",
+    "FOREGROUND_RED": "static org.fusesource.jansi.internal.Kernel32.FOREGROUND_RED",
+    "FillConsoleOutputAttribute": "static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputAttribute",
+    "FillConsoleOutputCharacterW": "static org.fusesource.jansi.internal.Kernel32.FillConsoleOutputCharacterW",
+    "GetConsoleScreenBufferInfo": "static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo",
+    "GetStdHandle": "static org.fusesource.jansi.internal.Kernel32.GetStdHandle",
+    "SMALL_RECT": "static org.fusesource.jansi.internal.Kernel32.SMALL_RECT",
+    "STD_ERROR_HANDLE": "static org.fusesource.jansi.internal.Kernel32.STD_ERROR_HANDLE",
+    "STD_OUTPUT_HANDLE": "static org.fusesource.jansi.internal.Kernel32.STD_OUTPUT_HANDLE",
+    "ScrollConsoleScreenBuffer": "static org.fusesource.jansi.internal.Kernel32.ScrollConsoleScreenBuffer",
+    "SetConsoleCursorPosition": "static org.fusesource.jansi.internal.Kernel32.SetConsoleCursorPosition",
+    "SetConsoleTextAttribute": "static org.fusesource.jansi.internal.Kernel32.SetConsoleTextAttribute",
+    "SetConsoleTitle": "static org.fusesource.jansi.internal.Kernel32.SetConsoleTitle"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from src.main.org.fusesource.jansi.io.AnsiProcessor import AnsiProcessor",
+    "import builtins"
+  ]
+}

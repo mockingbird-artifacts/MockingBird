@@ -1,0 +1,1058 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-fileupload/src/main/java/org/apache/commons/fileupload/util/mime/Base64Decoder.java",
+  "imports": {
+    "19-19:import java.io.IOException;": {
+      "start": 19,
+      "end": 19,
+      "body": "import java.io.IOException;"
+    },
+    "20-20:import java.io.OutputStream;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.io.OutputStream;"
+    }
+  },
+  "classes": {
+    "25-182:Base64Decoder": {
+      "start": 25,
+      "end": 182,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "127-127:Base64Decoder": {
+          "start": 127,
+          "end": 127,
+          "body": [
+            "private Base64Decoder() {}"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "Base64Decoder()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.17914676666259766,
+          "generation_timestamp": "2026-02-22T02:29:43.470612",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "138-181:decode": {
+          "start": 138,
+          "end": 181,
+          "body": [
+            "public static int decode(byte[] data, OutputStream out) throws IOException {",
+            "        int outLen = 0;",
+            "        byte[] cache = new byte[INPUT_BYTES_PER_CHUNK];",
+            "        int cachedBytes = 0;",
+            "",
+            "        for (byte b : data) {",
+            "            final byte d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b];",
+            "            if (d == INVALID_BYTE) {",
+            "                continue; // Ignore invalid bytes",
+            "            }",
+            "            cache[cachedBytes++] = d;",
+            "            if (cachedBytes == INPUT_BYTES_PER_CHUNK) {",
+            "                final byte b1 = cache[0];",
+            "                final byte b2 = cache[1];",
+            "                final byte b3 = cache[2];",
+            "                final byte b4 = cache[3];",
+            "                if (b1 == PAD_BYTE || b2 == PAD_BYTE) {",
+            "                    throw new IOException(",
+            "                            \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"",
+            "                                + \" padding\");",
+            "                }",
+            "                out.write((b1 << 2) | (b2 >> 4)); // 6 bits of b1 plus 2 bits of b2",
+            "                outLen++;",
+            "                if (b3 != PAD_BYTE) {",
+            "                    out.write((b2 << 4) | (b3 >> 2)); // 4 bits of b2 plus 4 bits of b3",
+            "                    outLen++;",
+            "                    if (b4 != PAD_BYTE) {",
+            "                        out.write((b3 << 6) | b4); // 2 bits of b3 plus 6 bits of b4",
+            "                        outLen++;",
+            "                    }",
+            "                } else if (b4 != PAD_BYTE) { // if byte 3 is pad, byte 4 must be pad too",
+            "                    throw new // line wrap to avoid 120 char limit",
+            "                    IOException(",
+            "                            \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"",
+            "                                + \" 3rd byte is\");",
+            "                }",
+            "                cachedBytes = 0;",
+            "            }",
+            "        }",
+            "        if (cachedBytes != 0) {",
+            "            throw new IOException(\"Invalid Base64 input: truncated\");",
+            "        }",
+            "        return outLen;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int",
+            "byte[]",
+            "byte",
+            "IOException"
+          ],
+          "signature": "decode( byte[] data,  OutputStream out)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "byte[]",
+              "name": "data"
+            },
+            {
+              "modifier": "",
+              "type": "OutputStream",
+              "name": "out"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.IOException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.OutputStream",
+              "write(int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 01:47:22",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 01:47:58",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "byte[]": {
+                "identifier": "byte[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 01:48:14",
+                "source_type": "byte[]",
+                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to a syntax issue. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\nimport io\n```\n\nPYTHON TRANSLATION:\n```python\ndef decode(data: bytes, out: io.BytesIO) -> int:\n    outLen = 0\n    cache = [0] * INPUT_BYTES_PER_CHUNK\n    cachedBytes = 0\n\n    for b in data:\n        d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b]\n        if d == INVALID_BYTE:\n            continue  # Ignore invalid bytes\n        cache[cachedBytes] = d\n        cachedBytes += 1\n        if cachedBytes == INPUT_BYTES_PER_CHUNK:\n            b1, b2, b3, b4 = cache\n            if b1 == PAD_BYTE or b2 == PAD_BYTE:\n                raise IOError(\n                    \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                    + \" padding\")\n            out.write((b1 << 2) | (b2 >> 4))  # 6 bits of b1 plus 2 bits of b2\n            outLen += 1\n            if b3 != PAD_BYTE:\n                out.write((b2 << 4) | (b3 >> 2))  # 4 bits of b2 plus 4 bits of b3\n                outLen += 1\n                if b4 != PAD_BYTE:\n                    out.write((b3 << 6) | b4)  # 2 bits of b3 plus 6 bits of b4\n                    outLen += 1\n            elif b4 != PAD_BYTE:  # if byte 3 is pad, byte 4 must be pad too\n                raise IOError(\n                    \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                    + \" 3rd byte is\")\n            cachedBytes = 0\n    if cachedBytes != 0:\n        raise IOError(\"Invalid Base64 input: truncated\")\n    return outLen\n```\n\nREASONING:\nThe Java method `decode` takes a byte array and an output stream as parameters. The method reads the bytes from the array, decodes them using a lookup table (DECODING_TABLE), and writes the decoded data to the output stream. It also checks for invalid padding in the input and throws exceptions if necessary.\n\nIn Python, we can use `bytes` as an equivalent type for Java's byte array. We can use `io.BytesIO` as a direct replacement for Java's OutputStream. The rest of the code is straightforward translation from Java to Python.\n",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "In Python, the equivalent type for a byte array in Java is `List[int]`. This is because Python does not have a specific byte data type like Java. Instead, it uses integers to represent bytes. Therefore, we can use a list of integers to represent a byte array in Python. The `List[int]` type hint indicates that the variable should be a list containing integer values.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nbyte[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public static int decode(byte[] data, OutputStream out) throws IOException {\n        int outLen = 0;\n        byte[] cache = new byte[INPUT_BYTES_PER_CHUNK];\n        int cachedBytes = 0;\n\n        for (byte b : data) {\n            final byte d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b];\n            if (d == INVALID_BYTE) {\n                continue; // Ignore invalid bytes\n            }\n            cache[cachedBytes++] = d;\n            if (cachedBytes == INPUT_BYTES_PER_CHUNK) {\n                final byte b1 = cache[0];\n                final byte b2 = cache[1];\n                final byte b3 = cache[2];\n                final byte b4 = cache[3];\n                if (b1 == PAD_BYTE || b2 == PAD_BYTE) {\n                    throw new IOException(\n                            \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                                + \" padding\");\n                }\n                out.write((b1 << 2) | (b2 >> 4)); // 6 bits of b1 plus 2 bits of b2\n                outLen++;\n                if (b3 != PAD_BYTE) {\n                    out.write((b2 << 4) | (b3 >> 2)); // 4 bits of b2 plus 4 bits of b3\n                    outLen++;\n                    if (b4 != PAD_BYTE) {\n                        out.write((b3 << 6) | b4); // 2 bits of b3 plus 6 bits of b4\n                        outLen++;\n                    }\n                } else if (b4 != PAD_BYTE) { // if byte 3 is pad, byte 4 must be pad too\n                    throw new // line wrap to avoid 120 char limit\n                    IOException(\n                            \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                                + \" 3rd byte is\");\n                }\n                cachedBytes = 0;\n            }\n        }\n        if (cachedBytes != 0) {\n            throw new IOException(\"Invalid Base64 input: truncated\");\n        }\n        return outLen;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "byte": {
+                "identifier": "byte",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 01:48:33",
+                "source_type": "byte",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 01:48:47",
+                "source_type": "IOException",
+                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to a syntax issue. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom io import BytesIO\nimport base64\n```\n\nPYTHON TRANSLATION:\n```python\ndef decode(data, out):\n    outLen = 0\n    cache = bytearray()\n    cachedBytes = 0\n\n    for b in data:\n        d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b]\n        if d == INVALID_BYTE:\n            continue  # Ignore invalid bytes\n        cache.append(d)\n        cachedBytes += 1\n        if cachedBytes == INPUT_BYTES_PER_CHUNK:\n            b1, b2, b3, b4 = cache\n            if b1 == PAD_BYTE or b2 == PAD_BYTE:\n                raise IOError(\n                    \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                    + \" padding\")\n            out.write((b1 << 2) | (b2 >> 4))  # 6 bits of b1 plus 2 bits of b2\n            outLen += 1\n            if b3 != PAD_BYTE:\n                out.write((b2 << 4) | (b3 >> 2))  # 4 bits of b2 plus 4 bits of b3\n                outLen += 1\n                if b4 != PAD_BYTE:\n                    out.write((b3 << 6) | b4)  # 2 bits of b3 plus 6 bits of b4\n                    outLen += 1\n                elif b4 != PAD_BYTE:  # if byte 3 is pad, byte 4 must be pad too\n                    raise IOError(\n                        \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                        + \" 3rd byte is\")\n            cache.clear()\n            cachedBytes = 0\n    if cachedBytes != 0:\n        raise IOError(\"Invalid Base64 input: truncated\")\n    return outLen\n```\n\nREASONING:\nThe equivalent type in Python for the Java IOException class is the built-in IOError exception. This is used to signal an I/O related error, such as \"file not found\" or \"disk full\". In this case, it's being used to signal that there was a problem with Base64 decoding due to invalid input.\n",
+                "imports": null,
+                "translated_target_type": "IOError",
+                "reasoning": "In Python, `IOError` is equivalent to Java's `IOException` as they both represent input/output related errors. However, please note that in your provided code snippet, there seems to be a typo or custom exception being used instead of `UnsupportedEncodingException` which might need further investigation and adjustment based on the actual implementation details.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nIOException\n```\n\nJAVA TYPE DESCRIPTION:\nSignals that an I/O exception of some sort has occurred. This\n class is the general class of exceptions produced by failed or\n interrupted I/O operations.\n\nJAVA CODE:\n```\n    public static int decode(byte[] data, OutputStream out) throws IOException {\n        int outLen = 0;\n        byte[] cache = new byte[INPUT_BYTES_PER_CHUNK];\n        int cachedBytes = 0;\n\n        for (byte b : data) {\n            final byte d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b];\n            if (d == INVALID_BYTE) {\n                continue; // Ignore invalid bytes\n            }\n            cache[cachedBytes++] = d;\n            if (cachedBytes == INPUT_BYTES_PER_CHUNK) {\n                final byte b1 = cache[0];\n                final byte b2 = cache[1];\n                final byte b3 = cache[2];\n                final byte b4 = cache[3];\n                if (b1 == PAD_BYTE || b2 == PAD_BYTE) {\n                    throw new IOException(\n                            \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                                + \" padding\");\n                }\n                out.write((b1 << 2) | (b2 >> 4)); // 6 bits of b1 plus 2 bits of b2\n                outLen++;\n                if (b3 != PAD_BYTE) {\n                    out.write((b2 << 4) | (b3 >> 2)); // 4 bits of b2 plus 4 bits of b3\n                    outLen++;\n                    if (b4 != PAD_BYTE) {\n                        out.write((b3 << 6) | b4); // 2 bits of b3 plus 6 bits of b4\n                        outLen++;\n                    }\n                } else if (b4 != PAD_BYTE) { // if byte 3 is pad, byte 4 must be pad too\n                    throw new // line wrap to avoid 120 char limit\n                    IOException(\n                            \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                                + \" 3rd byte is\");\n                }\n                cachedBytes = 0;\n            }\n        }\n        if (cachedBytes != 0) {\n            throw new IOException(\"Invalid Base64 input: truncated\");\n        }\n        return outLen;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "|byte[]|data": {
+                "identifier": "|byte[]|data",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 01:47:37",
+                "source_type": "byte[]",
+                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to a syntax issue. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\nimport io\n```\n\nPYTHON TRANSLATION:\n```python\ndef decode(data: List[int], out: io.BytesIO) -> int:\n    outLen = 0\n    cache = [0] * INPUT_BYTES_PER_CHUNK\n    cachedBytes = 0\n\n    for b in data:\n        d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b]\n        if d == INVALID_BYTE:\n            continue  # Ignore invalid bytes\n        cache[cachedBytes] = d\n        cachedBytes += 1\n        if cachedBytes == INPUT_BYTES_PER_CHUNK:\n            b1, b2, b3, b4 = cache\n            if b1 == PAD_BYTE or b2 == PAD_BYTE:\n                raise IOError(\n                    \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                    + \" padding\")\n            out.write((b1 << 2) | (b2 >> 4))  # 6 bits of b1 plus 2 bits of b2\n            outLen += 1\n            if b3 != PAD_BYTE:\n                out.write((b2 << 4) | (b3 >> 2))  # 4 bits of b2 plus 4 bits of b3\n                outLen += 1\n                if b4 != PAD_BYTE:\n                    out.write((b3 << 6) | b4)  # 2 bits of b3 plus 6 bits of b4\n                    outLen += 1\n            elif b4 != PAD_BYTE:  # if byte 3 is pad, byte 4 must be pad too\n                raise IOError(\n                    \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                    + \" 3rd byte is\")\n            cachedBytes = 0\n    if cachedBytes != 0:\n        raise IOError(\"Invalid Base64 input: truncated\")\n    return outLen\n```\n\nREASONING:\nThe Java code is translated to Python by replacing the Java types with their equivalent Python types. The `byte[]` in Java becomes a list of integers (`List[int]`) in Python, and `OutputStream` becomes an instance of `io.BytesIO`. Other minor changes include changing the exception type from `IOException` to `IOError` for simplicity.\n",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "In Python, the equivalent type for a byte array in Java is `List[int]`. This is because Python does not have a specific byte data type like Java. Instead, it uses integers to represent bytes. Therefore, we can use a list of integers to represent a byte array in Python. The `List[int]` type hint indicates that the variable should be a list containing integer values.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nbyte[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public static int decode(byte[] data, OutputStream out) throws IOException {\n        int outLen = 0;\n        byte[] cache = new byte[INPUT_BYTES_PER_CHUNK];\n        int cachedBytes = 0;\n\n        for (byte b : data) {\n            final byte d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b];\n            if (d == INVALID_BYTE) {\n                continue; // Ignore invalid bytes\n            }\n            cache[cachedBytes++] = d;\n            if (cachedBytes == INPUT_BYTES_PER_CHUNK) {\n                final byte b1 = cache[0];\n                final byte b2 = cache[1];\n                final byte b3 = cache[2];\n                final byte b4 = cache[3];\n                if (b1 == PAD_BYTE || b2 == PAD_BYTE) {\n                    throw new IOException(\n                            \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                                + \" padding\");\n                }\n                out.write((b1 << 2) | (b2 >> 4)); // 6 bits of b1 plus 2 bits of b2\n                outLen++;\n                if (b3 != PAD_BYTE) {\n                    out.write((b2 << 4) | (b3 >> 2)); // 4 bits of b2 plus 4 bits of b3\n                    outLen++;\n                    if (b4 != PAD_BYTE) {\n                        out.write((b3 << 6) | b4); // 2 bits of b3 plus 6 bits of b4\n                        outLen++;\n                    }\n                } else if (b4 != PAD_BYTE) { // if byte 3 is pad, byte 4 must be pad too\n                    throw new // line wrap to avoid 120 char limit\n                    IOException(\n                            \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                                + \" 3rd byte is\");\n                }\n                cachedBytes = 0;\n            }\n        }\n        if (cachedBytes != 0) {\n            throw new IOException(\"Invalid Base64 input: truncated\");\n        }\n        return outLen;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "|OutputStream|out": {
+                "identifier": "|OutputStream|out",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 01:47:54",
+                "source_type": "OutputStream",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom io import BytesIO\n```\n\nPYTHON TRANSLATION:\n```python\nBytesIO\n```\n\nREASONING: \nIn Python, the equivalent type to Java's `OutputStream` is `io.BytesIO`. This class inherits from `io.BufferedIOBase` and provides a stream interface for bytes-like objects (`bytes`, `bytearray`). It also supports in-memory binary streams. In this case, we can use it to replace the `OutputStream out` parameter in the Java code.\n",
+                "imports": "from io import BytesIO",
+                "translated_target_type": "BytesIO",
+                "reasoning": "In Python, the equivalent type to Java's `OutputStream` is `io.BytesIO`. This class inherits from `io.BufferedIOBase` and provides a stream interface for bytes-like objects (`bytes`, `bytearray`). It also supports in-memory binary streams. In this case, we can use it to replace the `OutputStream out` parameter in the Java code.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nOutputStream\n```\n\nJAVA TYPE DESCRIPTION:\nThis abstract class is the superclass of all classes representing\n an output stream of bytes. An output stream accepts output bytes\n and sends them to some sink.\n \n\nJAVA CODE:\n```\n    public static int decode(byte[] data, OutputStream out) throws IOException {\n        int outLen = 0;\n        byte[] cache = new byte[INPUT_BYTES_PER_CHUNK];\n        int cachedBytes = 0;\n\n        for (byte b : data) {\n            final byte d = DECODING_TABLE[MASK_BYTE_UNSIGNED & b];\n            if (d == INVALID_BYTE) {\n                continue; // Ignore invalid bytes\n            }\n            cache[cachedBytes++] = d;\n            if (cachedBytes == INPUT_BYTES_PER_CHUNK) {\n                final byte b1 = cache[0];\n                final byte b2 = cache[1];\n                final byte b3 = cache[2];\n                final byte b4 = cache[3];\n                if (b1 == PAD_BYTE || b2 == PAD_BYTE) {\n                    throw new IOException(\n                            \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"\n                                + \" padding\");\n                }\n                out.write((b1 << 2) | (b2 >> 4)); // 6 bits of b1 plus 2 bits of b2\n                outLen++;\n                if (b3 != PAD_BYTE) {\n                    out.write((b2 << 4) | (b3 >> 2)); // 4 bits of b2 plus 4 bits of b3\n                    outLen++;\n                    if (b4 != PAD_BYTE) {\n                        out.write((b3 << 6) | b4); // 2 bits of b3 plus 6 bits of b4\n                        outLen++;\n                    }\n                } else if (b4 != PAD_BYTE) { // if byte 3 is pad, byte 4 must be pad too\n                    throw new // line wrap to avoid 120 char limit\n                    IOException(\n                            \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"\n                                + \" 3rd byte is\");\n                }\n                cachedBytes = 0;\n            }\n        }\n        if (cachedBytes != 0) {\n            throw new IOException(\"Invalid Base64 input: truncated\");\n        }\n        return outLen;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def decode(data: List[int], out: BytesIO) -> int:",
+            "        @staticmethod",
+            "        def decode(data: List[int], out: BytesIO) -> int:",
+            "            outLen = 0",
+            "            cache = [0]*4",
+            "            cachedBytes = 0",
+            "            for b in data:",
+            "                d = Base64Decoder.__DECODING_TABLE[Base64Decoder.__MASK_BYTE_UNSIGNED & b]",
+            "                if d == Base64Decoder.__INVALID_BYTE:",
+            "                    continue   # Ignore invalid bytes",
+            "                cache[cachedBytes] = d",
+            "                cachedBytes += 1",
+            "                if cachedBytes == 4:",
+            "                    b1, b2, b3, b4 = [bytes([i]) for i in cache]  # convert each integer to a byte",
+            "                    if b1 == Base64Decoder.__PAD_BYTE or b2 == Base64Decoder.__PAD_BYTE:",
+            "                        raise IOError(",
+            "                            \"Invalid Base64 input: incorrect padding, first two bytes cannot be\"",
+            "                            + \" padding\")",
+            "                    out.write((b1 << 2) | (b2 >> 4))  # 6 bits of b1 plus 2 bits of b2",
+            "                    outLen += 1",
+            "                    if b3 != Base64Decoder.__PAD_BYTE:",
+            "                        out.write((b2 << 4) | (b3 >> 2))  # 4 bits of b2 plus 4 bits of b3",
+            "                        outLen += 1",
+            "                        if b4 != Base64Decoder.__PAD_BYTE:",
+            "                            out.write((b3 << 6) | b4)  # 2 bits of b3 plus 6 bits of b4",
+            "                            outLen += 1",
+            "                    elif b4 != Base64Decoder.__PAD_BYTE:  # if byte 3 is pad, byte 4 must be pad too",
+            "                        raise IOError(",
+            "                            \"Invalid Base64 input: incorrect padding, 4th byte must be padding if\"",
+            "                            + \" 3rd byte is\")",
+            "                    cachedBytes = 0",
+            "            if cachedBytes != 0:",
+            "                raise IOError(\"Invalid Base64 input: truncated\")",
+            "            return outLen"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/fileupload/util/mime/MimeUtilityTestCase_decodeUtf8Base64Encoded_decomposed_mocker_2_Base64Decoder_decode.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtilityTestCase_decodeUtf8Base64Encoded_decomposed_mocker_2_Base64Decoder_decode.py\", line 41, in test_mocking\n    self.assertTrue(recursive_equal(method_ret, convert_to_python(json.loads(\"{\\\"memory_address\\\":682168620,\\\"type\\\":\\\"java.lang.Integer\\\",\\\"value\\\":\\\"17\\\"}\"), force_new_object=True)))\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 715, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testtruncatedString": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 35, in testtruncatedString\n    with pytest.raises(IOError):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/raises.py\", line 710, in __exit__\n    fail(f\"DID NOT RAISE {self.expected_exceptions[0]!r}\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: DID NOT RAISE <class 'OSError'>",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "77-81:truncatedString"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testrfc4648Section10Decode": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 18, in testrfc4648Section10Decode\n    self.__assertEncoded(\"\", \"\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 91, in __assertEncoded\n    self.assertEqual(actual, expected)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "51-60:rfc4648Section10Decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "129-138:assertEncoded"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testdecodeWithInnerPad": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 27, in testdecodeWithInnerPad\n    self.__assertEncoded(\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 91, in __assertEncoded\n    self.assertEqual(actual, expected)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "66-69:decodeWithInnerPad"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "129-138:assertEncoded"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testnonBase64Bytes": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 32, in testnonBase64Bytes\n    self.__assertEncoded(\"Hello World\", \"S?G1%sbG 8g\\rV\\t\\n29ybGQ*=\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 91, in __assertEncoded\n    self.assertEqual(actual, expected)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "72-75:nonBase64Bytes"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "129-138:assertEncoded"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testdecodeTrailingJunk": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 44, in testdecodeTrailingJunk\n    self.__assertEncoded(\"foobar\", \"Zm9vYmFy!!!\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 91, in __assertEncoded\n    self.assertEqual(actual, expected)\n    ^^^^\nNameError: name 'self' is not defined",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "83-86:decodeTrailingJunk"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "129-138:assertEncoded"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testdecodeTrailing1": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 47, in testdecodeTrailing1\n    self.__assertIOException(\"truncated\", \"Zm9vYmFy1\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "88-91:decodeTrailing1"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testdecodeTrailing2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 50, in testdecodeTrailing2\n    self.__assertIOException(\"truncated\", \"Zm9vYmFy12\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "93-96:decodeTrailing2"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testdecodeTrailing3": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 53, in testdecodeTrailing3\n    self.__assertIOException(\"truncated\", \"Zm9vYmFy123\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "98-101:decodeTrailing3"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testbadPadding": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 56, in testbadPadding\n    self.__assertIOException(\"incorrect padding, 4th byte\", \"Zg=a\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "103-106:badPadding"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testbadPaddingLeading1": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 59, in testbadPaddingLeading1\n    self.__assertIOException(\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "108-111:badPaddingLeading1"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testbadPaddingLeading2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 64, in testbadPaddingLeading2\n    self.__assertIOException(\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "113-116:badPaddingLeading2"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py::Base64DecoderTestCase::testbadLength": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 69, in testbadLength\n    self.__assertIOException(\"truncated\", \"Zm8==\")\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/Base64DecoderTestCase.py\", line 100, in __assertIOException\n    pytest.fail(\"Expected IOException\")\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/site-packages/_pytest/outcomes.py\", line 163, in __call__\n    raise Failed(msg=reason, pytrace=pytrace)\nFailed: Expected IOException",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+                  "class_name": "25-182:Base64Decoder",
+                  "fragment_name": "138-181:decode"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "118-121:badLength"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.Base64DecoderTestCase",
+                  "class_name": "32-154:Base64DecoderTestCase",
+                  "fragment_name": "140-153:assertIOException"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 126.24274778366089,
+          "generation_timestamp": "2026-02-22T02:31:49.848583",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def decode(data: List[int], out: BytesIO) -> int:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "28-28:INVALID_BYTE": {
+          "start": 28,
+          "end": 28,
+          "enum_constant": false,
+          "body": [
+            "private static final int INVALID_BYTE = -1;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __INVALID_BYTE: int = -1"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 8.931789636611938,
+          "generation_timestamp": "2026-02-22T02:22:35.150481",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __INVALID_BYTE: int = ",
+            ""
+          ]
+        },
+        "31-31:PAD_BYTE": {
+          "start": 31,
+          "end": 31,
+          "enum_constant": false,
+          "body": [
+            "private static final int PAD_BYTE = -2;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __PAD_BYTE: int = -2"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 10.062382698059082,
+          "generation_timestamp": "2026-02-22T02:22:26.113777",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __PAD_BYTE: int = ",
+            ""
+          ]
+        },
+        "34-34:MASK_BYTE_UNSIGNED": {
+          "start": 34,
+          "end": 34,
+          "enum_constant": false,
+          "body": [
+            "private static final int MASK_BYTE_UNSIGNED = 0xFF;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __MASK_BYTE_UNSIGNED: int = 0xFF"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 9.822344064712524,
+          "generation_timestamp": "2026-02-22T02:22:15.927645",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __MASK_BYTE_UNSIGNED: int = ",
+            ""
+          ]
+        },
+        "37-37:INPUT_BYTES_PER_CHUNK": {
+          "start": 37,
+          "end": 37,
+          "enum_constant": false,
+          "body": [
+            "private static final int INPUT_BYTES_PER_CHUNK = 4;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __INPUT_BYTES_PER_CHUNK: int = 4"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 12.233044862747192,
+          "generation_timestamp": "2026-02-22T02:22:05.965392",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __INPUT_BYTES_PER_CHUNK: int = ",
+            ""
+          ]
+        },
+        "40-105:ENCODING_TABLE": {
+          "start": 40,
+          "end": 105,
+          "enum_constant": false,
+          "body": [
+            "private static final byte[] ENCODING_TABLE = {",
+            "        (byte) 'A',",
+            "        (byte) 'B',",
+            "        (byte) 'C',",
+            "        (byte) 'D',",
+            "        (byte) 'E',",
+            "        (byte) 'F',",
+            "        (byte) 'G',",
+            "        (byte) 'H',",
+            "        (byte) 'I',",
+            "        (byte) 'J',",
+            "        (byte) 'K',",
+            "        (byte) 'L',",
+            "        (byte) 'M',",
+            "        (byte) 'N',",
+            "        (byte) 'O',",
+            "        (byte) 'P',",
+            "        (byte) 'Q',",
+            "        (byte) 'R',",
+            "        (byte) 'S',",
+            "        (byte) 'T',",
+            "        (byte) 'U',",
+            "        (byte) 'V',",
+            "        (byte) 'W',",
+            "        (byte) 'X',",
+            "        (byte) 'Y',",
+            "        (byte) 'Z',",
+            "        (byte) 'a',",
+            "        (byte) 'b',",
+            "        (byte) 'c',",
+            "        (byte) 'd',",
+            "        (byte) 'e',",
+            "        (byte) 'f',",
+            "        (byte) 'g',",
+            "        (byte) 'h',",
+            "        (byte) 'i',",
+            "        (byte) 'j',",
+            "        (byte) 'k',",
+            "        (byte) 'l',",
+            "        (byte) 'm',",
+            "        (byte) 'n',",
+            "        (byte) 'o',",
+            "        (byte) 'p',",
+            "        (byte) 'q',",
+            "        (byte) 'r',",
+            "        (byte) 's',",
+            "        (byte) 't',",
+            "        (byte) 'u',",
+            "        (byte) 'v',",
+            "        (byte) 'w',",
+            "        (byte) 'x',",
+            "        (byte) 'y',",
+            "        (byte) 'z',",
+            "        (byte) '0',",
+            "        (byte) '1',",
+            "        (byte) '2',",
+            "        (byte) '3',",
+            "        (byte) '4',",
+            "        (byte) '5',",
+            "        (byte) '6',",
+            "        (byte) '7',",
+            "        (byte) '8',",
+            "        (byte) '9',",
+            "        (byte) '+',",
+            "        (byte) '/'",
+            "    };"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "byte[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "byte[]": {
+                "identifier": "byte[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:14",
+                "source_type": "byte[]",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List\n```\n\nPYTHON TRANSLATION:\n```python\nList[int]\n```\n\nREASONING: \nIn Python, the equivalent type for a byte array in Java is `List[int]`. This is because Python does not have a specific byte data type like Java. Instead, it uses integers to represent bytes. The list comprehension in the provided code creates a list of ASCII values corresponding to each character in the alphabet (both uppercase and lowercase), digits from 0-9, '+', '/'. This is equivalent to a byte array in Java where each element represents an ASCII value.\n",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "In Python, the equivalent type for a byte array in Java is `List[int]`. This is because Python does not have a specific byte data type like Java. Instead, it uses integers to represent bytes. The list comprehension in the provided code creates a list of ASCII values corresponding to each character in the alphabet (both uppercase and lowercase), digits from 0-9, '+', '/'. This is equivalent to a byte array in Java where each element represents an ASCII value.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nbyte[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static final byte[] ENCODING_TABLE = {\n        (byte) 'A',\n        (byte) 'B',\n        (byte) 'C',\n        (byte) 'D',\n        (byte) 'E',\n        (byte) 'F',\n        (byte) 'G',\n        (byte) 'H',\n        (byte) 'I',\n        (byte) 'J',\n        (byte) 'K',\n        (byte) 'L',\n        (byte) 'M',\n        (byte) 'N',\n        (byte) 'O',\n        (byte) 'P',\n        (byte) 'Q',\n        (byte) 'R',\n        (byte) 'S',\n        (byte) 'T',\n        (byte) 'U',\n        (byte) 'V',\n        (byte) 'W',\n        (byte) 'X',\n        (byte) 'Y',\n        (byte) 'Z',\n        (byte) 'a',\n        (byte) 'b',\n        (byte) 'c',\n        (byte) 'd',\n        (byte) 'e',\n        (byte) 'f',\n        (byte) 'g',\n        (byte) 'h',\n        (byte) 'i',\n        (byte) 'j',\n        (byte) 'k',\n        (byte) 'l',\n        (byte) 'm',\n        (byte) 'n',\n        (byte) 'o',\n        (byte) 'p',\n        (byte) 'q',\n        (byte) 'r',\n        (byte) 's',\n        (byte) 't',\n        (byte) 'u',\n        (byte) 'v',\n        (byte) 'w',\n        (byte) 'x',\n        (byte) 'y',\n        (byte) 'z',\n        (byte) '0',\n        (byte) '1',\n        (byte) '2',\n        (byte) '3',\n        (byte) '4',\n        (byte) '5',\n        (byte) '6',\n        (byte) '7',\n        (byte) '8',\n        (byte) '9',\n        (byte) '+',\n        (byte) '/'\n    };\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __ENCODING_TABLE: List[int] = [65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 43, 47]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 28.017856121063232,
+          "generation_timestamp": "2026-02-22T02:21:53.604548",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __ENCODING_TABLE: List[int] = ",
+            ""
+          ]
+        },
+        "108-108:PADDING": {
+          "start": 108,
+          "end": 108,
+          "enum_constant": false,
+          "body": [
+            "private static final byte PADDING = (byte) '=';"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "byte"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "byte": {
+                "identifier": "byte",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:18",
+                "source_type": "byte",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __PADDING: int = ord('=')"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 11.830787897109985,
+          "generation_timestamp": "2026-02-22T02:21:25.447861",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __PADDING: int = ",
+            ""
+          ]
+        },
+        "114-114:DECODING_TABLE": {
+          "start": 114,
+          "end": 114,
+          "enum_constant": false,
+          "body": [
+            "private static final byte[] DECODING_TABLE = new byte[Byte.MAX_VALUE - Byte.MIN_VALUE + 1];"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "byte[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "byte[]": {
+                "identifier": "byte[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 01:47:18",
+                "source_type": "byte[]",
+                "generation": "PYTHON IMPORTS:\n```python\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```python\nnp.ndarray\n```\n\nREASONING: \nIn Python, the equivalent type for a byte array in Java is `numpy`'s ndarray (N-dimensional array). This type can be used to represent arrays of bytes in Python, and it has similar functionality as the byte array in Java. The numpy library provides many functions that are useful for numerical computations on arrays, which makes it a good choice for working with binary data in Python.\n",
+                "imports": "import numpy as np",
+                "translated_target_type": "np.ndarray",
+                "reasoning": "In Python, the equivalent type for a byte array in Java is `numpy`'s ndarray (N-dimensional array). This type can be used to represent arrays of bytes in Python, and it has similar functionality as the byte array in Java. The numpy library provides many functions that are useful for numerical computations on arrays, which makes it a good choice for working with binary data in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nbyte[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private static final byte[] DECODING_TABLE = new byte[Byte.MAX_VALUE - Byte.MIN_VALUE + 1];\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __DECODING_TABLE: np.ndarray = np.zeros(256, dtype=np.byte)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 27.41552710533142,
+          "generation_timestamp": "2026-02-22T02:21:13.514352",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DECODING_TABLE: np.ndarray = ",
+            ""
+          ]
+        }
+      },
+      "static_initializers": {
+        "116-124:run_static_init": {
+          "start": 116,
+          "end": 124,
+          "body": [
+            "static {",
+            "        for (int i = 0; i < DECODING_TABLE.length; i++) {",
+            "            DECODING_TABLE[i] = INVALID_BYTE;",
+            "        }",
+            "        for (int i = 0; i < ENCODING_TABLE.length; i++) {",
+            "            DECODING_TABLE[ENCODING_TABLE[i]] = (byte) i;",
+            "        }",
+            "        DECODING_TABLE[PADDING] = PAD_BYTE;",
+            "    }"
+          ],
+          "type_translations": {},
+          "translation": [
+            "    def run_static_init():",
+            "        Base64Decoder.__INVALID_BYTE = -1",
+            "        Base64Decoder.__PAD_BYTE = -2",
+            "        Base64Decoder.__ENCODING_TABLE = [ord(c) for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/']",
+            "        Base64Decoder.__PADDING = ord('=')",
+            "        Base64Decoder.__DECODING_TABLE = np.full(256, Base64Decoder.__INVALID_BYTE)",
+            "        for i in range(len(Base64Decoder.__ENCODING_TABLE)):",
+            "            Base64Decoder.__DECODING_TABLE[Base64Decoder.__ENCODING_TABLE[i]] = i",
+            "        Base64Decoder.__DECODING_TABLE[Base64Decoder.__PADDING] = Base64Decoder.__PAD_BYTE"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 16.677404165267944,
+          "generation_timestamp": "2026-02-22T02:20:45.999474",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": []
+        }
+      },
+      "python_class_declaration": "class Base64Decoder:\n\n"
+    }
+  },
+  "import_map": {
+    "IOException": "java.io.IOException",
+    "OutputStream": "java.io.OutputStream"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO",
+    "from typing import List",
+    "import numpy as np"
+  ]
+}

@@ -1,0 +1,3551 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/JavaFastPFOR/src/main/java/me/lemire/integercompression/benchmarktools/BenchmarkOffsettedSeries.java",
+  "imports": {
+    "7-7:import java.io.File;": {
+      "start": 7,
+      "end": 7,
+      "body": "import java.io.File;"
+    },
+    "8-8:import java.io.PrintWriter;": {
+      "start": 8,
+      "end": 8,
+      "body": "import java.io.PrintWriter;"
+    },
+    "9-9:import java.util.Arrays;": {
+      "start": 9,
+      "end": 9,
+      "body": "import java.util.Arrays;"
+    },
+    "10-10:import java.util.Random;": {
+      "start": 10,
+      "end": 10,
+      "body": "import java.util.Random;"
+    },
+    "12-12:import me.lemire.integercompression.BinaryPacking;": {
+      "start": 12,
+      "end": 12,
+      "body": "import me.lemire.integercompression.BinaryPacking;"
+    },
+    "13-13:import me.lemire.integercompression.DeltaZigzagBinaryPacking;": {
+      "start": 13,
+      "end": 13,
+      "body": "import me.lemire.integercompression.DeltaZigzagBinaryPacking;"
+    },
+    "14-14:import me.lemire.integercompression.DeltaZigzagVariableByte;": {
+      "start": 14,
+      "end": 14,
+      "body": "import me.lemire.integercompression.DeltaZigzagVariableByte;"
+    },
+    "15-15:import me.lemire.integercompression.FastPFOR;": {
+      "start": 15,
+      "end": 15,
+      "body": "import me.lemire.integercompression.FastPFOR;"
+    },
+    "16-16:import me.lemire.integercompression.FastPFOR128;": {
+      "start": 16,
+      "end": 16,
+      "body": "import me.lemire.integercompression.FastPFOR128;"
+    },
+    "17-17:import me.lemire.integercompression.IntWrapper;": {
+      "start": 17,
+      "end": 17,
+      "body": "import me.lemire.integercompression.IntWrapper;"
+    },
+    "18-18:import me.lemire.integercompression.IntegerCODEC;": {
+      "start": 18,
+      "end": 18,
+      "body": "import me.lemire.integercompression.IntegerCODEC;"
+    },
+    "19-19:import me.lemire.integercompression.JustCopy;": {
+      "start": 19,
+      "end": 19,
+      "body": "import me.lemire.integercompression.JustCopy;"
+    },
+    "20-20:import me.lemire.integercompression.differential.IntegratedBinaryPacking;": {
+      "start": 20,
+      "end": 20,
+      "body": "import me.lemire.integercompression.differential.IntegratedBinaryPacking;"
+    },
+    "21-21:import me.lemire.integercompression.differential.XorBinaryPacking;": {
+      "start": 21,
+      "end": 21,
+      "body": "import me.lemire.integercompression.differential.XorBinaryPacking;"
+    }
+  },
+  "classes": {
+    "27-295:BenchmarkOffsettedSeries": {
+      "start": 27,
+      "end": 295,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "44-85:run": {
+          "start": 44,
+          "end": 85,
+          "body": [
+            "public static void run(final PrintWriter csvWriter, final int count, final int length) {",
+            "                IntegerCODEC[] codecs = { new JustCopy(), new BinaryPacking(),",
+            "                        new DeltaZigzagBinaryPacking(),",
+            "                        new DeltaZigzagVariableByte(),",
+            "                        new IntegratedBinaryPacking(), new XorBinaryPacking(),",
+            "                        FastPFOR128.FastPFOR1281(), FastPFOR.FastPFOR1()};",
+            "",
+            "                csvWriter",
+            "                        .format(\"\\\"Dataset\\\",\\\"CODEC\\\",\\\"Bits per int\\\",\"",
+            "                                + \"\\\"Compress speed (MiS)\\\",\\\"Decompress speed (MiS)\\\"\\n\");",
+            "",
+            "                benchmark0(csvWriter, codecs, count, length, DEFAULT_MEAN,",
+            "                        DEFAULT_RANGE);",
+            "                benchmark0(csvWriter, codecs, count, length, DEFAULT_MEAN >> 5,",
+            "                        DEFAULT_RANGE);",
+            "",
+            "                IntegerCODEC[] codecs2 = { new JustCopy(), new BinaryPacking(),",
+            "                        new DeltaZigzagBinaryPacking(),",
+            "                        new DeltaZigzagVariableByte(),",
+            "                        new IntegratedBinaryPacking(), new XorBinaryPacking(),",
+            "                        FastPFOR128.FastPFOR1281(),FastPFOR.FastPFOR1(), };",
+            "",
+            "                int freq = length / 4;",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 0, DEFAULT_RANGE >> 0, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 5, DEFAULT_RANGE >> 0, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 10, DEFAULT_RANGE >> 0, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 0, DEFAULT_RANGE >> 2, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 5, DEFAULT_RANGE >> 2, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 10, DEFAULT_RANGE >> 2, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 0, DEFAULT_RANGE >> 4, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 5, DEFAULT_RANGE >> 4, freq);",
+            "                benchmarkSine(csvWriter, codecs2, count, length,",
+            "                        DEFAULT_MEAN >> 10, DEFAULT_RANGE >> 4, freq);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IntegerCODEC[]",
+            "JustCopy",
+            "BinaryPacking",
+            "DeltaZigzagBinaryPacking",
+            "DeltaZigzagVariableByte",
+            "IntegratedBinaryPacking",
+            "XorBinaryPacking",
+            "int"
+          ],
+          "signature": "run(final PrintWriter csvWriter, final int count, final int length)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "PrintWriter",
+              "name": "csvWriter"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "count"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR128",
+              "24-336:FastPFOR128",
+              "71-73:FastPFOR1281"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.FastPFOR",
+              "41-355:FastPFOR",
+              "90-92:FastPFOR1"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "format(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "100-119:benchmark0"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "87-98:benchmarkSine"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IntegerCODEC[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerCODEC[] has been translated to \"object\"",
+                "prompt": ""
+              },
+              "JustCopy": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type JustCopy has been translated to \"object\"",
+                "prompt": ""
+              },
+              "BinaryPacking": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type BinaryPacking has been translated to \"object\"",
+                "prompt": ""
+              },
+              "DeltaZigzagBinaryPacking": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DeltaZigzagBinaryPacking has been translated to \"object\"",
+                "prompt": ""
+              },
+              "DeltaZigzagVariableByte": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type DeltaZigzagVariableByte has been translated to \"object\"",
+                "prompt": ""
+              },
+              "IntegratedBinaryPacking": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegratedBinaryPacking has been translated to \"object\"",
+                "prompt": ""
+              },
+              "XorBinaryPacking": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type XorBinaryPacking has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|PrintWriter|csvWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def run(csvWriter: object, count: object, length: object) -> None:",
+            "        from src.main.me.lemire.integercompression.DeltaZigzagBinaryPacking import DeltaZigzagBinaryPacking",
+            "        from src.main.me.lemire.integercompression.DeltaZigzagVariableByte import DeltaZigzagVariableByte",
+            "        from src.main.me.lemire.integercompression.FastPFOR import FastPFOR",
+            "        from src.main.me.lemire.integercompression.differential.XorBinaryPacking import XorBinaryPacking",
+            "        from src.main.me.lemire.integercompression.BinaryPacking import BinaryPacking",
+            "        from src.main.me.lemire.integercompression.FastPFOR128 import FastPFOR128",
+            "        from src.main.me.lemire.integercompression.JustCopy import JustCopy",
+            "        from src.main.me.lemire.integercompression.differential.IntegratedBinaryPacking import IntegratedBinaryPacking",
+            "        codecs = [JustCopy(), BinaryPacking(), DeltaZigzagBinaryPacking(), DeltaZigzagVariableByte(), IntegratedBinaryPacking(), XorBinaryPacking(), FastPFOR128.FastPFOR1281(), FastPFOR.FastPFOR1()]",
+            "",
+            "        csvWriter.write(\"\\\"Dataset\\\",\\\"CODEC\\\",\\\"Bits per int\\\",\\\"Compress speed  (MiS)\\\",\\\"Decompress speed  (MiS)\\\"\\n\")",
+            "",
+            "        BenchmarkOffsettedSeries.__benchmark0(csvWriter, codecs, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN, BenchmarkOffsettedSeries.__DEFAULT_RANGE)",
+            "        BenchmarkOffsettedSeries.__benchmark0(csvWriter, codecs, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 5, BenchmarkOffsettedSeries.__DEFAULT_RANGE)",
+            "",
+            "        codecs2 = [JustCopy(), BinaryPacking(), DeltaZigzagBinaryPacking(), DeltaZigzagVariableByte(), IntegratedBinaryPacking(), XorBinaryPacking(), FastPFOR128.FastPFOR1281(), FastPFOR.FastPFOR1()]",
+            "        freq = length // 4",
+            "",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 0, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 0, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 5, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 0, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 10, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 0, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 0, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 2, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 5, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 2, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 10, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 2, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 0, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 4, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 5, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 4, freq)",
+            "        BenchmarkOffsettedSeries.__benchmarkSine(csvWriter, codecs2, count, length, BenchmarkOffsettedSeries.__DEFAULT_MEAN >> 10, BenchmarkOffsettedSeries.__DEFAULT_RANGE >> 4, freq)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "pending",
+          "elapsed_time": 26.64818048477173,
+          "generation_timestamp": "2026-03-17T07:30:37.761590",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def run(csvWriter: object, count: object, length: object) -> None:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "87-98:benchmarkSine": {
+          "start": 87,
+          "end": 98,
+          "body": [
+            "private static void benchmarkSine(final PrintWriter csvWriter,",
+            "                final IntegerCODEC[] codecs, final int count, final int length, final int mean,",
+            "                final int range, final int freq) {",
+            "                String dataProp = String.format(",
+            "                        \"(mean=%1$d range=%2$d freq=%3$d)\", mean, range, freq);",
+            "                int[][] data = generateSineDataChunks(0, count, length, mean,",
+            "                        range, freq);",
+            "                benchmark1(csvWriter, \"Sine \" + dataProp, codecs, data,",
+            "                        DEFAULT_REPEAT, DEFAULT_WARMUP);",
+            "                benchmark1(csvWriter, \"Sine+delta \" + dataProp, codecs, data,",
+            "                        DEFAULT_REPEAT, DEFAULT_WARMUP);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "String",
+            "int[][]",
+            "int"
+          ],
+          "signature": "benchmarkSine(final PrintWriter csvWriter, final IntegerCODEC[] codecs, final int count, final int length, final int mean, final int range, final int freq)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "PrintWriter",
+              "name": "csvWriter"
+            },
+            {
+              "modifier": "final",
+              "type": "IntegerCODEC[]",
+              "name": "codecs"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "count"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "mean"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "range"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "freq"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "214-229:generateSineDataChunks"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "121-132:benchmark1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|PrintWriter|csvWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|IntegerCODEC[]|codecs": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|mean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|range": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|freq": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.39806699752807617,
+          "generation_timestamp": "2026-03-17T07:20:42.488024",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __benchmarkSine(csvWriter: object, codecs: object, count: object, length: object, mean: object, range_: object, freq: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "100-119:benchmark0": {
+          "start": 100,
+          "end": 119,
+          "body": [
+            "private static void benchmark0(final PrintWriter csvWriter, final IntegerCODEC[] codecs,",
+            "                                       final int count, final int length, final int mean, final int range) {",
+            "                String dataProp = String.format(\"(mean=%1$d range=%2$d)\", mean,",
+            "                        range);",
+            "",
+            "                int[][] randData = generateDataChunks(0, count, length, mean,",
+            "                        range);",
+            "                int[][] deltaData = deltaDataChunks(randData);",
+            "                int[][] sortedData = sortDataChunks(randData);",
+            "                int[][] sortedDeltaData = deltaDataChunks(sortedData);",
+            "",
+            "                benchmark1(csvWriter, \"Random \" + dataProp, codecs, randData,",
+            "                        DEFAULT_REPEAT, DEFAULT_WARMUP);",
+            "                benchmark1(csvWriter, \"Random+delta \" + dataProp, codecs,",
+            "                        deltaData, DEFAULT_REPEAT, DEFAULT_WARMUP);",
+            "                benchmark1(csvWriter, \"Sorted \" + dataProp, codecs, sortedData,",
+            "                        DEFAULT_REPEAT, DEFAULT_WARMUP);",
+            "                benchmark1(csvWriter, \"Sorted+delta \" + dataProp, codecs,",
+            "                        sortedDeltaData, DEFAULT_REPEAT, DEFAULT_WARMUP);",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "String",
+            "int[][]",
+            "int"
+          ],
+          "signature": "benchmark0(final PrintWriter csvWriter, final IntegerCODEC[] codecs, final int count, final int length, final int mean, final int range)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "PrintWriter",
+              "name": "csvWriter"
+            },
+            {
+              "modifier": "final",
+              "type": "IntegerCODEC[]",
+              "name": "codecs"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "count"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "mean"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "range"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Integer",
+              "valueOf(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "231-243:generateDataChunks"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "245-257:deltaDataChunks"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "259-266:sortDataChunks"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "121-132:benchmark1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|PrintWriter|csvWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|IntegerCODEC[]|codecs": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|mean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|range": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __benchmark0(csvWriter: object, codecs: object, count: object, length: object, mean: object, range_: object) -> None:",
+            "        dataProp = f\"(mean={mean} range={range})\"",
+            "",
+            "        randData = BenchmarkOffsettedSeries.__generateDataChunks(0, count, length, mean, range_)",
+            "        deltaData = BenchmarkOffsettedSeries.__deltaDataChunks(randData)",
+            "        sortedData = BenchmarkOffsettedSeries.__sortDataChunks(randData)",
+            "        sortedDeltaData = BenchmarkOffsettedSeries.__deltaDataChunks(sortedData)",
+            "",
+            "        BenchmarkOffsettedSeries.__benchmark1(csvWriter, \"Random \" + dataProp, codecs, randData, ",
+            "                                              BenchmarkOffsettedSeries.__DEFAULT_REPEAT, BenchmarkOffsettedSeries.__DEFAULT_WARMUP)",
+            "        BenchmarkOffsettedSeries.__benchmark1(csvWriter, \"Random+delta \" + dataProp, codecs, deltaData, ",
+            "                                              BenchmarkOffsettedSeries.__DEFAULT_REPEAT, BenchmarkOffsettedSeries.__DEFAULT_WARMUP)",
+            "        BenchmarkOffsettedSeries.__benchmark1(csvWriter, \"Sorted \" + dataProp, codecs, sortedData, ",
+            "                                              BenchmarkOffsettedSeries.__DEFAULT_REPEAT, BenchmarkOffsettedSeries.__DEFAULT_WARMUP)",
+            "        BenchmarkOffsettedSeries.__benchmark1(csvWriter, \"Sorted+delta \" + dataProp, codecs, sortedDeltaData, ",
+            "                                              BenchmarkOffsettedSeries.__DEFAULT_REPEAT, BenchmarkOffsettedSeries.__DEFAULT_WARMUP)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.5481412410736084,
+          "generation_timestamp": "2026-03-17T07:20:43.060320",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __benchmark0(csvWriter: object, codecs: object, count: object, length: object, mean: object, range_: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "121-132:benchmark1": {
+          "start": 121,
+          "end": 132,
+          "body": [
+            "private static void benchmark1(final PrintWriter csvWriter, final String dataName,",
+            "                                       final IntegerCODEC[] codecs, final int[][] data, final int repeat, final int warmup) {",
+            "                System.out.println(\"Processing: \" + dataName);",
+            "                for (IntegerCODEC codec : codecs) {",
+            "                        String codecName = codec.toString();",
+            "                        for (int i = 0; i < warmup; ++i) {",
+            "                                benchmark2(null, null, null, codec, data, repeat);",
+            "                        }",
+            "                        benchmark2(csvWriter, dataName, codecName, codec, data,",
+            "                                repeat);",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IntegerCODEC",
+            "String",
+            "int"
+          ],
+          "signature": "benchmark1(final PrintWriter csvWriter, final String dataName, final IntegerCODEC[] codecs, final int[][] data, final int repeat, final int warmup)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "PrintWriter",
+              "name": "csvWriter"
+            },
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "dataName"
+            },
+            {
+              "modifier": "final",
+              "type": "IntegerCODEC[]",
+              "name": "codecs"
+            },
+            {
+              "modifier": "final",
+              "type": "int[][]",
+              "name": "data"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "repeat"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "warmup"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "toString()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "134-161:benchmark2"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IntegerCODEC": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntegerCODEC has been translated to \"object\"",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|PrintWriter|csvWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|String|dataName": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|IntegerCODEC[]|codecs": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int[][]|data": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|repeat": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "final|int|warmup": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __benchmark1(csvWriter: object, dataName: object, codecs: object, data: object, repeat: object, warmup: object) -> None:",
+            "        def add(self, a: int, b: int) -> int:",
+            "            return a + b"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.5517044067382812,
+          "generation_timestamp": "2026-03-17T07:20:23.618339",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __benchmark1(csvWriter: object, dataName: object, codecs: object, data: object, repeat: object, warmup: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "134-161:benchmark2": {
+          "start": 134,
+          "end": 161,
+          "body": [
+            "private static void benchmark2(PrintWriter csvWriter, String dataName,",
+            "                                       String codecName, IntegerCODEC codec, int[][] data, int repeat) {",
+            "                PerformanceLogger logger = new PerformanceLogger();",
+            "",
+            "                int maxLen = getMaxLen(data);",
+            "                int[] compressBuffer = new int[4 * maxLen + 1024];",
+            "                int[] decompressBuffer = new int[maxLen];",
+            "",
+            "                for (int i = 0; i < repeat; ++i) {",
+            "                        for (int[] array : data) {",
+            "                                int compSize = compress(logger, codec, array,",
+            "                                        compressBuffer);",
+            "                                int decompSize = decompress(logger, codec,",
+            "                                        compressBuffer, compSize,",
+            "                                        decompressBuffer);",
+            "                                checkArray(array, decompressBuffer, decompSize,",
+            "                                        codec);",
+            "                        }",
+            "                }",
+            "",
+            "                if (csvWriter != null) {",
+            "                        csvWriter.format(",
+            "                                \"\\\"%1$s\\\",\\\"%2$s\\\",%3$.2f,%4$.0f,%5$.0f\\n\",",
+            "                                dataName, codecName, logger.getBitPerInt(),",
+            "                                logger.getCompressSpeed(),",
+            "                                logger.getDecompressSpeed());",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "PerformanceLogger",
+            "int",
+            "int[]"
+          ],
+          "signature": "benchmark2( PrintWriter csvWriter,  String dataName,  String codecName,  IntegerCODEC codec,  int[][] data,  int repeat)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "PrintWriter",
+              "name": "csvWriter"
+            },
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "dataName"
+            },
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "codecName"
+            },
+            {
+              "modifier": "",
+              "type": "IntegerCODEC",
+              "name": "codec"
+            },
+            {
+              "modifier": "",
+              "type": "int[][]",
+              "name": "data"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "repeat"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "204-212:getMaxLen"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "181-192:compress"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "194-202:decompress"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "163-179:checkArray"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "12-75:PerformanceLogger",
+              "58-60:getBitPerInt"
+            ],
+            [
+              "library",
+              "java.lang.Double",
+              "valueOf(double)"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "12-75:PerformanceLogger",
+              "66-69:getCompressSpeed"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "12-75:PerformanceLogger",
+              "71-74:getDecompressSpeed"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "format(java.lang.String,java.lang.Object[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "PerformanceLogger": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type PerformanceLogger has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|PrintWriter|csvWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|String|dataName": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|String|codecName": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|IntegerCODEC|codec": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int[][]|data": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|repeat": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __benchmark2(csvWriter: object, dataName: object, codecName: object, codec: object, data: object, repeat: object) -> None:",
+            "        from src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger import PerformanceLogger",
+            "        logger = PerformanceLogger()",
+            "",
+            "        maxLen = BenchmarkOffsettedSeries.__getMaxLen(data)",
+            "        compressBuffer = [0] * (4 * maxLen + 1024)",
+            "        decompressBuffer = [0] * maxLen",
+            "",
+            "        for i in range(repeat):",
+            "            for array in data:",
+            "                compSize = BenchmarkOffsettedSeries.__compress(logger, codec, array, compressBuffer)",
+            "                decompSize = BenchmarkOffsettedSeries.__decompress(logger, codec, compressBuffer, compSize, decompressBuffer)",
+            "                BenchmarkOffsettedSeries.__checkArray(array, decompressBuffer, decompSize, codec)",
+            "",
+            "        if csvWriter is not None:",
+            "            csvWriter.write(\"\\\"{}\\\",\\\"{}\\\",{},{},{}\\n\".format(dataName, codecName, logger.getBitPerInt(), logger.getCompressSpeed(), logger.getDecompressSpeed()))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.24261140823364258,
+          "generation_timestamp": "2026-03-17T07:18:52.957715",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __benchmark2(csvWriter: object, dataName: object, codecName: object, codec: object, data: object, repeat: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "163-179:checkArray": {
+          "start": 163,
+          "end": 179,
+          "body": [
+            "private static void checkArray(int[] expected, int[] actualArray,",
+            "                int actualLen, IntegerCODEC codec) {",
+            "                if (actualLen != expected.length) {",
+            "                        throw new RuntimeException(\"Length mismatch:\"",
+            "                                + \" expected=\" + expected.length + \" actual=\"",
+            "                                + actualLen + \" codec=\" + codec.toString());",
+            "                }",
+            "                for (int i = 0; i < expected.length; ++i) {",
+            "                        if (actualArray[i] != expected[i]) {",
+            "                                throw new RuntimeException(\"Value mismatch: \"",
+            "                                        + \" where=\" + i + \" expected=\"",
+            "                                        + expected[i] + \" actual=\"",
+            "                                        + actualArray[i] + \" codec=\"",
+            "                                        + codec.toString());",
+            "                        }",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "RuntimeException",
+            "int"
+          ],
+          "signature": "checkArray( int[] expected,  int[] actualArray,  int actualLen,  IntegerCODEC codec)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "expected"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "actualArray"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "actualLen"
+            },
+            {
+              "modifier": "",
+              "type": "IntegerCODEC",
+              "name": "codec"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.RuntimeException",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "RuntimeException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import Any, Optional",
+                "translated_target_type": "Optional[Any]",
+                "reasoning": "In the Java code provided, `RuntimeException` is used as a catch-all for any exception that might be thrown during normal operation of the JVM. In Python, we don't have an exact equivalent type because Python doesn't have checked exceptions like Java does. However, we can use `Optional[Any]` to indicate that a function may return either a value or None (which is similar to how Java handles unchecked exceptions).",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[]|expected": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int[]|actualArray": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|actualLen": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|IntegerCODEC|codec": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __checkArray(expected: object, actualArray: object, actualLen: object, codec: object) -> None:",
+            "        if actualLen != len(expected):",
+            "            raise RuntimeError(\"Length mismatch:\" + \" expected=\" + str(len(expected)) + \" actual=\" + str(actualLen) + \" codec=\" + str(codec))",
+            "            ",
+            "        for i in range(len(expected)):",
+            "            if actualArray[i] != expected[i]:",
+            "                raise RuntimeError(\"Value mismatch:\" + \" where=\" + str(i) + \" expected=\" + str(expected[i]) + \" actual=\" + str(actualArray[i]) + \" codec=\" + str(codec))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.23174023628234863,
+          "generation_timestamp": "2026-03-17T06:48:10.042618",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __checkArray(expected: object, actualArray: object, actualLen: object, codec: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "181-192:compress": {
+          "start": 181,
+          "end": 192,
+          "body": [
+            "private static int compress(PerformanceLogger logger, IntegerCODEC codec,",
+            "                int[] src, int[] dst) {",
+            "                IntWrapper inpos = IntWrapper.IntWrapper1();",
+            "                IntWrapper outpos = IntWrapper.IntWrapper1();",
+            "                logger.compressionTimer.start();",
+            "                codec.compress0(src, inpos, src.length, dst, outpos);",
+            "                logger.compressionTimer.end();",
+            "                int outSize = outpos.get();",
+            "                logger.addOriginalSize(src.length);",
+            "                logger.addCompressedSize(outSize);",
+            "                return outSize;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "IntWrapper",
+            "int"
+          ],
+          "signature": "compress( PerformanceLogger logger,  IntegerCODEC codec,  int[] src,  int[] dst)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "PerformanceLogger",
+              "name": "logger"
+            },
+            {
+              "modifier": "",
+              "type": "IntegerCODEC",
+              "name": "codec"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "src"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "dst"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "24-26:IntWrapper1"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "13-32:Timer",
+              "20-22:start"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntegerCODEC",
+              "16-60:IntegerCODEC",
+              "36-37:compress0"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "13-32:Timer",
+              "24-27:end"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "12-75:PerformanceLogger",
+              "42-44:addOriginalSize"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "12-75:PerformanceLogger",
+              "46-48:addCompressedSize"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IntWrapper": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntWrapper has been translated to \"object\"",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|PerformanceLogger|logger": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|IntegerCODEC|codec": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int[]|src": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int[]|dst": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __compress(logger: object, codec: object, src: object, dst: object) -> int:",
+            "        from src.main.me.lemire.integercompression.IntWrapper import IntWrapper",
+            "        inpos = IntWrapper.IntWrapper1()",
+            "        outpos = IntWrapper.IntWrapper1()",
+            "        logger.compressionTimer.start()",
+            "        codec.compress0(src, inpos, len(src), dst, outpos)",
+            "        logger.compressionTimer.end()",
+            "        outSize = outpos.get()",
+            "        logger.addOriginalSize(len(src))",
+            "        logger.addCompressedSize(outSize)",
+            "        return outSize"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.4871842861175537,
+          "generation_timestamp": "2026-03-17T07:12:52.732399",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __compress(logger: object, codec: object, src: object, dst: object) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "194-202:decompress": {
+          "start": 194,
+          "end": 202,
+          "body": [
+            "private static int decompress(PerformanceLogger logger, IntegerCODEC codec,",
+            "                int[] src, int srcLen, int[] dst) {",
+            "                IntWrapper inpos = IntWrapper.IntWrapper1();",
+            "                IntWrapper outpos = IntWrapper.IntWrapper1();",
+            "                logger.decompressionTimer.start();",
+            "                codec.uncompress0(src, inpos, srcLen, dst, outpos);",
+            "                logger.decompressionTimer.end();",
+            "                return outpos.get();",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "IntWrapper"
+          ],
+          "signature": "decompress( PerformanceLogger logger,  IntegerCODEC codec,  int[] src,  int srcLen,  int[] dst)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "PerformanceLogger",
+              "name": "logger"
+            },
+            {
+              "modifier": "",
+              "type": "IntegerCODEC",
+              "name": "codec"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "src"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "srcLen"
+            },
+            {
+              "modifier": "",
+              "type": "int[]",
+              "name": "dst"
+            }
+          ],
+          "calls": [
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "24-26:IntWrapper1"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "13-32:Timer",
+              "20-22:start"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntegerCODEC",
+              "16-60:IntegerCODEC",
+              "57-58:uncompress0"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.PerformanceLogger",
+              "13-32:Timer",
+              "24-27:end"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.IntWrapper",
+              "14-97:IntWrapper",
+              "62-64:get"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IntWrapper": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type IntWrapper has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|PerformanceLogger|logger": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|IntegerCODEC|codec": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int[]|src": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|srcLen": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int[]|dst": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __decompress(logger: object, codec: object, src: object, srcLen: object, dst: object) -> int:",
+            "        from src.main.me.lemire.integercompression.IntWrapper import IntWrapper",
+            "        inpos = IntWrapper.IntWrapper1()",
+            "        outpos = IntWrapper.IntWrapper1()",
+            "        logger.decompressionTimer.start()",
+            "        codec.uncompress0(src, inpos, srcLen, dst, outpos)",
+            "        logger.decompressionTimer.end()",
+            "        return outpos.get()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.4730875492095947,
+          "generation_timestamp": "2026-03-17T07:12:53.243724",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __decompress(logger: object, codec: object, src: object, srcLen: object, dst: object) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "204-212:getMaxLen": {
+          "start": 204,
+          "end": 212,
+          "body": [
+            "private static int getMaxLen(int[][] data) {",
+            "                int maxLen = 0;",
+            "                for (int[] array : data) {",
+            "                        if (array.length > maxLen) {",
+            "                                maxLen = array.length;",
+            "                        }",
+            "                }",
+            "                return maxLen;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int",
+            "int[]"
+          ],
+          "signature": "getMaxLen( int[][] data)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[][]",
+              "name": "data"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[][]|data": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __getMaxLen(data: object) -> int:",
+            "        max_len = 0",
+            "        for array in data:",
+            "            if len(array) > max_len:",
+            "                max_len = len(array)",
+            "        return max_len"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.15648460388183594,
+          "generation_timestamp": "2026-03-17T06:48:10.218759",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __getMaxLen(data: object) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "214-229:generateSineDataChunks": {
+          "start": 214,
+          "end": 229,
+          "body": [
+            "private static int[][] generateSineDataChunks(long seed, int count,",
+            "                int length, int mean, int range, int freq) {",
+            "                int[][] chunks = new int[count][];",
+            "                Random r = new Random(seed);",
+            "                for (int i = 0; i < count; ++i) {",
+            "                        int[] chunk = chunks[i] = new int[length];",
+            "                        int phase = r.nextInt(2 * freq);",
+            "                        for (int j = 0; j < length; ++j) {",
+            "                                double angle = 2.0 * Math.PI * (j + phase)",
+            "                                        / freq;",
+            "                                chunk[j] = (int) (mean + Math.sin(angle)",
+            "                                        * range);",
+            "                        }",
+            "                }",
+            "                return chunks;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int[][]"
+          ],
+          "body_types": [
+            "int[][]",
+            "int",
+            "Random",
+            "int[]",
+            "double"
+          ],
+          "signature": "generateSineDataChunks( long seed,  int count,  int length,  int mean,  int range,  int freq)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "long",
+              "name": "seed"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "length"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "mean"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "range"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "freq"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Random",
+              "<init>(long)"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "nextInt(int)"
+            ],
+            [
+              "library",
+              "java.lang.Math",
+              "sin(double)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Random": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import random",
+                "translated_target_type": "random.Random",
+                "reasoning": "In Python, the equivalent of Java's `java.util.Random` class is `random.Random` in the `random` module. This class provides methods for generating random numbers and sequences. The seed value can be set using the constructor or by calling the `seed()` method. In this case, a seed value is passed to the constructor of `random.Random` which is equivalent to creating an instance of `java.util.Random` with a specified seed in Java.",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              },
+              "double": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "float",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|long|seed": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|length": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|mean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|range": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|freq": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __generateSineDataChunks(seed: object, count: object, length: object, mean: object, range_: object, freq: object) -> List[List[Any]]:",
+            "        chunks = [[] for _ in range(count)]",
+            "        r = random.Random(seed)",
+            "        for i in range(count):",
+            "            chunk = chunks[i] = [0] * length",
+            "            phase = r.randint(0, 2 * freq)",
+            "            for j in range(length):",
+            "                angle = 2.0 * math.pi * (j + phase) / freq",
+            "                chunk[j] = round(mean + math.sin(angle) * range_)",
+            "        return chunks"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.22842955589294434,
+          "generation_timestamp": "2026-03-17T06:48:10.459929",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __generateSineDataChunks(seed: object, count: object, length: object, mean: object, range_: object, freq: object) -> List[List[Any]]:\n",
+            "        pass\n\n"
+          ]
+        },
+        "231-243:generateDataChunks": {
+          "start": 231,
+          "end": 243,
+          "body": [
+            "private static int[][] generateDataChunks(long seed, int count,",
+            "                int length, int mean, int range) {",
+            "                int offset = mean - range / 2;",
+            "                int[][] chunks = new int[count][];",
+            "                Random r = new Random(seed);",
+            "                for (int i = 0; i < count; ++i) {",
+            "                        int[] chunk = chunks[i] = new int[length];",
+            "                        for (int j = 0; j < length; ++j) {",
+            "                                chunk[j] = r.nextInt(range) + offset;",
+            "                        }",
+            "                }",
+            "                return chunks;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int[][]"
+          ],
+          "body_types": [
+            "int",
+            "int[][]",
+            "Random",
+            "int[]"
+          ],
+          "signature": "generateDataChunks( long seed,  int count,  int length,  int mean,  int range)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "long",
+              "name": "seed"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "count"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "length"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "mean"
+            },
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "range"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Random",
+              "<init>(long)"
+            ],
+            [
+              "library",
+              "java.util.Random",
+              "nextInt(int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "Random": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import random",
+                "translated_target_type": "random.Random",
+                "reasoning": "In Python, the equivalent of Java's `java.util.Random` class is `random.Random` in the `random` module. This class provides methods for generating random numbers and sequences. The seed value can be set using the constructor or by calling the `seed()` method. In this case, a seed value is passed to the constructor of `random.Random` which is equivalent to creating an instance of `java.util.Random` with a specified seed in Java.",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|long|seed": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|count": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|length": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|mean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              },
+              "|int|range": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __generateDataChunks(seed: object, count: object, length: object, mean: object, range_: object) -> List[List[Any]]:",
+            "        offset = mean - range_ // 2",
+            "        chunks = [[] for _ in range(count)]",
+            "        r = random.Random(seed)",
+            "        for i in range(count):",
+            "            chunk = chunks[i] = [0] * length",
+            "            for j in range(length):",
+            "                chunk[j] = r.randint(offset, offset + range_)",
+            "        return chunks"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.2641744613647461,
+          "generation_timestamp": "2026-03-17T06:48:10.737897",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __generateDataChunks(seed: object, count: object, length: object, mean: object, range_: object) -> List[List[Any]]:\n",
+            "        pass\n\n"
+          ]
+        },
+        "245-257:deltaDataChunks": {
+          "start": 245,
+          "end": 257,
+          "body": [
+            "private static int[][] deltaDataChunks(int[][] src) {",
+            "                int[][] dst = new int[src.length][];",
+            "                for (int i = 0; i < src.length; ++i) {",
+            "                        int[] s = src[i];",
+            "                        int[] d = dst[i] = new int[s.length];",
+            "                        int prev = 0;",
+            "                        for (int j = 0; j < s.length; ++j) {",
+            "                                d[j] = s[j] - prev;",
+            "                                prev = s[j];",
+            "                        }",
+            "                }",
+            "                return dst;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int[][]"
+          ],
+          "body_types": [
+            "int[][]",
+            "int",
+            "int[]"
+          ],
+          "signature": "deltaDataChunks( int[][] src)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[][]",
+              "name": "src"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "Tuple[int, int]",
+                "reasoning": "The Java method `roundColor1` takes an integer and a list of integers as input. The first integer is the color to be rounded, while the list contains multiple colors. In Python, we can represent this using a tuple where the first element is the color (an integer) and the second element is another tuple containing all the possible colors (a list of integers). This way, we maintain the same functionality as in the Java code.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[][]|src": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __deltaDataChunks(src: object) -> List[List[Any]]:",
+            "        dst = [[] for _ in range(len(src))]",
+            "        for i, s in enumerate(src):",
+            "            prev = 0",
+            "            for j, val in enumerate(s):",
+            "                dst[i].append(val - prev)",
+            "                prev = val",
+            "        return dst"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.17171335220336914,
+          "generation_timestamp": "2026-03-17T06:48:10.927699",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __deltaDataChunks(src: object) -> List[List[Any]]:\n",
+            "        pass\n\n"
+          ]
+        },
+        "259-266:sortDataChunks": {
+          "start": 259,
+          "end": 266,
+          "body": [
+            "private static int[][] sortDataChunks(int[][] src) {",
+            "                int[][] dst = new int[src.length][];",
+            "                for (int i = 0; i < src.length; ++i) {",
+            "                        dst[i] = Arrays.copyOf(src[i], src[i].length);",
+            "                        Arrays.sort(dst[i]);",
+            "                }",
+            "                return dst;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "int[][]"
+          ],
+          "body_types": [
+            "int[][]",
+            "int"
+          ],
+          "signature": "sortDataChunks( int[][] src)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int[][]",
+              "name": "src"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Arrays",
+              "copyOf(int[],int)"
+            ],
+            [
+              "library",
+              "java.util.Arrays",
+              "sort(int[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int[][]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[List[Any]]",
+                "reasoning": "In Python, the equivalent type for a 2D array of integers is `List[List[int]]`. However, in this case, we are dealing with an array where each element can be of any type (since it's not specified what types will be stored), so we use `Any` from the typing module to indicate that.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int[][]|src": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __sortDataChunks(src: object) -> List[List[Any]]:",
+            "        dst = [sorted(chunk) for chunk in src]",
+            "        return dst"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.3360128402709961,
+          "generation_timestamp": "2026-03-17T06:48:11.285808",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __sortDataChunks(src: object) -> List[List[Any]]:\n",
+            "        pass\n\n"
+          ]
+        },
+        "272-294:main": {
+          "start": 272,
+          "end": 294,
+          "body": [
+            "public static void main(final String[] args) throws Exception {",
+            "                File csvFile = new File(",
+            "                        String.format(",
+            "                                \"benchmark-offsetted-%1$tY%1$tm%1$tdT%1$tH%1$tM%1$tS.csv\",",
+            "                                System.currentTimeMillis()));",
+            "                PrintWriter writer = null;",
+            "                try {",
+            "                        writer = new PrintWriter(csvFile);",
+            "                        System.out",
+            "                                .println(\"# Results will be written into a CSV file: \"",
+            "                                        + csvFile.getName());",
+            "                        System.out.println();",
+            "                        BenchmarkOffsettedSeries.run(writer, 8 * 1024, 1280);",
+            "                        System.out.println();",
+            "                        System.out",
+            "                                .println(\"# Results were written into a CSV file: \"",
+            "                                        + csvFile.getName());",
+            "                } finally {",
+            "                        if (writer != null) {",
+            "                                writer.close();",
+            "                        }",
+            "                }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "File",
+            "PrintWriter"
+          ],
+          "signature": "main(final String[] args)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String[]",
+              "name": "args"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.System",
+              "currentTimeMillis()"
+            ],
+            [
+              "library",
+              "java.lang.Long",
+              "valueOf(long)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "format(java.lang.String,java.lang.Object[])"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "<init>(java.io.File)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getName()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println()"
+            ],
+            [
+              "JavaFastPFOR.src.main.me.lemire.integercompression.benchmarktools.BenchmarkOffsettedSeries",
+              "27-295:BenchmarkOffsettedSeries",
+              "44-85:run"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "close()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "In Python, the equivalent type to Java's `File` class is provided by the `pathlib.Path` class in the standard library. This class provides an object-oriented interface for working with file system paths and files. It offers methods for checking if a path exists, getting the size of a file, reading or writing to a file, etc.",
+                "prompt": ""
+              },
+              "PrintWriter": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the equivalent type to Java's PrintWriter is StringIO from the io module. This class provides a convenient means of working with text data in memory using file-like objects. It can be used as an alternative to writing directly to a file or printing to console for testing purposes. The StringIO object behaves like a file, allowing you to write and read strings just like you would with files.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String[]|args": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def main(args: object) -> None:",
+            "        from datetime import datetime",
+            "        from pathlib import Path",
+            "        from io import StringIO",
+            "        import csv",
+            "",
+            "        current_time = int(datetime.now().timestamp() * 1000)",
+            "        file_name = f\"benchmark-offsetted-{current_time}.csv\"",
+            "        csv_file = Path(file_name)",
+            "        ",
+            "        with open(csv_file, 'w', newline='') as writer:",
+            "            print(f\"# Results will be written into a CSV file: {csv_file.name}\")",
+            "            print()",
+            "            ",
+            "            BenchmarkOffsettedSeries.run(writer, 8 * 1024, 1280)",
+            "            ",
+            "            print()",
+            "            print(f\"# Results were written into a CSV file: {csv_file.name}\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.32955503463745117,
+          "generation_timestamp": "2026-03-17T07:30:38.176431",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def main(args: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "28-28:DEFAULT_MEAN": {
+          "start": 28,
+          "end": 28,
+          "enum_constant": false,
+          "body": [
+            "private static final int DEFAULT_MEAN = 1 << 20;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __DEFAULT_MEAN: int = 1 << 20"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.8342955112457275,
+          "generation_timestamp": "2026-03-17T05:49:33.814330",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DEFAULT_MEAN: int = ",
+            ""
+          ]
+        },
+        "29-29:DEFAULT_RANGE": {
+          "start": 29,
+          "end": 29,
+          "enum_constant": false,
+          "body": [
+            "private static final int DEFAULT_RANGE = 1 << 10;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __DEFAULT_RANGE: int = 1 << 10"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.3691234588623047,
+          "generation_timestamp": "2026-03-17T05:49:32.941457",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DEFAULT_RANGE: int = ",
+            ""
+          ]
+        },
+        "30-30:DEFAULT_REPEAT": {
+          "start": 30,
+          "end": 30,
+          "enum_constant": false,
+          "body": [
+            "private static final int DEFAULT_REPEAT = 5;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __DEFAULT_REPEAT: int = 5"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.18807125091552734,
+          "generation_timestamp": "2026-03-17T05:49:32.555846",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DEFAULT_REPEAT: int = ",
+            ""
+          ]
+        },
+        "31-31:DEFAULT_WARMUP": {
+          "start": 31,
+          "end": 31,
+          "enum_constant": false,
+          "body": [
+            "private static final int DEFAULT_WARMUP = 2;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __DEFAULT_WARMUP: int = 2"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0.2402803897857666,
+          "generation_timestamp": "2026-03-17T05:49:32.354045",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DEFAULT_WARMUP: int = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class BenchmarkOffsettedSeries:\n\n"
+    }
+  },
+  "import_map": {
+    "File": "java.io.File",
+    "PrintWriter": "java.io.PrintWriter",
+    "Arrays": "java.util.Arrays",
+    "Random": "java.util.Random",
+    "BinaryPacking": "me.lemire.integercompression.BinaryPacking",
+    "DeltaZigzagBinaryPacking": "me.lemire.integercompression.DeltaZigzagBinaryPacking",
+    "DeltaZigzagVariableByte": "me.lemire.integercompression.DeltaZigzagVariableByte",
+    "FastPFOR": "me.lemire.integercompression.FastPFOR",
+    "FastPFOR128": "me.lemire.integercompression.FastPFOR128",
+    "IntWrapper": "me.lemire.integercompression.IntWrapper",
+    "IntegerCODEC": "me.lemire.integercompression.IntegerCODEC",
+    "JustCopy": "me.lemire.integercompression.JustCopy",
+    "IntegratedBinaryPacking": "me.lemire.integercompression.differential.IntegratedBinaryPacking",
+    "XorBinaryPacking": "me.lemire.integercompression.differential.XorBinaryPacking"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import StringIO",
+    "from pathlib import Path",
+    "from typing import Any, Optional",
+    "from typing import List, Any",
+    "from typing import List, Tuple",
+    "import random"
+  ]
+}

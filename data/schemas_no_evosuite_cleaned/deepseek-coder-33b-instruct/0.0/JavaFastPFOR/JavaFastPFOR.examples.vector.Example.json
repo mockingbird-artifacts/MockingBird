@@ -1,0 +1,332 @@
+{
+    "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/JavaFastPFOR/examples/vector/Example.java",
+    "imports": {
+        "5-5:import java.util.Arrays;": {
+            "start": 5,
+            "end": 5,
+            "body": "import java.util.Arrays;"
+        },
+        "6-6:import me.lemire.integercompression.FastPFOR;": {
+            "start": 6,
+            "end": 6,
+            "body": "import me.lemire.integercompression.FastPFOR;"
+        },
+        "7-7:import me.lemire.integercompression.IntWrapper;": {
+            "start": 7,
+            "end": 7,
+            "body": "import me.lemire.integercompression.IntWrapper;"
+        },
+        "8-8:import me.lemire.integercompression.Composition;": {
+            "start": 8,
+            "end": 8,
+            "body": "import me.lemire.integercompression.Composition;"
+        },
+        "9-9:import me.lemire.integercompression.IntegerCODEC;": {
+            "start": 9,
+            "end": 9,
+            "body": "import me.lemire.integercompression.IntegerCODEC;"
+        },
+        "10-10:import me.lemire.integercompression.VariableByte;": {
+            "start": 10,
+            "end": 10,
+            "body": "import me.lemire.integercompression.VariableByte;"
+        },
+        "11-11:import me.lemire.integercompression.vector.VectorFastPFOR;": {
+            "start": 11,
+            "end": 11,
+            "body": "import me.lemire.integercompression.vector.VectorFastPFOR;"
+        }
+    },
+    "classes": {
+        "13-67:Example": {
+            "start": 13,
+            "end": 67,
+            "is_abstract": false,
+            "is_interface": false,
+            "is_enum": false,
+            "modifiers": [
+                "public"
+            ],
+            "nested_inside": "",
+            "nests": [],
+            "implements": [],
+            "extends": [],
+            "methods": {
+                "14-66:main": {
+                    "start": 14,
+                    "end": 66,
+                    "body": [
+                        "public static void main(String[] args) {",
+                        "    if (args.length == 0)",
+                        "      throw new IllegalArgumentException();",
+                        "",
+                        "    // pass 0 for Vector compressor , non-zero for default compressor",
+                        "    int compressorToUse = Integer.parseInt(args[0]);",
+                        "",
+                        "    final int N = 1310720;",
+                        "    int[] data = new int[N];",
+                        "",
+                        "    // 2-bit data",
+                        "    for (int k = 0; k < N; k += 1)",
+                        "      data[k] = 3;",
+                        "",
+                        "    // a few large values",
+                        "    for (int k = 0; k < N; k += 5)",
+                        "      data[k] = 100;",
+                        "    for (int k = 0; k < N; k += 533)",
+                        "      data[k] = 10000;",
+                        "",
+                        "    int[] compressed = new int[N + 1024];",
+                        "",
+                        "    IntegerCODEC codec = new Composition(",
+                        "        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),",
+                        "        new VariableByte());",
+                        "",
+                        "    IntWrapper inputoffset = new IntWrapper(0);",
+                        "    IntWrapper outputoffset = new IntWrapper(0);",
+                        "",
+                        "    codec.compress(data, inputoffset, data.length, compressed, outputoffset);",
+                        "",
+                        "    System.out.println(\"compressed unsorted integers from \" +",
+                        "                       data.length * 4 / 1024 + \"KB to \" +",
+                        "                       outputoffset.intValue() * 4 / 1024 + \"KB\");",
+                        "",
+                        "    compressed = Arrays.copyOf(compressed, outputoffset.intValue());",
+                        "",
+                        "    int[] recovered = new int[N];",
+                        "    IntWrapper recoffset = new IntWrapper(0);",
+                        "",
+                        "    codec.uncompress(compressed, new IntWrapper(0), compressed.length,",
+                        "                     recovered, recoffset);",
+                        "",
+                        "    System.out.println(\"compressed length = \" + compressed.length +",
+                        "                       \", uncompressed length = \" + recoffset.intValue());",
+                        "",
+                        "    if (Arrays.equals(data, recovered))",
+                        "      System.out.println(\"data is recovered without loss\");",
+                        "    else",
+                        "      throw new RuntimeException(\"bug\"); // could use assert",
+                        "",
+                        "    System.out.println();",
+                        "  }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "public",
+                        "static"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "IllegalArgumentException",
+                        "int",
+                        "int[]",
+                        "IntegerCODEC",
+                        "Composition",
+                        "VectorFastPFOR",
+                        "FastPFOR",
+                        "VariableByte",
+                        "IntWrapper",
+                        "RuntimeException"
+                    ],
+                    "signature": "main( String[] args)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "String[]",
+                            "name": "args"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "void",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "return_types",
+                                "timestamp": "2026-02-22 12:57:02",
+                                "source_type": "void",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "None",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "IllegalArgumentException": {
+                                "identifier": "IllegalArgumentException",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:57:30",
+                                "source_type": "IllegalArgumentException",
+                                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to syntax issues. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```python\ndef main(args: List[str]) -> None:\n    if len(args) == 0:\n        raise ValueError(\"No arguments provided\")\n\n    compressorToUse = int(args[0])\n\n    N = 1310720\n    data = np.zeros(N, dtype=np.int32)\n\n    # 2-bit data\n    for k in range(0, N, 1):\n        data[k] = 3\n\n    # a few large values\n    for k in range(0, N, 5):\n        data[k] = 100\n    for k in range(0, N, 533):\n        data[k] = 10000\n\n    compressed = np.zeros(N + 1024, dtype=np.int32)\n\n    codec = Composition(\n        VectorFastPFOR() if compressorToUse == 0 else FastPFOR(),\n        VariableByte())\n\n    inputoffset = IntWrapper(0)\n    outputoffset = IntWrapper(0)\n\n    codec.compress(data, inputoffset, data.size, compressed, outputoffset)\n\n    print(\"compressed unsorted integers from \" + str(data.nbytes * 4 / 1024) + \"KB to \" +\n          str(outputoffset.intValue() * 4 / 1024) + \"KB\")\n\n    compressed = np.resize(compressed, outputoffset.intValue())\n\n    recovered = np.zeros(N, dtype=np.int32)\n    recoffset = IntWrapper(0)\n\n    codec.uncompress(compressed, IntWrapper(0), compressed.size,\n                     recovered, recoffset)\n\n    print(\"compressed length = \" + str(compressed.size) +\n          \", uncompressed length = \" + str(recoffset.intValue()))\n\n    if np.array_equal(data, recovered):\n        print(\"data is recovered without loss\")\n    else:\n        raise RuntimeError(\"bug\")  # could use assert\n\n    print()\n```\n\nREASONING:\nThe Java code uses a lot of integer arrays and operations on them. In Python, we can use numpy arrays for this purpose which are more efficient than standard lists in terms of memory usage and speed. Also, the `IntWrapper` class is replaced with simple integers since they are used as counters here. The `IllegalArgumentException` in Java is replaced by a `ValueError` in Python because it's more appropriate for this context.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nIllegalArgumentException\n```\n\nJAVA TYPE DESCRIPTION:\nThrown to indicate that a method has been passed an illegal or\n inappropriate argument.\n\nJAVA CODE:\n```\n    public static void main(String[] args) {\n    if (args.length == 0)\n      throw new IllegalArgumentException();\n\n    // pass 0 for Vector compressor , non-zero for default compressor\n    int compressorToUse = Integer.parseInt(args[0]);\n\n    final int N = 1310720;\n    int[] data = new int[N];\n\n    // 2-bit data\n    for (int k = 0; k < N; k += 1)\n      data[k] = 3;\n\n    // a few large values\n    for (int k = 0; k < N; k += 5)\n      data[k] = 100;\n    for (int k = 0; k < N; k += 533)\n      data[k] = 10000;\n\n    int[] compressed = new int[N + 1024];\n\n    IntegerCODEC codec = new Composition(\n        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),\n        new VariableByte());\n\n    IntWrapper inputoffset = new IntWrapper(0);\n    IntWrapper outputoffset = new IntWrapper(0);\n\n    codec.compress(data, inputoffset, data.length, compressed, outputoffset);\n\n    System.out.println(\"compressed unsorted integers from \" +\n                       data.length * 4 / 1024 + \"KB to \" +\n                       outputoffset.intValue() * 4 / 1024 + \"KB\");\n\n    compressed = Arrays.copyOf(compressed, outputoffset.intValue());\n\n    int[] recovered = new int[N];\n    IntWrapper recoffset = new IntWrapper(0);\n\n    codec.uncompress(compressed, new IntWrapper(0), compressed.length,\n                     recovered, recoffset);\n\n    System.out.println(\"compressed length = \" + compressed.length +\n                       \", uncompressed length = \" + recoffset.intValue());\n\n    if (Arrays.equals(data, recovered))\n      System.out.println(\"data is recovered without loss\");\n    else\n      throw new RuntimeException(\"bug\"); // could use assert\n\n    System.out.println();\n  }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "int": {
+                                "identifier": "int",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:57:55",
+                                "source_type": "int",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "int",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "int[]": {
+                                "identifier": "int[]",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:57:55",
+                                "source_type": "int[]",
+                                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\n```\n\nPYTHON TRANSLATION:\n```python\nList[Tuple[int, int]]\n```\n\nREASONING:\nIn the Java code provided, `data` is an array of integers. However, it's used as a list of tuples where each tuple contains two integers. This can be represented in Python using the typing module's List and Tuple types. The outer List represents the data as a sequence of tuples, while the inner Tuple holds two integers.\n",
+                                "imports": "from typing import List, Tuple",
+                                "translated_target_type": "List[Tuple[int, int]]",
+                                "reasoning": "In the Java code provided, `data` is an array of integers. However, it's used as a list of tuples where each tuple contains two integers. This can be represented in Python using the typing module's List and Tuple types. The outer List represents the data as a sequence of tuples, while the inner Tuple holds two integers.",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nint[]\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public static void main(String[] args) {\n    if (args.length == 0)\n      throw new IllegalArgumentException();\n\n    // pass 0 for Vector compressor , non-zero for default compressor\n    int compressorToUse = Integer.parseInt(args[0]);\n\n    final int N = 1310720;\n    int[] data = new int[N];\n\n    // 2-bit data\n    for (int k = 0; k < N; k += 1)\n      data[k] = 3;\n\n    // a few large values\n    for (int k = 0; k < N; k += 5)\n      data[k] = 100;\n    for (int k = 0; k < N; k += 533)\n      data[k] = 10000;\n\n    int[] compressed = new int[N + 1024];\n\n    IntegerCODEC codec = new Composition(\n        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),\n        new VariableByte());\n\n    IntWrapper inputoffset = new IntWrapper(0);\n    IntWrapper outputoffset = new IntWrapper(0);\n\n    codec.compress(data, inputoffset, data.length, compressed, outputoffset);\n\n    System.out.println(\"compressed unsorted integers from \" +\n                       data.length * 4 / 1024 + \"KB to \" +\n                       outputoffset.intValue() * 4 / 1024 + \"KB\");\n\n    compressed = Arrays.copyOf(compressed, outputoffset.intValue());\n\n    int[] recovered = new int[N];\n    IntWrapper recoffset = new IntWrapper(0);\n\n    codec.uncompress(compressed, new IntWrapper(0), compressed.length,\n                     recovered, recoffset);\n\n    System.out.println(\"compressed length = \" + compressed.length +\n                       \", uncompressed length = \" + recoffset.intValue());\n\n    if (Arrays.equals(data, recovered))\n      System.out.println(\"data is recovered without loss\");\n    else\n      throw new RuntimeException(\"bug\"); // could use assert\n\n    System.out.println();\n  }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "IntegerCODEC": {
+                                "identifier": "IntegerCODEC",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:04",
+                                "source_type": "IntegerCODEC",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "IntegerCODEC",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "Composition": {
+                                "identifier": "Composition",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:04",
+                                "source_type": "Composition",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "Composition",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "VectorFastPFOR": {
+                                "identifier": "VectorFastPFOR",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:14",
+                                "source_type": "VectorFastPFOR",
+                                "generation": "I'm sorry for the confusion, but I can't provide a translation without knowing more about the context. The `VectorFastPFOR` class is not part of Python's standard library or any third-party libraries that I know of. It seems to be specific to your project and may require additional dependencies or implementation details that are not provided in this snippet.\n\nIf you could provide more information about the context, such as where `VectorFastPFOR` is defined, what it does, and any other relevant code or libraries, I would be able to give a more accurate translation.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nVectorFastPFOR\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public static void main(String[] args) {\n    if (args.length == 0)\n      throw new IllegalArgumentException();\n\n    // pass 0 for Vector compressor , non-zero for default compressor\n    int compressorToUse = Integer.parseInt(args[0]);\n\n    final int N = 1310720;\n    int[] data = new int[N];\n\n    // 2-bit data\n    for (int k = 0; k < N; k += 1)\n      data[k] = 3;\n\n    // a few large values\n    for (int k = 0; k < N; k += 5)\n      data[k] = 100;\n    for (int k = 0; k < N; k += 533)\n      data[k] = 10000;\n\n    int[] compressed = new int[N + 1024];\n\n    IntegerCODEC codec = new Composition(\n        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),\n        new VariableByte());\n\n    IntWrapper inputoffset = new IntWrapper(0);\n    IntWrapper outputoffset = new IntWrapper(0);\n\n    codec.compress(data, inputoffset, data.length, compressed, outputoffset);\n\n    System.out.println(\"compressed unsorted integers from \" +\n                       data.length * 4 / 1024 + \"KB to \" +\n                       outputoffset.intValue() * 4 / 1024 + \"KB\");\n\n    compressed = Arrays.copyOf(compressed, outputoffset.intValue());\n\n    int[] recovered = new int[N];\n    IntWrapper recoffset = new IntWrapper(0);\n\n    codec.uncompress(compressed, new IntWrapper(0), compressed.length,\n                     recovered, recoffset);\n\n    System.out.println(\"compressed length = \" + compressed.length +\n                       \", uncompressed length = \" + recoffset.intValue());\n\n    if (Arrays.equals(data, recovered))\n      System.out.println(\"data is recovered without loss\");\n    else\n      throw new RuntimeException(\"bug\"); // could use assert\n\n    System.out.println();\n  }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nImport Statement throws error: No module named 'fastpfor'\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            },
+                            "FastPFOR": {
+                                "identifier": "FastPFOR",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:23",
+                                "source_type": "FastPFOR",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "FastPFOR",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "VariableByte": {
+                                "identifier": "VariableByte",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:23",
+                                "source_type": "VariableByte",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "VariableByte",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "IntWrapper": {
+                                "identifier": "IntWrapper",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:23",
+                                "source_type": "IntWrapper",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "IntWrapper",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "RuntimeException": {
+                                "identifier": "RuntimeException",
+                                "translated": false,
+                                "attempted": true,
+                                "type_variation": "body_types",
+                                "timestamp": "2026-02-22 12:58:39",
+                                "source_type": "RuntimeException",
+                                "generation": "I'm sorry for the confusion, but there seems to be a misunderstanding. The provided Java code does not use any RuntimeException or subclasses thereof. It only uses IllegalArgumentException and RuntimeException itself, which are part of the standard Java library and do not have direct equivalents in Python. \n\nIf you meant to ask for an equivalent type in Python that maintains the same functionality as a specific Java class or method, please provide more context or clarify your question.\n",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nRuntimeException\n```\n\nJAVA TYPE DESCRIPTION:\nRuntimeException is the superclass of those\n exceptions that can be thrown during the normal operation of the\n Java Virtual Machine.\n\n\nJAVA CODE:\n```\n    public static void main(String[] args) {\n    if (args.length == 0)\n      throw new IllegalArgumentException();\n\n    // pass 0 for Vector compressor , non-zero for default compressor\n    int compressorToUse = Integer.parseInt(args[0]);\n\n    final int N = 1310720;\n    int[] data = new int[N];\n\n    // 2-bit data\n    for (int k = 0; k < N; k += 1)\n      data[k] = 3;\n\n    // a few large values\n    for (int k = 0; k < N; k += 5)\n      data[k] = 100;\n    for (int k = 0; k < N; k += 533)\n      data[k] = 10000;\n\n    int[] compressed = new int[N + 1024];\n\n    IntegerCODEC codec = new Composition(\n        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),\n        new VariableByte());\n\n    IntWrapper inputoffset = new IntWrapper(0);\n    IntWrapper outputoffset = new IntWrapper(0);\n\n    codec.compress(data, inputoffset, data.length, compressed, outputoffset);\n\n    System.out.println(\"compressed unsorted integers from \" +\n                       data.length * 4 / 1024 + \"KB to \" +\n                       outputoffset.intValue() * 4 / 1024 + \"KB\");\n\n    compressed = Arrays.copyOf(compressed, outputoffset.intValue());\n\n    int[] recovered = new int[N];\n    IntWrapper recoffset = new IntWrapper(0);\n\n    codec.uncompress(compressed, new IntWrapper(0), compressed.length,\n                     recovered, recoffset);\n\n    System.out.println(\"compressed length = \" + compressed.length +\n                       \", uncompressed length = \" + recoffset.intValue());\n\n    if (Arrays.equals(data, recovered))\n      System.out.println(\"data is recovered without loss\");\n    else\n      throw new RuntimeException(\"bug\"); // could use assert\n\n    System.out.println();\n  }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "parameters": {
+                            "|String[]|args": {
+                                "identifier": "|String[]|args",
+                                "translated": true,
+                                "attempted": true,
+                                "type_variation": "parameters",
+                                "timestamp": "2026-02-22 12:57:02",
+                                "source_type": "String[]",
+                                "generation": "PYTHON IMPORTS:\n```python\nfrom typing import List, Tuple\nimport numpy as np\n```\n\nPYTHON TRANSLATION:\n```python\nList[Tuple[np.ndarray, int]]\n```\n\nREASONING:\nIn the Java code provided, `String[]` is used to store command line arguments passed to the program. In Python, we can use a list of tuples where each tuple contains an integer array and an integer. This is equivalent to the String[] in Java as it allows us to store multiple arrays along with their corresponding integers. The numpy library's ndarray type is used for storing integer arrays, which is similar to Java's int[].\n",
+                                "imports": "from typing import List, Tuple\nimport numpy as np",
+                                "translated_target_type": "List[Tuple[np.ndarray, int]]",
+                                "reasoning": "In the Java code provided, `String[]` is used to store command line arguments passed to the program. In Python, we can use a list of tuples where each tuple contains an integer array and an integer. This is equivalent to the String[] in Java as it allows us to store multiple arrays along with their corresponding integers. The numpy library's ndarray type is used for storing integer arrays, which is similar to Java's int[].",
+                                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nString[]\n```\n\nJAVA TYPE DESCRIPTION:\nThe String class represents character strings. All\n string literals in Java programs, such as \"abc\", are\n implemented as instances of this class.\n \n\nJAVA CODE:\n```\n    public static void main(String[] args) {\n    if (args.length == 0)\n      throw new IllegalArgumentException();\n\n    // pass 0 for Vector compressor , non-zero for default compressor\n    int compressorToUse = Integer.parseInt(args[0]);\n\n    final int N = 1310720;\n    int[] data = new int[N];\n\n    // 2-bit data\n    for (int k = 0; k < N; k += 1)\n      data[k] = 3;\n\n    // a few large values\n    for (int k = 0; k < N; k += 5)\n      data[k] = 100;\n    for (int k = 0; k < N; k += 533)\n      data[k] = 10000;\n\n    int[] compressed = new int[N + 1024];\n\n    IntegerCODEC codec = new Composition(\n        compressorToUse == 0 ? new VectorFastPFOR() : new FastPFOR(),\n        new VariableByte());\n\n    IntWrapper inputoffset = new IntWrapper(0);\n    IntWrapper outputoffset = new IntWrapper(0);\n\n    codec.compress(data, inputoffset, data.length, compressed, outputoffset);\n\n    System.out.println(\"compressed unsorted integers from \" +\n                       data.length * 4 / 1024 + \"KB to \" +\n                       outputoffset.intValue() * 4 / 1024 + \"KB\");\n\n    compressed = Arrays.copyOf(compressed, outputoffset.intValue());\n\n    int[] recovered = new int[N];\n    IntWrapper recoffset = new IntWrapper(0);\n\n    codec.uncompress(compressed, new IntWrapper(0), compressed.length,\n                     recovered, recoffset);\n\n    System.out.println(\"compressed length = \" + compressed.length +\n                       \", uncompressed length = \" + recoffset.intValue());\n\n    if (Arrays.equals(data, recovered))\n      System.out.println(\"data is recovered without loss\");\n    else\n      throw new RuntimeException(\"bug\"); // could use assert\n\n    System.out.println();\n  }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            },
+            "fields": {}
+        }
+    },
+    "import_map": {
+        "Arrays": "java.util.Arrays",
+        "FastPFOR": "me.lemire.integercompression.FastPFOR",
+        "IntWrapper": "me.lemire.integercompression.IntWrapper",
+        "Composition": "me.lemire.integercompression.Composition",
+        "IntegerCODEC": "me.lemire.integercompression.IntegerCODEC",
+        "VariableByte": "me.lemire.integercompression.VariableByte",
+        "VectorFastPFOR": "me.lemire.integercompression.vector.VectorFastPFOR"
+    }
+}

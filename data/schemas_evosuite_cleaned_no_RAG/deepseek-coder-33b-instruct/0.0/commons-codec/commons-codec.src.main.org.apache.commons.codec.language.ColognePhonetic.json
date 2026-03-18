@@ -1,0 +1,3288 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-codec/src/main/java/org/apache/commons/codec/language/ColognePhonetic.java",
+  "imports": {
+    "20-20:import org.apache.commons.codec.EncoderException;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.apache.commons.codec.EncoderException;"
+    },
+    "21-21:import org.apache.commons.codec.StringEncoder;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.apache.commons.codec.StringEncoder;"
+    },
+    "23-23:import java.util.Locale;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.util.Locale;"
+    }
+  },
+  "classes": {
+    "171-453:ColognePhonetic": {
+      "start": 171,
+      "end": 453,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [
+        "190-220:CologneBuffer",
+        "222-252:CologneOutputBuffer",
+        "254-280:CologneInputBuffer"
+      ],
+      "implements": [
+        "StringEncoder"
+      ],
+      "extends": [],
+      "methods": {
+        "285-292:arrayContains": {
+          "start": 285,
+          "end": 292,
+          "body": [
+            "private static boolean arrayContains(final char[] arr, final char key) {",
+            "        for (final char element : arr) {",
+            "            if (element == key) {",
+            "                return true;",
+            "            }",
+            "        }",
+            "        return false;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "char"
+          ],
+          "signature": "arrayContains(final char[] arr, final char key)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "char[]",
+              "name": "arr"
+            },
+            {
+              "modifier": "final",
+              "type": "char",
+              "name": "key"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:16",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|char[]|arr": {
+                "identifier": "final|char[]|arr",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:16",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List, Tuple",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|char|key": {
+                "identifier": "final|char|key",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __arrayContains(arr: List[str], key: str) -> bool:",
+            "        for element in arr:",
+            "            if element == key:",
+            "                return True",
+            "        return False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 122.27206945419312,
+          "generation_timestamp": "2025-08-12T11:18:20.309587",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __arrayContains(arr: List[str], key: str) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "303-381:colognePhonetic": {
+          "start": 303,
+          "end": 381,
+          "body": [
+            "public String colognePhonetic(final String text) {",
+            "        if (text == null) {",
+            "            return null;",
+            "        }",
+            "",
+            "        final CologneInputBuffer input = new CologneInputBuffer(preprocess(text));",
+            "        final CologneOutputBuffer output = new CologneOutputBuffer(input.length() * 2);",
+            "",
+            "        char nextChar;",
+            "",
+            "        char lastChar = CHAR_IGNORE;",
+            "        char chr;",
+            "",
+            "        while (!input.isEmpty()) {",
+            "            chr = input.removeNext();",
+            "",
+            "            if (!input.isEmpty()) {",
+            "                nextChar = input.getNextChar();",
+            "            } else {",
+            "                nextChar = CHAR_IGNORE;",
+            "            }",
+            "",
+            "            if (chr < 'A' || chr > 'Z') {",
+            "                continue; // ignore unwanted characters",
+            "            }",
+            "",
+            "            if (arrayContains(AEIJOUY, chr)) {",
+            "                output.put('0');",
+            "            } else if (chr == 'B' || (chr == 'P' && nextChar != 'H')) {",
+            "                output.put('1');",
+            "            } else if ((chr == 'D' || chr == 'T') && !arrayContains(CSZ, nextChar)) {",
+            "                output.put('2');",
+            "            } else if (arrayContains(FPVW, chr)) {",
+            "                output.put('3');",
+            "            } else if (arrayContains(GKQ, chr)) {",
+            "                output.put('4');",
+            "            } else if (chr == 'X' && !arrayContains(CKQ, lastChar)) {",
+            "                output.put('4');",
+            "                output.put('8');",
+            "            } else if (chr == 'S' || chr == 'Z') {",
+            "                output.put('8');",
+            "            } else if (chr == 'C') {",
+            "                if (output.isEmpty()) {",
+            "                    if (arrayContains(AHKLOQRUX, nextChar)) {",
+            "                        output.put('4');",
+            "                    } else {",
+            "                        output.put('8');",
+            "                    }",
+            "                } else if (arrayContains(SZ, lastChar) || !arrayContains(AHKOQUX, nextChar)) {",
+            "                    output.put('8');",
+            "                } else {",
+            "                    output.put('4');",
+            "                }",
+            "            } else if (arrayContains(DTX, chr)) {",
+            "                output.put('8');",
+            "            } else {",
+            "                switch (chr) {",
+            "                    case 'R':",
+            "                        output.put('7');",
+            "                        break;",
+            "                    case 'L':",
+            "                        output.put('5');",
+            "                        break;",
+            "                    case 'M':",
+            "                    case 'N':",
+            "                        output.put('6');",
+            "                        break;",
+            "                    case 'H':",
+            "                        output.put(CHAR_IGNORE); // needed by put",
+            "                        break;",
+            "                    default:",
+            "                        break;",
+            "                }",
+            "            }",
+            "",
+            "            lastChar = chr;",
+            "        }",
+            "        return output.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "CologneInputBuffer",
+            "CologneOutputBuffer",
+            "char"
+          ],
+          "signature": "colognePhonetic(final String text)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "433-452:preprocess"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "254-280:CologneInputBuffer",
+              "256-258:CologneInputBuffer"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "208-210:length"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "222-252:CologneOutputBuffer",
+              "226-229:CologneOutputBuffer"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "254-280:CologneInputBuffer",
+              "275-279:removeNext"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "217-219:isEmpty"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "254-280:CologneInputBuffer",
+              "267-269:getNextChar"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "285-292:arrayContains"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "222-252:CologneOutputBuffer",
+              "238-244:put"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "212-215:toString"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "CologneInputBuffer": {
+                "identifier": "CologneInputBuffer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "CologneInputBuffer",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CologneInputBuffer",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CologneOutputBuffer": {
+                "identifier": "CologneOutputBuffer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "CologneOutputBuffer",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CologneOutputBuffer",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|text": {
+                "identifier": "final|String|text",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "out_of_context",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": {
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 27, in test01\n    self.assertEqual(string, \"048528426\", \"message\")\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 866, in _baseAssertEqual\n    raise self.failureException(msg)\nAssertionError: None != '048528426' : message",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "406-408:encode1"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "35-40:test01"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test02": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 36, in test02\n    self.assertEqual(\"\", string)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 866, in _baseAssertEqual\n    raise self.failureException(msg)\nAssertionError: '' != None",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "406-408:encode1"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "42-47:test02"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test18": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "406-408:encode1"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "183-188:test18"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test00": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 22, in test00\n    boolean0 = colognePhonetic0.isEncodeEqual('c[b,g9\"b}U1', 'c[b,g9\"b}U1')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 49, in isEncodeEqual\n    self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoneType' object has no attribute 'lower'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "418-420:isEncodeEqual"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "28-33:test00"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test07": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 66, in test07\n    colognePhonetic0.isEncodeEqual(None, None)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 49, in isEncodeEqual\n    self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoneType' object has no attribute 'lower'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "418-420:isEncodeEqual"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "77-87:test07"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test21": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 134, in test21\n    boolean0 = colognePhonetic0.isEncodeEqual(\"[xL]-Kivs$O^bBhz\", 'c[b,g9\"b}U1')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 49, in isEncodeEqual\n    self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoneType' object has no attribute 'lower'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "418-420:isEncodeEqual"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "212-217:test21"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 0,
+          "generation_timestamp": "2025-08-12T11:56:01.400576",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def colognePhonetic(self, text: str) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "383-386:encode": {
+          "start": 383,
+          "end": 386,
+          "body": [
+            "@Override",
+            "    public Object encode(final Object object) throws EncoderException {",
+            "        return encode0(object);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Object"
+          ],
+          "body_types": [],
+          "signature": "encode(final Object object)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Object",
+              "name": "object"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "388-399:encode0"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "406-408:encode1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Object": {
+                "identifier": "Object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:23",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|Object|object": {
+                "identifier": "final|Object|object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:29",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "is_overload": true
+        },
+        "388-399:encode0": {
+          "start": 388,
+          "end": 399,
+          "body": [
+            "public Object encode0(final Object object) throws EncoderException {",
+            "        if (!(object instanceof String)) {",
+            "            throw new EncoderException(",
+            "                    \"This method's parameter was expected to be of the type \"",
+            "                            + String.class.getName()",
+            "                            + \". But actually it was of the type \"",
+            "                            + object.getClass().getName()",
+            "                            + \".\",",
+            "                    null);",
+            "        }",
+            "        return encode1((String) object);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Object"
+          ],
+          "body_types": [
+            "String",
+            "EncoderException"
+          ],
+          "signature": "encode0(final Object object)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Object",
+              "name": "object"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getName()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "getClass()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.EncoderException",
+              "25-78:EncoderException",
+              "62-64:EncoderException"
+            ],
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "406-408:encode1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Object": {
+                "identifier": "Object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:37",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any, Union",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "EncoderException": {
+                "identifier": "EncoderException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "EncoderException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "EncoderException",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Object|object": {
+                "identifier": "final|Object|object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:44",
+                "source_type": "Object",
+                "generation": "",
+                "imports": "from typing import Any, Union",
+                "translated_target_type": "Any",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 141.4600260257721,
+          "generation_timestamp": "2025-08-12T21:04:29.649337",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def encode0(self, object_: Any) -> Any:\n",
+            "        pass\n\n"
+          ]
+        },
+        "401-404:encode": {
+          "start": 401,
+          "end": 404,
+          "body": [
+            "@Override",
+            "    public String encode(final String text) {",
+            "        return encode1(text);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "encode(final String text)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|text": {
+                "identifier": "final|String|text",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "is_overload": true
+        },
+        "406-408:encode1": {
+          "start": 406,
+          "end": 408,
+          "body": [
+            "public String encode1(final String text) {",
+            "        return colognePhonetic(text);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [],
+          "signature": "encode1(final String text)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "303-381:colognePhonetic"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|text": {
+                "identifier": "final|String|text",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def encode1(self, text: str) -> str:",
+            "        return self.colognePhonetic(text)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test01": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 27, in test01\n    self.assertEqual(string, \"048528426\", \"message\")\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 866, in _baseAssertEqual\n    raise self.failureException(msg)\nAssertionError: None != '048528426' : message",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "406-408:encode1"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "35-40:test01"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test02": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 36, in test02\n    self.assertEqual(\"\", string)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 873, in assertEqual\n    assertion_func(first, second, msg=msg)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 866, in _baseAssertEqual\n    raise self.failureException(msg)\nAssertionError: '' != None",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "406-408:encode1"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "42-47:test02"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test18": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "406-408:encode1"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "183-188:test18"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 42.07309293746948,
+          "generation_timestamp": "2025-08-12T11:56:43.630090",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def encode1(self, text: str) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "418-420:isEncodeEqual": {
+          "start": 418,
+          "end": 420,
+          "body": [
+            "public boolean isEncodeEqual(final String text1, final String text2) {",
+            "        return colognePhonetic(text1).equals(colognePhonetic(text2));",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isEncodeEqual(final String text1, final String text2)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text1"
+            },
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text2"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "171-453:ColognePhonetic",
+              "303-381:colognePhonetic"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|String|text1": {
+                "identifier": "final|String|text1",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|String|text2": {
+                "identifier": "final|String|text2",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def isEncodeEqual(self, text1: str, text2: str) -> bool:",
+            "        return self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test00": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 22, in test00\n    boolean0 = colognePhonetic0.isEncodeEqual('c[b,g9\"b}U1', 'c[b,g9\"b}U1')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 49, in isEncodeEqual\n    self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoneType' object has no attribute 'lower'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "418-420:isEncodeEqual"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "28-33:test00"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test07": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 66, in test07\n    colognePhonetic0.isEncodeEqual(None, None)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 49, in isEncodeEqual\n    self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoneType' object has no attribute 'lower'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "418-420:isEncodeEqual"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "77-87:test07"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py::ColognePhonetic_ESTest::test21": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest.py\", line 134, in test21\n    boolean0 = colognePhonetic0.isEncodeEqual(\"[xL]-Kivs$O^bBhz\", 'c[b,g9\"b}U1')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 49, in isEncodeEqual\n    self.colognePhonetic(text1).lower() == self.colognePhonetic(text2).lower()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoneType' object has no attribute 'lower'",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "303-381:colognePhonetic"
+                },
+                {
+                  "schema_name": "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+                  "class_name": "171-453:ColognePhonetic",
+                  "fragment_name": "418-420:isEncodeEqual"
+                },
+                {
+                  "schema_name": "commons-codec.src.test.org.apache.commons.codec.language.ColognePhonetic_ESTest",
+                  "class_name": "26-225:ColognePhonetic_ESTest",
+                  "fragment_name": "212-217:test21"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 37.56773376464844,
+          "generation_timestamp": "2025-08-12T11:59:05.891095",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isEncodeEqual(self, text1: str, text2: str) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "433-452:preprocess": {
+          "start": 433,
+          "end": 452,
+          "body": [
+            "private char[] preprocess(final String text) {",
+            "        final char[] chrs = text.toUpperCase(Locale.GERMAN).toCharArray();",
+            "",
+            "        for (int index = 0; index < chrs.length; index++) {",
+            "            switch (chrs[index]) {",
+            "                case '\\u00C4': // capital A, umlaut mark",
+            "                    chrs[index] = 'A';",
+            "                    break;",
+            "                case '\\u00DC': // capital U, umlaut mark",
+            "                    chrs[index] = 'U';",
+            "                    break;",
+            "                case '\\u00D6': // capital O, umlaut mark",
+            "                    chrs[index] = 'O';",
+            "                    break;",
+            "                default:",
+            "                    break;",
+            "            }",
+            "        }",
+            "        return chrs;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "char[]"
+          ],
+          "body_types": [
+            "char[]",
+            "char",
+            "int"
+          ],
+          "signature": "preprocess(final String text)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "String",
+              "name": "text"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "toUpperCase(java.util.Locale)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "toCharArray()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:18:52",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:18:58",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:07",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:07",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|String|text": {
+                "identifier": "final|String|text",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:18:58",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __preprocess(self, text: str) -> List[str]:",
+            "        chrs = list(text.upper())",
+            "        for index in range(len(chrs)):",
+            "            if chrs[index] == '\\u00C4':  # capital A, umlaut mark",
+            "                chrs[index] = 'A'",
+            "            elif chrs[index] == '\\u00DC':  # capital U, umlaut mark",
+            "                chrs[index] = 'U'",
+            "            elif chrs[index] == '\\u00D6':  # capital O, umlaut mark",
+            "                chrs[index] = 'O'",
+            "        return chrs"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 63.51210379600525,
+          "generation_timestamp": "2025-08-12T11:19:23.938642",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __preprocess(self, text: str) -> List[str]:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "173-173:AEIJOUY": {
+          "start": 173,
+          "end": 173,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] AEIJOUY = {'A', 'E', 'I', 'J', 'O', 'U', 'Y'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:30",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "None",
+                "translated_target_type": "list",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __AEIJOUY: List[str] = ['A', 'E', 'I', 'J', 'O', 'U', 'Y']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 50.862159729003906,
+          "generation_timestamp": "2025-08-11T10:34:41.280590",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __AEIJOUY: list = ",
+            ""
+          ]
+        },
+        "174-174:CSZ": {
+          "start": 174,
+          "end": 174,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] CSZ = {'C', 'S', 'Z'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:34",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __CSZ: List[str] = ['C', 'S', 'Z']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 38.73797869682312,
+          "generation_timestamp": "2025-08-11T10:33:50.306110",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __CSZ: List[str] = ",
+            ""
+          ]
+        },
+        "175-175:FPVW": {
+          "start": 175,
+          "end": 175,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] FPVW = {'F', 'P', 'V', 'W'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:40",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __FPVW: List[str] = ['F', 'P', 'V', 'W']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 40.00080323219299,
+          "generation_timestamp": "2025-08-11T10:33:11.470404",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __FPVW: List[str] = ",
+            ""
+          ]
+        },
+        "176-176:GKQ": {
+          "start": 176,
+          "end": 176,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] GKQ = {'G', 'K', 'Q'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:43",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __GKQ: List[str] = ['G', 'K', 'Q']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 58.7451810836792,
+          "generation_timestamp": "2025-08-11T10:32:31.369539",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __GKQ: List[str] = ",
+            ""
+          ]
+        },
+        "177-177:CKQ": {
+          "start": 177,
+          "end": 177,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] CKQ = {'C', 'K', 'Q'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:47",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __CKQ: List[str] = ['C', 'K', 'Q']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 66.56134104728699,
+          "generation_timestamp": "2025-08-11T10:31:32.420202",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __CKQ: List[str] = ",
+            ""
+          ]
+        },
+        "178-178:AHKLOQRUX": {
+          "start": 178,
+          "end": 178,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] AHKLOQRUX = {'A', 'H', 'K', 'L', 'O', 'Q', 'R', 'U', 'X'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:50",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __AHKLOQRUX: List[str] = ['A', 'H', 'K', 'L', 'O', 'Q', 'R', 'U', 'X']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 40.84680151939392,
+          "generation_timestamp": "2025-08-11T10:30:25.751454",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __AHKLOQRUX: List[str] = ",
+            ""
+          ]
+        },
+        "179-179:SZ": {
+          "start": 179,
+          "end": 179,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] SZ = {'S', 'Z'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:54",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __SZ: List[str] = ['S', 'Z']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 37.25906753540039,
+          "generation_timestamp": "2025-08-11T10:29:44.745448",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __SZ: List[str] = ",
+            ""
+          ]
+        },
+        "180-180:AHKOQUX": {
+          "start": 180,
+          "end": 180,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] AHKOQUX = {'A', 'H', 'K', 'O', 'Q', 'U', 'X'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:17:57",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __AHKOQUX: List[str] = ['A', 'H', 'K', 'O', 'Q', 'U', 'X']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 57.23321294784546,
+          "generation_timestamp": "2025-08-11T10:29:07.259082",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __AHKOQUX: List[str] = ",
+            ""
+          ]
+        },
+        "181-181:DTX": {
+          "start": 181,
+          "end": 181,
+          "enum_constant": false,
+          "body": [
+            "private static final char[] DTX = {'D', 'T', 'X'};"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:18:10",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __DTX: List[str] = ['D', 'T', 'X']"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 70.2294225692749,
+          "generation_timestamp": "2025-08-11T10:28:09.872363",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __DTX: List[str] = ",
+            ""
+          ]
+        },
+        "183-183:CHAR_IGNORE": {
+          "start": 183,
+          "end": 183,
+          "enum_constant": false,
+          "body": [
+            "private static final char CHAR_IGNORE = '-';"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "char"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:18:16",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __CHAR_IGNORE: str = '-'"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 35.60117506980896,
+          "generation_timestamp": "2025-08-11T10:26:59.536443",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __CHAR_IGNORE: str = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class ColognePhonetic(StringEncoder):\n\n"
+    },
+    "190-220:CologneBuffer": {
+      "start": 190,
+      "end": 220,
+      "is_abstract": true,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "abstract"
+      ],
+      "nested_inside": "171-453:ColognePhonetic",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "196-204:CologneBuffer": {
+          "start": 196,
+          "end": 204,
+          "body": [
+            "public CologneBuffer(int constructorId, final char[] data, final int buffSize) {",
+            "            if (constructorId == 0) {",
+            "                this.data = new char[buffSize];",
+            "                this.length = 0;",
+            "            } else {",
+            "                this.data = data;",
+            "                this.length = data.length;",
+            "            }",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [
+            "char"
+          ],
+          "signature": "CologneBuffer( int constructorId, final char[] data, final int buffSize)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "constructorId"
+            },
+            {
+              "modifier": "final",
+              "type": "char[]",
+              "name": "data"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "buffSize"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:24",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|int|constructorId": {
+                "identifier": "|int|constructorId",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|char[]|data": {
+                "identifier": "final|char[]|data",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:18",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|buffSize": {
+                "identifier": "final|int|buffSize",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:24",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, constructorId: int, data: List[str], buffSize: int) -> None:",
+            "        if constructorId == 0:",
+            "            self._data = [''] * buffSize",
+            "            self._length = 0",
+            "        else:",
+            "            self._data = data",
+            "            self._length = len(data)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 40.746686697006226,
+          "generation_timestamp": "2025-08-12T11:20:04.830067",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, constructorId: int, data: List[str], buffSize: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "206-206:copyData": {
+          "start": 206,
+          "end": 206,
+          "body": [
+            "protected abstract char[] copyData(int start, final int length);"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected",
+            "abstract"
+          ],
+          "return_types": [
+            "char[]"
+          ],
+          "body_types": [],
+          "signature": "copyData( int start, final int length)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "int",
+              "name": "start"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:24",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "|int|start": {
+                "identifier": "|int|start",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "final|int|length",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _copyData(self, start: int, length: int) -> List[str]:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.29427266120910645,
+          "generation_timestamp": "2025-08-12T11:20:05.230925",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _copyData(self, start: int, length: int) -> List[str]:\n",
+            "        pass\n\n"
+          ]
+        },
+        "208-210:length": {
+          "start": 208,
+          "end": 210,
+          "body": [
+            "public int length() {",
+            "            return length;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "length()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def length(self) -> int:",
+            "        return self._length"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 124.96885418891907,
+          "generation_timestamp": "2025-08-12T11:22:10.299859",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def length(self) -> int:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "212-215:toString": {
+          "start": 212,
+          "end": 215,
+          "body": [
+            "@Override",
+            "        public String toString() {",
+            "            return new String(copyData(0, length));",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "String"
+          ],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "206-206:copyData"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "<init>(char[])"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        return ''.join(self._copyData(0, self._length))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 44.07613134384155,
+          "generation_timestamp": "2025-08-12T11:22:54.528363",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        },
+        "217-219:isEmpty": {
+          "start": 217,
+          "end": 219,
+          "body": [
+            "public boolean isEmpty() {",
+            "            return length() == 0;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isEmpty()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "208-210:length"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def isEmpty(self) -> bool:",
+            "        return self._length == 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 126.96317434310913,
+          "generation_timestamp": "2025-08-12T11:25:01.604283",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isEmpty(self) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "192-192:data": {
+          "start": 192,
+          "end": 192,
+          "enum_constant": false,
+          "body": [
+            "protected final char[] data;"
+          ],
+          "modifiers": [
+            "protected",
+            "final"
+          ],
+          "types": [
+            "char[]"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:19:07",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    _data: List[str] = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    _data: List[str] = None"
+          ]
+        },
+        "194-194:length": {
+          "start": 194,
+          "end": 194,
+          "enum_constant": false,
+          "body": [
+            "protected int length = 0;"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:19:14",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    _length: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 40.639628171920776,
+          "generation_timestamp": "2025-08-11T10:26:23.811056",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    _length: int = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class CologneBuffer(ABC):\n\n"
+    },
+    "222-252:CologneOutputBuffer": {
+      "start": 222,
+      "end": 252,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private"
+      ],
+      "nested_inside": "171-453:ColognePhonetic",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "CologneBuffer"
+      ],
+      "methods": {
+        "226-229:CologneOutputBuffer": {
+          "start": 226,
+          "end": 229,
+          "body": [
+            "public CologneOutputBuffer(final int buffSize) {",
+            "            super(0, null, buffSize);",
+            "            lastCode = '/'; // impossible value",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "CologneOutputBuffer(final int buffSize)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "buffSize"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "196-204:CologneBuffer"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|int|buffSize": {
+                "identifier": "final|int|buffSize",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self, buffSize: int) -> None:",
+            "        super().__init__(0, None, buffSize)",
+            "        self.__lastCode = '\\u0000'   # impossible value"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test15_decomposed_mocker_5_ColognePhonetic$CologneOutputBuffer_<init>.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test15_decomposed_mocker_5_ColognePhonetic$CologneOutputBuffer_<init>.py\", line 49, in test_mocking\n    method_ret = orig_CologneOutputBuffer_init(obj, *method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: CologneOutputBuffer.__init__() takes 2 positional arguments but 3 were given"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 201.13495469093323,
+          "generation_timestamp": "2025-08-12T11:28:22.892937",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, buffSize: int) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "238-244:put": {
+          "start": 238,
+          "end": 244,
+          "body": [
+            "public void put(final char code) {",
+            "            if (code != CHAR_IGNORE && lastCode != code && (code != '0' || length == 0)) {",
+            "                data[length] = code;",
+            "                length++;",
+            "            }",
+            "            lastCode = code;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "put(final char code)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "char",
+              "name": "code"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|char|code": {
+                "identifier": "final|char|code",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def put(self, code: str) -> None:",
+            "        if code != self._CologneOutputBuffer__CHAR_IGNORE and self._lastCode != code and (code != '0' or len(self.data) == 0):",
+            "            self.data[len(self.data)] = code",
+            "            self.length += 1",
+            "                ",
+            "        self._lastCode = code"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test17_decomposed_mocker_450_ColognePhonetic$CologneOutputBuffer_put.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test17_decomposed_mocker_450_ColognePhonetic$CologneOutputBuffer_put.py\", line 39, in test_mocking\n    instance_initial.orig_CologneOutputBuffer_put(*method_args)\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 94, in put\n    code != self._CologneOutputBuffer__CHAR_IGNORE\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'CologneOutputBuffer' object has no attribute '_CologneOutputBuffer__CHAR_IGNORE'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 212.8811821937561,
+          "generation_timestamp": "2025-08-12T11:31:55.905770",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def put(self, code: str) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "246-251:copyData": {
+          "start": 246,
+          "end": 251,
+          "body": [
+            "@Override",
+            "        protected char[] copyData(final int start, final int length) {",
+            "            final char[] newData = new char[length];",
+            "            System.arraycopy(data, start, newData, 0, length);",
+            "            return newData;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "char[]"
+          ],
+          "body_types": [
+            "char[]",
+            "char"
+          ],
+          "signature": "copyData(final int start, final int length)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "start"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.System",
+              "arraycopy(java.lang.Object,int,java.lang.Object,int,int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:33",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:37",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|int|start": {
+                "identifier": "final|int|start",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:33",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "final|int|length",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:33",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _copyData(self, start: int, length: int) -> List[str]:",
+            "        newData = [\"\"] * length",
+            "        System.arraycopy(data, start, newData, 0, length)",
+            "        return newData"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test02_decomposed_mocker_35_ColognePhonetic$CologneOutputBuffer_copyData.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test02_decomposed_mocker_35_ColognePhonetic$CologneOutputBuffer_copyData.py\", line 40, in test_mocking\n    method_ret = instance_initial.orig_CologneOutputBuffer_copyData(*method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 98, in _copyData\n    System.arraycopy(data, start, newData, 0, length)\n    ^^^^^^\nNameError: name 'System' is not defined"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 175.74250507354736,
+          "generation_timestamp": "2025-08-12T11:34:51.770523",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _copyData(self, start: int, length: int) -> List[str]:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "224-224:lastCode": {
+          "start": 224,
+          "end": 224,
+          "enum_constant": false,
+          "body": [
+            "private char lastCode;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "char"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-11 00:19:28",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __lastCode: str = '\\u0000'"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __lastCode: str = '\\u0000'"
+          ]
+        }
+      },
+      "python_class_declaration": "class CologneOutputBuffer(CologneBuffer):\n\n"
+    },
+    "254-280:CologneInputBuffer": {
+      "start": 254,
+      "end": 280,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private"
+      ],
+      "nested_inside": "171-453:ColognePhonetic",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "CologneBuffer"
+      ],
+      "methods": {
+        "256-258:CologneInputBuffer": {
+          "start": 256,
+          "end": 258,
+          "body": [
+            "public CologneInputBuffer(final char[] data) {",
+            "            super(1, data, 0);",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "CologneInputBuffer(final char[] data)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "char[]",
+              "name": "data"
+            }
+          ],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "190-220:CologneBuffer",
+              "196-204:CologneBuffer"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|char[]|data": {
+                "identifier": "final|char[]|data",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:37",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def  __init__(self, data: List[str])  -> None:",
+            "        super().__init__(1, data, len(data))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test20_decomposed_mocker_5_ColognePhonetic$CologneInputBuffer_<init>.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test20_decomposed_mocker_5_ColognePhonetic$CologneInputBuffer_<init>.py\", line 49, in test_mocking\n    method_ret = orig_CologneInputBuffer_init(obj, *method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: CologneInputBuffer.__init__() takes 2 positional arguments but 3 were given"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 196.63764214515686,
+          "generation_timestamp": "2025-08-12T11:38:08.552263",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, data: List[str]) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "260-265:copyData": {
+          "start": 260,
+          "end": 265,
+          "body": [
+            "@Override",
+            "        protected char[] copyData(final int start, final int length) {",
+            "            final char[] newData = new char[length];",
+            "            System.arraycopy(data, data.length - this.length + start, newData, 0, length);",
+            "            return newData;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "char[]"
+          ],
+          "body_types": [
+            "char[]",
+            "char"
+          ],
+          "signature": "copyData(final int start, final int length)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "start"
+            },
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "length"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.System",
+              "arraycopy(java.lang.Object,int,java.lang.Object,int,int)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:42",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "char[]": {
+                "identifier": "char[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:47",
+                "source_type": "char[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[str]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:52",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|int|start": {
+                "identifier": "final|int|start",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:47",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|int|length": {
+                "identifier": "final|int|length",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-11 00:19:47",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def _copyData(self, start: int, length: int) -> List[str]:",
+            "        newData = [\"\"] * length",
+            "        System.arraycopy(data, data.length - self.length + start, newData, 0, length)",
+            "        return newData"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 48.14102053642273,
+          "generation_timestamp": "2025-08-12T11:38:56.847396",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _copyData(self, start: int, length: int) -> List[str]:\n",
+            "        pass\n\n"
+          ]
+        },
+        "267-269:getNextChar": {
+          "start": 267,
+          "end": 269,
+          "body": [
+            "public char getNextChar() {",
+            "            return data[getNextPos()];",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "char"
+          ],
+          "body_types": [],
+          "signature": "getNextChar()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "254-280:CologneInputBuffer",
+              "271-273:getNextPos"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:52",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getNextChar(self) -> str:",
+            "        return self.data[self._getNextPos()]"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test15_decomposed_mocker_99_ColognePhonetic$CologneInputBuffer_getNextChar.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test15_decomposed_mocker_99_ColognePhonetic$CologneInputBuffer_getNextChar.py\", line 42, in test_mocking\n    method_ret = instance_initial.orig_CologneInputBuffer_getNextChar()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 112, in getNextChar\n    return self.data[self._getNextPos()]\n           ^^^^^^^^^\nAttributeError: 'CologneInputBuffer' object has no attribute 'data'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 217.2879922389984,
+          "generation_timestamp": "2025-08-12T11:46:12.252923",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getNextChar(self) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "271-273:getNextPos": {
+          "start": 271,
+          "end": 273,
+          "body": [
+            "protected int getNextPos() {",
+            "            return data.length - length;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "protected"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "getNextPos()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:52",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def  _getNextPos(self) -> int:",
+            "        return len(self.data) - self.length"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test11_decomposed_mocker_55_ColognePhonetic$CologneInputBuffer_getNextPos.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test11_decomposed_mocker_55_ColognePhonetic$CologneInputBuffer_getNextPos.py\", line 37, in test_mocking\n    method_ret = instance_initial.orig_CologneInputBuffer_getNextPos()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 116, in _getNextPos\n    return len(self.data) - self.length\n               ^^^^^^^^^\nAttributeError: 'CologneInputBuffer' object has no attribute 'data'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 217.8466920852661,
+          "generation_timestamp": "2025-08-12T11:42:34.813683",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def _getNextPos(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "275-279:removeNext": {
+          "start": 275,
+          "end": 279,
+          "body": [
+            "public char removeNext() {",
+            "            final char ch = getNextChar();",
+            "            length--;",
+            "            return ch;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "char"
+          ],
+          "body_types": [
+            "char"
+          ],
+          "signature": "removeNext()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-codec.src.main.org.apache.commons.codec.language.ColognePhonetic",
+              "254-280:CologneInputBuffer",
+              "267-269:getNextChar"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-11 00:19:52",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-11 00:19:52",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def removeNext(self) -> str:",
+            "        ch = self.getNextChar()",
+            "        self.length -= 1",
+            "        return ch"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test12_decomposed_mocker_119_ColognePhonetic$CologneInputBuffer_removeNext.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/test/org/apache/commons/codec/language/ColognePhonetic_ESTest_test12_decomposed_mocker_119_ColognePhonetic$CologneInputBuffer_removeNext.py\", line 42, in test_mocking\n    method_ret = instance_initial.orig_CologneInputBuffer_removeNext()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-codec/src/main/org/apache/commons/codec/language/ColognePhonetic.py\", line 121, in removeNext\n    self.length -= 1\nTypeError: unsupported operand type(s) for -=: 'method' and 'int'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 210.3753547668457,
+          "generation_timestamp": "2025-08-12T11:49:42.819415",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def removeNext(self) -> str:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class CologneInputBuffer(CologneBuffer):\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from abc import ABC",
+    "from src.main.org.apache.commons.codec.StringEncoder import StringEncoder",
+    "from typing import Any, Union",
+    "from typing import List",
+    "from typing import List, Tuple",
+    "from unittest import TestCase, main"
+  ]
+}

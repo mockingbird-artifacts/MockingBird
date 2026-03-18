@@ -1,0 +1,595 @@
+{
+    "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/base/src/main/java/org/apache/commons/graph/algorithm/dataflow/DataFlowSolutions.java",
+    "imports": {
+        "22-22:import org.apache.commons.graph.*;": {
+            "start": 22,
+            "end": 22,
+            "body": "import org.apache.commons.graph.*;"
+        },
+        "24-24:import java.util.BitSet;": {
+            "start": 24,
+            "end": 24,
+            "body": "import java.util.BitSet;"
+        },
+        "25-25:import java.util.HashMap;": {
+            "start": 25,
+            "end": 25,
+            "body": "import java.util.HashMap;"
+        },
+        "26-26:import java.util.Iterator;": {
+            "start": 26,
+            "end": 26,
+            "body": "import java.util.Iterator;"
+        },
+        "27-27:import java.util.Map;": {
+            "start": 27,
+            "end": 27,
+            "body": "import java.util.Map;"
+        }
+    },
+    "classes": {
+        "29-90:DataFlowSolutions": {
+            "start": 29,
+            "end": 90,
+            "is_abstract": false,
+            "is_interface": false,
+            "is_enum": false,
+            "modifiers": [
+                "public"
+            ],
+            "nested_inside": "",
+            "nests": [],
+            "implements": [],
+            "extends": [],
+            "methods": {
+                "33-35:DataFlowSolutions": {
+                    "start": 33,
+                    "end": 35,
+                    "body": [
+                        "public DataFlowSolutions(DirectedGraph graph, DataFlowEquations eq) {",
+                        "        calculateDataFlow(graph, eq);",
+                        "    }"
+                    ],
+                    "is_constructor": true,
+                    "annotations": [],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [],
+                    "body_types": [],
+                    "signature": "DataFlowSolutions( DirectedGraph graph,  DataFlowEquations eq)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "DirectedGraph",
+                            "name": "graph"
+                        },
+                        {
+                            "modifier": "",
+                            "type": "DataFlowEquations",
+                            "name": "eq"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {
+                            "|DirectedGraph|graph": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "|DataFlowEquations|eq": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "37-81:calculateDataFlow": {
+                    "start": 37,
+                    "end": 81,
+                    "body": [
+                        "private void calculateDataFlow(DirectedGraph graph, DataFlowEquations eq) {",
+                        "        Iterator vertices = graph.getVertices().iterator();",
+                        "        while (vertices.hasNext()) {",
+                        "            Vertex v = (Vertex) vertices.next();",
+                        "            inValues.put(v, new BitSet()); // Initialize everything to",
+                        "            outValues.put(v, new BitSet()); // empty",
+                        "        }",
+                        "",
+                        "        boolean isOK = true;",
+                        "        while (isOK) {",
+                        "            vertices = graph.getVertices().iterator();",
+                        "            isOK = false;",
+                        "            while (vertices.hasNext()) {",
+                        "                Vertex v = (Vertex) vertices.next();",
+                        "",
+                        "                BitSet out = new BitSet();",
+                        "                out.or((BitSet) inValues.get(v));",
+                        "                out.or(eq.generates(v));",
+                        "                out.andNot(eq.kills(v));",
+                        "",
+                        "                /*",
+                        "                System.err.println(\"Old Out: \" + v + \":\" + outValues.get( v ));",
+                        "                System.err.println(\"New Out: \" + v + \":\" + out);",
+                        "                */",
+                        "                if (!out.equals(outValues.get(v))) {",
+                        "                    isOK = true;",
+                        "                    outValues.put(v, out);",
+                        "",
+                        "                    Iterator outbound = graph.getOutbound(v).iterator();",
+                        "                    while (outbound.hasNext()) {",
+                        "                        Vertex target = graph.getTarget((Edge) outbound.next());",
+                        "",
+                        "                        BitSet in = (BitSet) inValues.get(target);",
+                        "                        in.or(out);",
+                        "                        inValues.put(target, in);",
+                        "                        /*",
+                        "                        System.err.println(\"Old In: \" + target + \":\" +",
+                        "                        \t\t   inValues.get( target ));",
+                        "                        System.err.println(\"New In: \" + target + \":\" + in );",
+                        "                        */",
+                        "                    }",
+                        "                }",
+                        "            }",
+                        "        }",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "private"
+                    ],
+                    "return_types": [
+                        "void"
+                    ],
+                    "body_types": [
+                        "Iterator",
+                        "Vertex",
+                        "BitSet",
+                        "boolean",
+                        "Edge"
+                    ],
+                    "signature": "calculateDataFlow( DirectedGraph graph,  DataFlowEquations eq)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "DirectedGraph",
+                            "name": "graph"
+                        },
+                        {
+                            "modifier": "",
+                            "type": "DataFlowEquations",
+                            "name": "eq"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "void": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "Iterator": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "Vertex": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "BitSet": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "boolean": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "Edge": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {
+                            "|DirectedGraph|graph": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            },
+                            "|DataFlowEquations|eq": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "83-85:reaches": {
+                    "start": 83,
+                    "end": 85,
+                    "body": [
+                        "public BitSet reaches(Vertex vertex) {",
+                        "        return (BitSet) inValues.get(vertex);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "BitSet"
+                    ],
+                    "body_types": [
+                        "BitSet"
+                    ],
+                    "signature": "reaches( Vertex vertex)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "Vertex",
+                            "name": "vertex"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "BitSet": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "BitSet": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {
+                            "|Vertex|vertex": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "87-89:leaves": {
+                    "start": 87,
+                    "end": 89,
+                    "body": [
+                        "public BitSet leaves(Vertex vertex) {",
+                        "        return (BitSet) outValues.get(vertex);",
+                        "    }"
+                    ],
+                    "is_constructor": false,
+                    "annotations": [],
+                    "modifiers": [
+                        "public"
+                    ],
+                    "return_types": [
+                        "BitSet"
+                    ],
+                    "body_types": [
+                        "BitSet"
+                    ],
+                    "signature": "leaves( Vertex vertex)",
+                    "parameters": [
+                        {
+                            "modifier": "",
+                            "type": "Vertex",
+                            "name": "vertex"
+                        }
+                    ],
+                    "calls": [],
+                    "type_translations": {
+                        "return_types": {
+                            "BitSet": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "body_types": {
+                            "BitSet": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "parameters": {
+                            "|Vertex|vertex": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        },
+                        "types": {}
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            },
+            "fields": {
+                "30-30:inValues": {
+                    "start": 30,
+                    "end": 30,
+                    "enum_constant": false,
+                    "body": [
+                        "private Map inValues = new HashMap();"
+                    ],
+                    "modifiers": [
+                        "private"
+                    ],
+                    "types": [
+                        "Map"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "Map": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                },
+                "31-31:outValues": {
+                    "start": 31,
+                    "end": 31,
+                    "enum_constant": false,
+                    "body": [
+                        "private Map outValues = new HashMap();"
+                    ],
+                    "modifiers": [
+                        "private"
+                    ],
+                    "types": [
+                        "Map"
+                    ],
+                    "type_translations": {
+                        "return_types": {},
+                        "body_types": {},
+                        "parameters": {},
+                        "types": {
+                            "Map": {
+                                "identifier": "",
+                                "translated": false,
+                                "attempted": false,
+                                "type_variation": "",
+                                "timestamp": "",
+                                "source_type": "",
+                                "generation": "",
+                                "imports": "",
+                                "translated_target_type": "",
+                                "reasoning": "",
+                                "prompt": ""
+                            }
+                        }
+                    },
+                    "translation": [],
+                    "translation_status": "pending",
+                    "syntactic_validation": "pending",
+                    "field_exercise": "pending",
+                    "graal_validation": "pending",
+                    "mocking_validation": "pending",
+                    "test_execution": "pending",
+                    "elapsed_time": 0,
+                    "generation_timestamp": 0,
+                    "model_name": ""
+                }
+            }
+        }
+    },
+    "import_map": {
+        "*": "org.apache.commons.graph.*",
+        "BitSet": "java.util.BitSet",
+        "HashMap": "java.util.HashMap",
+        "Iterator": "java.util.Iterator",
+        "Map": "java.util.Map"
+    }
+}

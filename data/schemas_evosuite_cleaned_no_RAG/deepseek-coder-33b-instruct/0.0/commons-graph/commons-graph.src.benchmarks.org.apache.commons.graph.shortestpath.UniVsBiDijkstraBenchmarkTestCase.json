@@ -1,0 +1,1173 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-graph/src/benchmarks/java/org/apache/commons/graph/shortestpath/UniVsBiDijkstraBenchmarkTestCase.java",
+  "imports": {
+    "22-22:import static org.apache.commons.graph.CommonsGraph.findShortestPath;": {
+      "start": 22,
+      "end": 22,
+      "body": "import static org.apache.commons.graph.CommonsGraph.findShortestPath;"
+    },
+    "23-23:import static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph;": {
+      "start": 23,
+      "end": 23,
+      "body": "import static org.apache.commons.graph.CommonsGraph.newDirectedMutableGraph;"
+    },
+    "24-24:import static org.junit.Assert.assertTrue;": {
+      "start": 24,
+      "end": 24,
+      "body": "import static org.junit.Assert.assertTrue;"
+    },
+    "26-26:import static java.lang.String.format;": {
+      "start": 26,
+      "end": 26,
+      "body": "import static java.lang.String.format;"
+    },
+    "27-27:import static java.lang.String.valueOf;": {
+      "start": 27,
+      "end": 27,
+      "body": "import static java.lang.String.valueOf;"
+    },
+    "29-29:import org.apache.commons.graph.GraphException;": {
+      "start": 29,
+      "end": 29,
+      "body": "import org.apache.commons.graph.GraphException;"
+    },
+    "30-30:import org.apache.commons.graph.Mapper;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.graph.Mapper;"
+    },
+    "31-31:import org.apache.commons.graph.WeightedPath;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.graph.WeightedPath;"
+    },
+    "32-32:import org.apache.commons.graph.builder.AbstractGraphConnection;": {
+      "start": 32,
+      "end": 32,
+      "body": "import org.apache.commons.graph.builder.AbstractGraphConnection;"
+    },
+    "33-33:import org.apache.commons.graph.model.BaseLabeledVertex;": {
+      "start": 33,
+      "end": 33,
+      "body": "import org.apache.commons.graph.model.BaseLabeledVertex;"
+    },
+    "34-34:import org.apache.commons.graph.model.BaseLabeledWeightedEdge;": {
+      "start": 34,
+      "end": 34,
+      "body": "import org.apache.commons.graph.model.BaseLabeledWeightedEdge;"
+    },
+    "35-35:import org.apache.commons.graph.model.BaseWeightedEdge;": {
+      "start": 35,
+      "end": 35,
+      "body": "import org.apache.commons.graph.model.BaseWeightedEdge;"
+    },
+    "36-36:import org.apache.commons.graph.model.DirectedMutableGraph;": {
+      "start": 36,
+      "end": 36,
+      "body": "import org.apache.commons.graph.model.DirectedMutableGraph;"
+    },
+    "37-37:import org.apache.commons.graph.weight.OrderedMonoid;": {
+      "start": 37,
+      "end": 37,
+      "body": "import org.apache.commons.graph.weight.OrderedMonoid;"
+    },
+    "38-38:import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;": {
+      "start": 38,
+      "end": 38,
+      "body": "import org.apache.commons.graph.weight.primitive.DoubleWeightBaseOperations;"
+    },
+    "39-39:import org.junit.BeforeClass;": {
+      "start": 39,
+      "end": 39,
+      "body": "import org.junit.BeforeClass;"
+    },
+    "40-40:import org.junit.Test;": {
+      "start": 40,
+      "end": 40,
+      "body": "import org.junit.Test;"
+    },
+    "42-42:import java.util.ArrayList;": {
+      "start": 42,
+      "end": 42,
+      "body": "import java.util.ArrayList;"
+    },
+    "43-43:import java.util.LinkedList;": {
+      "start": 43,
+      "end": 43,
+      "body": "import java.util.LinkedList;"
+    },
+    "44-44:import java.util.List;": {
+      "start": 44,
+      "end": 44,
+      "body": "import java.util.List;"
+    },
+    "45-45:import java.util.Random;": {
+      "start": 45,
+      "end": 45,
+      "body": "import java.util.Random;"
+    }
+  },
+  "classes": {
+    "47-180:UniVsBiDijkstraBenchmarkTestCase": {
+      "start": 47,
+      "end": 180,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "67-139:setUp": {
+          "start": 67,
+          "end": 139,
+          "body": [
+            "@BeforeClass",
+            "    public static void setUp() {",
+            "        weightOperations = new DoubleWeightBaseOperations();",
+            "",
+            "        weightedEdges =",
+            "                new Mapper<BaseLabeledWeightedEdge<Double>, Double>() {",
+            "",
+            "                    public Double map(BaseLabeledWeightedEdge<Double> input) {",
+            "                        return input.getWeight();",
+            "                    }",
+            "                };",
+            "",
+            "        graph =",
+            "                newDirectedMutableGraph(",
+            "                        new AbstractGraphConnection<",
+            "                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>() {",
+            "                            Random r = new Random();",
+            "",
+            "                            private boolean addEdge(BaseLabeledVertex src, BaseLabeledVertex dst) {",
+            "                                try {",
+            "                                    addEdge(",
+            "                                                    new BaseLabeledWeightedEdge<Double>(",
+            "                                                            format(\"%s -> %s\", src, dst),",
+            "                                                            10.0 * r.nextDouble() + 1.0))",
+            "                                            .from(src)",
+            "                                            .to(dst);",
+            "                                    return true;",
+            "                                } catch (GraphException e) {",
+            "                                    return false;",
+            "                                }",
+            "                            }",
+            "",
+            "                            public void connect0() {",
+            "                                vertices = new ArrayList<BaseLabeledVertex>();",
+            "                                for (int i = 0; i < NODES; i++) {",
+            "                                    BaseLabeledVertex v = new BaseLabeledVertex(valueOf(i));",
+            "                                    addVertex(v);",
+            "                                    vertices.add(v);",
+            "                                }",
+            "",
+            "                                for (int i = 0; i < NODES - 1; i++) {",
+            "                                    addEdge(vertices.get(i), vertices.get(i + 1));",
+            "                                }",
+            "",
+            "                                addEdge(vertices.get(NODES - 1), vertices.get(0));",
+            "",
+            "                                int maxEdges = Math.max(0, EDGES - NODES);",
+            "                                for (int i = 0; i < maxEdges; i++) {",
+            "                                    while (!addEdge(",
+            "                                            vertices.get(r.nextInt(NODES)),",
+            "                                            vertices.get(r.nextInt(NODES)))) {}",
+            "                                }",
+            "                            }",
+            "                        });",
+            "",
+            "        sourceListUni = new LinkedList<BaseLabeledVertex>();",
+            "        targetListUni = new LinkedList<BaseLabeledVertex>();",
+            "",
+            "        sourceListBi = new LinkedList<BaseLabeledVertex>();",
+            "        targetListBi = new LinkedList<BaseLabeledVertex>();",
+            "",
+            "        Random r = new Random();",
+            "",
+            "        for (int i = 0; i < 15; i++) {",
+            "            BaseLabeledVertex s = vertices.get(r.nextInt(vertices.size()));",
+            "            sourceListUni.add(s);",
+            "            sourceListBi.add(s);",
+            "",
+            "            BaseLabeledVertex t = vertices.get(r.nextInt(vertices.size()));",
+            "            targetListUni.add(t);",
+            "            targetListBi.add(t);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@BeforeClass"
+          ],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "DoubleWeightBaseOperations",
+            "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+            "BaseLabeledWeightedEdge<Double>",
+            "Double",
+            "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+            "Random",
+            "boolean",
+            "BaseLabeledVertex",
+            "GraphException",
+            "void",
+            "ArrayList<BaseLabeledVertex>",
+            "int",
+            "LinkedList<BaseLabeledVertex>"
+          ],
+          "signature": "setUp()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 20:36:00",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "DoubleWeightBaseOperations": {
+                "identifier": "DoubleWeightBaseOperations",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:36:00",
+                "source_type": "DoubleWeightBaseOperations",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "DoubleWeightBaseOperations",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Mapper<BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:36:15",
+                "source_type": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:36:59",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Double": {
+                "identifier": "Double",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:37:16",
+                "source_type": "Double",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "float",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:37:35",
+                "source_type": "AbstractGraphConnection<\n                                BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Random": {
+                "identifier": "Random",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:04",
+                "source_type": "Random",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:18",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:18",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "GraphException": {
+                "identifier": "GraphException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:18",
+                "source_type": "GraphException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "GraphException",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:18",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ArrayList<BaseLabeledVertex>": {
+                "identifier": "ArrayList<BaseLabeledVertex>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:18",
+                "source_type": "ArrayList<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "from typing import List, Any",
+                "translated_target_type": "List[Any]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:33",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "LinkedList<BaseLabeledVertex>": {
+                "identifier": "LinkedList<BaseLabeledVertex>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:38:50",
+                "source_type": "LinkedList<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "141-159:testPerformBidirectionalDijkstra": {
+          "start": 141,
+          "end": 159,
+          "body": [
+            "@Test",
+            "    public void testPerformBidirectionalDijkstra() {",
+            "        BaseLabeledVertex source = sourceListBi.removeFirst();",
+            "        BaseLabeledVertex target = targetListBi.removeFirst();",
+            "",
+            "        try {",
+            "            WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> path =",
+            "                    findShortestPath(graph)",
+            "                            .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                            .from(source)",
+            "                            .to(target)",
+            "                            .applyingBidirectionalDijkstra(weightOperations);",
+            "",
+            "            assertTrue(path.getSize() > 0);",
+            "            assertTrue(path.getWeight() > 0D);",
+            "        } catch (Exception e) {",
+            "            e.printStackTrace();",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseWeightedEdge<Double>",
+            "Exception"
+          ],
+          "signature": "testPerformBidirectionalDijkstra()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 20:39:11",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:39:11",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:39:26",
+                "source_type": "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:39:56",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:40:29",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Exception": {
+                "identifier": "Exception",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:41:07",
+                "source_type": "Exception",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "161-179:testPerformUnidirectionalDijkstra": {
+          "start": 161,
+          "end": 179,
+          "body": [
+            "@Test",
+            "    public void testPerformUnidirectionalDijkstra() {",
+            "        BaseLabeledVertex source = sourceListUni.removeFirst();",
+            "        BaseLabeledVertex target = targetListUni.removeFirst();",
+            "",
+            "        try {",
+            "            WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double> path =",
+            "                    findShortestPath(graph)",
+            "                            .whereEdgesHaveWeights(new BaseWeightedEdge<Double>())",
+            "                            .from(source)",
+            "                            .to(target)",
+            "                            .applyingDijkstra(weightOperations);",
+            "",
+            "            assertTrue(path.getSize() > 0);",
+            "            assertTrue(path.getWeight() > 0D);",
+            "        } catch (Exception e) {",
+            "            e.printStackTrace();",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Test"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BaseLabeledVertex",
+            "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+            "BaseLabeledWeightedEdge<Double>",
+            "BaseWeightedEdge<Double>",
+            "Exception"
+          ],
+          "signature": "testPerformUnidirectionalDijkstra()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 20:41:23",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BaseLabeledVertex": {
+                "identifier": "BaseLabeledVertex",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:41:23",
+                "source_type": "BaseLabeledVertex",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "BaseLabeledVertex",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:41:41",
+                "source_type": "WeightedPath<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>, Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseLabeledWeightedEdge<Double>": {
+                "identifier": "BaseLabeledWeightedEdge<Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:42:09",
+                "source_type": "BaseLabeledWeightedEdge<Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "BaseWeightedEdge<Double>": {
+                "identifier": "BaseWeightedEdge<Double>",
+                "translated": false,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:42:51",
+                "source_type": "BaseWeightedEdge<Double>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Exception": {
+                "identifier": "Exception",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 20:43:31",
+                "source_type": "Exception",
+                "generation": "",
+                "imports": "from unittest import TestCase\nimport traceback",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        }
+      },
+      "fields": {
+        "48-48:NODES": {
+          "start": 48,
+          "end": 48,
+          "enum_constant": false,
+          "body": [
+            "private static final int NODES = 5000;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:33:29",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "49-49:EDGES": {
+          "start": 49,
+          "end": 49,
+          "enum_constant": false,
+          "body": [
+            "private static final int EDGES = 100000;"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "int"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:33:29",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "51-51:graph": {
+          "start": 51,
+          "end": 51,
+          "enum_constant": false,
+          "body": [
+            "private static DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>> graph;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>": {
+                "identifier": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:33:46",
+                "source_type": "DirectedMutableGraph<BaseLabeledVertex, BaseLabeledWeightedEdge<Double>>",
+                "generation": "",
+                "imports": "from typing import Dict, List, Tuple",
+                "translated_target_type": "Dict[str, Dict[str, float]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "53-53:weightedEdges": {
+          "start": 53,
+          "end": 53,
+          "enum_constant": false,
+          "body": [
+            "private static Mapper<BaseLabeledWeightedEdge<Double>, Double> weightedEdges;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "Mapper<BaseLabeledWeightedEdge<Double>, Double>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Mapper<BaseLabeledWeightedEdge<Double>, Double>": {
+                "identifier": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:34:07",
+                "source_type": "Mapper<BaseLabeledWeightedEdge<Double>, Double>",
+                "generation": "",
+                "imports": "from typing import Dict, Tuple",
+                "translated_target_type": "Dict[Tuple[str, str], float]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "55-55:sourceListUni": {
+          "start": 55,
+          "end": 55,
+          "enum_constant": false,
+          "body": [
+            "private static LinkedList<BaseLabeledVertex> sourceListUni;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "LinkedList<BaseLabeledVertex>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "LinkedList<BaseLabeledVertex>": {
+                "identifier": "LinkedList<BaseLabeledVertex>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:34:25",
+                "source_type": "LinkedList<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "from collections import deque",
+                "translated_target_type": "deque[BaseLabeledVertex]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "57-57:sourceListBi": {
+          "start": 57,
+          "end": 57,
+          "enum_constant": false,
+          "body": [
+            "private static LinkedList<BaseLabeledVertex> sourceListBi;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "LinkedList<BaseLabeledVertex>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "LinkedList<BaseLabeledVertex>": {
+                "identifier": "LinkedList<BaseLabeledVertex>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:34:39",
+                "source_type": "LinkedList<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "from collections import deque",
+                "translated_target_type": "deque[BaseLabeledVertex]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "59-59:targetListUni": {
+          "start": 59,
+          "end": 59,
+          "enum_constant": false,
+          "body": [
+            "private static LinkedList<BaseLabeledVertex> targetListUni;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "LinkedList<BaseLabeledVertex>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "LinkedList<BaseLabeledVertex>": {
+                "identifier": "LinkedList<BaseLabeledVertex>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:34:55",
+                "source_type": "LinkedList<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "from collections import deque",
+                "translated_target_type": "deque[BaseLabeledVertex]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "61-61:targetListBi": {
+          "start": 61,
+          "end": 61,
+          "enum_constant": false,
+          "body": [
+            "private static LinkedList<BaseLabeledVertex> targetListBi;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "LinkedList<BaseLabeledVertex>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "LinkedList<BaseLabeledVertex>": {
+                "identifier": "LinkedList<BaseLabeledVertex>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:35:12",
+                "source_type": "LinkedList<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "from collections import deque",
+                "translated_target_type": "deque[BaseLabeledVertex]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "63-63:vertices": {
+          "start": 63,
+          "end": 63,
+          "enum_constant": false,
+          "body": [
+            "private static List<BaseLabeledVertex> vertices;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "List<BaseLabeledVertex>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "List<BaseLabeledVertex>": {
+                "identifier": "List<BaseLabeledVertex>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:35:31",
+                "source_type": "List<BaseLabeledVertex>",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[BaseLabeledVertex]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        },
+        "65-65:weightOperations": {
+          "start": 65,
+          "end": 65,
+          "enum_constant": false,
+          "body": [
+            "private static OrderedMonoid<Double> weightOperations;"
+          ],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "types": [
+            "OrderedMonoid<Double>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "OrderedMonoid<Double>": {
+                "identifier": "OrderedMonoid<Double>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 20:35:44",
+                "source_type": "OrderedMonoid<Double>",
+                "generation": "",
+                "imports": "from typing import List, Tuple\nimport numpy as np",
+                "translated_target_type": "List[Tuple[np.ndarray, float]]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "pending",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": ""
+        }
+      }
+    }
+  }
+}

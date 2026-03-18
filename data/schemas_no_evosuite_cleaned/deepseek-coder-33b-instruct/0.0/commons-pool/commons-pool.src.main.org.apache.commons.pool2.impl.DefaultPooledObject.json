@@ -1,0 +1,2664 @@
+{
+  "path": "java_projects/cleaned_final_projects_no_evosuite_cleaned/commons-pool/src/main/java/org/apache/commons/pool2/impl/DefaultPooledObject.java",
+  "imports": {
+    "19-19:import org.apache.commons.pool2.PooledObject;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.apache.commons.pool2.PooledObject;"
+    },
+    "20-20:import org.apache.commons.pool2.PooledObjectState;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.apache.commons.pool2.PooledObjectState;"
+    },
+    "21-21:import org.apache.commons.pool2.TrackedUse;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.apache.commons.pool2.TrackedUse;"
+    },
+    "23-23:import java.io.PrintWriter;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.io.PrintWriter;"
+    },
+    "24-24:import java.time.Clock;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.time.Clock;"
+    },
+    "25-25:import java.time.Duration;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.time.Duration;"
+    },
+    "26-26:import java.time.Instant;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.time.Instant;"
+    }
+  },
+  "classes": {
+    "36-266:DefaultPooledObject": {
+      "start": 36,
+      "end": 266,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "58-60:DefaultPooledObject": {
+          "start": 58,
+          "end": 60,
+          "body": [
+            "public DefaultPooledObject(final T object) {",
+            "        this.object = object;",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "DefaultPooledObject(final T object)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "T",
+              "name": "object"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.time.Clock",
+              "systemUTC()"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "218-220:now"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {
+              "final|T|object": {
+                "identifier": "final|T|object",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 15:58:54",
+                "source_type": "T",
+                "generation": "PYTHA:\n```\nPYTHON IMPORTS:\n```\n```\nPYTHON TRANSLATION:\nT\n```\n```\nREASONING:\nThe type T in the Java code is used as a generic placeholder for any type. In Python, we don't have to specify the type when declaring variables or functions, so there is no direct equivalent. However, if you want to maintain the same functionality, you can use typing.Any in Python which allows any type of data.\n```\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type T has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nT\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public DefaultPooledObject(final T object) {\n        this.object = object;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nno type translation has been provided\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 173.50401163101196,
+          "generation_timestamp": "2026-02-23T06:04:09.820734",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self, object_: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "67-82:allocate": {
+          "start": 67,
+          "end": 82,
+          "body": [
+            "public synchronized boolean allocate() {",
+            "        if (state == PooledObjectState.IDLE) {",
+            "            state = PooledObjectState.ALLOCATED;",
+            "            lastBorrowInstant = now();",
+            "            lastUseInstant = lastBorrowInstant;",
+            "            borrowedCount++;",
+            "            if (logAbandoned) {",
+            "                borrowedBy.fillInStackTrace();",
+            "            }",
+            "            return true;",
+            "        }",
+            "        if (state == PooledObjectState.EVICTION) {",
+            "            state = PooledObjectState.EVICTION_RETURN_TO_HEAD;",
+            "        }",
+            "        return false;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "allocate()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "218-220:now"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.CallStack",
+              "32-56:CallStack",
+              "46-46:fillInStackTrace"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 15:59:07",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def allocate(self) -> bool:",
+            "        from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "        if self.__state == PooledObjectState.IDLE:",
+            "            self.__state = PooledObjectState.ALLOCATED",
+            "            self.__lastBorrowInstant = self.__now()",
+            "            self.__lastUseInstant = self.__lastBorrowInstant",
+            "            self.__borrowedCount += 1",
+            "            if self.__logAbandoned:",
+            "                self.__borrowedBy.fillInStackTrace()",
+            "            return True",
+            "        if self.__state == PooledObjectState.EVICTION:",
+            "            self.__state = PooledObjectState.EVICTION_RETURN_TO_HEAD",
+            "        return False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 42.51581883430481,
+          "generation_timestamp": "2026-02-23T11:03:48.713719",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def allocate(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "84-90:compareTo": {
+          "start": 84,
+          "end": 90,
+          "body": [
+            "public int compareTo(final PooledObject<T> other) {",
+            "        final int compareTo = getLastReturnInstant().compareTo(other.getLastReturnInstant());",
+            "        if (compareTo == 0) {",
+            "            return System.identityHashCode(this) - System.identityHashCode(other);",
+            "        }",
+            "        return compareTo;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [
+            "int"
+          ],
+          "signature": "compareTo(final PooledObject<T> other)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "PooledObject<T>",
+              "name": "other"
+            }
+          ],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "150-152:getLastReturnInstant"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.PooledObject",
+              "33-310:PooledObject",
+              "200-202:getLastReturnInstant"
+            ],
+            [
+              "library",
+              "java.time.Instant",
+              "compareTo(java.time.Instant)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "identityHashCode(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 15:59:07",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 15:59:38",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|PooledObject<T>|other": {
+                "identifier": "final|PooledObject<T>|other",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 15:59:23",
+                "source_type": "PooledObject<T>",
+                "generation": "I apologize for the confusion. The previous translation was incorrect and it caused an error due to syntax issues in Python. Here's the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom typing import TypeVar, Generic\nimport time\n```\n\nPYTHON TRANSLATION:\n```python\nT = TypeVar('T')\n\nclass PooledObject(Generic[T]):\n    def __init__(self, obj: T):\n        self.obj = obj\n        self.last_return_instant = time.time()\n\n    def getLastReturnInstant(self) -> float:\n        return self.last_return_instant\n```\n\nREASONING:\nIn Python, we don't have a direct equivalent to Java's `PooledObject<T>` type. However, we can create an equivalent class in Python using the `Generic` and `TypeVar` features from the typing module. We also use the `time` module for getting the current time as a substitute for `getLastReturnInstant()` method.\n",
+                "imports": "from typing import List, Dict, Any\nfrom datetime import datetime, timedelta",
+                "translated_target_type": "List[Dict[str, Any]]",
+                "reasoning": "In the Java code provided, `createRemoveList` method is creating a list of abandoned objects. The type of this list is `ArrayList<PooledObject<T>>` which translates to `List[Dict[str, Any]]` in Python. This is because Python does not have a direct equivalent for Java's generic types like `PooledObject<T>`. Instead, we can use a dictionary (`Dict[str, Any]`) to represent the objects and then store these dictionaries in a list (`List[Dict[str, Any]]`). The keys of this dictionary would be the properties of the object and their values would be the corresponding property values.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nPooledObject<T>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public int compareTo(final PooledObject<T> other) {\n        final int compareTo = getLastReturnInstant().compareTo(other.getLastReturnInstant());\n        if (compareTo == 0) {\n            return System.identityHashCode(this) - System.identityHashCode(other);\n        }\n        return compareTo;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def compareTo(self, other: List[Dict[str, Any]]) -> int:",
+            "        compare_to = self.getLastReturnInstant().compareTo(other.getLastReturnInstant())",
+            "        if compare_to == 0:",
+            "            return System.identityHashCode(self) - System.identityHashCode(other)",
+            "        return compare_to"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.5966477394104,
+          "generation_timestamp": "2026-02-23T05:54:05.479715",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def compareTo(self, other: List[Dict[str, Any]]) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "100-109:deallocate": {
+          "start": 100,
+          "end": 109,
+          "body": [
+            "public synchronized boolean deallocate() {",
+            "        if (state == PooledObjectState.ALLOCATED || state == PooledObjectState.RETURNING) {",
+            "            state = PooledObjectState.IDLE;",
+            "            lastReturnInstant = now();",
+            "            borrowedBy.clear();",
+            "            return true;",
+            "        }",
+            "",
+            "        return false;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "deallocate()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "218-220:now"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.CallStack",
+              "32-56:CallStack",
+              "39-39:clear"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 15:59:38",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def deallocate(self) -> bool:",
+            "        from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "        if self.__state == PooledObjectState.ALLOCATED or self.__state == PooledObjectState.RETURNING:",
+            "            self.__state = PooledObjectState.IDLE",
+            "            self.__lastReturnInstant = self.__now()",
+            "            self.__borrowedBy.clear()",
+            "            return True",
+            "        else:",
+            "            return False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 47.731536626815796,
+          "generation_timestamp": "2026-02-23T11:03:05.932511",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def deallocate(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "117-119:getBorrowedCount": {
+          "start": 117,
+          "end": 119,
+          "body": [
+            "public long getBorrowedCount() {",
+            "        return borrowedCount;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "long"
+          ],
+          "body_types": [],
+          "signature": "getBorrowedCount()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 15:59:38",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getBorrowedCount(self) -> int:",
+            "        return self.__borrowedCount"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.33312177658081,
+          "generation_timestamp": "2026-02-23T05:50:08.561193",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getBorrowedCount(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "121-123:getCreateInstant": {
+          "start": 121,
+          "end": 123,
+          "body": [
+            "public Instant getCreateInstant() {",
+            "        return createInstant;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Instant"
+          ],
+          "body_types": [],
+          "signature": "getCreateInstant()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 15:59:38",
+                "source_type": "Instant",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, the equivalent of Java's `Instant` class is the `datetime` class from the `datetime` module. This class represents a specific moment in time and can be used to represent an instantaneous point on the timeline. The `getCreateInstant()` method in your Java code returns an `Instant` object, which corresponds to Python's `datetime` type.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, the equivalent of Java's `Instant` class is the `datetime` class from the `datetime` module. This class represents a specific moment in time and can be used to represent an instantaneous point on the timeline. The `getCreateInstant()` method in your Java code returns an `Instant` object, which corresponds to Python's `datetime` type.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    public Instant getCreateInstant() {\n        return createInstant;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getCreateInstant(self) -> datetime:",
+            "        return self.__createInstant"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 47.36961650848389,
+          "generation_timestamp": "2026-02-23T05:50:56.041857",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getCreateInstant(self) -> datetime:\n",
+            "        pass\n\n"
+          ]
+        },
+        "125-127:getCreateTime": {
+          "start": 125,
+          "end": 127,
+          "body": [
+            "public long getCreateTime() {",
+            "        return createInstant.toEpochMilli();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "long"
+          ],
+          "body_types": [],
+          "signature": "getCreateTime()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.time.Instant",
+              "toEpochMilli()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 15:59:49",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getCreateTime(self) -> int:",
+            "        return round(self.__createInstant.timestamp() * 1000)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 42.626603841781616,
+          "generation_timestamp": "2026-02-23T05:51:38.783827",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getCreateTime(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "129-132:getIdleDuration": {
+          "start": 129,
+          "end": 132,
+          "body": [
+            "public Duration getIdleDuration() {",
+            "        final Duration elapsed = Duration.between(lastReturnInstant, now());",
+            "        return elapsed.isNegative() ? Duration.ZERO : elapsed;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Duration"
+          ],
+          "body_types": [
+            "Duration"
+          ],
+          "signature": "getIdleDuration()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "218-220:now"
+            ],
+            [
+              "library",
+              "java.time.Duration",
+              "between(java.time.temporal.Temporal,java.time.temporal.Temporal)"
+            ],
+            [
+              "library",
+              "java.time.Duration",
+              "isNegative()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Duration": {
+                "identifier": "Duration",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:00:07",
+                "source_type": "Duration",
+                "generation": "PYTHAON IMPORTS:\n```python\nfrom datetime import timedelta, datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndef getIdleDuration(): \n    elapsed = datetime.now() - lastReturnInstant\n    return max(elapsed, timedelta())\n```\n\nREASONING:\nIn Python, the equivalent of Java's Duration class is provided by the datetime module. The 'timedelta' object in Python represents a duration, and can be used to represent an interval between two dates or times. In this case, it is being used to calculate the elapsed time since the last return instant.\n",
+                "imports": "from datetime import timedelta",
+                "translated_target_type": "timedelta",
+                "reasoning": "In Python, the equivalent of Java's Duration type is the timedelta class from the datetime module. This class represents a duration, the difference between two dates or times. In this case, it is used to represent a time-based amount of time, such as '34.5 seconds'. The code snippet provided in the JAVA CODE section can be translated into Python by using the timedelta object and specifying the duration in seconds.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDuration\n```\n\nJAVA TYPE DESCRIPTION:\nA time-based amount of time, such as '34.5 seconds'.\n \n\nJAVA CODE:\n```\n    public Duration getIdleDuration() {\n        final Duration elapsed = Duration.between(lastReturnInstant, now());\n        return elapsed.isNegative() ? Duration.ZERO : elapsed;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "Duration": {
+                "identifier": "Duration",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:00:48",
+                "source_type": "Duration",
+                "generation": "PYTHAON IMPORTS:\n```python\nfrom datetime import timedelta, datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndef getIdleDuration(): \n    elapsed = datetime.now() - lastReturnInstant\n    return max(elapsed, timedelta())\n```\n\nREASONING:\nIn Python, the equivalent of Java's Duration class is provided by the datetime module. The 'timedelta' object in Python represents a duration, and can be used to represent an interval between two dates or times. In this case, it is being used to calculate the elapsed time since the last return instant.\n",
+                "imports": "from datetime import timedelta",
+                "translated_target_type": "timedelta",
+                "reasoning": "In Python, the equivalent of Java's Duration type is the timedelta class from the datetime module. This class represents a duration, the difference between two dates or times. In this case, it is used to represent a time-based amount of time, such as '34.5 seconds'. The code snippet provided in the JAVA CODE section can be translated into Python by using the timedelta object and specifying the duration in seconds.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDuration\n```\n\nJAVA TYPE DESCRIPTION:\nA time-based amount of time, such as '34.5 seconds'.\n \n\nJAVA CODE:\n```\n    public Duration getIdleDuration() {\n        final Duration elapsed = Duration.between(lastReturnInstant, now());\n        return elapsed.isNegative() ? Duration.ZERO : elapsed;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: invalid syntax (<string>, line 1)\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getIdleDuration(self) -> timedelta:",
+            "        elapsed = datetime.now() - self.__lastReturnInstant",
+            "        return elapsed if elapsed > timedelta(0) else timedelta(0)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 50.130913734436035,
+          "generation_timestamp": "2026-02-23T06:05:00.174848",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getIdleDuration(self) -> timedelta:\n",
+            "        pass\n\n"
+          ]
+        },
+        "134-136:getIdleTime": {
+          "start": 134,
+          "end": 136,
+          "body": [
+            "public Duration getIdleTime() {",
+            "        return getIdleDuration();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Duration"
+          ],
+          "body_types": [],
+          "signature": "getIdleTime()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "129-132:getIdleDuration"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Duration": {
+                "identifier": "Duration",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:07",
+                "source_type": "Duration",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import timedelta\n```\n\nPYTHON TRANSLATION:\n```python\ntimedelta\n```\n\nREASONING:\nIn Python, the equivalent of Java's Duration type is the timedelta class from the datetime module. This class represents a duration, the difference between two dates or times. In this case, it seems like getIdleTime() method in Java returns a Duration object which corresponds to timedelta in Python.\n",
+                "imports": "from datetime import timedelta",
+                "translated_target_type": "timedelta",
+                "reasoning": "In Python, the equivalent of Java's Duration type is the timedelta class from the datetime module. This class represents a duration, the difference between two dates or times. In this case, it seems like getIdleTime() method in Java returns a Duration object which corresponds to timedelta in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nDuration\n```\n\nJAVA TYPE DESCRIPTION:\nA time-based amount of time, such as '34.5 seconds'.\n \n\nJAVA CODE:\n```\n    public Duration getIdleTime() {\n        return getIdleDuration();\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getIdleTime(self) -> timedelta:",
+            "        return self.getIdleDuration()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 34.17827868461609,
+          "generation_timestamp": "2026-02-23T06:05:34.466482",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getIdleTime(self) -> timedelta:\n",
+            "        pass\n\n"
+          ]
+        },
+        "138-140:getIdleTimeMillis": {
+          "start": 138,
+          "end": 140,
+          "body": [
+            "public long getIdleTimeMillis() {",
+            "        return getIdleDuration().toMillis();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "long"
+          ],
+          "body_types": [],
+          "signature": "getIdleTimeMillis()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "129-132:getIdleDuration"
+            ],
+            [
+              "library",
+              "java.time.Duration",
+              "toMillis()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:20",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getIdleTimeMillis(self) -> int:",
+            "        return self.getIdleDuration().total_seconds() * 1000"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 35.27666425704956,
+          "generation_timestamp": "2026-02-23T06:06:09.859791",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getIdleTimeMillis(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "142-144:getLastBorrowInstant": {
+          "start": 142,
+          "end": 144,
+          "body": [
+            "public Instant getLastBorrowInstant() {",
+            "        return lastBorrowInstant;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Instant"
+          ],
+          "body_types": [],
+          "signature": "getLastBorrowInstant()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:20",
+                "source_type": "Instant",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Java, `Instant` is used to represent a specific point in time. In Python, we can use the `datetime` module from the standard library which provides classes for manipulating dates and times. The `getLastBorrowInstant()` method in Java returns an `Instant` object, so in Python, we would return a `datetime` object instead.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Java, `Instant` is used to represent a specific point in time. In Python, we can use the `datetime` module from the standard library which provides classes for manipulating dates and times. The `getLastBorrowInstant()` method in Java returns an `Instant` object, so in Python, we would return a `datetime` object instead.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    public Instant getLastBorrowInstant() {\n        return lastBorrowInstant;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getLastBorrowInstant(self) -> datetime:",
+            "        return self.__lastBorrowInstant"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 43.97919249534607,
+          "generation_timestamp": "2026-02-23T05:52:22.879156",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getLastBorrowInstant(self) -> datetime:\n",
+            "        pass\n\n"
+          ]
+        },
+        "146-148:getLastBorrowTime": {
+          "start": 146,
+          "end": 148,
+          "body": [
+            "public long getLastBorrowTime() {",
+            "        return lastBorrowInstant.toEpochMilli();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "long"
+          ],
+          "body_types": [],
+          "signature": "getLastBorrowTime()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.time.Instant",
+              "toEpochMilli()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:30",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getLastBorrowTime(self) -> int:",
+            "        return self.__lastBorrowInstant.timestamp() * 1000"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 50.4272301197052,
+          "generation_timestamp": "2026-02-23T05:53:13.424873",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getLastBorrowTime(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "150-152:getLastReturnInstant": {
+          "start": 150,
+          "end": 152,
+          "body": [
+            "public Instant getLastReturnInstant() {",
+            "        return lastReturnInstant;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Instant"
+          ],
+          "body_types": [],
+          "signature": "getLastReturnInstant()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:39",
+                "source_type": "Instant",
+                "generation": "I apologize for the confusion. The correct translation is indeed `datetime` as it's a built-in Python module that provides classes for manipulating dates and times. Here is the corrected response:\n\nPYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, the equivalent type for Java's Instant is `datetime`. The `datetime` module in Python provides classes for manipulating dates and times. It also supports arithmetic operations on date, time, and combination of both types. In this case, it seems like `getLastReturnInstant()` method returns a datetime object which represents an instantaneous point on the timeline.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, the equivalent type for Java's Instant is `datetime`. The `datetime` module in Python provides classes for manipulating dates and times. It also supports arithmetic operations on date, time, and combination of both types. In this case, it seems like `getLastReturnInstant()` method returns a datetime object which represents an instantaneous point on the timeline.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    public Instant getLastReturnInstant() {\n        return lastReturnInstant;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'datetime' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getLastReturnInstant(self) -> datetime:",
+            "        return self.__lastReturnInstant"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 22.10608744621277,
+          "generation_timestamp": "2026-02-23T05:53:35.646671",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getLastReturnInstant(self) -> datetime:\n",
+            "        pass\n\n"
+          ]
+        },
+        "154-156:getLastReturnTime": {
+          "start": 154,
+          "end": 156,
+          "body": [
+            "public long getLastReturnTime() {",
+            "        return lastReturnInstant.toEpochMilli();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "long"
+          ],
+          "body_types": [],
+          "signature": "getLastReturnTime()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.time.Instant",
+              "toEpochMilli()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:53",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getLastReturnTime(self) -> int:",
+            "        return self.__lastReturnInstant.timestamp() * 1000 if self.__lastReturnInstant else None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 36.49077033996582,
+          "generation_timestamp": "2026-02-23T05:54:42.086196",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getLastReturnTime(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "166-171:getLastUsedInstant": {
+          "start": 166,
+          "end": 171,
+          "body": [
+            "public Instant getLastUsedInstant() {",
+            "        if (object instanceof TrackedUse) {",
+            "            return PoolImplUtils.max(((TrackedUse) object).getLastUsedInstant(), lastUseInstant);",
+            "        }",
+            "        return lastUseInstant;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Instant"
+          ],
+          "body_types": [
+            "TrackedUse"
+          ],
+          "signature": "getLastUsedInstant()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.TrackedUse",
+              "29-53:TrackedUse",
+              "50-52:getLastUsedInstant"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.PoolImplUtils",
+              "35-225:PoolImplUtils",
+              "159-161:max"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:01:53",
+                "source_type": "Instant",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, the equivalent type for `Instant` in Java is `datetime`. The `datetime` module provides classes to work with dates and times. In this case, it's used to get the last used instant of an object.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, the equivalent type for `Instant` in Java is `datetime`. The `datetime` module provides classes to work with dates and times. In this case, it's used to get the last used instant of an object.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    public Instant getLastUsedInstant() {\n        if (object instanceof TrackedUse) {\n            return PoolImplUtils.max(((TrackedUse) object).getLastUsedInstant(), lastUseInstant);\n        }\n        return lastUseInstant;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "TrackedUse": {
+                "identifier": "TrackedUse",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:02:07",
+                "source_type": "TrackedUse",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "TrackedUse",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getLastUsedInstant(self) -> datetime:",
+            "        from src.main.org.apache.commons.pool2.impl.PoolImplUtils import PoolImplUtils",
+            "        from src.main.org.apache.commons.pool2.TrackedUse import TrackedUse",
+            "        if isinstance(self.__object, TrackedUse):",
+            "            return PoolImplUtils.max_(self.__object.getLastUsedInstant(), self.__lastUseInstant)",
+            "        else:",
+            "            return self.__lastUseInstant"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 38.94814682006836,
+          "generation_timestamp": "2026-02-23T14:44:11.388958",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getLastUsedInstant(self) -> datetime:\n",
+            "        pass\n\n"
+          ]
+        },
+        "181-183:getLastUsedTime": {
+          "start": 181,
+          "end": 183,
+          "body": [
+            "public long getLastUsedTime() {",
+            "        return getLastUsedInstant().toEpochMilli();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "long"
+          ],
+          "body_types": [],
+          "signature": "getLastUsedTime()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "166-171:getLastUsedInstant"
+            ],
+            [
+              "library",
+              "java.time.Instant",
+              "toEpochMilli()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:07",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getLastUsedTime(self) -> int:",
+            "        return self.getLastUsedInstant().timestamp() * 1000"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 18.78723382949829,
+          "generation_timestamp": "2026-02-23T14:44:30.292068",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getLastUsedTime(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        },
+        "185-187:getObject": {
+          "start": 185,
+          "end": 187,
+          "body": [
+            "public T getObject() {",
+            "        return object;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "T"
+          ],
+          "body_types": [],
+          "signature": "getObject()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "T": {
+                "identifier": "T",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:21",
+                "source_type": "T",
+                "generation": "I'm sorry, but without the specific type and description provided in your question, I can't provide a direct translation. However, if you could provide more details about the Java type and its functionality, I would be happy to help with a Python equivalent.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type T has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nT\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    public T getObject() {\n        return object;\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nYour response did not follow the RESPONSE FORMAT guidelines. Make sure you follow the RESPONSE FORMAT in your new response.\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getObject(self) -> object:",
+            "        return self.__object"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 41.1110303401947,
+          "generation_timestamp": "2026-02-23T05:55:23.311303",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getObject(self) -> object:\n",
+            "        pass\n\n"
+          ]
+        },
+        "194-196:getState": {
+          "start": 194,
+          "end": 196,
+          "body": [
+            "public synchronized PooledObjectState getState() {",
+            "        return state;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "PooledObjectState"
+          ],
+          "body_types": [],
+          "signature": "getState()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "PooledObjectState": {
+                "identifier": "PooledObjectState",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:32",
+                "source_type": "PooledObjectState",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "PooledObjectState",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def getState(self) -> \"PooledObjectState\":",
+            "        return self.__state"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/pool2/impl/PooledSoftReferenceTest_testToString_decomposed_mocker_2_DefaultPooledObject_getState.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-pool/src/test/org/apache/commons/pool2/impl/PooledSoftReferenceTest_testToString_decomposed_mocker_2_DefaultPooledObject_getState.py\", line 38, in test_mocking\n    method_ret = instance_initial.orig_DefaultPooledObject_getState()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PooledSoftReference' object has no attribute 'orig_DefaultPooledObject_getState'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 143.6086654663086,
+          "generation_timestamp": "2026-02-23T05:57:47.052227",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def getState(self) -> \"PooledObjectState\":\n",
+            "        pass\n\n"
+          ]
+        },
+        "199-201:invalidate": {
+          "start": 199,
+          "end": 201,
+          "body": [
+            "public synchronized void invalidate() {",
+            "        state = PooledObjectState.INVALID;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "invalidate()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:32",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def invalidate(self) -> None:",
+            "        from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "        self.__state = PooledObjectState.INVALID"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 28.740999221801758,
+          "generation_timestamp": "2026-02-23T05:58:15.925802",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def invalidate(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "204-206:markAbandoned": {
+          "start": 204,
+          "end": 206,
+          "body": [
+            "public synchronized void markAbandoned() {",
+            "        state = PooledObjectState.ABANDONED;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "markAbandoned()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:32",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def markAbandoned(self) -> None:",
+            "        from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "        self.__state = PooledObjectState.ABANDONED"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 17.9852511882782,
+          "generation_timestamp": "2026-02-23T05:58:34.024122",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def markAbandoned(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "209-211:markReturning": {
+          "start": 209,
+          "end": 211,
+          "body": [
+            "public synchronized void markReturning() {",
+            "        state = PooledObjectState.RETURNING;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "markReturning()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:32",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def markReturning(self) -> None:",
+            "        from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "        self.__state = PooledObjectState.RETURNING"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 25.556315422058105,
+          "generation_timestamp": "2026-02-23T05:58:59.693153",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def markReturning(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "218-220:now": {
+          "start": 218,
+          "end": 220,
+          "body": [
+            "private Instant now() {",
+            "        return systemClock.instant();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "Instant"
+          ],
+          "body_types": [],
+          "signature": "now()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.time.Clock",
+              "instant()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:02:45",
+                "source_type": "Instant",
+                "generation": "I apologize for the confusion. The `datetime` module in Python is indeed correct, but we need to clarify that we're looking for a type, not an object. Here's the corrected response:\n\nPYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, `datetime` is a type that corresponds to Java's `Instant`. It represents both date and time in a single object. This type can be used to represent an instantaneous point on the timeline in Java.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, `datetime` is a type that corresponds to Java's `Instant`. It represents both date and time in a single object. This type can be used to represent an instantaneous point on the timeline in Java.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    private Instant now() {\n        return systemClock.instant();\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\ndatetime.now() is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def  __now(self) -> datetime:",
+            "        return self.__systemClock"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/pool2/impl/PooledSoftReferenceTest_setUp_decomposed_mocker_2_DefaultPooledObject_now.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/MockingBird/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/MockingBird/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-pool/src/test/org/apache/commons/pool2/impl/PooledSoftReferenceTest_setUp_decomposed_mocker_2_DefaultPooledObject_now.py\", line 38, in test_mocking\n    method_ret = instance_initial.orig_DefaultPooledObject_now()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PooledSoftReference' object has no attribute 'orig_DefaultPooledObject_now'"
+              }
+            ]
+          },
+          "test_execution": "not-exercised",
+          "elapsed_time": 136.41622519493103,
+          "generation_timestamp": "2026-02-23T06:01:16.211966",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __now(self) -> datetime:\n",
+            "        pass\n\n"
+          ]
+        },
+        "222-228:printStackTrace": {
+          "start": 222,
+          "end": 228,
+          "body": [
+            "public void printStackTrace(final PrintWriter writer) {",
+            "        boolean written = borrowedBy.printStackTrace(writer);",
+            "        written |= usedBy.printStackTrace(writer);",
+            "        if (written) {",
+            "            writer.flush();",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "boolean"
+          ],
+          "signature": "printStackTrace(final PrintWriter writer)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "PrintWriter",
+              "name": "writer"
+            }
+          ],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.CallStack",
+              "32-56:CallStack",
+              "55-55:printStackTrace"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "flush()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:03:04",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:04:25",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|PrintWriter|writer": {
+                "identifier": "final|PrintWriter|writer",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 16:03:24",
+                "source_type": "PrintWriter",
+                "generation": "PYTHAON IMPORTS:\n```python\nimport io\n```\n\nPYTHON TRANSLATION:\n```python\nio.StringIO\n```\n\nREASONING:\nIn Python, the equivalent type to Java's PrintWriter is io.StringIO from the io module. This class provides a stream-like interface for writing and reading strings in memory, which can be used as an alternative to using a file on disk. It has methods like write() and getvalue(), which are similar to println() and flush() in Java's PrintWriter.\n",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the equivalent of Java's PrintWriter is the StringIO class from the io module. This class provides a convenient way to create file-like objects that can be used as output streams for formatted strings. It also supports all print methods found in PrintStream and does not contain methods for writing raw bytes, which a program should use unencoded byte streams.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nPrintWriter\n```\n\nJAVA TYPE DESCRIPTION:\nPrints formatted representations of objects to a text-output stream.  This\n class implements all of the print methods found in PrintStream.  It does not contain methods for writing raw bytes, for which\n a program should use unencoded byte streams.\n\n\nJAVA CODE:\n```\n    public void printStackTrace(final PrintWriter writer) {\n        boolean written = borrowedBy.printStackTrace(writer);\n        written |= usedBy.printStackTrace(writer);\n        if (written) {\n            writer.flush();\n        }\n    }\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nError evaluating type: name 'io' is not defined\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def printStackTrace(self, writer: StringIO) -> None:",
+            "        written = self.__borrowedBy.printStackTrace(writer)",
+            "        written |= self.__usedBy.printStackTrace(writer)",
+            "        if written:",
+            "            writer.flush()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.54157042503357,
+          "generation_timestamp": "2026-02-23T11:04:39.729666",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def printStackTrace(self, writer: StringIO) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "230-232:setLogAbandoned": {
+          "start": 230,
+          "end": 232,
+          "body": [
+            "public void setLogAbandoned(final boolean logAbandoned) {",
+            "        this.logAbandoned = logAbandoned;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "setLogAbandoned(final boolean logAbandoned)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "logAbandoned"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:04:25",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|boolean|logAbandoned": {
+                "identifier": "final|boolean|logAbandoned",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2026-02-22 16:04:25",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def setLogAbandoned(self, logAbandoned: bool) -> None:",
+            "        self.__logAbandoned = logAbandoned"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.059669017791748,
+          "generation_timestamp": "2026-02-23T06:06:40.026270",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def setLogAbandoned(self, logAbandoned: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "243-249:startEvictionTest": {
+          "start": 243,
+          "end": 249,
+          "body": [
+            "public synchronized boolean startEvictionTest() {",
+            "        if (state == PooledObjectState.IDLE) {",
+            "            state = PooledObjectState.EVICTION;",
+            "            return true;",
+            "        }",
+            "        return false;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "synchronized"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "startEvictionTest()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:04:25",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def startEvictionTest(self) -> bool:",
+            "        from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "        if self._DefaultPooledObject__state == PooledObjectState.IDLE:",
+            "            self._DefaultPooledObject__state = PooledObjectState.EVICTION",
+            "            return True",
+            "        return False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 19.627728700637817,
+          "generation_timestamp": "2026-02-23T06:06:59.766527",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def startEvictionTest(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "251-260:toString": {
+          "start": 251,
+          "end": 260,
+          "body": [
+            "public String toString() {",
+            "        final StringBuilder result = new StringBuilder();",
+            "        result.append(\"Object: \");",
+            "        result.append(object.toString());",
+            "        result.append(\", State: \");",
+            "        synchronized (this) {",
+            "            result.append(state.toString());",
+            "        }",
+            "        return result.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "StringBuilder"
+          ],
+          "signature": "toString()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Object",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:04:25",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2026-02-22 16:04:25",
+                "source_type": "StringBuilder",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom io import StringIO\n```\n\nPYTHON TRANSLATION:\n```python\nStringIO\n```\n\nREASONING: \nIn Python, the equivalent type to Java's `StringBuilder` is `io.StringIO`. This class provides a similar functionality as `StringBuilder` in Java, allowing for mutable sequences of characters and appending operations. It also supports string formatting methods like `append()` used in the provided Java code.\n",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the equivalent type to Java's `StringBuilder` is `io.StringIO`. This class provides a similar functionality as `StringBuilder` in Java, allowing for mutable sequences of characters and appending operations. It also supports string formatting methods like `append()` used in the provided Java code.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nStringBuilder\n```\n\nJAVA TYPE DESCRIPTION:\nA mutable sequence of characters.  This class provides an API compatible\n with StringBuffer, but with no guarantee of synchronization.\n This class is designed for use as a drop-in replacement for\n StringBuffer in places where the string buffer was being\n used by a single thread (as is generally the case).   Where possible,\n it is recommended that this class be used in preference to\n StringBuffer as it will be faster under most implementations.\n\n\nJAVA CODE:\n```\n    public String toString() {\n        final StringBuilder result = new StringBuilder();\n        result.append(\"Object: \");\n        result.append(object.toString());\n        result.append(\", State: \");\n        synchronized (this) {\n            result.append(state.toString());\n        }\n        return result.toString();\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def toString(self) -> str:",
+            "        result = StringIO()",
+            "        result.write(\"Object: \")",
+            "        result.write(str(self.__object))",
+            "        result.write(\", State: \")",
+            "        with self:",
+            "            result.write(str(self.__state))",
+            "        return result.getvalue()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 30.922555446624756,
+          "generation_timestamp": "2026-02-23T06:07:30.804549",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def toString(self) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "262-265:use": {
+          "start": 262,
+          "end": 265,
+          "body": [
+            "public void use() {",
+            "        lastUseInstant = now();",
+            "        usedBy.fillInStackTrace();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "use()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.DefaultPooledObject",
+              "36-266:DefaultPooledObject",
+              "218-220:now"
+            ],
+            [
+              "commons-pool.src.main.org.apache.commons.pool2.impl.CallStack",
+              "32-56:CallStack",
+              "46-46:fillInStackTrace"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2026-02-22 16:04:41",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def use(self) -> None:",
+            "        self.__lastUseInstant = self.__now()",
+            "        self.__usedBy.fillInStackTrace()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 21.060297966003418,
+          "generation_timestamp": "2026-02-23T11:04:09.910524",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def use(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "38-38:object": {
+          "start": 38,
+          "end": 38,
+          "enum_constant": false,
+          "body": [
+            "private final T object;"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "T"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "T": {
+                "identifier": "T",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:57:38",
+                "source_type": "T",
+                "generation": "I'm sorry, but without the specific type and description provided in the JAVA TYPE and JAVA TYPE DESCRIPTION sections of your question, I can't provide a direct translation. However, if you could provide more details about what type `T` is in Java, I would be happy to help find an equivalent type in Python.\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type T has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nT\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private final T object;\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\nYour response did not follow the RESPONSE FORMAT guidelines. Make sure you follow the RESPONSE FORMAT in your new response.\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __object: object = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __object: object = None"
+          ]
+        },
+        "39-40:state": {
+          "start": 39,
+          "end": 40,
+          "enum_constant": false,
+          "body": [
+            "private PooledObjectState state =",
+            "            PooledObjectState.IDLE;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "PooledObjectState"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "PooledObjectState": {
+                "identifier": "PooledObjectState",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:57:47",
+                "source_type": "PooledObjectState",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "PooledObjectState",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.apache.commons.pool2.PooledObjectState import PooledObjectState",
+            "    __state: \"PooledObjectState\" = PooledObjectState.IDLE"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 41.063594341278076,
+          "generation_timestamp": "2026-02-23T04:56:17.979523",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __state: \"PooledObjectState\" = ",
+            ""
+          ]
+        },
+        "41-41:systemClock": {
+          "start": 41,
+          "end": 41,
+          "enum_constant": false,
+          "body": [
+            "private final Clock systemClock = Clock.systemUTC();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Clock"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Clock": {
+                "identifier": "Clock",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:57:57",
+                "source_type": "Clock",
+                "generation": "I apologize for the confusion. The previous response was incorrect and it caused the error you mentioned. Here is the correct translation:\n\nPYTHON IMPORTS:\n```python\nfrom datetime import datetime, timezone\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime.now(timezone.utc)\n```\n\nREASONING:\nIn Python, the equivalent of Java's Clock class is provided by the datetime and timezone modules. The datetime module provides classes for manipulating dates and times, while the timezone module allows for working with different time zones. In this case, we use the now() function from the datetime module to get the current date and time in UTC (Coordinated Universal Time), which is equivalent to Java's Clock.systemUTC().\n",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type Clock has been translated to \"object\"",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nClock\n```\n\nJAVA TYPE DESCRIPTION:\nA clock providing access to the current instant, date and time using a time-zone.\n \n\nJAVA CODE:\n```\n    private final Clock systemClock = Clock.systemUTC();\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\ndatetime.now(timezone.utc) is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    class DefaultPooledObject:",
+            "     __systemClock: object = datetime.now(timezone.utc)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "failed",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 217.99011254310608,
+          "generation_timestamp": "2026-02-23T04:55:36.776323",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __systemClock: object = ",
+            ""
+          ]
+        },
+        "42-42:createInstant": {
+          "start": 42,
+          "end": 42,
+          "enum_constant": false,
+          "body": [
+            "private final Instant createInstant = now();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Instant"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:14",
+                "source_type": "Instant",
+                "generation": "I apologize for the confusion. The `datetime` module in Python is indeed used to work with dates and times, but it does not have an exact equivalent of Java's `Instant` class. However, you can use the `time` module in Python which provides various time-related functions. \n\nHere is a simple translation:\n\nPYTHON IMPORTS:\n```python\nimport time\n```\n\nPYTHON TRANSLATION:\n```python\ntime.time()\n```\n\nREASONING: \nIn Python, the `time` module provides various functions to manipulate time-related tasks. The `time()` function returns the current time in seconds since the Epoch (a fixed point in time used as a reference). It is similar to Java's `Instant.now()` method which returns the current instant from the epoch of 1970-01-01T00:00:00Z.\n",
+                "imports": "from datetime import timedelta, datetime",
+                "translated_target_type": "timedelta",
+                "reasoning": "In Python, the equivalent of Java's `Instant` is `datetime.now()` which returns the current date and time. The `getActiveDuration` method in your code calculates the difference between two timestamps (last borrow and last return), so it can be translated to a `timedelta` object, which represents a duration, rather than an instantaneous point on the time-line as in Java's `Instant`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    private final Instant createInstant = now();\n```\n\nFEEDBACK: Your previous translation was incorrect and it caused the following error. Make sure you only include the type translation in the response and no other code.\ndatetime.now() is not a valid type\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __createInstant: datetime = datetime.now()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 37.47447872161865,
+          "generation_timestamp": "2026-02-23T04:51:58.646481",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __createInstant: timedelta = ",
+            ""
+          ]
+        },
+        "44-44:lastBorrowInstant": {
+          "start": 44,
+          "end": 44,
+          "enum_constant": false,
+          "body": [
+            "private volatile Instant lastBorrowInstant = createInstant;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "Instant"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:23",
+                "source_type": "Instant",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, the equivalent type to Java's Instant is datetime. The datetime module in Python provides classes for manipulating dates and times. It includes a class called datetime which can be used to represent both date (year, month, day) and time (hour, minute, second, microsecond). In this case, it seems like the lastBorrowInstant variable is being used to store the last time something was borrowed, so it would make sense for it to be a datetime object.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, the equivalent type to Java's Instant is datetime. The datetime module in Python provides classes for manipulating dates and times. It includes a class called datetime which can be used to represent both date (year, month, day) and time (hour, minute, second, microsecond). In this case, it seems like the lastBorrowInstant variable is being used to store the last time something was borrowed, so it would make sense for it to be a datetime object.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    private volatile Instant lastBorrowInstant = createInstant;\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __lastBorrowInstant: datetime = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 29.359898567199707,
+          "generation_timestamp": "2026-02-23T04:51:20.987166",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __lastBorrowInstant: datetime = ",
+            ""
+          ]
+        },
+        "45-45:lastUseInstant": {
+          "start": 45,
+          "end": 45,
+          "enum_constant": false,
+          "body": [
+            "private volatile Instant lastUseInstant = createInstant;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "Instant"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:30",
+                "source_type": "Instant",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, the equivalent type to Java's Instant is datetime. The datetime module in Python provides classes for manipulating dates and times. It also supports arithmetic operations on date and time objects which are similar to what can be done with an Instant object in Java.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, the equivalent type to Java's Instant is datetime. The datetime module in Python provides classes for manipulating dates and times. It also supports arithmetic operations on date and time objects which are similar to what can be done with an Instant object in Java.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    private volatile Instant lastUseInstant = createInstant;\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __lastUseInstant: datetime = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 45.954586029052734,
+          "generation_timestamp": "2026-02-23T04:50:51.477570",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __lastUseInstant: datetime = ",
+            ""
+          ]
+        },
+        "46-46:lastReturnInstant": {
+          "start": 46,
+          "end": 46,
+          "enum_constant": false,
+          "body": [
+            "private volatile Instant lastReturnInstant = createInstant;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "Instant"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Instant": {
+                "identifier": "Instant",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:36",
+                "source_type": "Instant",
+                "generation": "PYTHON IMPORTS:\n```python\nfrom datetime import datetime\n```\n\nPYTHON TRANSLATION:\n```python\ndatetime\n```\n\nREASONING: \nIn Python, the equivalent type to Java's Instant is datetime. The datetime module in Python provides classes for manipulating dates and times, which can be used as a replacement for Java's Instant class.\n",
+                "imports": "from datetime import datetime",
+                "translated_target_type": "datetime",
+                "reasoning": "In Python, the equivalent type to Java's Instant is datetime. The datetime module in Python provides classes for manipulating dates and times, which can be used as a replacement for Java's Instant class.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nInstant\n```\n\nJAVA TYPE DESCRIPTION:\nAn instantaneous point on the time-line.\n \n\nJAVA CODE:\n```\n    private volatile Instant lastReturnInstant = createInstant;\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            }
+          },
+          "translation": [
+            "    __lastReturnInstant: datetime = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 33.255762338638306,
+          "generation_timestamp": "2026-02-23T04:50:05.365666",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __lastReturnInstant: datetime = ",
+            ""
+          ]
+        },
+        "47-47:logAbandoned": {
+          "start": 47,
+          "end": 47,
+          "enum_constant": false,
+          "body": [
+            "private volatile boolean logAbandoned;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:45",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __logAbandoned: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __logAbandoned: bool = False"
+          ]
+        },
+        "48-48:borrowedBy": {
+          "start": 48,
+          "end": 48,
+          "enum_constant": false,
+          "body": [
+            "private volatile CallStack borrowedBy = NoOpCallStack.INSTANCE;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "CallStack"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "CallStack": {
+                "identifier": "CallStack",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:45",
+                "source_type": "CallStack",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CallStack",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.apache.commons.pool2.impl.NoOpCallStack import NoOpCallStack",
+            "    __borrowedBy: \"CallStack\" = NoOpCallStack.INSTANCE"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 26.10619330406189,
+          "generation_timestamp": "2026-02-23T04:49:31.930007",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __borrowedBy: \"CallStack\" = ",
+            ""
+          ]
+        },
+        "49-49:usedBy": {
+          "start": 49,
+          "end": 49,
+          "enum_constant": false,
+          "body": [
+            "private volatile CallStack usedBy = NoOpCallStack.INSTANCE;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "CallStack"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "CallStack": {
+                "identifier": "CallStack",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:45",
+                "source_type": "CallStack",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CallStack",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    from src.main.org.apache.commons.pool2.impl.NoOpCallStack import NoOpCallStack",
+            "    __usedBy: \"CallStack\" = NoOpCallStack.INSTANCE"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 26.55849051475525,
+          "generation_timestamp": "2026-02-23T04:49:05.511393",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __usedBy: \"CallStack\" = ",
+            ""
+          ]
+        },
+        "50-50:borrowedCount": {
+          "start": 50,
+          "end": 50,
+          "enum_constant": false,
+          "body": [
+            "private volatile long borrowedCount;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "long"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "long": {
+                "identifier": "long",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2026-02-22 15:58:45",
+                "source_type": "long",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __borrowedCount: int = 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __borrowedCount: int = 0"
+          ]
+        }
+      },
+      "python_class_declaration": "class DefaultPooledObject:\n\n"
+    }
+  },
+  "import_map": {
+    "PooledObject": "org.apache.commons.pool2.PooledObject",
+    "PooledObjectState": "org.apache.commons.pool2.PooledObjectState",
+    "TrackedUse": "org.apache.commons.pool2.TrackedUse",
+    "PrintWriter": "java.io.PrintWriter",
+    "Clock": "java.time.Clock",
+    "Duration": "java.time.Duration",
+    "Instant": "java.time.Instant"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from datetime import datetime",
+    "from datetime import timedelta",
+    "from datetime import timedelta, datetime",
+    "from io import StringIO",
+    "from typing import List, Dict, Any\nfrom datetime import datetime, timedelta"
+  ]
+}

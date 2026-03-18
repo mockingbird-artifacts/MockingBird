@@ -1,0 +1,2305 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/jansi/src/main/java/org/fusesource/jansi/AnsiMain.java",
+  "imports": {
+    "18-18:import org.fusesource.jansi.Ansi.Attribute;": {
+      "start": 18,
+      "end": 18,
+      "body": "import org.fusesource.jansi.Ansi.Attribute;"
+    },
+    "19-19:import org.fusesource.jansi.internal.CLibrary;": {
+      "start": 19,
+      "end": 19,
+      "body": "import org.fusesource.jansi.internal.CLibrary;"
+    },
+    "20-20:import org.fusesource.jansi.internal.JansiLoader;": {
+      "start": 20,
+      "end": 20,
+      "body": "import org.fusesource.jansi.internal.JansiLoader;"
+    },
+    "21-21:import org.fusesource.jansi.internal.Kernel32;": {
+      "start": 21,
+      "end": 21,
+      "body": "import org.fusesource.jansi.internal.Kernel32;"
+    },
+    "22-22:import org.fusesource.jansi.internal.MingwSupport;": {
+      "start": 22,
+      "end": 22,
+      "body": "import org.fusesource.jansi.internal.MingwSupport;"
+    },
+    "24-24:import java.io.BufferedReader;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.io.BufferedReader;"
+    },
+    "25-25:import java.io.Closeable;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.io.Closeable;"
+    },
+    "26-26:import java.io.File;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.io.File;"
+    },
+    "27-27:import java.io.FileInputStream;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.io.FileInputStream;"
+    },
+    "28-28:import java.io.IOException;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.io.IOException;"
+    },
+    "29-29:import java.io.InputStream;": {
+      "start": 29,
+      "end": 29,
+      "body": "import java.io.InputStream;"
+    },
+    "30-30:import java.io.InputStreamReader;": {
+      "start": 30,
+      "end": 30,
+      "body": "import java.io.InputStreamReader;"
+    },
+    "31-31:import java.io.PrintStream;": {
+      "start": 31,
+      "end": 31,
+      "body": "import java.io.PrintStream;"
+    },
+    "32-32:import java.util.Properties;": {
+      "start": 32,
+      "end": 32,
+      "body": "import java.util.Properties;"
+    },
+    "34-34:import static java.nio.charset.StandardCharsets.UTF_8;": {
+      "start": 34,
+      "end": 34,
+      "body": "import static java.nio.charset.StandardCharsets.UTF_8;"
+    },
+    "35-35:import static org.fusesource.jansi.Ansi.ansi0;": {
+      "start": 35,
+      "end": 35,
+      "body": "import static org.fusesource.jansi.Ansi.ansi0;"
+    },
+    "36-36:import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;": {
+      "start": 36,
+      "end": 36,
+      "body": "import static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo;"
+    }
+  },
+  "classes": {
+    "55-344:AnsiMain": {
+      "start": 55,
+      "end": 344,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "56-192:main": {
+          "start": 56,
+          "end": 192,
+          "body": [
+            "public static void main(String... args) throws IOException {",
+            "        System.out.println(\"Jansi \" + getJansiVersion());",
+            "",
+            "        System.out.println();",
+            "",
+            "        // info on native library",
+            "        System.out.println(\"library.jansi.path= \" + System.getProperty(\"library.jansi.path\", \"\"));",
+            "        System.out.println(\"library.jansi.version= \" + System.getProperty(\"library.jansi.version\", \"\"));",
+            "        boolean loaded = JansiLoader.initialize();",
+            "        if (loaded) {",
+            "            System.out.println(\"Jansi native library loaded from \" + JansiLoader.getNativeLibraryPath());",
+            "            if (JansiLoader.getNativeLibrarySourceUrl() != null) {",
+            "                System.out.println(\"   which was auto-extracted from \" + JansiLoader.getNativeLibrarySourceUrl());",
+            "            }",
+            "        } else {",
+            "            String prev = System.getProperty(AnsiConsole.JANSI_GRACEFUL);",
+            "            try {",
+            "                System.setProperty(AnsiConsole.JANSI_GRACEFUL, \"false\");",
+            "                JansiLoader.initialize();",
+            "            } catch (Throwable e) {",
+            "                e.printStackTrace(System.out);",
+            "            } finally {",
+            "                if (prev != null) {",
+            "                    System.setProperty(AnsiConsole.JANSI_GRACEFUL, prev);",
+            "                } else {",
+            "                    System.clearProperty(AnsiConsole.JANSI_GRACEFUL);",
+            "                }",
+            "            }",
+            "        }",
+            "",
+            "        System.out.println();",
+            "",
+            "        System.out.println(\"os.name= \" + System.getProperty(\"os.name\") + \", \"",
+            "                + \"os.version= \" + System.getProperty(\"os.version\") + \", \"",
+            "                + \"os.arch= \" + System.getProperty(\"os.arch\"));",
+            "        System.out.println(\"file.encoding= \" + System.getProperty(\"file.encoding\"));",
+            "        System.out.println(\"sun.stdout.encoding= \" + System.getProperty(\"sun.stdout.encoding\") + \", \"",
+            "                + \"sun.stderr.encoding= \" + System.getProperty(\"sun.stderr.encoding\"));",
+            "        System.out.println(\"stdout.encoding= \" + System.getProperty(\"stdout.encoding\") + \", \" + \"stderr.encoding= \"",
+            "                + System.getProperty(\"stderr.encoding\"));",
+            "        System.out.println(\"java.version= \" + System.getProperty(\"java.version\") + \", \"",
+            "                + \"java.vendor= \" + System.getProperty(\"java.vendor\") + \",\"",
+            "                + \" java.home= \" + System.getProperty(\"java.home\"));",
+            "        System.out.println(\"Console: \" + System.console());",
+            "",
+            "        System.out.println();",
+            "",
+            "        System.out.println(AnsiConsole.JANSI_GRACEFUL + \"= \" + System.getProperty(AnsiConsole.JANSI_GRACEFUL, \"\"));",
+            "        System.out.println(AnsiConsole.JANSI_MODE + \"= \" + System.getProperty(AnsiConsole.JANSI_MODE, \"\"));",
+            "        System.out.println(AnsiConsole.JANSI_OUT_MODE + \"= \" + System.getProperty(AnsiConsole.JANSI_OUT_MODE, \"\"));",
+            "        System.out.println(AnsiConsole.JANSI_ERR_MODE + \"= \" + System.getProperty(AnsiConsole.JANSI_ERR_MODE, \"\"));",
+            "        System.out.println(AnsiConsole.JANSI_COLORS + \"= \" + System.getProperty(AnsiConsole.JANSI_COLORS, \"\"));",
+            "        System.out.println(AnsiConsole.JANSI_OUT_COLORS + \"= \" + System.getProperty(AnsiConsole.JANSI_OUT_COLORS, \"\"));",
+            "        System.out.println(AnsiConsole.JANSI_ERR_COLORS + \"= \" + System.getProperty(AnsiConsole.JANSI_ERR_COLORS, \"\"));",
+            "        System.out.println(",
+            "                AnsiConsole.JANSI_PASSTHROUGH + \"= \" + AnsiConsole.getBoolean(AnsiConsole.JANSI_PASSTHROUGH));",
+            "        System.out.println(AnsiConsole.JANSI_STRIP + \"= \" + AnsiConsole.getBoolean(AnsiConsole.JANSI_STRIP));",
+            "        System.out.println(AnsiConsole.JANSI_FORCE + \"= \" + AnsiConsole.getBoolean(AnsiConsole.JANSI_FORCE));",
+            "        System.out.println(AnsiConsole.JANSI_NORESET + \"= \" + AnsiConsole.getBoolean(AnsiConsole.JANSI_NORESET));",
+            "        System.out.println(Ansi.DISABLE + \"= \" + AnsiConsole.getBoolean(Ansi.DISABLE));",
+            "",
+            "        System.out.println();",
+            "",
+            "        System.out.println(\"IS_WINDOWS: \" + AnsiConsole.IS_WINDOWS);",
+            "        if (AnsiConsole.IS_WINDOWS) {",
+            "            System.out.println(\"IS_CONEMU: \" + AnsiConsole.IS_CONEMU);",
+            "            System.out.println(\"IS_CYGWIN: \" + AnsiConsole.IS_CYGWIN);",
+            "            System.out.println(\"IS_MSYSTEM: \" + AnsiConsole.IS_MSYSTEM);",
+            "        }",
+            "",
+            "        System.out.println();",
+            "",
+            "        diagnoseTty(false); // System.out",
+            "        diagnoseTty(true); // System.err",
+            "",
+            "        AnsiConsole.systemInstall();",
+            "",
+            "        System.out.println();",
+            "",
+            "        System.out.println(\"Resulting Jansi modes for stout/stderr streams:\");",
+            "        System.out.println(\"  - System.out: \" + AnsiConsole.out().toString());",
+            "        System.out.println(\"  - System.err: \" + AnsiConsole.err().toString());",
+            "        System.out.println(\"Processor types description:\");",
+            "        for (AnsiType type : AnsiType.values()) {",
+            "            System.out.println(\"  - \" + type + \": \" + type.getDescription());",
+            "        }",
+            "        System.out.println(\"Colors support description:\");",
+            "        for (AnsiColors colors : AnsiColors.values()) {",
+            "            System.out.println(\"  - \" + colors + \": \" + colors.getDescription());",
+            "        }",
+            "        System.out.println(\"Modes description:\");",
+            "        for (AnsiMode mode : AnsiMode.values()) {",
+            "            System.out.println(\"  - \" + mode + \": \" + mode.getDescription());",
+            "        }",
+            "",
+            "        try {",
+            "            System.out.println();",
+            "",
+            "            testAnsi(false);",
+            "            testAnsi(true);",
+            "",
+            "            if (args.length == 0) {",
+            "                printJansiLogoDemo();",
+            "                return;",
+            "            }",
+            "",
+            "            System.out.println();",
+            "",
+            "            if (args.length == 1) {",
+            "                File f = new File(args[0]);",
+            "                if (f.exists()) {",
+            "                    // write file content",
+            "                    System.out.println(",
+            "                            ansi0().bold().a1(\"\\\"\" + args[0] + \"\\\" content:\").reset());",
+            "                    writeFileContent(f);",
+            "                    return;",
+            "                }",
+            "            }",
+            "",
+            "            // write args without Jansi then with Jansi AnsiConsole",
+            "            System.out.println(ansi0().bold().a1(\"original args:\").reset());",
+            "            int i = 1;",
+            "            for (String arg : args) {",
+            "                AnsiConsole.system_out.print(i++ + \": \");",
+            "                AnsiConsole.system_out.println(arg);",
+            "            }",
+            "",
+            "            System.out.println(ansi0().bold().a1(\"Jansi filtered args:\").reset());",
+            "            i = 1;",
+            "            for (String arg : args) {",
+            "                System.out.print(i++ + \": \");",
+            "                System.out.println(arg);",
+            "            }",
+            "        } finally {",
+            "            AnsiConsole.systemUninstall();",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "boolean",
+            "String",
+            "Throwable",
+            "AnsiType",
+            "AnsiColors",
+            "AnsiMode",
+            "File",
+            "int"
+          ],
+          "signature": "main()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "194-197:getJansiVersion"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println()"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "73-91:initialize"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "93-95:getNativeLibraryPath"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.JansiLoader",
+              "61-395:JansiLoader",
+              "97-99:getNativeLibrarySourceUrl"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "setProperty(java.lang.String,java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "printStackTrace(java.io.PrintStream)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "clearProperty(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.System",
+              "console()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.Object)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "460-468:getBoolean"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(boolean)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(java.lang.Object)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "199-232:diagnoseTty"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "519-532:systemInstall"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "478-481:out"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiPrintStream",
+              "28-101:AnsiPrintStream",
+              "92-100:toString"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "500-503:err"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiType",
+              "23-39:AnsiType",
+              "36-38:getDescription"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiColors",
+              "23-37:AnsiColors",
+              "34-36:getDescription"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMode",
+              "23-37:AnsiMode",
+              "34-36:getDescription"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "234-295:testAnsi"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "311-322:printJansiLogoDemo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiConsole",
+              "61-571:AnsiConsole",
+              "546-559:systemUninstall"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "exists()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "191-197:ansi0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "770-772:bold"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "778-782:a1"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "766-768:reset"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.Object)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "324-335:writeFileContent"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "valueOf(int)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "print(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Throwable": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Exception",
+                "reasoning": "In Python, the `Exception` class is the base class for all built-in exceptions. It serves a similar purpose to Java's `Throwable` class, which is the superclass of all errors and exceptions. Therefore, `Exception` is the equivalent type in Python that maintains the same functionality as `Throwable` in Java.",
+                "prompt": ""
+              },
+              "AnsiType": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiType",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiColors": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiColors",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "AnsiMode": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiMode",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "File": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import os",
+                "translated_target_type": "os.PathLike",
+                "reasoning": "The `File` class in Java represents file and directory pathnames. In Python, the equivalent type that represents file and directory pathnames is `os.PathLike`, which is an abstract base class for representing filesystem paths.",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def main() -> None:",
+            "        from src.main.org.fusesource.jansi.Ansi import Ansi",
+            "        from src.main.org.fusesource.jansi.AnsiType import AnsiType",
+            "        from src.main.org.fusesource.jansi.AnsiMode import AnsiMode",
+            "        from src.main.org.fusesource.jansi.AnsiColors import AnsiColors",
+            "        from src.main.org.fusesource.jansi.AnsiConsole import AnsiConsole",
+            "        from src.main.org.fusesource.jansi.internal.JansiLoader import JansiLoader",
+            "        print(\"Jansi \" + AnsiMain.__getJansiVersion())",
+            "",
+            "        print()",
+            "",
+            "        # info on native library",
+            "        print(\"library.jansi.path= \" + os.getenv(\"library.jansi.path\", \"\"))",
+            "        print(\"library.jansi.version= \" + os.getenv(\"library.jansi.version\", \"\"))",
+            "        loaded = JansiLoader.initialize()",
+            "        if loaded:",
+            "            print(\"Jansi native library loaded from \" + JansiLoader.getNativeLibraryPath())",
+            "            if JansiLoader.getNativeLibrarySourceUrl() is not None:",
+            "                print(\"   which was auto-extracted from \" + JansiLoader.getNativeLibrarySourceUrl())",
+            "        else:",
+            "            prev = os.getenv(AnsiConsole.JANSI_GRACEFUL)",
+            "            try:",
+            "                os.environ[AnsiConsole.JANSI_GRACEFUL] = \"false\"",
+            "                JansiLoader.initialize()",
+            "            except Exception as e:",
+            "                e.printStackTrace()",
+            "            finally:",
+            "                if prev is not None:",
+            "                    os.environ[AnsiConsole.JANSI_GRACEFUL] = prev",
+            "                else:",
+            "                    os.environ.pop(AnsiConsole.JANSI_GRACEFUL, None)",
+            "",
+            "        print()",
+            "",
+            "        print(\"os.name= \" + os.getenv(\"os.name\", \"\") + \", \"",
+            "              + \"os.version= \" + os.getenv(\"os.version\", \"\") + \", \"",
+            "              + \"os.arch= \" + os.getenv(\"os.arch\", \"\"))",
+            "        print(\"file.encoding= \" + os.getenv(\"file.encoding\", \"\"))",
+            "        print(\"sun.stdout.encoding= \" + os.getenv(\"sun.stdout.encoding\", \"\") + \", \"",
+            "              + \"sun.stderr.encoding= \" + os.getenv(\"sun.stderr.encoding\", \"\"))",
+            "        print(\"stdout.encoding= \" + os.getenv(\"stdout.encoding\", \"\") + \", \" + \"stderr.encoding= \"",
+            "              + os.getenv(\"stderr.encoding\", \"\"))",
+            "        print(\"java.version= \" + os.getenv(\"java.version\", \"\") + \", \"",
+            "              + \"java.vendor= \" + os.getenv(\"java.vendor\", \"\") + \",\"",
+            "              + \" java.home= \" + os.getenv(\"java.home\", \"\"))",
+            "        print(\"Console: \" + os.getenv(\"console\", \"\"))",
+            "",
+            "        print()",
+            "",
+            "        print(AnsiConsole.JANSI_GRACEFUL + \"= \" + os.getenv(AnsiConsole.JANSI_GRACEFUL, \"\"))",
+            "        print(AnsiConsole.JANSI_MODE + \"= \" + os.getenv(AnsiConsole.JANSI_MODE, \"\"))",
+            "        print(AnsiConsole.JANSI_OUT_MODE + \"= \" + os.getenv(AnsiConsole.JANSI_OUT_MODE, \"\"))",
+            "        print(AnsiConsole.JANSI_ERR_MODE + \"= \" + os.getenv(AnsiConsole.JANSI_ERR_MODE, \"\"))",
+            "        print(AnsiConsole.JANSI_COLORS + \"= \" + os.getenv(AnsiConsole.JANSI_COLORS, \"\"))",
+            "        print(AnsiConsole.JANSI_OUT_COLORS + \"= \" + os.getenv(AnsiConsole.JANSI_OUT_COLORS, \"\"))",
+            "        print(AnsiConsole.JANSI_ERR_COLORS + \"= \" + os.getenv(AnsiConsole.JANSI_ERR_COLORS, \"\"))",
+            "        print(AnsiConsole.JANSI_PASSTHROUGH + \"= \" + str(AnsiConsole.getBoolean(AnsiConsole.JANSI_PASSTHROUGH)))",
+            "        print(AnsiConsole.JANSI_STRIP + \"= \" + str(AnsiConsole.getBoolean(AnsiConsole.JANSI_STRIP)))",
+            "        print(AnsiConsole.JANSI_FORCE + \"= \" + str(AnsiConsole.getBoolean(AnsiConsole.JANSI_FORCE)))",
+            "        print(AnsiConsole.JANSI_NORESET + \"= \" + str(AnsiConsole.getBoolean(AnsiConsole.JANSI_NORESET)))",
+            "        print(Ansi.DISABLE + \"= \" + str(AnsiConsole.getBoolean(Ansi.DISABLE)))",
+            "",
+            "        print()",
+            "",
+            "        print(\"IS_WINDOWS: \" + str(AnsiConsole.IS_WINDOWS))",
+            "        if AnsiConsole.IS_WINDOWS:",
+            "            print(\"IS_CONEMU: \" + str(AnsiConsole.IS_CONEMU))",
+            "            print(\"IS_CYGWIN: \" + str(AnsiConsole.IS_CYGWIN))",
+            "            print(\"IS_MSYSTEM: \" + str(AnsiConsole.IS_MSYSTEM))",
+            "",
+            "        print()",
+            "",
+            "        AnsiMain.__diagnoseTty(False)  # System.out",
+            "        AnsiMain.__diagnoseTty(True)  # System.err",
+            "",
+            "        AnsiConsole.systemInstall()",
+            "",
+            "        print()",
+            "",
+            "        print(\"Resulting Jansi modes for stout/stderr streams:\")",
+            "        print(\"  - System.out: \" + AnsiConsole.out().toString())",
+            "        print(\"  - System.err: \" + AnsiConsole.err().toString())",
+            "        print(\"Processor types description:\")",
+            "        for type_ in AnsiType:",
+            "            print(\"  - \" + str(type_) + \": \" + type_.getDescription())",
+            "        print(\"Colors support description:\")",
+            "        for colors in AnsiColors:",
+            "            print(\"  - \" + str(colors) + \": \" + colors.getDescription())",
+            "        print(\"Modes description:\")",
+            "        for mode in AnsiMode:",
+            "            print(\"  - \" + str(mode) + \": \" + mode.getDescription())",
+            "",
+            "        try:",
+            "            print()",
+            "",
+            "            AnsiMain.__testAnsi(False)",
+            "            AnsiMain.__testAnsi(True)",
+            "",
+            "            if len(sys.argv) == 0:",
+            "                AnsiMain.__printJansiLogoDemo()",
+            "                return",
+            "",
+            "            print()",
+            "",
+            "            if len(sys.argv) == 1:",
+            "                f = open(sys.argv[0], 'r')",
+            "                if f.exists():",
+            "                    # write file content",
+            "                    print(Ansi.ansi0().bold().a1(\"\\\"\" + sys.argv[0] + \"\\\" content:\").reset())",
+            "                    AnsiMain.__writeFileContent(f)",
+            "                    return",
+            "",
+            "            # write args without Jansi then with Jansi AnsiConsole",
+            "            print(Ansi.ansi0().bold().a1(\"original args:\").reset())",
+            "            i = 1",
+            "            for arg in sys.argv:",
+            "                AnsiConsole.system_out.print(str(i) + \": \")",
+            "                AnsiConsole.system_out.println(arg)",
+            "                i += 1",
+            "",
+            "            print(Ansi.ansi0().bold().a1(\"Jansi filtered args:\").reset())",
+            "            i = 1",
+            "            for arg in sys.argv:",
+            "                print(str(i) + \": \")",
+            "                print(arg)",
+            "                i += 1",
+            "        finally:",
+            "            AnsiConsole.systemUninstall()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 53.709312438964844,
+          "generation_timestamp": "2025-11-04T21:42:25.451991",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def main() -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "194-197:getJansiVersion": {
+          "start": 194,
+          "end": 197,
+          "body": [
+            "private static String getJansiVersion() {",
+            "        Package p = AnsiMain.class.getPackage();",
+            "        return (p == null) ? null : p.getImplementationVersion();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "Package",
+            "AnsiMain"
+          ],
+          "signature": "getJansiVersion()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "getPackage()"
+            ],
+            [
+              "library",
+              "java.lang.Package",
+              "getImplementationVersion()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Package": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import importlib.metadata",
+                "translated_target_type": "importlib.metadata.PackageMetadata",
+                "reasoning": "In Python, the `importlib.metadata` module provides access to metadata about packages, which is similar to the `Package` class in Java. The `PackageMetadata` class in `importlib.metadata` can be used to retrieve information such as versioning, which corresponds to the functionality provided by the `Package` class in Java.",
+                "prompt": ""
+              },
+              "AnsiMain": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiMain",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __getJansiVersion() -> str:",
+            "        p = importlib.metadata.version('AnsiMain')",
+            "        return p if p is not None else None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.941687107086182,
+          "generation_timestamp": "2025-11-04T20:21:41.663564",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __getJansiVersion() -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "199-232:diagnoseTty": {
+          "start": 199,
+          "end": 232,
+          "body": [
+            "private static void diagnoseTty(boolean stderr) {",
+            "        int isatty;",
+            "        int width;",
+            "        if (AnsiConsole.IS_WINDOWS) {",
+            "            long console = Kernel32.GetStdHandle(stderr ? Kernel32.STD_ERROR_HANDLE : Kernel32.STD_OUTPUT_HANDLE);",
+            "            int[] mode = new int[1];",
+            "            isatty = Kernel32.GetConsoleMode(console, mode);",
+            "            if ((AnsiConsole.IS_CONEMU || AnsiConsole.IS_CYGWIN || AnsiConsole.IS_MSYSTEM) && isatty == 0) {",
+            "                MingwSupport mingw = new MingwSupport();",
+            "                String name = mingw.getConsoleName(!stderr);",
+            "                if (name != null && !name.isEmpty()) {",
+            "                    isatty = 1;",
+            "                    width = mingw.getTerminalWidth(name);",
+            "                } else {",
+            "                    isatty = 0;",
+            "                    width = 0;",
+            "                }",
+            "            } else {",
+            "                Kernel32.CONSOLE_SCREEN_BUFFER_INFO info = new Kernel32.CONSOLE_SCREEN_BUFFER_INFO();",
+            "                GetConsoleScreenBufferInfo(console, info);",
+            "                width = info.windowWidth();",
+            "            }",
+            "        } else {",
+            "            int fd = stderr ? CLibrary.STDERR_FILENO : CLibrary.STDOUT_FILENO;",
+            "            isatty = CLibrary.LOADED ? CLibrary.isatty(fd) : 0;",
+            "            CLibrary.WinSize ws = new CLibrary.WinSize((short) 0, (short) 0);",
+            "            CLibrary.ioctl(fd, CLibrary.TIOCGWINSZ, ws);",
+            "            width = ws.ws_col;",
+            "        }",
+            "",
+            "        System.out.println(\"isatty(STD\" + (stderr ? \"ERR\" : \"OUT\") + \"_FILENO): \" + isatty + \", System.\"",
+            "                + (stderr ? \"err\" : \"out\") + \" \" + ((isatty == 0) ? \"is *NOT*\" : \"is\") + \" a terminal\");",
+            "        System.out.println(\"width(STD\" + (stderr ? \"ERR\" : \"OUT\") + \"_FILENO): \" + width);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "int",
+            "long",
+            "int[]",
+            "MingwSupport",
+            "String",
+            "Kernel32.CONSOLE_SCREEN_BUFFER_INFO",
+            "Kernel32",
+            "CONSOLE_SCREEN_BUFFER_INFO",
+            "CLibrary.WinSize",
+            "CLibrary",
+            "WinSize",
+            "short"
+          ],
+          "signature": "diagnoseTty( boolean stderr)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stderr"
+            }
+          ],
+          "calls": [
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "182-182:GetStdHandle"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "210-210:GetConsoleMode"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "40-67:MingwSupport"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "69-86:getConsoleName"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "isEmpty()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.MingwSupport",
+              "34-137:MingwSupport",
+              "88-103:getTerminalWidth"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "26-536:Kernel32",
+              "176-177:GetConsoleScreenBufferInfo"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.Kernel32",
+              "128-152:CONSOLE_SCREEN_BUFFER_INFO",
+              "145-147:windowWidth"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.CLibrary",
+              "25-158:CLibrary",
+              "75-75:isatty"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.CLibrary",
+              "111-131:WinSize",
+              "127-130:WinSize"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.internal.CLibrary",
+              "25-158:CLibrary",
+              "104-104:ioctl"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "long": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "list[int]",
+                "reasoning": "In Python, the equivalent of a Java `int[]` is a list of integers. The type `list[int]` specifies a list where each element is an integer, which corresponds to Java's `int[]`.",
+                "prompt": ""
+              },
+              "MingwSupport": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "MingwSupport",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Kernel32.CONSOLE_SCREEN_BUFFER_INFO": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Kernel32.CONSOLE_SCREEN_BUFFER_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Kernel32": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Kernel32",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CONSOLE_SCREEN_BUFFER_INFO": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CONSOLE_SCREEN_BUFFER_INFO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CLibrary.WinSize": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CLibrary.WinSize",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "CLibrary": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CLibrary",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "WinSize": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "WinSize",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "short": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|stderr": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __diagnoseTty(stderr: bool) -> None:",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import Kernel32",
+            "        from src.main.org.fusesource.jansi.internal.Kernel32 import CONSOLE_SCREEN_BUFFER_INFO",
+            "        from src.main.org.fusesource.jansi.AnsiConsole import AnsiConsole",
+            "        from src.main.org.fusesource.jansi.internal.MingwSupport import MingwSupport",
+            "        from src.main.org.fusesource.jansi.internal.CLibrary import CLibrary",
+            "        from src.main.org.fusesource.jansi.internal.CLibrary import WinSize",
+            "        isatty = 0",
+            "        width = 0",
+            "        if AnsiConsole.IS_WINDOWS:",
+            "            console = Kernel32.GetStdHandle(Kernel32.STD_ERROR_HANDLE if stderr else Kernel32.STD_OUTPUT_HANDLE)",
+            "            mode = [0]",
+            "            isatty = Kernel32.GetConsoleMode(console, mode)",
+            "            if (AnsiConsole.IS_CONEMU or AnsiConsole.IS_CYGWIN or AnsiConsole.IS_MSYSTEM) and isatty == 0:",
+            "                mingw = MingwSupport()",
+            "                name = mingw.getConsoleName(not stderr)",
+            "                if name is not None and name:",
+            "                    isatty = 1",
+            "                    width = mingw.getTerminalWidth(name)",
+            "                else:",
+            "                    isatty = 0",
+            "                    width = 0",
+            "            else:",
+            "                info = CONSOLE_SCREEN_BUFFER_INFO()",
+            "                Kernel32.GetConsoleScreenBufferInfo(console, info)",
+            "                width = info.windowWidth()",
+            "        else:",
+            "            fd = CLibrary.STDERR_FILENO if stderr else CLibrary.STDOUT_FILENO",
+            "            isatty = CLibrary.isatty(fd) if CLibrary.LOADED else 0",
+            "            ws = WinSize(0, 0)",
+            "            CLibrary.ioctl(fd, CLibrary.TIOCGWINSZ, ws)",
+            "            width = ws.ws_col",
+            "",
+            "        print(f\"isatty(STD{'ERR' if stderr else 'OUT'}_FILENO): {isatty}, System.{'' if stderr else 'err'}out is {'NOT' if isatty == 0 else ''} a terminal\")",
+            "        print(f\"width(STD{'ERR' if stderr else 'OUT'}_FILENO): {width}\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 23.78307271003723,
+          "generation_timestamp": "2025-11-04T21:41:31.255953",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __diagnoseTty(stderr: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "234-295:testAnsi": {
+          "start": 234,
+          "end": 295,
+          "body": [
+            "private static void testAnsi(boolean stderr) {",
+            "        @SuppressWarnings(\"resource\")",
+            "        PrintStream s = stderr ? System.err : System.out;",
+            "        s.print(\"test on System.\" + (stderr ? \"err\" : \"out\") + \":\");",
+            "        for (Ansi.Color c : Ansi.Color.values()) {",
+            "            s.print(\" \" + ansi0().fg0(c) + c + ansi0().reset());",
+            "        }",
+            "        s.println();",
+            "        s.print(\"            bright:\");",
+            "        for (Ansi.Color c : Ansi.Color.values()) {",
+            "            s.print(\" \" + ansi0().fgBright(c) + c + ansi0().reset());",
+            "        }",
+            "        s.println();",
+            "        s.print(\"              bold:\");",
+            "        for (Ansi.Color c : Ansi.Color.values()) {",
+            "            s.print(\" \" + ansi0().bold().fg0(c) + c + ansi0().reset());",
+            "        }",
+            "        s.println();",
+            "        s.print(\"             faint:\");",
+            "        for (Ansi.Color c : Ansi.Color.values()) {",
+            "            s.print(\" \" + ansi0().a0(Attribute.INTENSITY_FAINT).fg0(c) + c + ansi0().reset());",
+            "        }",
+            "        s.println();",
+            "        s.print(\"        bold+faint:\");",
+            "        for (Ansi.Color c : Ansi.Color.values()) {",
+            "            s.print(\" \" + ansi0().bold().a0(Attribute.INTENSITY_FAINT).fg0(c) + c + ansi0().reset());",
+            "        }",
+            "        s.println();",
+            "        Ansi ansi = ansi0();",
+            "        ansi.a1(\"        256 colors: \");",
+            "        for (int i = 0; i < 6 * 6 * 6; i++) {",
+            "            if (i > 0 && i % 36 == 0) {",
+            "                ansi.reset();",
+            "                ansi.newline();",
+            "                ansi.a1(\"                    \");",
+            "            } else if (i > 0 && i % 6 == 0) {",
+            "                ansi.reset();",
+            "                ansi.a1(\"  \");",
+            "            }",
+            "            int a0 = i % 6;",
+            "            int a1 = (i / 6) % 6;",
+            "            int a2 = i / 36;",
+            "            ansi.bg1(16 + a0 + a2 * 6 + a1 * 36).a3(' ');",
+            "        }",
+            "        ansi.reset();",
+            "        s.println(ansi);",
+            "        ansi = ansi0();",
+            "        ansi.a1(\"         truecolor: \");",
+            "        for (int i = 0; i < 256; i++) {",
+            "            if (i > 0 && i % 48 == 0) {",
+            "                ansi.reset();",
+            "                ansi.newline();",
+            "                ansi.a1(\"                    \");",
+            "            }",
+            "            int r = 255 - i;",
+            "            int g = i * 2 > 255 ? 255 - 2 * i : 2 * i;",
+            "            int b = i;",
+            "            ansi.bgRgb1(r, g, b).fgRgb1(255 - r, 255 - g, 255 - b).a3(i % 2 == 0 ? '/' : '\\\\');",
+            "        }",
+            "        ansi.reset();",
+            "        s.println(ansi);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "PrintStream",
+            "Ansi.Color",
+            "Ansi",
+            "Color",
+            "int"
+          ],
+          "signature": "testAnsi( boolean stderr)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "boolean",
+              "name": "stderr"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "print(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "191-197:ansi0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "404-407:fg0"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.Object)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "766-768:reset"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "510-513:fgBright"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "770-772:bold"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "576-579:a0"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "778-782:a1"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "856-860:newline"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "466-471:bg1"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "790-794:a3"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.Object)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "477-484:bgRgb1"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.Ansi",
+              "29-999:Ansi",
+              "420-427:fgRgb1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "PrintStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, the equivalent type that provides similar functionality to Java's `PrintStream` is `io.TextIOWrapper`. This type wraps a binary stream (like `io.BytesIO`) and provides methods for writing text data, similar to how `PrintStream` works with byte streams in Java.",
+                "prompt": ""
+              },
+              "Ansi.Color": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Ansi.Color",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Ansi": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Ansi",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Color": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "Color",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|boolean|stderr": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __testAnsi(stderr: bool) -> None:",
+            "        from src.main.org.fusesource.jansi.Ansi import Ansi",
+            "        from src.main.org.fusesource.jansi.Ansi import Color",
+            "        from src.main.org.fusesource.jansi.Ansi import Attribute",
+            "        s = sys.stderr if stderr else sys.stdout",
+            "        s.write(\"test on System.\" + (\"err\" if stderr else \"out\") + \":\")",
+            "        for c in Color:",
+            "            s.write(\" \" + Ansi.ansi0().fg0(c) + str(c) + Ansi.ansi0().reset())",
+            "        s.write(\"\\n\")",
+            "        s.write(\"            bright:\")",
+            "        for c in Color:",
+            "            s.write(\" \" + Ansi.ansi0().fgBright(c) + str(c) + Ansi.ansi0().reset())",
+            "        s.write(\"\\n\")",
+            "        s.write(\"              bold:\")",
+            "        for c in Color:",
+            "            s.write(\" \" + Ansi.ansi0().bold().fg0(c) + str(c) + Ansi.ansi0().reset())",
+            "        s.write(\"\\n\")",
+            "        s.write(\"             faint:\")",
+            "        for c in Color:",
+            "            s.write(\" \" + Ansi.ansi0().a0(Attribute.INTENSITY_FAINT).fg0(c) + str(c) + Ansi.ansi0().reset())",
+            "        s.write(\"\\n\")",
+            "        s.write(\"        bold+faint:\")",
+            "        for c in Color:",
+            "            s.write(\" \" + Ansi.ansi0().bold().a0(Attribute.INTENSITY_FAINT).fg0(c) + str(c) + Ansi.ansi0().reset())",
+            "        s.write(\"\\n\")",
+            "        ansi = Ansi.ansi0()",
+            "        ansi.a1(\"        256 colors: \")",
+            "        for i in range(6 * 6 * 6):",
+            "            if i > 0 and i % 36 == 0:",
+            "                ansi.reset()",
+            "                ansi.newline()",
+            "                ansi.a1(\"                    \")",
+            "            elif i > 0 and i % 6 == 0:",
+            "                ansi.reset()",
+            "                ansi.a1(\"  \")",
+            "            a0 = i % 6",
+            "            a1 = (i // 6) % 6",
+            "            a2 = i // 36",
+            "            ansi.bg1(16 + a0 + a2 * 6 + a1 * 36).a3(' ')",
+            "        ansi.reset()",
+            "        s.write(str(ansi))",
+            "        ansi = Ansi.ansi0()",
+            "        ansi.a1(\"         truecolor: \")",
+            "        for i in range(256):",
+            "            if i > 0 and i % 48 == 0:",
+            "                ansi.reset()",
+            "                ansi.newline()",
+            "                ansi.a1(\"                    \")",
+            "            r = 255 - i",
+            "            g = 2 * i if 2 * i <= 255 else 255 - 2 * i",
+            "            b = i",
+            "            ansi.bgRgb1(r, g, b).fgRgb1(255 - r, 255 - g, 255 - b).a3('/' if i % 2 == 0 else '\\\\')",
+            "        ansi.reset()",
+            "        s.write(str(ansi))"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 31.018288612365723,
+          "generation_timestamp": "2025-11-04T20:22:41.131184",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __testAnsi(stderr: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "297-309:getPomPropertiesVersion": {
+          "start": 297,
+          "end": 309,
+          "body": [
+            "private static String getPomPropertiesVersion(String path) throws IOException {",
+            "        InputStream in = AnsiMain.class.getResourceAsStream(\"/META-INF/maven/\" + path + \"/pom.properties\");",
+            "        if (in == null) {",
+            "            return null;",
+            "        }",
+            "        try {",
+            "            Properties p = new Properties();",
+            "            p.load(in);",
+            "            return p.getProperty(\"version\");",
+            "        } finally {",
+            "            closeQuietly(in);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "InputStream",
+            "AnsiMain",
+            "Properties"
+          ],
+          "signature": "getPomPropertiesVersion( String path)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "path"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.lang.Class",
+              "getResourceAsStream(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Properties",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.Properties",
+              "load(java.io.InputStream)"
+            ],
+            [
+              "library",
+              "java.util.Properties",
+              "getProperty(java.lang.String)"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "337-343:closeQuietly"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "InputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess\nimport io",
+                "translated_target_type": "io.BytesIO",
+                "reasoning": "In Python, the equivalent of Java's `InputStream` for handling byte streams is `io.BytesIO`. This class provides a way to work with in-memory binary streams, similar to how `InputStream` works in Java.",
+                "prompt": ""
+              },
+              "AnsiMain": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiMain",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "Properties": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import configparser",
+                "translated_target_type": "configparser.ConfigParser",
+                "reasoning": "The `Properties` class in Java is used to represent a persistent set of properties, where each key and value is a string. In Python, the equivalent functionality can be achieved using the `ConfigParser` class from the `configparser` module, which is designed to handle configuration files with key-value pairs, similar to how `Properties` works in Java.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|path": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __getPomPropertiesVersion(path: str) -> str:",
+            "        import io",
+            "        in_stream = AnsiMain.__class__.getResourceAsStream(\"/META-INF/maven/\" + path + \"/pom.properties\")",
+            "        if in_stream is None:",
+            "            return None",
+            "        try:",
+            "            p = configparser.ConfigParser()",
+            "            p.read_file(io.StringIO(in_stream.read().decode('ISO-8859-1')))",
+            "            return p.get('DEFAULT', 'version', fallback=None)",
+            "        finally:",
+            "            AnsiMain.__closeQuietly(in_stream)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.85039186477661,
+          "generation_timestamp": "2025-11-04T20:25:45.854839",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __getPomPropertiesVersion(path: object) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "311-322:printJansiLogoDemo": {
+          "start": 311,
+          "end": 322,
+          "body": [
+            "private static void printJansiLogoDemo() throws IOException {",
+            "        BufferedReader in =",
+            "                new BufferedReader(new InputStreamReader(AnsiMain.class.getResourceAsStream(\"jansi.txt\"), UTF_8));",
+            "        try {",
+            "            String l;",
+            "            while ((l = in.readLine()) != null) {",
+            "                System.out.println(l);",
+            "            }",
+            "        } finally {",
+            "            closeQuietly(in);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "BufferedReader",
+            "InputStreamReader",
+            "AnsiMain",
+            "String"
+          ],
+          "signature": "printJansiLogoDemo()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Class",
+              "getResourceAsStream(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.InputStreamReader",
+              "<init>(java.io.InputStream,java.nio.charset.Charset)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "<init>(java.io.Reader)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.BufferedReader",
+              "readLine()"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "337-343:closeQuietly"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "BufferedReader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.BufferedReader",
+                "reasoning": "The `BufferedReader` in Java is used to read text from a character-input stream, buffering characters for efficient reading. In Python, the equivalent type is `io.BufferedReader`, which also provides buffered reading of text from a stream.",
+                "prompt": ""
+              },
+              "InputStreamReader": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "In Python, `io.TextIOWrapper` serves a similar purpose to Java's `InputStreamReader`. It is used to decode bytes into characters, effectively bridging byte streams to character streams. The `TextIOWrapper` can be initialized with a byte stream and an encoding, which aligns with the functionality of `InputStreamReader` in Java.",
+                "prompt": ""
+              },
+              "AnsiMain": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "AnsiMain",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __printJansiLogoDemo() -> None:",
+            "        import io",
+            "        from typing import Any",
+            "",
+            "        try:",
+            "            with io.BufferedReader(io.InputStreamReader(AnsiMain.__class__.getResourceAsStream(\"jansi.txt\"), \"UTF-8\")) as in_stream:",
+            "                line: str",
+            "                while (line := in_stream.readLine()) is not None:",
+            "                    print(line)",
+            "        except Exception as e:",
+            "            e.printStackTrace()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 15.885293245315552,
+          "generation_timestamp": "2025-11-04T20:26:01.926530",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __printJansiLogoDemo() -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "324-335:writeFileContent": {
+          "start": 324,
+          "end": 335,
+          "body": [
+            "private static void writeFileContent(File f) throws IOException {",
+            "        InputStream in = new FileInputStream(f);",
+            "        try {",
+            "            byte[] buf = new byte[1024];",
+            "            int l = 0;",
+            "            while ((l = in.read(buf)) >= 0) {",
+            "                System.out.write(buf, 0, l);",
+            "            }",
+            "        } finally {",
+            "            closeQuietly(in);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "InputStream",
+            "FileInputStream",
+            "byte[]",
+            "byte",
+            "int"
+          ],
+          "signature": "writeFileContent( File f)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "File",
+              "name": "f"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.FileInputStream",
+              "<init>(java.io.File)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "write(byte[],int,int)"
+            ],
+            [
+              "library",
+              "java.io.InputStream",
+              "read(byte[])"
+            ],
+            [
+              "jansi.src.main.org.fusesource.jansi.AnsiMain",
+              "55-344:AnsiMain",
+              "337-343:closeQuietly"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "InputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import subprocess\nimport io",
+                "translated_target_type": "io.BytesIO",
+                "reasoning": "In Python, the equivalent of Java's `InputStream` for handling byte streams is `io.BytesIO`. This class provides a way to work with in-memory binary streams, similar to how `InputStream` works in Java.",
+                "prompt": ""
+              },
+              "FileInputStream": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import io",
+                "translated_target_type": "io.FileIO",
+                "reasoning": "In Python, the equivalent type to Java's `FileInputStream` is `io.FileIO`. This class provides a way to read bytes from a file, similar to how `FileInputStream` works in Java.",
+                "prompt": ""
+              },
+              "byte[]": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "In Python, the equivalent type for a Java `byte[]` is a list of integers, as Python does not have a distinct byte array type. The `List[int]` type from the `typing` module is used to represent this.",
+                "prompt": ""
+              },
+              "byte": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|File|f": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __writeFileContent(f: object) -> None:",
+            "        with open(f, 'rb') as in_file:",
+            "            try:",
+            "                buf = bytearray(1024)",
+            "                l = in_file.readinto(buf)",
+            "                while l > 0:",
+            "                    builtins.print(buf[:l].decode('utf-8'), end='')",
+            "                    l = in_file.readinto(buf)",
+            "            except IOError as e:",
+            "                e.printStackTrace()",
+            "            finally:",
+            "                AnsiMain.__closeQuietly(in_file)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 16.049882888793945,
+          "generation_timestamp": "2025-11-04T20:26:18.150932",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __writeFileContent(f: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "337-343:closeQuietly": {
+          "start": 337,
+          "end": 343,
+          "body": [
+            "private static void closeQuietly(Closeable c) {",
+            "        try {",
+            "            c.close();",
+            "        } catch (IOException ioe) {",
+            "            ioe.printStackTrace(System.err);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "IOException"
+          ],
+          "signature": "closeQuietly( Closeable c)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "Closeable",
+              "name": "c"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.io.Closeable",
+              "close()"
+            ],
+            [
+              "library",
+              "java.io.IOException",
+              "printStackTrace(java.io.PrintStream)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "IOException": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "import builtins",
+                "translated_target_type": "builtins.Exception",
+                "reasoning": "In Python, the equivalent of Java's `IOException` is `builtins.Exception`. Both are used to signal that an I/O operation has failed or been interrupted.",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|Closeable|c": {
+                "identifier": "",
+                "translated": true,
+                "attempted": false,
+                "type_variation": "",
+                "timestamp": "",
+                "source_type": "",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "Type  has been translated to \"object\"",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __closeQuietly(c: object) -> None:",
+            "        from src.main.org.fusesource.jansi.AnsiConsole import AnsiConsole",
+            "        try:",
+            "            c.close()",
+            "        except io.IOException as ioe:",
+            "            ioe.printStackTrace(AnsiConsole.err)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 13.982852697372437,
+          "generation_timestamp": "2025-11-04T20:24:00.637584",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __closeQuietly(c: object) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class AnsiMain:\n\n"
+    }
+  },
+  "import_map": {
+    "Attribute": "org.fusesource.jansi.Ansi.Attribute",
+    "CLibrary": "org.fusesource.jansi.internal.CLibrary",
+    "JansiLoader": "org.fusesource.jansi.internal.JansiLoader",
+    "Kernel32": "org.fusesource.jansi.internal.Kernel32",
+    "MingwSupport": "org.fusesource.jansi.internal.MingwSupport",
+    "BufferedReader": "java.io.BufferedReader",
+    "Closeable": "java.io.Closeable",
+    "File": "java.io.File",
+    "FileInputStream": "java.io.FileInputStream",
+    "IOException": "java.io.IOException",
+    "InputStream": "java.io.InputStream",
+    "InputStreamReader": "java.io.InputStreamReader",
+    "PrintStream": "java.io.PrintStream",
+    "Properties": "java.util.Properties",
+    "UTF_8": "static java.nio.charset.StandardCharsets.UTF_8",
+    "ansi0": "static org.fusesource.jansi.Ansi.ansi0",
+    "GetConsoleScreenBufferInfo": "static org.fusesource.jansi.internal.Kernel32.GetConsoleScreenBufferInfo"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from typing import List",
+    "import builtins",
+    "import configparser",
+    "import importlib.metadata",
+    "import io",
+    "import os",
+    "import subprocess\nimport io"
+  ]
+}

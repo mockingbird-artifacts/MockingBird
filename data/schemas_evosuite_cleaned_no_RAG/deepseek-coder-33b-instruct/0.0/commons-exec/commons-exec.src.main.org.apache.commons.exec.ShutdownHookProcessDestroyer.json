@@ -1,0 +1,1347 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-exec/src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java",
+  "imports": {
+    "20-20:import java.util.Vector;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.util.Vector;"
+    }
+  },
+  "classes": {
+    "25-187:ShutdownHookProcessDestroyer": {
+      "start": 25,
+      "end": 187,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [
+        "27-45:ProcessDestroyerThread"
+      ],
+      "implements": [
+        "ProcessDestroyer"
+      ],
+      "extends": [],
+      "methods": {
+        "67-68:ShutdownHookProcessDestroyer": {
+          "start": 67,
+          "end": 68,
+          "body": [
+            "public ShutdownHookProcessDestroyer() {",
+            "    }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "ShutdownHookProcessDestroyer()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.15029072761535645,
+          "generation_timestamp": "2025-08-18T00:46:35.503005",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "76-86:add": {
+          "start": 76,
+          "end": 86,
+          "body": [
+            "@Override",
+            "    public boolean add(final Process process) {",
+            "        synchronized (processes) {",
+            "            // if this list is empty, register the shutdown hook",
+            "            if (processes.isEmpty()) {",
+            "                addShutdownHook();",
+            "            }",
+            "            processes.addElement(process);",
+            "            return processes.contains(process);",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "add(final Process process)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Process",
+              "name": "process"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Vector",
+              "isEmpty()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "91-97:addShutdownHook"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "addElement(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "contains(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:47:08",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|Process|process": {
+                "identifier": "final|Process|process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:47:39",
+                "source_type": "Process",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def add(self, process: subprocess.Popen)  -> bool:",
+            "        with self.__lock:",
+            "            if not self.__added:",
+            "                self.__addShutdownHook()",
+            "            self.__processes.append(process)",
+            "            return process in self.__processes"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 100.63162755966187,
+          "generation_timestamp": "2025-08-18T01:01:31.624986",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def add(self, process: subprocess.Popen) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "91-97:addShutdownHook": {
+          "start": 91,
+          "end": 97,
+          "body": [
+            "private void addShutdownHook() {",
+            "        if (!running) {",
+            "            destroyProcessThread = new ProcessDestroyerThread();",
+            "            Runtime.getRuntime().addShutdownHook(destroyProcessThread);",
+            "            added = true;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "ProcessDestroyerThread"
+          ],
+          "signature": "addShutdownHook()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "27-45:ProcessDestroyerThread",
+              "31-33:ProcessDestroyerThread"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "getRuntime()"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "addShutdownHook(java.lang.Thread)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:48:06",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "ProcessDestroyerThread": {
+                "identifier": "ProcessDestroyerThread",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:48:06",
+                "source_type": "ProcessDestroyerThread",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ProcessDestroyerThread",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __addShutdownHook(self) -> None:",
+            "        if not self.__running:",
+            "            from unittest.mock import Mock",
+            "            self.__destroyProcessThread = ProcessDestroyerThread()",
+            "            import atexit",
+            "            atexit.register(self.__destroyProcessThread.start)",
+            "            self.__added = True"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 109.44996500015259,
+          "generation_timestamp": "2025-08-18T00:58:10.241392",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __addShutdownHook(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "104-106:isAddedAsShutdownHook": {
+          "start": 104,
+          "end": 106,
+          "body": [
+            "public boolean isAddedAsShutdownHook() {",
+            "        return added;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isAddedAsShutdownHook()",
+          "parameters": [],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:48:06",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def isAddedAsShutdownHook(self) -> bool:",
+            "        return self.__added"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 108.25758266448975,
+          "generation_timestamp": "2025-08-18T00:48:23.859752",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isAddedAsShutdownHook(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "114-116:isEmpty": {
+          "start": 114,
+          "end": 116,
+          "body": [
+            "public boolean isEmpty() {",
+            "        return size() == 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isEmpty()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "183-186:size"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:48:06",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def isEmpty(self)  -> bool:",
+            "        return self.size() == 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 106.45775985717773,
+          "generation_timestamp": "2025-08-18T00:54:30.571378",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isEmpty(self) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "124-133:remove": {
+          "start": 124,
+          "end": 133,
+          "body": [
+            "@Override",
+            "    public boolean remove(final Process process) {",
+            "        synchronized (processes) {",
+            "            final boolean processRemoved = processes.removeElement(process);",
+            "            if (processRemoved && processes.isEmpty()) {",
+            "                removeShutdownHook();",
+            "            }",
+            "            return processRemoved;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [
+            "boolean"
+          ],
+          "signature": "remove(final Process process)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "Process",
+              "name": "process"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.util.Vector",
+              "removeElement(java.lang.Object)"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "isEmpty()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "138-159:removeShutdownHook"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:48:06",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:48:58",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|Process|process": {
+                "identifier": "final|Process|process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:48:31",
+                "source_type": "Process",
+                "generation": "",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def remove(self, process: subprocess.Popen) -> bool:",
+            "        with self.__lock:",
+            "            try:",
+            "                self.__processes.remove(process)",
+            "            except ValueError:",
+            "                return False",
+            "            ",
+            "            if not self.__processes and self.__added:",
+            "                self.__removeShutdownHook()",
+            "                ",
+            "            return True"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 85.75393629074097,
+          "generation_timestamp": "2025-08-18T01:08:21.727960",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def remove(self, process: subprocess.Popen) -> bool:\n",
+            "        pass\n\n"
+          ]
+        },
+        "138-159:removeShutdownHook": {
+          "start": 138,
+          "end": 159,
+          "body": [
+            "private void removeShutdownHook() {",
+            "        if (added && !running) {",
+            "            final boolean removed = Runtime.getRuntime().removeShutdownHook(destroyProcessThread);",
+            "            if (!removed) {",
+            "                System.err.println(\"Could not remove shutdown hook\");",
+            "            }",
+            "            // start the hook thread, a unstarted thread may not be eligible for garbage collection Cf.: http://developer.java.sun.com/developer/",
+            "            // bugParade/bugs/4533087.html",
+            "",
+            "            destroyProcessThread.setShouldDestroy(false);",
+            "            destroyProcessThread.start();",
+            "            // this should return quickly, since it basically is a NO-OP.",
+            "            try {",
+            "                destroyProcessThread.join(20000);",
+            "            } catch (final InterruptedException ie) {",
+            "                // the thread didn't die in time",
+            "                // it should not kill any processes unexpectedly",
+            "            }",
+            "            destroyProcessThread = null;",
+            "            added = false;",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "boolean",
+            "InterruptedException"
+          ],
+          "signature": "removeShutdownHook()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Runtime",
+              "getRuntime()"
+            ],
+            [
+              "library",
+              "java.lang.Runtime",
+              "removeShutdownHook(java.lang.Thread)"
+            ],
+            [
+              "library",
+              "java.io.PrintStream",
+              "println(java.lang.String)"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "27-45:ProcessDestroyerThread",
+              "42-44:setShouldDestroy"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:48:58",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:48:58",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "InterruptedException": {
+                "identifier": "InterruptedException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:49:24",
+                "source_type": "InterruptedException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __removeShutdownHook(self) -> None:",
+            "        if self.__added and not self.__running:",
+            "            removed = Runtime.getRuntime().removeShutdownHook(self.__destroyProcessThread)",
+            "            ",
+            "            if not removed:",
+            "                print(\"Could not remove shutdown hook\", file=sys.stderr)",
+            "                ",
+            "            # start the hook thread, a unstarted thread may not be eligible for garbage collection Cf.: http://developer.java.sun.com/developer/bugParade/bugs/4533087.html",
+            "            ",
+            "            self.__destroyProcessThread.setShouldDestroy(False)",
+            "            self.__destroyProcessThread.start()",
+            "            ",
+            "            # this should return quickly, since it basically is a NO-OP.",
+            "            try:",
+            "                self.__destroyProcessThread.join(20000)",
+            "            except InterruptedException as ie:",
+            "                 # the thread didn't die in time, so don't kill any processes unexpectedly",
+            "                pass",
+            "            ",
+            "            self.__destroyProcessThread = None",
+            "            self.__added = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 130.6667001247406,
+          "generation_timestamp": "2025-08-18T01:05:18.039248",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __removeShutdownHook(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "164-176:run": {
+          "start": 164,
+          "end": 176,
+          "body": [
+            "@Override",
+            "    public void run() {",
+            "        synchronized (processes) {",
+            "            running = true;",
+            "            processes.forEach(process -> {",
+            "                try {",
+            "                    process.destroy();",
+            "                } catch (final Throwable t) {",
+            "                    System.err.println(\"Unable to terminate process during process shutdown\");",
+            "                }",
+            "            });",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [
+            "Throwable"
+          ],
+          "signature": "run()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.function.Consumer",
+              "accept()"
+            ],
+            [
+              "library",
+              "java.util.Vector",
+              "forEach(java.util.function.Consumer)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:49:45",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "Throwable": {
+                "identifier": "Throwable",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-17 19:49:56",
+                "source_type": "Throwable",
+                "generation": "",
+                "imports": "from unittest.mock import Mock\nimport pytest",
+                "translated_target_type": "Exception",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def run(self)  -> None:",
+            "        with self.__processes:",
+            "            self.__running  = True",
+            "            for process in self.__processes:",
+            "                try:",
+            "                    process.terminate()",
+            "                except Exception as e:",
+            "                    print(\"Unable to terminate process during process shutdown\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 120.97041034698486,
+          "generation_timestamp": "2025-08-18T00:50:24.974166",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def run(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "183-186:size": {
+          "start": 183,
+          "end": 186,
+          "body": [
+            "@Override",
+            "    public int size() {",
+            "        return processes.size();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "int"
+          ],
+          "body_types": [],
+          "signature": "size()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.util.Vector",
+              "size()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:50:09",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def size(self)  -> int:",
+            "        return len(self.__processes)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 138.92653250694275,
+          "generation_timestamp": "2025-08-18T00:52:44.013159",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def size(self) -> int:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "48-48:processes": {
+          "start": 48,
+          "end": 48,
+          "enum_constant": false,
+          "body": [
+            "private final Vector<Process> processes = new Vector<>();"
+          ],
+          "modifiers": [
+            "private",
+            "final"
+          ],
+          "types": [
+            "Vector<Process>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Vector<Process>": {
+                "identifier": "Vector<Process>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:46:50",
+                "source_type": "Vector<Process>",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "object",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __processes: List[subprocess.Popen] = []"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "failed",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 148.3096101284027,
+          "generation_timestamp": "2025-08-17T23:19:27.639391",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __processes: object = ",
+            ""
+          ]
+        },
+        "51-51:destroyProcessThread": {
+          "start": 51,
+          "end": 51,
+          "enum_constant": false,
+          "body": [
+            "private ProcessDestroyerThread destroyProcessThread;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "ProcessDestroyerThread"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "ProcessDestroyerThread": {
+                "identifier": "ProcessDestroyerThread",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:47:08",
+                "source_type": "ProcessDestroyerThread",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ProcessDestroyerThread",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __destroyProcessThread: \"ProcessDestroyerThread\" = None"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __destroyProcessThread: \"ProcessDestroyerThread\" = None"
+          ]
+        },
+        "54-54:added": {
+          "start": 54,
+          "end": 54,
+          "enum_constant": false,
+          "body": [
+            "private boolean added;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:47:08",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __added: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __added: bool = False"
+          ]
+        },
+        "59-59:running": {
+          "start": 59,
+          "end": 59,
+          "enum_constant": false,
+          "body": [
+            "private volatile boolean running;"
+          ],
+          "modifiers": [
+            "private",
+            "volatile"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:47:08",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __running: bool = False"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": 0,
+          "model_name": "",
+          "partial_translation": [
+            "    __running: bool = False"
+          ]
+        }
+      },
+      "python_class_declaration": "class ShutdownHookProcessDestroyer(ProcessDestroyer):\n\n"
+    },
+    "27-45:ProcessDestroyerThread": {
+      "start": 27,
+      "end": 45,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "nested_inside": "25-187:ShutdownHookProcessDestroyer",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "31-33:ProcessDestroyerThread": {
+          "start": 31,
+          "end": 33,
+          "body": [
+            "public ProcessDestroyerThread() {",
+            "            super(\"ProcessDestroyer Shutdown Hook\");",
+            "        }"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "ProcessDestroyerThread()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Thread",
+              "<init>(java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:",
+            "        super().__init__(\"ProcessDestroyer Shutdown Hook\")"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 109.99892735481262,
+          "generation_timestamp": "2025-08-18T00:56:20.683991",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "35-40:run": {
+          "start": 35,
+          "end": 40,
+          "body": [
+            "@Override",
+            "        public void run() {",
+            "            if (shouldDestroy) {",
+            "                ShutdownHookProcessDestroyer.this.run();",
+            "            }",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "run()",
+          "parameters": [],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.ShutdownHookProcessDestroyer",
+              "25-187:ShutdownHookProcessDestroyer",
+              "164-176:run"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:50:09",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def run(self)   -> None:",
+            "        if self.__shouldDestroy:",
+            "            ShutdownHookProcessDestroyer().run()"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 100.44855880737305,
+          "generation_timestamp": "2025-08-18T00:59:50.863747",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def run(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "42-44:setShouldDestroy": {
+          "start": 42,
+          "end": 44,
+          "body": [
+            "public void setShouldDestroy(final boolean shouldDestroy) {",
+            "            this.shouldDestroy = shouldDestroy;",
+            "        }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "void"
+          ],
+          "body_types": [],
+          "signature": "setShouldDestroy(final boolean shouldDestroy)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "boolean",
+              "name": "shouldDestroy"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "void": {
+                "identifier": "void",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-17 19:50:09",
+                "source_type": "void",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "None",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|boolean|shouldDestroy": {
+                "identifier": "final|boolean|shouldDestroy",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-17 19:50:09",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def setShouldDestroy(self, shouldDestroy: bool)  -> None:",
+            "        self.__shouldDestroy = shouldDestroy"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 95.50252270698547,
+          "generation_timestamp": "2025-08-18T01:03:07.250201",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def setShouldDestroy(self, shouldDestroy: bool) -> None:\n",
+            "        pass\n\n"
+          ]
+        }
+      },
+      "fields": {
+        "29-29:shouldDestroy": {
+          "start": 29,
+          "end": 29,
+          "enum_constant": false,
+          "body": [
+            "private boolean shouldDestroy = true;"
+          ],
+          "modifiers": [
+            "private"
+          ],
+          "types": [
+            "boolean"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-17 19:50:09",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [],
+          "translation_status": "attempted",
+          "syntactic_validation": "non-parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 89.75609636306763,
+          "generation_timestamp": "2025-08-17T23:16:59.224847",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __shouldDestroy: bool = ",
+            ""
+          ]
+        }
+      },
+      "python_class_declaration": "class ProcessDestroyerThread:\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from src.main.org.apache.commons.exec.ProcessDestroyer import ProcessDestroyer",
+    "from unittest.mock import Mock\nimport pytest",
+    "import subprocess"
+  ]
+}

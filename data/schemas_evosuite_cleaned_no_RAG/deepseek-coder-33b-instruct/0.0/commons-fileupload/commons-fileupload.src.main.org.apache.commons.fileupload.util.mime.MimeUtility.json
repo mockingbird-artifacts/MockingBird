@@ -1,0 +1,1430 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-fileupload/src/main/java/org/apache/commons/fileupload/util/mime/MimeUtility.java",
+  "imports": {
+    "19-19:import java.io.ByteArrayOutputStream;": {
+      "start": 19,
+      "end": 19,
+      "body": "import java.io.ByteArrayOutputStream;"
+    },
+    "20-20:import java.io.IOException;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.io.IOException;"
+    },
+    "21-21:import java.io.UnsupportedEncodingException;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.io.UnsupportedEncodingException;"
+    },
+    "22-22:import java.util.HashMap;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.util.HashMap;"
+    },
+    "23-23:import java.util.Locale;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.util.Locale;"
+    },
+    "24-24:import java.util.Map;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.util.Map;"
+    }
+  },
+  "classes": {
+    "31-227:MimeUtility": {
+      "start": 31,
+      "end": 227,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [],
+      "methods": {
+        "68-68:MimeUtility": {
+          "start": 68,
+          "end": 68,
+          "body": [
+            "private MimeUtility() {}"
+          ],
+          "is_constructor": true,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [],
+          "body_types": [],
+          "signature": "MimeUtility()",
+          "parameters": [],
+          "calls": [
+            [
+              "library",
+              "java.lang.Object",
+              "<init>()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {}
+          },
+          "translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 0.10998845100402832,
+          "generation_timestamp": "2025-08-18T13:01:24.911197",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __init__(self) -> None:\n",
+            "        pass\n\n"
+          ]
+        },
+        "79-145:decodeText": {
+          "start": 79,
+          "end": 145,
+          "body": [
+            "public static String decodeText(String text) throws UnsupportedEncodingException {",
+            "        if (text.indexOf(ENCODED_TOKEN_MARKER) < 0) {",
+            "            return text;",
+            "        }",
+            "",
+            "        int offset = 0;",
+            "        int endOffset = text.length();",
+            "",
+            "        int startWhiteSpace = -1;",
+            "        int endWhiteSpace = -1;",
+            "",
+            "        StringBuilder decodedText = new StringBuilder(text.length());",
+            "",
+            "        boolean previousTokenEncoded = false;",
+            "",
+            "        while (offset < endOffset) {",
+            "            char ch = text.charAt(offset);",
+            "",
+            "            if (LINEAR_WHITESPACE.indexOf(ch) != -1) { // whitespace found",
+            "                startWhiteSpace = offset;",
+            "                while (offset < endOffset) {",
+            "                    ch = text.charAt(offset);",
+            "                    if (LINEAR_WHITESPACE.indexOf(ch) != -1) { // whitespace found",
+            "                        offset++;",
+            "                    } else {",
+            "                        endWhiteSpace = offset;",
+            "                        break;",
+            "                    }",
+            "                }",
+            "            } else {",
+            "                int wordStart = offset;",
+            "",
+            "                while (offset < endOffset) {",
+            "                    ch = text.charAt(offset);",
+            "                    if (LINEAR_WHITESPACE.indexOf(ch) == -1) { // not white space",
+            "                        offset++;",
+            "                    } else {",
+            "                        break;",
+            "                    }",
+            "                }",
+            "                String word = text.substring(wordStart, offset);",
+            "                if (word.startsWith(ENCODED_TOKEN_MARKER)) {",
+            "                    try {",
+            "                        String decodedWord = decodeWord(word);",
+            "",
+            "                        if (!previousTokenEncoded && startWhiteSpace != -1) {",
+            "                            decodedText.append(text.substring(startWhiteSpace, endWhiteSpace));",
+            "                            startWhiteSpace = -1;",
+            "                        }",
+            "                        previousTokenEncoded = true;",
+            "                        decodedText.append(decodedWord);",
+            "                        continue;",
+            "",
+            "                    } catch (ParseException e) {",
+            "                    }",
+            "                }",
+            "                if (startWhiteSpace != -1) {",
+            "                    decodedText.append(text.substring(startWhiteSpace, endWhiteSpace));",
+            "                    startWhiteSpace = -1;",
+            "                }",
+            "                previousTokenEncoded = false;",
+            "                decodedText.append(word);",
+            "            }",
+            "        }",
+            "",
+            "        return decodedText.toString();",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "int",
+            "StringBuilder",
+            "boolean",
+            "char",
+            "String",
+            "ParseException"
+          ],
+          "signature": "decodeText( String text)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "text"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "charAt(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+              "31-227:MimeUtility",
+              "158-208:decodeWord"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-18 08:47:49",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:47:49",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:48:50",
+                "source_type": "StringBuilder",
+                "generation": "",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ParseException": {
+                "identifier": "ParseException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "ParseException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ParseException",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|text": {
+                "identifier": "|String|text",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-18 08:47:49",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def decodeText(text: str) -> str:",
+            "        if MimeUtility.__ENCODED_TOKEN_MARKER not in text:",
+            "            return text",
+            "",
+            "        words = text.split()",
+            "        decoded_words = []",
+            "",
+            "        for word in words:",
+            "            if word.startswith(MimeUtility.__ENCODED_TOKEN_MARKER):",
+            "                encoded_word, charset, encoding, language = email.header.decode_header(word)[0]",
+            "                decoded_words.append(encoded_word)",
+            "            else:",
+            "                decoded_words.append(word)",
+            "",
+            "        return ' '.join(decoded_words)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": {
+            "outcome": "failed",
+            "feedback": [
+              {
+                "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest_test6_decomposed_mocker_0_MimeUtility_decodeText.py": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/mock.py\", line 1378, in patched\n    return func(*newargs, **newkeywargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest_test6_decomposed_mocker_0_MimeUtility_decodeText.py\", line 45, in test_mocking\n    method_ret = orig_MimeUtility_decodeText(*method_args)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 42, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)"
+              }
+            ]
+          },
+          "test_execution": {
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test0": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "16-28:test0"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test1": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py\", line 29, in test1\n    MimeUtility.decodeText(\"=?=?=?=?=?=?\")\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 53, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "30-41:test1"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test2": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py\", line 36, in test2\n    string0 = MimeUtility.decodeText(\"=?~?=?=?{X=1=\")\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 53, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "43-47:test2"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test3": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py\", line 44, in test3\n    string0 = MimeUtility.decodeText(\"=?=?\")\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 53, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "49-53:test3"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test4": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py\", line 52, in test4\n    string0 = MimeUtility.decodeText(\"=?\")\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 53, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "55-59:test4"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test5": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "61-65:test5"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test6": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py\", line 68, in test6\n    string0 = MimeUtility.decodeText(\"=?=?=??=?=A\")\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 53, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "67-71:test6"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test7": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "73-77:test7"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py::MimeUtility_ESTest::test8": {
+              "test_outcome": "exercised-failed",
+              "feedback": "Traceback (most recent call last):\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 57, in testPartExecutor\n    yield\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/root/miniconda3/envs/alphatransplus/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/test/org/apache/commons/fileupload/util/mime/MimeUtility_ESTest.py\", line 90, in test8\n    MimeUtility.decodeText(\"=??Q?m?={\")\n  File \"/home/tmp/AlphaTransPlusDev/data/recomposed_projects/deepseek-coder-33b-instruct/0.0/commons-fileupload/src/main/org/apache/commons/fileupload/util/mime/MimeUtility.py\", line 53, in decodeText\n    encoded_word, charset, encoding, language = email.header.decode_header(\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: not enough values to unpack (expected 4, got 2)",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+                  "class_name": "31-227:MimeUtility",
+                  "fragment_name": "79-145:decodeText"
+                },
+                {
+                  "schema_name": "commons-fileupload.src.test.org.apache.commons.fileupload.util.mime.MimeUtility_ESTest",
+                  "class_name": "14-91:MimeUtility_ESTest",
+                  "fragment_name": "79-90:test8"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 129.7676010131836,
+          "generation_timestamp": "2025-08-18T13:18:27.310024",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def decodeText(text: str) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "158-208:decodeWord": {
+          "start": 158,
+          "end": 208,
+          "body": [
+            "private static String decodeWord(String word)",
+            "            throws ParseException, UnsupportedEncodingException {",
+            "",
+            "        if (!word.startsWith(ENCODED_TOKEN_MARKER)) {",
+            "            throw new ParseException(\"Invalid RFC 2047 encoded-word: \" + word);",
+            "        }",
+            "",
+            "        int charsetPos = word.indexOf('?', 2);",
+            "        if (charsetPos == -1) {",
+            "            throw new ParseException(\"Missing charset in RFC 2047 encoded-word: \" + word);",
+            "        }",
+            "",
+            "        String charset = word.substring(2, charsetPos).toLowerCase(Locale.ENGLISH);",
+            "",
+            "        int encodingPos = word.indexOf('?', charsetPos + 1);",
+            "        if (encodingPos == -1) {",
+            "            throw new ParseException(\"Missing encoding in RFC 2047 encoded-word: \" + word);",
+            "        }",
+            "",
+            "        String encoding = word.substring(charsetPos + 1, encodingPos);",
+            "",
+            "        int encodedTextPos = word.indexOf(ENCODED_TOKEN_FINISHER, encodingPos + 1);",
+            "        if (encodedTextPos == -1) {",
+            "            throw new ParseException(\"Missing encoded text in RFC 2047 encoded-word: \" + word);",
+            "        }",
+            "",
+            "        String encodedText = word.substring(encodingPos + 1, encodedTextPos);",
+            "",
+            "        if (encodedText.length() == 0) {",
+            "            return \"\";",
+            "        }",
+            "",
+            "        try {",
+            "            ByteArrayOutputStream out = new ByteArrayOutputStream(encodedText.length());",
+            "",
+            "            byte[] encodedData = encodedText.getBytes(US_ASCII_CHARSET);",
+            "",
+            "            if (encoding.equals(BASE64_ENCODING_MARKER)) {",
+            "                Base64Decoder.decode(encodedData, out);",
+            "            } else if (encoding.equals(",
+            "                    QUOTEDPRINTABLE_ENCODING_MARKER)) { // maybe quoted printable.",
+            "                QuotedPrintableDecoder.decode(encodedData, out);",
+            "            } else {",
+            "                throw new UnsupportedEncodingException(\"Unknown RFC 2047 encoding: \" + encoding);",
+            "            }",
+            "            byte[] decodedData = out.toByteArray();",
+            "            return new String(decodedData, javaCharset(charset));",
+            "        } catch (IOException e) {",
+            "            throw new UnsupportedEncodingException(\"Invalid RFC 2047 encoding\");",
+            "        }",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "ParseException",
+            "int",
+            "String",
+            "ByteArrayOutputStream",
+            "byte[]",
+            "byte",
+            "UnsupportedEncodingException",
+            "IOException"
+          ],
+          "signature": "decodeWord( String word)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "word"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "startsWith(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.ParseException",
+              "22-35:ParseException",
+              "32-34:ParseException"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "substring(int,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "toLowerCase(java.util.Locale)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(java.lang.String,int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "<init>(int)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "getBytes(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "equals(java.lang.Object)"
+            ],
+            [
+              "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.Base64Decoder",
+              "25-182:Base64Decoder",
+              "138-181:decode"
+            ],
+            [
+              "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.QuotedPrintableDecoder",
+              "25-98:QuotedPrintableDecoder",
+              "44-82:decode"
+            ],
+            [
+              "library",
+              "java.io.UnsupportedEncodingException",
+              "<init>(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.ByteArrayOutputStream",
+              "toByteArray()"
+            ],
+            [
+              "commons-fileupload.src.main.org.apache.commons.fileupload.util.mime.MimeUtility",
+              "31-227:MimeUtility",
+              "216-226:javaCharset"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "<init>(byte[],java.lang.String)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "ParseException": {
+                "identifier": "ParseException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "ParseException",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "ParseException",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "ByteArrayOutputStream": {
+                "identifier": "ByteArrayOutputStream",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:49:54",
+                "source_type": "ByteArrayOutputStream",
+                "generation": "",
+                "imports": "from io import BytesIO\nimport pickle",
+                "translated_target_type": "BytesIO",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "byte[]": {
+                "identifier": "byte[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:50:22",
+                "source_type": "byte[]",
+                "generation": "",
+                "imports": "from typing import List",
+                "translated_target_type": "List[int]",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "byte": {
+                "identifier": "byte",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:50:38",
+                "source_type": "byte",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "UnsupportedEncodingException": {
+                "identifier": "UnsupportedEncodingException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:51:03",
+                "source_type": "UnsupportedEncodingException",
+                "generation": "",
+                "imports": "from unittest import TestCase, main\nimport email.header",
+                "translated_target_type": "UnicodeError",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "IOException": {
+                "identifier": "IOException",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:52:17",
+                "source_type": "IOException",
+                "generation": "",
+                "imports": null,
+                "translated_target_type": "IOError",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|word": {
+                "identifier": "|String|word",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-18 08:49:33",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [],
+          "translation_status": "out_of_context",
+          "syntactic_validation": "pending",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 0,
+          "generation_timestamp": "2025-08-18T13:03:20.185408",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __decodeWord(word: str) -> str:\n",
+            "        pass\n\n"
+          ]
+        },
+        "216-226:javaCharset": {
+          "start": 216,
+          "end": 226,
+          "body": [
+            "private static String javaCharset(String charset) {",
+            "        if (charset == null) {",
+            "            return null;",
+            "        }",
+            "",
+            "        String mappedCharset = MIME2JAVA.get(charset.toLowerCase(Locale.ENGLISH));",
+            "        if (mappedCharset == null) {",
+            "            return charset;",
+            "        }",
+            "        return mappedCharset;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private",
+            "static"
+          ],
+          "return_types": [
+            "String"
+          ],
+          "body_types": [
+            "String"
+          ],
+          "signature": "javaCharset( String charset)",
+          "parameters": [
+            {
+              "modifier": "",
+              "type": "String",
+              "name": "charset"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.lang.String",
+              "toLowerCase(java.util.Locale)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "get(java.lang.Object)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-08-18 08:52:39",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-08-18 08:52:39",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "|String|charset": {
+                "identifier": "|String|charset",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-08-18 08:52:39",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    @staticmethod",
+            "    def __javaCharset(charset: str) -> str:",
+            "        if charset is None:",
+            "            return None",
+            "        ",
+            "        mapped_charset = MimeUtility.__MIME2JAVA.get(charset.lower())",
+            "        if mapped_charset is None:",
+            "            return charset",
+            "        return mapped_charset"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.43327236175537,
+          "generation_timestamp": "2025-08-18T13:01:54.435888",
+          "model_name": "deepseek-coder-33b-instruct",
+          "is_overload": false,
+          "partial_translation": [
+            "    @staticmethod\n",
+            "    def __javaCharset(charset: str) -> str:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {
+        "34-34:US_ASCII_CHARSET": {
+          "start": 34,
+          "end": 34,
+          "enum_constant": false,
+          "body": [
+            "private static final String US_ASCII_CHARSET = \"US-ASCII\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __US_ASCII_CHARSET: str = \"US-ASCII\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 20.318856239318848,
+          "generation_timestamp": "2025-08-18T08:57:30.538275",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __US_ASCII_CHARSET: str = ",
+            ""
+          ]
+        },
+        "37-37:BASE64_ENCODING_MARKER": {
+          "start": 37,
+          "end": 37,
+          "enum_constant": false,
+          "body": [
+            "private static final String BASE64_ENCODING_MARKER = \"B\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __BASE64_ENCODING_MARKER: str = \"B\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 21.632925987243652,
+          "generation_timestamp": "2025-08-18T08:57:10.109967",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __BASE64_ENCODING_MARKER: str = ",
+            ""
+          ]
+        },
+        "40-40:QUOTEDPRINTABLE_ENCODING_MARKER": {
+          "start": 40,
+          "end": 40,
+          "enum_constant": false,
+          "body": [
+            "private static final String QUOTEDPRINTABLE_ENCODING_MARKER = \"Q\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __QUOTEDPRINTABLE_ENCODING_MARKER: str = \"Q\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 28.995617389678955,
+          "generation_timestamp": "2025-08-18T08:56:48.338693",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __QUOTEDPRINTABLE_ENCODING_MARKER: str = ",
+            ""
+          ]
+        },
+        "43-43:ENCODED_TOKEN_MARKER": {
+          "start": 43,
+          "end": 43,
+          "enum_constant": false,
+          "body": [
+            "private static final String ENCODED_TOKEN_MARKER = \"=?\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __ENCODED_TOKEN_MARKER: str = \"=?\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 28.5324547290802,
+          "generation_timestamp": "2025-08-18T08:56:19.220219",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __ENCODED_TOKEN_MARKER: str = ",
+            ""
+          ]
+        },
+        "46-46:ENCODED_TOKEN_FINISHER": {
+          "start": 46,
+          "end": 46,
+          "enum_constant": false,
+          "body": [
+            "private static final String ENCODED_TOKEN_FINISHER = \"?=\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __ENCODED_TOKEN_FINISHER: str = \"?=\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 23.705573797225952,
+          "generation_timestamp": "2025-08-18T08:55:50.574038",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __ENCODED_TOKEN_FINISHER: str = ",
+            ""
+          ]
+        },
+        "49-49:LINEAR_WHITESPACE": {
+          "start": 49,
+          "end": 49,
+          "enum_constant": false,
+          "body": [
+            "private static final String LINEAR_WHITESPACE = \" \\t\\r\\n\";"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "String"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __LINEAR_WHITESPACE: str = \" \\t\\r\\n\""
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 23.235204696655273,
+          "generation_timestamp": "2025-08-18T08:55:26.767359",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __LINEAR_WHITESPACE: str = ",
+            ""
+          ]
+        },
+        "52-52:MIME2JAVA": {
+          "start": 52,
+          "end": 52,
+          "enum_constant": false,
+          "body": [
+            "private static final Map<String, String> MIME2JAVA = new HashMap<String, String>();"
+          ],
+          "modifiers": [
+            "private",
+            "static",
+            "final"
+          ],
+          "types": [
+            "Map<String, String>"
+          ],
+          "type_translations": {
+            "return_types": {},
+            "body_types": {},
+            "parameters": {},
+            "types": {
+              "Map<String, String>": {
+                "identifier": "Map<String, String>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "types",
+                "timestamp": "2025-08-18 08:47:14",
+                "source_type": "Map<String, String>",
+                "generation": "",
+                "imports": "from typing import Dict",
+                "translated_target_type": "Dict[str, str]",
+                "reasoning": "",
+                "prompt": ""
+              }
+            }
+          },
+          "translation": [
+            "    __MIME2JAVA: Dict[str, str] = {}"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 19.637623071670532,
+          "generation_timestamp": "2025-08-18T08:55:03.418180",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": [
+            "    __MIME2JAVA: Dict[str, str] = ",
+            ""
+          ]
+        }
+      },
+      "static_initializers": {
+        "54-65:run_static_init": {
+          "start": 54,
+          "end": 65,
+          "body": [
+            "static {",
+            "        MIME2JAVA.put(\"iso-2022-cn\", \"ISO2022CN\");",
+            "        MIME2JAVA.put(\"iso-2022-kr\", \"ISO2022KR\");",
+            "        MIME2JAVA.put(\"utf-8\", \"UTF8\");",
+            "        MIME2JAVA.put(\"utf8\", \"UTF8\");",
+            "        MIME2JAVA.put(\"ja_jp.iso2022-7\", \"ISO2022JP\");",
+            "        MIME2JAVA.put(\"ja_jp.eucjp\", \"EUCJIS\");",
+            "        MIME2JAVA.put(\"euc-kr\", \"KSC5601\");",
+            "        MIME2JAVA.put(\"euckr\", \"KSC5601\");",
+            "        MIME2JAVA.put(\"us-ascii\", \"ISO-8859-1\");",
+            "        MIME2JAVA.put(\"x-us-ascii\", \"ISO-8859-1\");",
+            "    }"
+          ],
+          "type_translations": {},
+          "translation": [
+            "    def run_static_init():",
+            "        MimeUtility.__MIME2JAVA = {",
+            "                    \"iso-2022-cn\": \"ISO2022CN\",",
+            "                    \"iso-2022-kr\": \"ISO2022KR\",",
+            "                    \"utf-8\": \"UTF8\",",
+            "                    \"utf8\": \"UTF8\",",
+            "                    \"ja_jp.iso2022-7\": \"ISO2022JP\",",
+            "                    \"ja_jp.eucjp\": \"EUCJIS\",",
+            "                    \"euc-kr\": \"KSC5601\",",
+            "                    \"euckr\": \"KSC5601\",",
+            "                    \"us-ascii\": \"ISO-8859-1\",",
+            "                    \"x-us-ascii\": \"ISO-8859-1\"",
+            "                }"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "success",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "pending",
+          "elapsed_time": 29.72407031059265,
+          "generation_timestamp": "2025-08-18T08:54:43.680324",
+          "model_name": "deepseek-coder-33b-instruct",
+          "partial_translation": []
+        }
+      },
+      "python_class_declaration": "class MimeUtility:\n\n"
+    }
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import BytesIO\nimport pickle",
+    "from io import StringIO",
+    "from typing import Dict",
+    "from typing import List",
+    "from unittest import TestCase, main\nimport email.header"
+  ]
+}

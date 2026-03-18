@@ -1,0 +1,1004 @@
+{
+  "path": "java_projects/cleaned_final_projects_evosuite_cleaned/commons-exec/src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java",
+  "imports": {
+    "20-20:import java.io.File;": {
+      "start": 20,
+      "end": 20,
+      "body": "import java.io.File;"
+    },
+    "21-21:import java.io.IOException;": {
+      "start": 21,
+      "end": 21,
+      "body": "import java.io.IOException;"
+    },
+    "22-22:import java.io.PrintWriter;": {
+      "start": 22,
+      "end": 22,
+      "body": "import java.io.PrintWriter;"
+    },
+    "23-23:import java.nio.charset.Charset;": {
+      "start": 23,
+      "end": 23,
+      "body": "import java.nio.charset.Charset;"
+    },
+    "24-24:import java.nio.file.Files;": {
+      "start": 24,
+      "end": 24,
+      "body": "import java.nio.file.Files;"
+    },
+    "25-25:import java.nio.file.Path;": {
+      "start": 25,
+      "end": 25,
+      "body": "import java.nio.file.Path;"
+    },
+    "26-26:import java.util.Map;": {
+      "start": 26,
+      "end": 26,
+      "body": "import java.util.Map;"
+    },
+    "27-27:import java.util.Map.Entry;": {
+      "start": 27,
+      "end": 27,
+      "body": "import java.util.Map.Entry;"
+    },
+    "28-28:import java.util.Set;": {
+      "start": 28,
+      "end": 28,
+      "body": "import java.util.Set;"
+    },
+    "30-30:import org.apache.commons.exec.CommandLine;": {
+      "start": 30,
+      "end": 30,
+      "body": "import org.apache.commons.exec.CommandLine;"
+    },
+    "31-31:import org.apache.commons.exec.util.StringUtils;": {
+      "start": 31,
+      "end": 31,
+      "body": "import org.apache.commons.exec.util.StringUtils;"
+    }
+  },
+  "classes": {
+    "37-125:VmsCommandLauncher": {
+      "start": 37,
+      "end": 125,
+      "is_abstract": false,
+      "is_interface": false,
+      "is_enum": false,
+      "modifiers": [
+        "public"
+      ],
+      "nested_inside": "",
+      "nests": [],
+      "implements": [],
+      "extends": [
+        "Java13CommandLauncher"
+      ],
+      "methods": {
+        "42-100:createCommandFile": {
+          "start": 42,
+          "end": 100,
+          "body": [
+            "private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {",
+            "        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");",
+            "        final File script = path.toFile();",
+            "        script.deleteOnExit();",
+            "        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {",
+            "            // add the environment as global symbols for the DCL script",
+            "            if (env != null) {",
+            "                final Set<Entry<String, String>> entries = env.entrySet();",
+            "                for (final Entry<String, String> entry : entries) {",
+            "                    writer.print(\"$ \");",
+            "                    writer.print(entry.getKey());",
+            "                    writer.print(\" == \"); // define as global symbol",
+            "                    writer.println('\\\"');",
+            "                    String value = entry.getValue();",
+            "                    // Any embedded \" values need to be doubled",
+            "                    if (value.indexOf('\\\"') > 0) {",
+            "                        final StringBuilder sb = new StringBuilder();",
+            "                        for (int i = 0; i < value.length(); i++) {",
+            "                            final char c = value.charAt(i);",
+            "                            if (c == '\\\"') {",
+            "                                sb.append('\\\"');",
+            "                            }",
+            "                            sb.append(c);",
+            "                        }",
+            "                        value = sb.toString();",
+            "                    }",
+            "                    writer.print(value);",
+            "                    writer.println('\\\"');",
+            "                }",
+            "            }",
+            "",
+            "            final String command = cmd.getExecutable();",
+            "            if (cmd.isFile()) {// We assume it is it a script file",
+            "                writer.print(\"$ @\");",
+            "                // This is a bit crude, but seems to work",
+            "                final String[] parts = StringUtils.split(command, \"/\");",
+            "                writer.print(parts[0]); // device",
+            "                writer.print(\":[\");",
+            "                writer.print(parts[1]); // top level directory",
+            "                final int lastPart = parts.length - 1;",
+            "                for (int i = 2; i < lastPart; i++) {",
+            "                    writer.print(\".\");",
+            "                    writer.print(parts[i]);",
+            "                }",
+            "                writer.print(\"]\");",
+            "                writer.print(parts[lastPart]);",
+            "            } else {",
+            "                writer.print(\"$ \");",
+            "                writer.print(command);",
+            "            }",
+            "            final String[] args = cmd.getArguments();",
+            "            for (final String arg : args) {",
+            "                writer.println(\" -\");",
+            "                writer.print(arg);",
+            "            }",
+            "            writer.println();",
+            "        }",
+            "        return script;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "private"
+          ],
+          "return_types": [
+            "File"
+          ],
+          "body_types": [
+            "Path",
+            "File",
+            "PrintWriter",
+            "Set<Entry<String, String>>",
+            "Entry<String, String>",
+            "String",
+            "StringBuilder",
+            "int",
+            "char",
+            "String[]"
+          ],
+          "signature": "createCommandFile(final CommandLine cmd, final Map<String, String> env)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "CommandLine",
+              "name": "cmd"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<String, String>",
+              "name": "env"
+            }
+          ],
+          "calls": [
+            [
+              "library",
+              "java.nio.file.Files",
+              "createTempFile(java.lang.String,java.lang.String,java.nio.file.attribute.FileAttribute[])"
+            ],
+            [
+              "library",
+              "java.nio.file.Path",
+              "toFile()"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "deleteOnExit()"
+            ],
+            [
+              "library",
+              "java.nio.charset.Charset",
+              "defaultCharset()"
+            ],
+            [
+              "library",
+              "java.nio.file.Files",
+              "newBufferedWriter(java.nio.file.Path,java.nio.charset.Charset,java.nio.file.OpenOption[])"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "<init>(java.io.Writer)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "entrySet()"
+            ],
+            [
+              "library",
+              "java.util.Set",
+              "iterator()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "next()"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "print(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getKey()"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "println(char)"
+            ],
+            [
+              "library",
+              "java.util.Map",
+              "getValue()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "indexOf(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "<init>()"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "charAt(int)"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "append(char)"
+            ],
+            [
+              "library",
+              "java.lang.String",
+              "length()"
+            ],
+            [
+              "library",
+              "java.lang.StringBuilder",
+              "toString()"
+            ],
+            [
+              "library",
+              "java.util.Iterator",
+              "hasNext()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "356-361:getExecutable"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "377-379:isFile"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.util.StringUtils",
+              "32-234:StringUtils",
+              "108-115:split"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "336-349:getArguments"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "println(java.lang.String)"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "println()"
+            ],
+            [
+              "library",
+              "java.io.PrintWriter",
+              "close()"
+            ],
+            [
+              "library",
+              "java.lang.Throwable",
+              "addSuppressed(java.lang.Throwable)"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "File": {
+                "identifier": "File",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-30 13:52:22",
+                "source_type": "File",
+                "generation": "PYTHON IMPORTS:\n```\nimport os\n```\n\nPYTHON TRANSLATION:\n```\nos.PathLike\n```\n\nREASONING:\nThe `File` class in Java represents file and directory pathnames. In Python, the equivalent type that maintains the same functionality is `os.PathLike`, which is an abstract base class for representing file system paths.",
+                "imports": "import os",
+                "translated_target_type": "os.PathLike",
+                "reasoning": "The `File` class in Java represents file and directory pathnames. In Python, the equivalent type that maintains the same functionality is `os.PathLike`, which is an abstract base class for representing file system paths.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nFile\n```\n\nJAVA TYPE DESCRIPTION:\nAn abstract representation of file and directory pathnames.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "Path": {
+                "identifier": "Path",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:27",
+                "source_type": "Path",
+                "generation": "PYTHON IMPORTS:\n```\nfrom pathlib import Path\n```\n\nPYTHON TRANSLATION:\n```\nPath\n```\n\nREASONING:\nThe `Path` class in Java is used to represent file paths in a system-independent manner. In Python, the `pathlib` module provides a similar class called `Path` which is used to handle filesystem paths. This class is part of the `pathlib` module and provides an object-oriented interface for working with file system paths.",
+                "imports": "from pathlib import Path",
+                "translated_target_type": "Path",
+                "reasoning": "The `Path` class in Java is used to represent file paths in a system-independent manner. In Python, the `pathlib` module provides a similar class called `Path` which is used to handle filesystem paths. This class is part of the `pathlib` module and provides an object-oriented interface for working with file system paths.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nPath\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that may be used to locate a file in a file system. It will\n typically represent a system dependent file path.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "File": {
+                "identifier": "File",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:30",
+                "source_type": "File",
+                "generation": "PYTHON IMPORTS:\n```\nimport os\n```\n\nPYTHON TRANSLATION:\n```\nos.PathLike\n```\n\nREASONING:\nThe `File` class in Java represents file and directory pathnames. In Python, the equivalent type that maintains the same functionality is `os.PathLike`, which is an abstract base class for representing file system paths.",
+                "imports": "import os",
+                "translated_target_type": "os.PathLike",
+                "reasoning": "The `File` class in Java represents file and directory pathnames. In Python, the equivalent type that maintains the same functionality is `os.PathLike`, which is an abstract base class for representing file system paths.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nFile\n```\n\nJAVA TYPE DESCRIPTION:\nAn abstract representation of file and directory pathnames.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "PrintWriter": {
+                "identifier": "PrintWriter",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:32",
+                "source_type": "PrintWriter",
+                "generation": "PYTHON IMPORTS:\n```\nimport io\n```\n\nPYTHON TRANSLATION:\n```\nio.TextIOWrapper\n```\n\nREASONING:\nThe `PrintWriter` in Java is used for writing formatted text to a text-output stream. In Python, the equivalent type that provides similar functionality for writing text to a file is `io.TextIOWrapper`, which is used to wrap a binary buffer in text mode.",
+                "imports": "import io",
+                "translated_target_type": "io.TextIOWrapper",
+                "reasoning": "The `PrintWriter` in Java is used for writing formatted text to a text-output stream. In Python, the equivalent type that provides similar functionality for writing text to a file is `io.TextIOWrapper`, which is used to wrap a binary buffer in text mode.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nPrintWriter\n```\n\nJAVA TYPE DESCRIPTION:\nPrints formatted representations of objects to a text-output stream.  This\n class implements all of the print methods found in PrintStream.  It does not contain methods for writing raw bytes, for which\n a program should use unencoded byte streams.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Set<Entry<String, String>>": {
+                "identifier": "Set<Entry<String, String>>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:35",
+                "source_type": "Set<Entry<String, String>>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Set, Dict, Tuple\n```\n\nPYTHON TRANSLATION:\n```\nSet[Tuple[str, str]]\n```\n\nREASONING:\nIn Python, the equivalent of Java's `Set<Entry<String, String>>` is `Set[Tuple[str, str]]`. The `Entry` interface in Java represents a key-value pair, which is equivalent to a tuple in Python. The `Set` interface in Java is equivalent to the `Set` type in Python, which also ensures that there are no duplicate elements.",
+                "imports": "from typing import Set, Dict, Tuple",
+                "translated_target_type": "Set[Tuple[str, str]]",
+                "reasoning": "In Python, the equivalent of Java's `Set<Entry<String, String>>` is `Set[Tuple[str, str]]`. The `Entry` interface in Java represents a key-value pair, which is equivalent to a tuple in Python. The `Set` interface in Java is equivalent to the `Set` type in Python, which also ensures that there are no duplicate elements.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nSet<Entry<String, String>>\n```\n\nJAVA TYPE DESCRIPTION:\nA collection that contains no duplicate elements.  More formally, sets\n contain no pair of elements e1 and e2 such that\n e1.equals(e2), and at most one null element.  As implied by\n its name, this interface models the mathematical set abstraction.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "Entry<String, String>": {
+                "identifier": "Entry<String, String>",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:39",
+                "source_type": "Entry<String, String>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Tuple\n```\n\nPYTHON TRANSLATION:\n```\nTuple[str, str]\n```\n\nREASONING:\nIn Python, the equivalent type for `Entry<String, String>` from Java is `Tuple[str, str]`. This is because `Entry` in Java represents a key-value pair, which can be represented by a tuple in Python.",
+                "imports": "from typing import Tuple",
+                "translated_target_type": "Tuple[str, str]",
+                "reasoning": "In Python, the equivalent type for `Entry<String, String>` from Java is `Tuple[str, str]`. This is because `Entry` in Java represents a key-value pair, which can be represented by a tuple in Python.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nEntry<String, String>\n```\n\nJAVA TYPE DESCRIPTION:\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "String": {
+                "identifier": "String",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:41",
+                "source_type": "String",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "StringBuilder": {
+                "identifier": "StringBuilder",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:41",
+                "source_type": "StringBuilder",
+                "generation": "PYTHON IMPORTS:\n```\nfrom io import StringIO\n```\n\nPYTHON TRANSLATION:\n```\nStringIO\n```\n\nREASONING:\nIn Python, the `StringIO` class from the `io` module provides a mutable sequence of characters, similar to Java's `StringBuilder`. It allows for efficient string manipulation and can be used as a drop-in replacement for `StringBuilder` in many cases.",
+                "imports": "from io import StringIO",
+                "translated_target_type": "StringIO",
+                "reasoning": "In Python, the `StringIO` class from the `io` module provides a mutable sequence of characters, similar to Java's `StringBuilder`. It allows for efficient string manipulation and can be used as a drop-in replacement for `StringBuilder` in many cases.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nStringBuilder\n```\n\nJAVA TYPE DESCRIPTION:\nA mutable sequence of characters.  This class provides an API compatible\n with StringBuffer, but with no guarantee of synchronization.\n This class is designed for use as a drop-in replacement for\n StringBuffer in places where the string buffer was being\n used by a single thread (as is generally the case).   Where possible,\n it is recommended that this class be used in preference to\n StringBuffer as it will be faster under most implementations.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "int": {
+                "identifier": "int",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:44",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "char": {
+                "identifier": "char",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:44",
+                "source_type": "char",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "str",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "String[]": {
+                "identifier": "String[]",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:44",
+                "source_type": "String[]",
+                "generation": "PYTHON IMPORTS:\n```\nlist\n```\n\nPYTHON TRANSLATION:\n```\nlist[str]\n```\n\nREASONING:\nIn Python, the equivalent of a Java `String[]` is a list of strings, which can be represented as `list[str]`.",
+                "imports": "list",
+                "translated_target_type": "list[str]",
+                "reasoning": "In Python, the equivalent of a Java `String[]` is a list of strings, which can be represented as `list[str]`.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nString[]\n```\n\nJAVA TYPE DESCRIPTION:\nThe String class represents character strings. All\n string literals in Java programs, such as \"abc\", are\n implemented as instances of this class.\n \n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "parameters": {
+              "final|CommandLine|cmd": {
+                "identifier": "final|CommandLine|cmd",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:52:25",
+                "source_type": "CommandLine",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|Map<String, String>|env": {
+                "identifier": "final|Map<String, String>|env",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:52:25",
+                "source_type": "Map<String, String>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Dict\n```\n\nPYTHON TRANSLATION:\n```\nDict[str, str]\n```\n\nREASONING:\nIn Python, the equivalent type for Java's `Map<String, String>` is `Dict[str, str]`. This maintains the same functionality of mapping keys to values, where both keys and values are strings.",
+                "imports": "from typing import Dict",
+                "translated_target_type": "Dict[str, str]",
+                "reasoning": "In Python, the equivalent type for Java's `Map<String, String>` is `Dict[str, str]`. This maintains the same functionality of mapping keys to values, where both keys and values are strings.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMap<String, String>\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that maps keys to values.  A map cannot contain duplicate keys;\n each key can map to at most one value.\n\n\nJAVA CODE:\n```\n    private File createCommandFile(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        final Path path = Files.createTempFile(\"EXEC\", \".TMP\");\n        final File script = path.toFile();\n        script.deleteOnExit();\n        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {\n            // add the environment as global symbols for the DCL script\n            if (env != null) {\n                final Set<Entry<String, String>> entries = env.entrySet();\n                for (final Entry<String, String> entry : entries) {\n                    writer.print(\"$ \");\n                    writer.print(entry.getKey());\n                    writer.print(\" == \"); // define as global symbol\n                    writer.println('\\\"');\n                    String value = entry.getValue();\n                    // Any embedded \" values need to be doubled\n                    if (value.indexOf('\\\"') > 0) {\n                        final StringBuilder sb = new StringBuilder();\n                        for (int i = 0; i < value.length(); i++) {\n                            final char c = value.charAt(i);\n                            if (c == '\\\"') {\n                                sb.append('\\\"');\n                            }\n                            sb.append(c);\n                        }\n                        value = sb.toString();\n                    }\n                    writer.print(value);\n                    writer.println('\\\"');\n                }\n            }\n\n            final String command = cmd.getExecutable();\n            if (cmd.isFile()) {// We assume it is it a script file\n                writer.print(\"$ @\");\n                // This is a bit crude, but seems to work\n                final String[] parts = StringUtils.split(command, \"/\");\n                writer.print(parts[0]); // device\n                writer.print(\":[\");\n                writer.print(parts[1]); // top level directory\n                final int lastPart = parts.length - 1;\n                for (int i = 2; i < lastPart; i++) {\n                    writer.print(\".\");\n                    writer.print(parts[i]);\n                }\n                writer.print(\"]\");\n                writer.print(parts[lastPart]);\n            } else {\n                writer.print(\"$ \");\n                writer.print(command);\n            }\n            final String[] args = cmd.getArguments();\n            for (final String arg : args) {\n                writer.println(\" -\");\n                writer.print(arg);\n            }\n            writer.println();\n        }\n        return script;\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def __createCommandFile(self, cmd: \"CommandLine\", env: Dict[str, str]) -> os.PathLike:",
+            "        from src.main.org.apache.commons.exec.util.StringUtils import StringUtils",
+            "        path = Path(pathlib.Path().joinpath(pathlib.Path().home(), \"EXEC\" + str(uuid.uuid4()) + \".TMP\"))",
+            "        script = path.to_file()",
+            "        script.delete_on_exit()",
+            "        with io.TextIOWrapper(open(path, 'w'), encoding='utf-8') as writer:",
+            "            if env is not None:",
+            "                for key, value in env.items():",
+            "                    writer.write(f\"$ {key} == \\\"\")",
+            "                    if '\"' in value:",
+            "                        value = value.replace('\"', '\"\"')",
+            "                    writer.write(value)",
+            "                    writer.write('\\\"\\n')",
+            "            command = cmd.getExecutable()",
+            "            if cmd.isFile():",
+            "                parts = StringUtils.split(command, \"/\")",
+            "                writer.write(f\"$ @{parts[0]}:[{parts[1]}]\")",
+            "                for part in parts[2:-1]:",
+            "                    writer.write(f\".{part}\")",
+            "                writer.write(f\"]{parts[-1]}\")",
+            "            else:",
+            "                writer.write(f\"$ {command}\")",
+            "            for arg in cmd.getArguments():",
+            "                writer.write(f\" -{arg}\\n\")",
+            "            writer.write(\"\\n\")",
+            "        return script"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 32.626681327819824,
+          "generation_timestamp": "2025-10-30T19:22:15.282938",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def __createCommandFile(self, cmd: \"CommandLine\", env: Dict[str, str]) -> os.PathLike:\n",
+            "        pass\n\n"
+          ]
+        },
+        "106-108:exec0": {
+          "start": 106,
+          "end": 108,
+          "body": [
+            "public Process exec0(final CommandLine cmd, final Map<String, String> env) throws IOException {",
+            "        return super.exec0(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Process"
+          ],
+          "body_types": [
+            "CommandLine"
+          ],
+          "signature": "exec0(final CommandLine cmd, final Map<String, String> env)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "CommandLine",
+              "name": "cmd"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<String, String>",
+              "name": "env"
+            }
+          ],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+              "37-125:VmsCommandLauncher",
+              "42-100:createCommandFile"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getPath()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "192-208:CommandLine"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.CommandLauncherImpl",
+              "31-47:CommandLauncherImpl",
+              "34-36:exec0"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Process": {
+                "identifier": "Process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-30 13:52:46",
+                "source_type": "Process",
+                "generation": "PYTHON IMPORTS:\n```\nimport subprocess\n```\n\nPYTHON TRANSLATION:\n```\nsubprocess.Popen\n```\n\nREASONING:\nThe `Process` class in Java is used to control native processes started by `ProcessBuilder.start` and `Runtime.exec`. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `Process` class in Java is used to control native processes started by `ProcessBuilder.start` and `Runtime.exec`. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nProcess\n```\n\nJAVA TYPE DESCRIPTION:\nProcess provides control of native processes started by\n ProcessBuilder.start and Runtime.exec.\n The class provides methods for performing input from the process, performing\n output to the process, waiting for the process to complete,\n checking the exit status of the process, and destroying (killing)\n the process.\n The ProcessBuilder.start() and\n Runtime.exec\n methods create a native process and return an instance of a\n subclass of Process that can be used to control the process\n and obtain information about it.\n\n\nJAVA CODE:\n```\n    public Process exec0(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        return super.exec0(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "CommandLine": {
+                "identifier": "CommandLine",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:52:53",
+                "source_type": "CommandLine",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|CommandLine|cmd": {
+                "identifier": "final|CommandLine|cmd",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:52:49",
+                "source_type": "CommandLine",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|Map<String, String>|env": {
+                "identifier": "final|Map<String, String>|env",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:52:49",
+                "source_type": "Map<String, String>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Dict\n```\n\nPYTHON TRANSLATION:\n```\nDict[str, str]\n```\n\nREASONING:\nIn Python, the equivalent type for Java's `Map<String, String>` is `Dict[str, str]`. The `Dict` type from the `typing` module is used to represent a dictionary that maps keys of type `str` to values of type `str`. This maintains the same functionality as the Java `Map<String, String>`, where each key maps to a single value and duplicate keys are not allowed.",
+                "imports": "from typing import Dict",
+                "translated_target_type": "Dict[str, str]",
+                "reasoning": "In Python, the equivalent type for Java's `Map<String, String>` is `Dict[str, str]`. The `Dict` type from the `typing` module is used to represent a dictionary that maps keys of type `str` to values of type `str`. This maintains the same functionality as the Java `Map<String, String>`, where each key maps to a single value and duplicate keys are not allowed.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMap<String, String>\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that maps keys to values.  A map cannot contain duplicate keys;\n each key can map to at most one value.\n\n\nJAVA CODE:\n```\n    public Process exec0(final CommandLine cmd, final Map<String, String> env) throws IOException {\n        return super.exec0(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def exec0(self, cmd: \"CommandLine\", env: Dict[str, str]) -> subprocess.Popen:",
+            "        from src.main.org.apache.commons.exec.CommandLine import CommandLine",
+            "        return super().exec0(CommandLine(2, None, None, self.__createCommandFile(cmd, env).getPath()), env)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 25.191819190979004,
+          "generation_timestamp": "2025-10-30T19:36:22.579834",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def exec0(self, cmd: \"CommandLine\", env: Dict[str, str]) -> subprocess.Popen:\n",
+            "        pass\n\n"
+          ]
+        },
+        "115-117:exec1": {
+          "start": 115,
+          "end": 117,
+          "body": [
+            "public Process exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir) throws IOException {",
+            "        return super.exec1(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env, workingDir);",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "Process"
+          ],
+          "body_types": [
+            "CommandLine"
+          ],
+          "signature": "exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "CommandLine",
+              "name": "cmd"
+            },
+            {
+              "modifier": "final",
+              "type": "Map<String, String>",
+              "name": "env"
+            },
+            {
+              "modifier": "final",
+              "type": "File",
+              "name": "workingDir"
+            }
+          ],
+          "calls": [
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+              "37-125:VmsCommandLauncher",
+              "42-100:createCommandFile"
+            ],
+            [
+              "library",
+              "java.io.File",
+              "getPath()"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.CommandLine",
+              "33-428:CommandLine",
+              "192-208:CommandLine"
+            ],
+            [
+              "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+              "30-50:Java13CommandLauncher",
+              "46-49:exec1"
+            ]
+          ],
+          "type_translations": {
+            "return_types": {
+              "Process": {
+                "identifier": "Process",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-30 13:52:53",
+                "source_type": "Process",
+                "generation": "PYTHON IMPORTS:\n```\nimport subprocess\n```\n\nPYTHON TRANSLATION:\n```\nsubprocess.Popen\n```\n\nREASONING:\nThe `Process` class in Java is used to control native processes started by `ProcessBuilder.start` and `Runtime.exec`. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "imports": "import subprocess",
+                "translated_target_type": "subprocess.Popen",
+                "reasoning": "The `Process` class in Java is used to control native processes started by `ProcessBuilder.start` and `Runtime.exec`. In Python, the equivalent functionality is provided by the `subprocess.Popen` class, which allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nProcess\n```\n\nJAVA TYPE DESCRIPTION:\nProcess provides control of native processes started by\n ProcessBuilder.start and Runtime.exec.\n The class provides methods for performing input from the process, performing\n output to the process, waiting for the process to complete,\n checking the exit status of the process, and destroying (killing)\n the process.\n The ProcessBuilder.start() and\n Runtime.exec\n methods create a native process and return an instance of a\n subclass of Process that can be used to control the process\n and obtain information about it.\n\n\nJAVA CODE:\n```\n    public Process exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir) throws IOException {\n        return super.exec1(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env, workingDir);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "body_types": {
+              "CommandLine": {
+                "identifier": "CommandLine",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "body_types",
+                "timestamp": "2025-10-30 13:53:02",
+                "source_type": "CommandLine",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "parameters": {
+              "final|CommandLine|cmd": {
+                "identifier": "final|CommandLine|cmd",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:52:56",
+                "source_type": "CommandLine",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "CommandLine",
+                "reasoning": "",
+                "prompt": ""
+              },
+              "final|Map<String, String>|env": {
+                "identifier": "final|Map<String, String>|env",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:52:56",
+                "source_type": "Map<String, String>",
+                "generation": "PYTHON IMPORTS:\n```\nfrom typing import Dict\n```\n\nPYTHON TRANSLATION:\n```\nDict[str, str]\n```\n\nREASONING:\nIn Python, the equivalent type for Java's `Map<String, String>` is `Dict[str, str]`. The `Dict` type from the `typing` module is used to represent a dictionary that maps keys of type `str` to values of type `str`. This maintains the same functionality as the Java `Map<String, String>`, where each key maps to a single value and duplicate keys are not allowed.",
+                "imports": "from typing import Dict",
+                "translated_target_type": "Dict[str, str]",
+                "reasoning": "In Python, the equivalent type for Java's `Map<String, String>` is `Dict[str, str]`. The `Dict` type from the `typing` module is used to represent a dictionary that maps keys of type `str` to values of type `str`. This maintains the same functionality as the Java `Map<String, String>`, where each key maps to a single value and duplicate keys are not allowed.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nMap<String, String>\n```\n\nJAVA TYPE DESCRIPTION:\nAn object that maps keys to values.  A map cannot contain duplicate keys;\n each key can map to at most one value.\n\n\nJAVA CODE:\n```\n    public Process exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir) throws IOException {\n        return super.exec1(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env, workingDir);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              },
+              "final|File|workingDir": {
+                "identifier": "final|File|workingDir",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:53:00",
+                "source_type": "File",
+                "generation": "PYTHON IMPORTS:\n```\nimport pathlib\n```\n\nPYTHON TRANSLATION:\n```\npathlib.Path\n```\n\nREASONING:\nThe `File` class in Java represents file and directory pathnames. In Python, the equivalent functionality is provided by the `pathlib.Path` class from the `pathlib` module, which offers an object-oriented interface for handling filesystem paths.",
+                "imports": "import pathlib",
+                "translated_target_type": "pathlib.Path",
+                "reasoning": "The `File` class in Java represents file and directory pathnames. In Python, the equivalent functionality is provided by the `pathlib.Path` class from the `pathlib` module, which offers an object-oriented interface for handling filesystem paths.",
+                "prompt": "Use your expertise to translate the given type according to the instructions. Find an equivalent type (corresponding type that maintains the same functionality) in Python by looking into \"JAVA TYPE\", \"JAVA TYPE DESCRIPTION\" and \"JAVA CODE\" as context.\n\nJAVA TYPE:\n```\nFile\n```\n\nJAVA TYPE DESCRIPTION:\nAn abstract representation of file and directory pathnames.\n\n\nJAVA CODE:\n```\n    public Process exec1(final CommandLine cmd, final Map<String, String> env, final File workingDir) throws IOException {\n        return super.exec1(new CommandLine(2, null, null, createCommandFile(cmd, env).getPath()), env, workingDir);\n    }\n```\n\nRESPONSE FORMAT: You must provide your response in the following format by enclosing IMPORTS and TRANSLATION inside three backticks. DO NOT include any additional information in your response. Your response should only contain the translated type without any other PYTHON code syntax (e.g., assignments, definitions, expressions).\n\nPYTHON IMPORTS:\n```\n<python_imports_if_any>\n```\n\nPYTHON TRANSLATION:\n```\n<python_type_translation>\n```\n\nREASONING:\n<natural_language_reasoning>"
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def exec1(self, cmd: \"CommandLine\", env: Dict[str, str], workingDir: pathlib.Path) -> subprocess.Popen:",
+            "        from src.main.org.apache.commons.exec.CommandLine import CommandLine",
+            "        return super().exec1(CommandLine(2, None, None, self.__createCommandFile(cmd, env).resolve()), env, workingDir)"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "pending",
+          "test_execution": "not-exercised",
+          "elapsed_time": 29.77372121810913,
+          "generation_timestamp": "2025-10-30T19:39:52.804386",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def exec1(self, cmd: \"CommandLine\", env: Dict[str, str], workingDir: pathlib.Path) -> subprocess.Popen:\n",
+            "        pass\n\n"
+          ]
+        },
+        "120-124:isFailure": {
+          "start": 120,
+          "end": 124,
+          "body": [
+            "@Override",
+            "    public boolean isFailure(final int exitValue) {",
+            "        // even exit value signals failure",
+            "        return exitValue % 2 == 0;",
+            "    }"
+          ],
+          "is_constructor": false,
+          "annotations": [
+            "@Override"
+          ],
+          "modifiers": [
+            "public"
+          ],
+          "return_types": [
+            "boolean"
+          ],
+          "body_types": [],
+          "signature": "isFailure(final int exitValue)",
+          "parameters": [
+            {
+              "modifier": "final",
+              "type": "int",
+              "name": "exitValue"
+            }
+          ],
+          "calls": [],
+          "type_translations": {
+            "return_types": {
+              "boolean": {
+                "identifier": "boolean",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "return_types",
+                "timestamp": "2025-10-30 13:53:02",
+                "source_type": "boolean",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "bool",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "body_types": {},
+            "parameters": {
+              "final|int|exitValue": {
+                "identifier": "final|int|exitValue",
+                "translated": true,
+                "attempted": true,
+                "type_variation": "parameters",
+                "timestamp": "2025-10-30 13:53:02",
+                "source_type": "int",
+                "generation": "",
+                "imports": "",
+                "translated_target_type": "int",
+                "reasoning": "",
+                "prompt": ""
+              }
+            },
+            "types": {}
+          },
+          "translation": [
+            "    def isFailure(self, exitValue: int) -> bool:",
+            "        return exitValue % 2 == 0"
+          ],
+          "translation_status": "attempted",
+          "syntactic_validation": "parseable",
+          "field_exercise": "pending",
+          "graal_validation": "pending",
+          "mocking_validation": "success",
+          "test_execution": {
+            "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest.py::VmsCommandLauncher_ESTest::test0": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+                  "class_name": "30-50:Java13CommandLauncher",
+                  "fragment_name": "35-36:Java13CommandLauncher"
+                },
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+                  "class_name": "37-125:VmsCommandLauncher",
+                  "fragment_name": "120-124:isFailure"
+                },
+                {
+                  "schema_name": "commons-exec.src.test.org.apache.commons.exec.launcher.VmsCommandLauncher_ESTest",
+                  "class_name": "20-44:VmsCommandLauncher_ESTest",
+                  "fragment_name": "22-27:test0"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest.py::VmsCommandLauncher_ESTest::test1": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+                  "class_name": "30-50:Java13CommandLauncher",
+                  "fragment_name": "35-36:Java13CommandLauncher"
+                },
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+                  "class_name": "37-125:VmsCommandLauncher",
+                  "fragment_name": "120-124:isFailure"
+                },
+                {
+                  "schema_name": "commons-exec.src.test.org.apache.commons.exec.launcher.VmsCommandLauncher_ESTest",
+                  "class_name": "20-44:VmsCommandLauncher_ESTest",
+                  "fragment_name": "29-34:test1"
+                }
+              ]
+            },
+            "src/test/org/apache/commons/exec/launcher/VmsCommandLauncher_ESTest.py::VmsCommandLauncher_ESTest::test2": {
+              "test_outcome": "exercised-success",
+              "feedback": "",
+              "covered_methods": [
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.Java13CommandLauncher",
+                  "class_name": "30-50:Java13CommandLauncher",
+                  "fragment_name": "35-36:Java13CommandLauncher"
+                },
+                {
+                  "schema_name": "commons-exec.src.main.org.apache.commons.exec.launcher.VmsCommandLauncher",
+                  "class_name": "37-125:VmsCommandLauncher",
+                  "fragment_name": "120-124:isFailure"
+                },
+                {
+                  "schema_name": "commons-exec.src.test.org.apache.commons.exec.launcher.VmsCommandLauncher_ESTest",
+                  "class_name": "20-44:VmsCommandLauncher_ESTest",
+                  "fragment_name": "36-41:test2"
+                }
+              ]
+            }
+          },
+          "elapsed_time": 24.7733211517334,
+          "generation_timestamp": "2025-10-30T19:40:17.776527",
+          "model_name": "devstral-24b",
+          "is_overload": false,
+          "partial_translation": [
+            "    def isFailure(self, exitValue: int) -> bool:\n",
+            "        pass\n\n"
+          ],
+          "fixed_by_simple_reprompt": true
+        }
+      },
+      "fields": {},
+      "python_class_declaration": "class VmsCommandLauncher(Java13CommandLauncher):\n\n"
+    }
+  },
+  "import_map": {
+    "File": "java.io.File",
+    "IOException": "java.io.IOException",
+    "PrintWriter": "java.io.PrintWriter",
+    "Charset": "java.nio.charset.Charset",
+    "Files": "java.nio.file.Files",
+    "Path": "java.nio.file.Path",
+    "Map": "java.util.Map",
+    "Entry": "java.util.Map.Entry",
+    "Set": "java.util.Set",
+    "CommandLine": "org.apache.commons.exec.CommandLine",
+    "StringUtils": "org.apache.commons.exec.util.StringUtils"
+  },
+  "python_imports": [
+    "from __future__ import annotations",
+    "from io import StringIO",
+    "from pathlib import Path",
+    "from src.main.org.apache.commons.exec.launcher.Java13CommandLauncher import Java13CommandLauncher",
+    "from typing import Dict",
+    "from typing import Set, Dict, Tuple",
+    "import io",
+    "import os",
+    "import pathlib",
+    "import subprocess",
+    "list"
+  ]
+}
