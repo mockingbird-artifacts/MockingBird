@@ -91,5 +91,5 @@ RUN bash scripts/build_java_projects.sh
 
 SHELL ["/bin/bash", "-c"]
 RUN source /root/miniconda3/etc/profile.d/conda.sh && \
-    conda activate MockingBird && \
+    conda activate mockingbird && \
     python src/crawler/crawl_java_package.py
