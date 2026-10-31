@@ -173,7 +173,11 @@ public class CustomToStringConverter {
         }
         if (obj.getClass().isArray() || (basePackage != null && !objPackage.getName().startsWith(basePackage))) {
             JSONObject objDetails = new JSONObject();
-            if (obj instanceof Iterator) {
+            JSONObject extendedDetails = obj.getClass().isArray() ? null : handleExtendedLibraryObject(obj, basePackage, seen);
+            if (extendedDetails != null) {
+                objDetails = extendedDetails;
+                objDetails.put("memory_address", System.identityHashCode(obj));
+            } else if (obj instanceof Iterator) {
                 objDetails = handleIterator((Iterator<?>) obj, basePackage, seen);
                 objDetails.put("memory_address", System.identityHashCode(obj));
             } else if (obj instanceof BitSet) {
@@ -396,9 +400,13 @@ public class CustomToStringConverter {
                         }
                     } else {
                         JSONObject specialFieldDetails = new JSONObject();
+                        JSONObject extendedFieldDetails = (fieldValue == null || fieldValue.getClass().isArray()) ? null : handleExtendedLibraryObject(fieldValue, basePackage, seen);
                         if (fieldValue == null) {
                             fieldDetails.put("type", "null");
                             fieldDetails.put("value", "null");
+                        } else if (extendedFieldDetails != null) {
+                            specialFieldDetails = extendedFieldDetails;
+                            specialFieldDetails.put("memory_address", System.identityHashCode(fieldValue));
                         } else if (fieldValue instanceof BitSet) {
                             specialFieldDetails = handleBitSet((BitSet) fieldValue, basePackage, seen);
                             specialFieldDetails.put("memory_address", System.identityHashCode(fieldValue));
@@ -940,9 +948,14 @@ public class CustomToStringConverter {
             } else if (inner instanceof FileInputStream) {
                 details.put("stream_type", "file_stream");
                 details.put("stream_details", handleFileInputStream((FileInputStream) inner, basePackage, seen));
+            } else if (inner != null) {
+                JSONObject innerDetails = handleAnyInputStream(inner, basePackage, seen, 1);
+                details.put("stream_type", innerDetails.has("file_path") ? "file_stream" : (innerDetails.has("stream_type") && innerDetails.optString("stream_type").equals("unknown") ? "unknown" : "byte_stream"));
+                details.put("stream_details", innerDetails);
+                details.put("stream_class", inner.getClass().getName());
             } else {
                 details.put("stream_type", "unknown");
-                details.put("stream_class", inner.getClass().getName());
+                details.put("stream_class", "null");
             }
         } catch (Exception e) {
             details.put("error", e.toString());
@@ -972,9 +985,14 @@ public class CustomToStringConverter {
             } else if (inner instanceof FileOutputStream) {
                 details.put("stream_type", "file_stream");
                 details.put("stream_details", handleFileOutputStream((FileOutputStream) inner, basePackage, seen));
+            } else if (inner != null) {
+                JSONObject innerDetails = handleAnyOutputStream(inner, basePackage, seen, 1);
+                details.put("stream_type", innerDetails.has("file_path") ? "file_stream" : (innerDetails.has("stream_type") && innerDetails.optString("stream_type").equals("unknown") ? "unknown" : "byte_stream"));
+                details.put("stream_details", innerDetails);
+                details.put("stream_class", inner.getClass().getName());
             } else {
                 details.put("stream_type", "unknown");
-                details.put("stream_class", inner.getClass().getName());
+                details.put("stream_class", "null");
             }
         } catch (Exception e) {
             details.put("error", e.toString());
@@ -1133,16 +1151,30 @@ public class CustomToStringConverter {
             pathField.setAccessible(true);
             String filePath = (String) pathField.get(fos);
 
+            if (filePath == null) {
+                // descriptor-backed stream (process pipe, System.out/err, socket): not seekable, no path
+                fosDetails.put("special_note", "fd_stream");
+                Object fdObj = readField(fos, FileOutputStream.class, "fd");
+                Object fd = fdObj != null ? readField(fdObj, java.io.FileDescriptor.class, "fd") : null;
+                fosDetails.put("fd", fd != null ? fd : JSONObject.NULL);
+                fosDetails.put("file_path", JSONObject.NULL);
+                return fosDetails;
+            }
             fosDetails.put("file_path", filePath);
 
-            long position = fos.getChannel().position();
-            fosDetails.put("position", position);
-
-            long fileSize = fos.getChannel().size();
-            fosDetails.put("file_size", fileSize);
+            try {
+                long position = fos.getChannel().position();
+                fosDetails.put("position", position);
+                long fileSize = fos.getChannel().size();
+                fosDetails.put("file_size", fileSize);
+            } catch (Throwable t) {
+                fosDetails.put("position", 0);
+                fosDetails.put("file_size", new java.io.File(filePath).length());
+                fosDetails.put("channel_error", t.toString());
+            }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            fosDetails.put("error", e.toString());
         }
         return fosDetails;
     }
@@ -1233,16 +1265,31 @@ public class CustomToStringConverter {
             pathField.setAccessible(true);
             String filePath = (String) pathField.get(fis);
 
+            if (filePath == null) {
+                // descriptor-backed stream (process pipe, System.in, socket): not seekable, no path
+                fisDetails.put("special_note", fis == System.in ? "System.in" : "fd_stream");
+                Object fdObj = readField(fis, FileInputStream.class, "fd");
+                Object fd = fdObj != null ? readField(fdObj, java.io.FileDescriptor.class, "fd") : null;
+                fisDetails.put("fd", fd != null ? fd : JSONObject.NULL);
+                fisDetails.put("file_path", JSONObject.NULL);
+                try { fisDetails.put("available", fis.available()); } catch (Throwable t) { /* ignore */ }
+                return fisDetails;
+            }
             fisDetails.put("file_path", filePath);
 
-            long position = fis.getChannel().position();
-            fisDetails.put("position", position);
-
-            long fileSize = fis.getChannel().size();
-            fisDetails.put("file_size", fileSize);
+            try {
+                long position = fis.getChannel().position();
+                fisDetails.put("position", position);
+                long fileSize = fis.getChannel().size();
+                fisDetails.put("file_size", fileSize);
+            } catch (Throwable t) {
+                fisDetails.put("position", 0);
+                fisDetails.put("file_size", new java.io.File(filePath).length());
+                fisDetails.put("channel_error", t.toString());
+            }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            fisDetails.put("error", e.toString());
         }
         return fisDetails;
     }
@@ -1416,6 +1463,526 @@ public class CustomToStringConverter {
         return bitSetDetails;
     }
 
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Serialization of java.io / java.nio / java.lang.Process / java.util.concurrent types.
+    //
+    // `handleExtendedLibraryObject` is consulted first by both dispatch sites (top-level objects and field values) and
+    // returns null when the object is not one of the newly covered types, so the pre-existing handlers keep their
+    // behavior.  Inner streams/readers/writers are resolved recursively through `handleAnyInputStream`,
+    // `handleAnyOutputStream`, `handleAnyReader`, `handleAnyWriter`, so wrappers over wrappers (e.g. a DataInputStream
+    // over a BufferedInputStream over a process pipe) no longer fall into the "unknown" bucket.
+    // -----------------------------------------------------------------------------------------------------------------
+    private static Object readField(Object target, Class<?> declaringClass, String name) {
+        try {
+            Field f = declaringClass.getDeclaredField(name);
+            f.setAccessible(true);
+            return f.get(target);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private static Object readFieldAnywhere(Object target, String name) {
+        Class<?> c = target.getClass();
+        while (c != null) {
+            try {
+                Field f = c.getDeclaredField(name);
+                f.setAccessible(true);
+                return f.get(target);
+            } catch (Throwable t) {
+                c = c.getSuperclass();
+            }
+        }
+        return null;
+    }
+
+    private static JSONObject handleExtendedLibraryObject(Object value, String basePackage, Set<Integer> seen) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            if (value instanceof java.text.DecimalFormat) {
+                JSONObject d = new JSONObject();
+                d.put("type", value.getClass().getName());
+                d.put("pattern", ((java.text.DecimalFormat) value).toPattern());
+                d.put("special_note", "decimal_format");
+                return d;
+            } else if (value instanceof java.text.SimpleDateFormat) {
+                JSONObject d = new JSONObject();
+                d.put("type", value.getClass().getName());
+                d.put("pattern", ((java.text.SimpleDateFormat) value).toPattern());
+                d.put("special_note", "date_format");
+                return d;
+            } else if (value instanceof java.text.Format) {
+                JSONObject d = new JSONObject();
+                d.put("type", value.getClass().getName());
+                d.put("value", value.toString());
+                d.put("special_note", "text_format");
+                return d;
+            } else if (value.getClass() == Object.class) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.lang.Object");
+                d.put("special_note", "plain_object");
+                d.put("memory_address", System.identityHashCode(value));
+                return d;
+            } else if (value instanceof java.nio.file.Path) {
+                return handlePath((java.nio.file.Path) value);
+            } else if (value instanceof java.nio.charset.Charset) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.nio.charset.Charset");
+                d.put("value", ((java.nio.charset.Charset) value).name());
+                return d;
+            } else if (value instanceof java.nio.ByteBuffer) {
+                return handleByteBuffer((java.nio.ByteBuffer) value, basePackage, seen);
+            } else if ((value instanceof java.nio.IntBuffer) || (value instanceof java.nio.LongBuffer) || (value instanceof java.nio.ShortBuffer)
+                    || (value instanceof java.nio.FloatBuffer) || (value instanceof java.nio.DoubleBuffer)) {
+                return handleNumericBuffer((java.nio.Buffer) value, basePackage, seen);
+            } else if (value instanceof java.io.CharArrayReader) {
+                return handleCharArrayReader((java.io.CharArrayReader) value);
+            } else if (value instanceof java.io.CharArrayWriter) {
+                JSONObject d = new JSONObject();
+                d.put("type", value.getClass().getName());
+                String content = value.toString();
+                d.put("content", content);
+                d.put("position", content.length());
+                return d;
+            } else if (value instanceof java.io.BufferedWriter) {
+                return handleAnyWriter((Writer) value, basePackage, seen, 0);
+            } else if (value instanceof java.io.FilterReader) {
+                return handleAnyReader((Reader) value, basePackage, seen, 0);
+            } else if (value instanceof java.io.FilterWriter) {
+                return handleAnyWriter((Writer) value, basePackage, seen, 0);
+            } else if (value instanceof java.io.SequenceInputStream) {
+                return handleAnyInputStream((InputStream) value, basePackage, seen, 0);
+            } else if (value instanceof java.io.RandomAccessFile) {
+                return handleRandomAccessFile((java.io.RandomAccessFile) value);
+            } else if (value instanceof java.io.FileDescriptor) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.io.FileDescriptor");
+                Object fd = readField(value, java.io.FileDescriptor.class, "fd");
+                d.put("value", fd != null ? fd.toString() : "-1");
+                return d;
+            } else if (value instanceof Process) {
+                return handleProcess((Process) value, basePackage, seen);
+            } else if (value instanceof ProcessBuilder) {
+                return handleProcessBuilder((ProcessBuilder) value, basePackage, seen);
+            } else if (value instanceof Thread) {
+                return handleThread((Thread) value);
+            } else if (value instanceof java.util.concurrent.atomic.AtomicBoolean) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.util.concurrent.atomic.AtomicBoolean");
+                d.put("value", Boolean.toString(((java.util.concurrent.atomic.AtomicBoolean) value).get()));
+                return d;
+            } else if (value instanceof java.util.concurrent.atomic.AtomicReference) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.util.concurrent.atomic.AtomicReference");
+                Object referent = ((java.util.concurrent.atomic.AtomicReference<?>) value).get();
+                d.put("referent", referent != null ? new JSONObject(customToString(referent, seen)) : JSONObject.NULL);
+                return d;
+            } else if (value instanceof java.util.concurrent.locks.Lock || value instanceof java.util.concurrent.locks.ReadWriteLock) {
+                JSONObject d = new JSONObject();
+                d.put("type", value.getClass().getName());
+                d.put("lock_class", value.getClass().getName());
+                if (value instanceof java.util.concurrent.locks.ReentrantLock) {
+                    d.put("locked", ((java.util.concurrent.locks.ReentrantLock) value).isLocked());
+                }
+                return d;
+            } else if (value instanceof java.util.Optional) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.util.Optional");
+                java.util.Optional<?> opt = (java.util.Optional<?>) value;
+                d.put("present", opt.isPresent());
+                d.put("referent", opt.isPresent() ? new JSONObject(customToString(opt.get(), seen)) : JSONObject.NULL);
+                return d;
+            } else if (value instanceof Map.Entry && !(value instanceof Map)) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.util.Map$Entry");
+                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) value;
+                d.put("key", entry.getKey() != null ? new JSONObject(customToString(entry.getKey(), seen)) : JSONObject.NULL);
+                d.put("entry_value", entry.getValue() != null ? new JSONObject(customToString(entry.getValue(), seen)) : JSONObject.NULL);
+                return d;
+            } else if (value instanceof java.util.zip.Checksum && !(value instanceof CRC32)) {
+                JSONObject d = new JSONObject();
+                d.put("type", value.getClass().getName());
+                d.put("value", Long.toString(((java.util.zip.Checksum) value).getValue()));
+                return d;
+            } else if (value instanceof java.util.UUID) {
+                JSONObject d = new JSONObject();
+                d.put("type", "java.util.UUID");
+                d.put("value", value.toString());
+                return d;
+            } else if (value instanceof FileInputStream) {
+                return handleFileInputStream((FileInputStream) value, basePackage, seen);   // fd-aware version below
+            } else if (value instanceof FileOutputStream) {
+                return handleFileOutputStream((FileOutputStream) value, basePackage, seen);
+            } else if (value instanceof InputStream && !(value instanceof ByteArrayInputStream) && !(value instanceof PipedInputStream)
+                    && !(value instanceof FilterInputStream)) {
+                // any other InputStream implementation from the JDK (not an application class)
+                return handleAnyInputStream((InputStream) value, basePackage, seen, 0);
+            } else if (value instanceof OutputStream && !(value instanceof ByteArrayOutputStream) && !(value instanceof PipedOutputStream)
+                    && !(value instanceof FilterOutputStream)) {
+                return handleAnyOutputStream((OutputStream) value, basePackage, seen, 0);
+            } else if (value instanceof Reader && !(value instanceof StringReader) && !(value instanceof BufferedReader)
+                    && !(value instanceof InputStreamReader) && !(value instanceof PipedReader)) {
+                return handleAnyReader((Reader) value, basePackage, seen, 0);
+            } else if (value instanceof Writer && !(value instanceof StringWriter) && !(value instanceof PrintWriter)
+                    && !(value instanceof OutputStreamWriter) && !(value instanceof PipedWriter)) {
+                return handleAnyWriter((Writer) value, basePackage, seen, 0);
+            }
+        } catch (Throwable t) {
+            JSONObject d = new JSONObject();
+            d.put("type", getTypeName(value, basePackage));
+            d.put("value", String.valueOf(value));
+            d.put("serialization_error", t.toString());
+            return d;
+        }
+        return null;
+    }
+
+    private static JSONObject handlePath(java.nio.file.Path path) {
+        JSONObject d = new JSONObject();
+        d.put("type", "java.nio.file.Path");
+        d.put("value", path.toString());
+        d.put("absolute", path.isAbsolute());
+        return d;
+    }
+
+    private static JSONObject handleByteBuffer(java.nio.ByteBuffer buffer, String basePackage, Set<Integer> seen) {
+        JSONObject d = new JSONObject();
+        d.put("type", "java.nio.ByteBuffer");
+        java.nio.ByteBuffer dup = buffer.duplicate();
+        dup.clear();   // position 0, limit = capacity: dump the whole backing content, the reader restores position/limit
+        byte[] content = new byte[buffer.limit()];
+        dup.get(content, 0, buffer.limit());
+        d.put("byte_array", handlePrimitiveArray(content, basePackage, seen));
+        d.put("size", buffer.limit());
+        d.put("position", buffer.position());
+        d.put("limit", buffer.limit());
+        d.put("capacity", buffer.capacity());
+        d.put("byte_order", buffer.order().toString());
+        d.put("direct", buffer.isDirect());
+        d.put("read_only", buffer.isReadOnly());
+        return d;
+    }
+
+    private static JSONObject handleNumericBuffer(java.nio.Buffer buffer, String basePackage, Set<Integer> seen) {
+        JSONObject d = new JSONObject();
+        JSONArray elements = new JSONArray();
+        String type;
+        if (buffer instanceof java.nio.IntBuffer) {
+            type = "java.nio.IntBuffer";
+            java.nio.IntBuffer b = ((java.nio.IntBuffer) buffer).duplicate(); b.clear();
+            for (int i = 0; i < buffer.limit(); i++) { elements.put(new JSONObject(customToString(b.get(i), seen))); }
+        } else if (buffer instanceof java.nio.LongBuffer) {
+            type = "java.nio.LongBuffer";
+            java.nio.LongBuffer b = ((java.nio.LongBuffer) buffer).duplicate(); b.clear();
+            for (int i = 0; i < buffer.limit(); i++) { elements.put(new JSONObject(customToString(b.get(i), seen))); }
+        } else if (buffer instanceof java.nio.ShortBuffer) {
+            type = "java.nio.ShortBuffer";
+            java.nio.ShortBuffer b = ((java.nio.ShortBuffer) buffer).duplicate(); b.clear();
+            for (int i = 0; i < buffer.limit(); i++) { elements.put(new JSONObject(customToString(b.get(i), seen))); }
+        } else if (buffer instanceof java.nio.FloatBuffer) {
+            type = "java.nio.FloatBuffer";
+            java.nio.FloatBuffer b = ((java.nio.FloatBuffer) buffer).duplicate(); b.clear();
+            for (int i = 0; i < buffer.limit(); i++) { elements.put(new JSONObject(customToString(b.get(i), seen))); }
+        } else {
+            type = "java.nio.DoubleBuffer";
+            java.nio.DoubleBuffer b = ((java.nio.DoubleBuffer) buffer).duplicate(); b.clear();
+            for (int i = 0; i < buffer.limit(); i++) { elements.put(new JSONObject(customToString(b.get(i), seen))); }
+        }
+        d.put("type", type);
+        d.put("collection_elements", elements);
+        d.put("position", buffer.position());
+        d.put("limit", buffer.limit());
+        d.put("capacity", buffer.capacity());
+        return d;
+    }
+
+    private static JSONObject handleCharArrayReader(java.io.CharArrayReader reader) {
+        JSONObject d = new JSONObject();
+        d.put("type", reader.getClass().getName());
+        Object buf = readField(reader, java.io.CharArrayReader.class, "buf");
+        Object pos = readField(reader, java.io.CharArrayReader.class, "pos");
+        Object count = readField(reader, java.io.CharArrayReader.class, "count");
+        if (buf instanceof char[]) {
+            int n = count instanceof Integer ? (Integer) count : ((char[]) buf).length;
+            d.put("content", new String((char[]) buf, 0, Math.min(n, ((char[]) buf).length)));
+            d.put("position", pos instanceof Integer ? (Integer) pos : 0);
+        } else {
+            d.put("content", "");
+            d.put("position", 0);
+        }
+        return d;
+    }
+
+    private static JSONObject handleRandomAccessFile(java.io.RandomAccessFile raf) {
+        JSONObject d = new JSONObject();
+        d.put("type", "java.io.RandomAccessFile");
+        Object path = readField(raf, java.io.RandomAccessFile.class, "path");
+        d.put("file_path", path != null ? path.toString() : JSONObject.NULL);
+        try {
+            d.put("position", raf.getFilePointer());
+            d.put("file_size", raf.length());
+        } catch (Throwable t) {
+            d.put("error", t.toString());
+        }
+        return d;
+    }
+
+    private static JSONObject handleProcess(Process process, String basePackage, Set<Integer> seen) {
+        JSONObject d = new JSONObject();
+        d.put("type", "java.lang.Process");
+        d.put("process_class", process.getClass().getName());
+        Object pid = readFieldAnywhere(process, "pid");
+        d.put("pid", pid != null ? pid : JSONObject.NULL);
+        boolean alive = process.isAlive();
+        d.put("alive", alive);
+        if (!alive) {
+            try { d.put("exit_value", process.exitValue()); } catch (Throwable t) { d.put("exit_value", JSONObject.NULL); }
+        } else {
+            d.put("exit_value", JSONObject.NULL);
+        }
+        try { d.put("stdout", handleAnyInputStream(process.getInputStream(), basePackage, seen, 0)); } catch (Throwable t) { /* ignore */ }
+        try { d.put("stderr", handleAnyInputStream(process.getErrorStream(), basePackage, seen, 0)); } catch (Throwable t) { /* ignore */ }
+        try { d.put("stdin", handleAnyOutputStream(process.getOutputStream(), basePackage, seen, 0)); } catch (Throwable t) { /* ignore */ }
+        return d;
+    }
+
+    private static JSONObject handleProcessBuilder(ProcessBuilder pb, String basePackage, Set<Integer> seen) {
+        JSONObject d = new JSONObject();
+        d.put("type", "java.lang.ProcessBuilder");
+        d.put("command", handleCollection(pb.command(), basePackage, seen));
+        d.put("directory", pb.directory() != null ? pb.directory().toString() : JSONObject.NULL);
+        d.put("redirect_error_stream", pb.redirectErrorStream());
+        return d;
+    }
+
+    private static JSONObject handleThread(Thread thread) {
+        JSONObject d = new JSONObject();
+        d.put("type", "java.lang.Thread");
+        d.put("thread_class", thread.getClass().getName());
+        d.put("name", thread.getName());
+        d.put("daemon", thread.isDaemon());
+        d.put("alive", thread.isAlive());
+        d.put("state", thread.getState().toString());
+        d.put("priority", thread.getPriority());
+        return d;
+    }
+
+    /** Recursive, wrapper-aware serialization of any java.io.InputStream. */
+    private static JSONObject handleAnyInputStream(InputStream in, String basePackage, Set<Integer> seen, int depth) {
+        JSONObject d = new JSONObject();
+        if (in == null) {
+            d.put("type", "null");
+            return d;
+        }
+        d.put("type", in.getClass().getName());
+        if (depth > 8) {
+            d.put("stream_type", "unknown");
+            d.put("stream_class", in.getClass().getName());
+            return d;
+        }
+        try {
+            if (in instanceof ByteArrayInputStream) {
+                return handleByteArrayInputStream((ByteArrayInputStream) in, basePackage, seen);
+            } else if (in instanceof FileInputStream) {
+                return handleFileInputStream((FileInputStream) in, basePackage, seen);
+            } else if (in instanceof PipedInputStream) {
+                return handlePipedInputStream((PipedInputStream) in, basePackage, seen);
+            } else if (in instanceof java.io.SequenceInputStream) {
+                Object current = readField(in, java.io.SequenceInputStream.class, "in");
+                d.put("stream_type", current instanceof InputStream ? "sequence" : "unknown");
+                if (current instanceof InputStream) {
+                    d.put("stream_details", handleAnyInputStream((InputStream) current, basePackage, seen, depth + 1));
+                }
+                return d;
+            } else if (in instanceof FilterInputStream) {
+                Object inner = readField(in, FilterInputStream.class, "in");
+                if (in instanceof java.io.PushbackInputStream) {
+                    Object buf = readField(in, java.io.PushbackInputStream.class, "buf");
+                    Object pos = readField(in, java.io.PushbackInputStream.class, "pos");
+                    if (buf instanceof byte[] && pos instanceof Integer) {
+                        byte[] b = (byte[]) buf; int p = (Integer) pos;
+                        d.put("pushback_bytes", handlePrimitiveArray(Arrays.copyOfRange(b, p, b.length), basePackage, seen));
+                    }
+                }
+                if (inner instanceof InputStream) {
+                    JSONObject innerDetails = handleAnyInputStream((InputStream) inner, basePackage, seen, depth + 1);
+                    d.put("stream_type", innerDetails.has("file_path") ? "file_stream" : "byte_stream");
+                    d.put("stream_details", innerDetails);
+                } else {
+                    d.put("stream_type", "unknown");
+                    d.put("stream_class", inner != null ? inner.getClass().getName() : "null");
+                }
+                return d;
+            } else if (in == System.in) {
+                d.put("special_note", "System.in");
+                return d;
+            } else {
+                d.put("stream_type", "unknown");
+                d.put("stream_class", in.getClass().getName());
+                try { d.put("available", in.available()); } catch (Throwable t) { /* ignore */ }
+                return d;
+            }
+        } catch (Throwable t) {
+            d.put("error", t.toString());
+            return d;
+        }
+    }
+
+    /** Recursive, wrapper-aware serialization of any java.io.OutputStream. */
+    private static JSONObject handleAnyOutputStream(OutputStream out, String basePackage, Set<Integer> seen, int depth) {
+        JSONObject d = new JSONObject();
+        if (out == null) {
+            d.put("type", "null");
+            return d;
+        }
+        d.put("type", out.getClass().getName());
+        if (depth > 8) {
+            d.put("stream_type", "unknown");
+            d.put("stream_class", out.getClass().getName());
+            return d;
+        }
+        try {
+            if (out instanceof ByteArrayOutputStream) {
+                return handleByteArrayOutputStream((ByteArrayOutputStream) out, basePackage, seen);
+            } else if (out instanceof FileOutputStream) {
+                return handleFileOutputStream((FileOutputStream) out, basePackage, seen);
+            } else if (out instanceof PipedOutputStream) {
+                return handlePipedOutputStream((PipedOutputStream) out, basePackage, seen);
+            } else if (out instanceof PrintStream) {
+                if (out == System.out) { d.put("special_note", "System.out"); return d; }
+                if (out == System.err) { d.put("special_note", "System.err"); return d; }
+                return handlePrintStream((PrintStream) out, basePackage, seen);
+            } else if (out instanceof FilterOutputStream) {
+                Object inner = readField(out, FilterOutputStream.class, "out");
+                if (inner instanceof OutputStream) {
+                    JSONObject innerDetails = handleAnyOutputStream((OutputStream) inner, basePackage, seen, depth + 1);
+                    d.put("stream_type", innerDetails.has("file_path") ? "file_stream" : "byte_stream");
+                    d.put("stream_details", innerDetails);
+                } else {
+                    d.put("stream_type", "unknown");
+                    d.put("stream_class", inner != null ? inner.getClass().getName() : "null");
+                }
+                return d;
+            } else {
+                d.put("stream_type", "unknown");
+                d.put("stream_class", out.getClass().getName());
+                return d;
+            }
+        } catch (Throwable t) {
+            d.put("error", t.toString());
+            return d;
+        }
+    }
+
+    /** Recursive, wrapper-aware serialization of any java.io.Reader; payload uses the StringIO/BufferedReader shapes. */
+    private static JSONObject handleAnyReader(Reader reader, String basePackage, Set<Integer> seen, int depth) {
+        JSONObject d = new JSONObject();
+        if (reader == null) {
+            d.put("type", "null");
+            return d;
+        }
+        d.put("type", reader.getClass().getName());
+        if (depth > 8) {
+            d.put("special_note", "unknown reader: " + reader.getClass().getName());
+            return d;
+        }
+        try {
+            JSONObject inner = null;
+            if (reader instanceof StringReader) {
+                inner = handleStringReader((StringReader) reader, basePackage, seen);
+                inner.put("content", inner.opt("value"));
+            } else if (reader instanceof java.io.CharArrayReader) {
+                inner = handleCharArrayReader((java.io.CharArrayReader) reader);
+            } else if (reader instanceof BufferedReader) {
+                inner = handleBufferedReader((BufferedReader) reader, basePackage, seen);
+            } else if (reader instanceof InputStreamReader) {
+                inner = handleInputStreamReader((InputStreamReader) reader, basePackage, seen);
+            } else if (reader instanceof PipedReader) {
+                inner = handlePipedReader((PipedReader) reader, basePackage, seen);
+            } else if (reader instanceof java.io.FilterReader) {
+                Object wrapped = readField(reader, java.io.FilterReader.class, "in");
+                if (reader instanceof java.io.PushbackReader) {
+                    Object buf = readField(reader, java.io.PushbackReader.class, "buf");
+                    Object pos = readField(reader, java.io.PushbackReader.class, "pos");
+                    if (buf instanceof char[] && pos instanceof Integer) {
+                        char[] b = (char[]) buf; int p = (Integer) pos;
+                        d.put("pushback_chars", new String(b, p, b.length - p));
+                    }
+                }
+                inner = wrapped instanceof Reader ? handleAnyReader((Reader) wrapped, basePackage, seen, depth + 1) : null;
+            }
+            if (inner != null) {
+                for (String key : inner.keySet()) {
+                    if (!key.equals("type") && !key.equals("memory_address")) {
+                        d.put(key, inner.get(key));
+                    }
+                }
+                d.put("inner_reader_class", inner.optString("type"));
+            } else {
+                d.put("special_note", "unknown reader: " + reader.getClass().getName());
+            }
+        } catch (Throwable t) {
+            d.put("error", t.toString());
+        }
+        return d;
+    }
+
+    /** Recursive, wrapper-aware serialization of any java.io.Writer; payload uses the PrintWriter/StringIO shapes. */
+    private static JSONObject handleAnyWriter(Writer writer, String basePackage, Set<Integer> seen, int depth) {
+        JSONObject d = new JSONObject();
+        if (writer == null) {
+            d.put("type", "null");
+            return d;
+        }
+        d.put("type", writer.getClass().getName());
+        if (depth > 8) {
+            d.put("special_note", "unknown writer: " + writer.getClass().getName());
+            return d;
+        }
+        try {
+            JSONObject inner = null;
+            if (writer instanceof StringWriter) {
+                StringWriter sw = (StringWriter) writer;
+                inner = new JSONObject();
+                inner.put("content", sw.toString());
+                inner.put("position", sw.getBuffer().length());
+            } else if (writer instanceof java.io.CharArrayWriter) {
+                inner = new JSONObject();
+                String content = writer.toString();
+                inner.put("content", content);
+                inner.put("position", content.length());
+            } else if (writer instanceof PrintWriter) {
+                inner = handlePrintWriter((PrintWriter) writer, basePackage, seen);
+            } else if (writer instanceof OutputStreamWriter) {
+                inner = handleOutputStreamWriter((OutputStreamWriter) writer, basePackage, seen);
+            } else if (writer instanceof PipedWriter) {
+                inner = handlePipedWriter((PipedWriter) writer, basePackage, seen);
+            } else if (writer instanceof java.io.BufferedWriter) {
+                try { writer.flush(); } catch (Throwable t) { /* flushing a closed writer is harmless here */ }
+                Object wrapped = readField(writer, java.io.BufferedWriter.class, "out");
+                inner = wrapped instanceof Writer ? handleAnyWriter((Writer) wrapped, basePackage, seen, depth + 1) : null;
+            } else if (writer instanceof java.io.FilterWriter) {
+                Object wrapped = readField(writer, java.io.FilterWriter.class, "out");
+                inner = wrapped instanceof Writer ? handleAnyWriter((Writer) wrapped, basePackage, seen, depth + 1) : null;
+            }
+            if (inner != null) {
+                for (String key : inner.keySet()) {
+                    if (!key.equals("type") && !key.equals("memory_address")) {
+                        d.put(key, inner.get(key));
+                    }
+                }
+                d.put("inner_writer_class", inner.optString("type"));
+            } else {
+                d.put("special_note", "unknown writer: " + writer.getClass().getName());
+            }
+        } catch (Throwable t) {
+            d.put("error", t.toString());
+        }
+        return d;
+    }
 
     public static String getTypeName(Object obj, String basePackage) {
         String fullTypeName = "";

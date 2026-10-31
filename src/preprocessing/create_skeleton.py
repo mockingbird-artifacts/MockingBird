@@ -10,6 +10,120 @@ from src.utils.get_custom_types import get_custom_types
 from src.utils.get_schema_file import get_schema_file
 
 
+# JDK superclasses without a subclassable Python equivalent (threading.RLock is a factory function, TimerTask has no
+# counterpart) are mapped to small adapter classes written into src/main/java_adapters.py of the recomposed project.
+LIBRARY_BASE_ADAPTERS = {
+    'java.util.concurrent.locks.ReentrantLock': 'ReentrantLockAdapter',
+    'java.util.TimerTask': 'TimerTaskAdapter',
+}
+ADAPTER_API_DOC = {
+    'ReentrantLockAdapter': 'lock(), unlock(), tryLock(), lockInterruptibly(), isLocked(), isHeldByCurrentThread(), getHoldCount(), newCondition(), hasQueuedThreads(), getQueueLength(), getWaitingThreads(c), hasWaiters(c); also acquire()/release() and the with-statement',
+    'TimerTaskAdapter': 'run() to be implemented, cancel() -> bool, scheduledExecutionTime() -> int',
+}
+ADAPTERS_MODULE_CODE = '''"""Python stand-ins for JDK superclasses that have no subclassable equivalent."""
+import threading
+
+
+class ReentrantLockAdapter:
+    """java.util.concurrent.locks.ReentrantLock API on top of threading.RLock, plus Python's acquire()/release() and
+    context-manager protocol."""
+
+    def __init__(self, fair=False):
+        self._lock = threading.RLock()
+        self._fair = bool(fair)
+        self._holds = 0
+
+    def lock(self):
+        self._lock.acquire()
+        self._holds += 1
+
+    def lockInterruptibly(self):
+        self.lock()
+
+    def tryLock(self, *args):
+        ok = self._lock.acquire(blocking=False) if not args else self._lock.acquire(timeout=float(args[0]))
+        if ok:
+            self._holds += 1
+        return ok
+
+    def unlock(self):
+        self._holds = max(0, self._holds - 1)
+        self._lock.release()
+
+    def acquire(self, *args, **kwargs):
+        ok = self._lock.acquire(*args, **kwargs)
+        if ok:
+            self._holds += 1
+        return ok
+
+    def release(self):
+        self.unlock()
+
+    def __enter__(self):
+        self.lock()
+        return self
+
+    def __exit__(self, *exc):
+        self.unlock()
+        return False
+
+    def newCondition(self):
+        return threading.Condition(self._lock)
+
+    def isLocked(self):
+        return self._holds > 0
+
+    def isHeldByCurrentThread(self):
+        return self._holds > 0
+
+    def getHoldCount(self):
+        return self._holds
+
+    def isFair(self):
+        return self._fair
+
+    def hasQueuedThreads(self):
+        return False
+
+    def getQueueLength(self):
+        return 0
+
+    def getWaitingThreads(self, condition):
+        return []
+
+    def hasWaiters(self, condition):
+        return False
+
+    def getWaitQueueLength(self, condition):
+        return 0
+
+
+class TimerTaskAdapter:
+    """java.util.TimerTask: subclasses implement run(); cancel() and scheduledExecutionTime() keep the Java contract."""
+
+    def __init__(self):
+        self._cancelled = False
+        self._scheduled_execution_time = 0
+
+    def run(self):
+        raise NotImplementedError
+
+    def cancel(self):
+        was_scheduled = not self._cancelled
+        self._cancelled = True
+        return was_scheduled
+
+    def scheduledExecutionTime(self):
+        return self._scheduled_execution_time
+'''
+
+
+def write_adapters_module(args):
+    d = f'data/recomposed_projects/{args.model_name}/{args.temperature}/{args.project_name}/src/main'
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, 'java_adapters.py'), 'w') as f:
+        f.write(ADAPTERS_MODULE_CODE)
+
 def remove_duplicate_methods(schema):
     duplicate_methods = {}
     for class_ in schema['classes']:
@@ -77,14 +191,23 @@ def main(args):
             class_name = class_.split(':')[1].strip()
             exceptional_superclasses = {'typing.', 'Comparator', 'Queue', 'Comparable', 'threading.RLock', 'Closeable', 'Enum', 'Iterator', 'Iterable', 'scaffolding', 'Supplier', 'Runnable', '.'}          
             if schema['classes'][class_]['extends'] != []:
+                fixed_values = set(fixed_type_map.values())
+                adapters_used = [LIBRARY_BASE_ADAPTERS[c] for c in schema['classes'][class_]['extends'] if c in LIBRARY_BASE_ADAPTERS]
+                adapters_used += [c for c in schema['classes'][class_]['extends'] if c in LIBRARY_BASE_ADAPTERS.values()]
+                for ad in adapters_used:
+                    python_imports.append(f'from src.main.java_adapters import {ad}')
+                    write_adapters_module(args)
+                schema['classes'][class_]['extends'] = [LIBRARY_BASE_ADAPTERS.get(c, c) for c in schema['classes'][class_]['extends']]
+                # a superclass name is kept when it is a project class, mapped through the fixed type map when it is a
+                # library class, and left unchanged when an earlier skeleton pass already mapped it (so re-running
+                # this stage does not drop the base class)
                 schema['classes'][class_]['extends'] = [
                     cls_name.split(".")[-1]
                     if cls_name.split(".")[-1] in custom_types
-                    else fixed_type_map[cls_name]
+                    else (fixed_type_map[cls_name] if cls_name in fixed_type_map else cls_name)
                     for cls_name in schema['classes'][class_]['extends']
-                    if cls_name.split(".")[-1] in custom_types or cls_name in fixed_type_map
-                ] 
-                fixed_values = set(fixed_type_map.values())
+                    if cls_name.split(".")[-1] in custom_types or cls_name in fixed_type_map or cls_name in fixed_values or cls_name in LIBRARY_BASE_ADAPTERS.values()
+                ]
                 for cls_name in schema['classes'][class_]['extends']:
                     if cls_name in fixed_values and "." in cls_name:
                         python_imports.append("import " + cls_name.split(".")[0])
@@ -102,6 +225,8 @@ def main(args):
                     python_imports.append('from abc import ABC')
                 else:
                     class_declaration = 'class ' + class_name + '(' + ', '.join(schema['classes'][class_]['extends']) + '):\n\n'
+                for ad in adapters_used:   # tell the translator what the adapter base provides
+                    class_declaration = class_declaration.rstrip('\n') + f"  # {ad}: {ADAPTER_API_DOC[ad]}\n\n"
 
             elif schema['classes'][class_]['implements'] != []:
                 schema['classes'][class_]['implements'] = [cls_name for cls_name in schema['classes'][class_]['implements'] if cls_name in custom_types]

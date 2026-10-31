@@ -142,6 +142,11 @@ class ValidateByMocking:
 
         env = os.environ.copy()
         env['PYTHONPATH'] = f"{cwd}:{current_dir}/src/mocking"
+        # context-aware type map for deserialization in mock_helper (fixed mapping is only the fallback)
+        env['MOCKINGBIRD_PROJECT'] = str(self.args.project_name)
+        env['MOCKINGBIRD_ROOT'] = current_dir
+        env['MOCKINGBIRD_TYPE_MAP'] = f"{current_dir}/data/type_resolution/{self.args.project_name}/type_mapping.json"
+        env.setdefault('MOCKINGBIRD_TYPE_MAP_LOG', f"{current_dir}/data/type_resolution/{self.args.project_name}/mock_type_resolution_log.jsonl")
         
         try:
             subprocess.run(

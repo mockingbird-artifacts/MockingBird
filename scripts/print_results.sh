@@ -8,7 +8,7 @@ suffix=$5
 
 echo "results for $project [temperature=$temperature, model=$model]"
 
-output=$(python3 src/postprocessing/print_results.py --project_name=$project --results_dir=$results_dir --temperature=$temperature --model=$model | tee /dev/tty)
+output=$(python3 src/postprocessing/print_results.py --project_name=$project --results_dir=$results_dir --temperature=$temperature --model=$model | tee /dev/stderr)
 
 total_main=$(echo "$output" | grep -oP 'main methods: \K[0-9]+')
 interface_methods=$(echo "$output" | grep -oP 'interface methods: \K[0-9]+')

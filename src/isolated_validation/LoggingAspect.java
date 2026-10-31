@@ -204,45 +204,54 @@ public class LoggingAspect {
         }
 
         if (calledOnInstance) {
-            allLogs.add("Instance Initial: " + CustomToStringConverter.customToJSONObject(instance).toString());
+            allLogs.add("Instance Initial: " + safeJson(instance));
         }
 
         for (int i = 0; i < args.length; i++) {
             originalParams.add(i);
             Object currentValue = args[i];
-            allLogs.add(("Arg" + i + " initial state: " + CustomToStringConverter.customToJSONObject(currentValue).toString()));
+            allLogs.add(("Arg" + i + " initial state: " + safeJson(currentValue)));
         }
 
         // Capture static fields
         Map<Class<?>, Map<String, Object>> originalStaticValues = new HashMap<>();
-        Set<Class<?>> allClasses = getAllClasses();
-        for (Class<?> clazz : allClasses) {
-            String path = clazz.getProtectionDomain().getCodeSource().getLocation().getPath();
-            if (path.contains("/test-classes/")) {
-                continue; // Skip test classes
-            } 
-            if (clazz.getName().contains("org.apache.commons.fileupload") || clazz.getName().startsWith("java.")) {
-                if (!clazz.isInterface() && !clazz.getSimpleName().equals("CustomToStringConverter")) {
-                    captureStaticFields(clazz, originalStaticValues);
+        Set<Class<?>> allClasses = new HashSet<>();
+        try {
+            allClasses = getAllClasses();
+            for (Class<?> clazz : allClasses) {
+                try {
+                    CodeSource cs = clazz.getProtectionDomain().getCodeSource();
+                    if (cs != null && cs.getLocation().getPath().contains("/test-classes/")) {
+                        continue; // Skip test classes
+                    }
+                    if (clazz.getName().contains("org.apache.commons.fileupload") || clazz.getName().startsWith("java.")) {
+                        if (!clazz.isInterface() && !clazz.getSimpleName().equals("CustomToStringConverter")) {
+                            captureStaticFields(clazz, originalStaticValues);
+                        }
+                    }
+                } catch (Throwable t) {
+                    continue; // a class that cannot be introspected is not part of the recorded state
                 }
             }
-        }
-        JSONArray allStaticFields = new JSONArray();
-        for (Class<?> clazz : allClasses) {
-            try {
-                if (clazz.getSimpleName().equals("CustomToStringConverter")) {
+            JSONArray allStaticFields = new JSONArray();
+            for (Class<?> clazz : allClasses) {
+                try {
+                    if (clazz.getSimpleName().equals("CustomToStringConverter")) {
+                        continue;
+                    }
+                    JSONObject classStaticFields = getStaticFieldsInfo(clazz, originalStaticValues, false);
+                    if (!classStaticFields.isEmpty()) {
+                        allStaticFields.put(classStaticFields);
+                    }
+                } catch (Throwable t) {
                     continue;
                 }
-            } catch (Throwable t) {
-                continue;
             }
-            JSONObject classStaticFields = getStaticFieldsInfo(clazz, originalStaticValues, false);
-            if (!classStaticFields.isEmpty()) {
-                allStaticFields.put(classStaticFields);
+            if (!allStaticFields.isEmpty()) {
+                allLogs.add("Static Fields Initial: " + allStaticFields);
             }
-        }
-        if (!allStaticFields.isEmpty()) {
-            allLogs.add("Static Fields Initial: " + allStaticFields);
+        } catch (Throwable t) {
+            allLogs.add("Static Fields Initial: []");
         }
 
         Object result = null;
@@ -258,51 +267,69 @@ public class LoggingAspect {
                     throw npe;
                 }   
             }
-        } catch (Exception e) {
-            allLogs.add("Exception thrown: " + CustomToStringConverter.customToJSONObject(e).toString());
+        } catch (Throwable e) {
+            allLogs.add("Exception thrown: " + safeJson(e));
             appendToLogFile(className + "." + methodName + "[" + modifer + ":" + allLogs);
             appendToLogFile("==========END OF " + className + "." + methodName + "==========");
             throw e;
         }
 
         // Capture changes to static fields
-        JSONArray allClassChanges = new JSONArray();
-        for (Class<?> clazz : allClasses) {
-            try {
-                if (clazz.getSimpleName().equals("CustomToStringConverter")) {
+        try {
+            JSONArray allClassChanges = new JSONArray();
+            for (Class<?> clazz : allClasses) {
+                try {
+                    if (clazz.getSimpleName().equals("CustomToStringConverter")) {
+                        continue;
+                    }
+                    JSONObject classChange = getStaticFieldsInfo(clazz, originalStaticValues, true);
+                    if (!classChange.isEmpty()) {
+                        allClassChanges.put(classChange);
+                    }
+                } catch (Throwable t) {
                     continue;
                 }
-            } catch (Throwable t) {
-                continue;
             }
-            JSONObject classChange = getStaticFieldsInfo(clazz, originalStaticValues, true);
-            if (!classChange.isEmpty()) {
-                allClassChanges.put(classChange);
+            if (!allClassChanges.isEmpty()) {
+                allLogs.add("Static Fields Changed: " + allClassChanges);
             }
-        }
-        if (!allClassChanges.isEmpty()) {
-            allLogs.add("Static Fields Changed: " + allClassChanges);
+        } catch (Throwable t) {
+            // static-field diff unavailable: the method's own record is still written below
         }
 
         if (calledOnInstance) {
-            allLogs.add("Instance Final: " + CustomToStringConverter.customToJSONObject(instance).toString());
+            allLogs.add("Instance Final: " + safeJson(instance));
         }
 
         for (int j = 0; j < args.length; j++) {
             if (originalParams.contains(j)) {
                 Object currentValue = args[j];
-                allLogs.add(("Arg" + j + " final state: " + CustomToStringConverter.customToJSONObject(currentValue).toString()));
+                allLogs.add(("Arg" + j + " final state: " + safeJson(currentValue)));
             }
         }
 
 
         if (result != null) {
-            allLogs.add(("Return value: " + CustomToStringConverter.customToJSONObject(result).toString()));
+            allLogs.add(("Return value: " + safeJson(result)));
         }
 
         appendToLogFile(className + "." + methodName + "[" + modifer + ":" + allLogs);
         appendToLogFile("==========END OF " + className + "." + methodName + "==========");
         return result;  // For non-constructor methods, return the result of the method execution
+    }
+
+
+    /** Serialize for the log without ever propagating a failure of the serializer itself into the program under test. */
+    private static String safeJson(Object value) {
+        try {
+            return CustomToStringConverter.customToJSONObject(value).toString();
+        } catch (Throwable t) {
+            JSONObject fallback = new JSONObject();
+            fallback.put("type", value == null ? "null" : value.getClass().getName());
+            fallback.put("special_note", "serialization_failed");
+            fallback.put("error", t.getClass().getName() + ": " + String.valueOf(t.getMessage()));
+            return fallback.toString();
+        }
     }
 
     public static boolean processingJUnitLifecycleMethod() {
@@ -512,8 +539,8 @@ public class LoggingAspect {
             JSONArray originalFields = new JSONArray();
 
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.getName().contains("$jacocoData") || field.getName().contains("ajc$")) {
-                    continue;
+                if (field.isSynthetic() || field.getName().contains("$jacocoData") || field.getName().contains("ajc$")) {
+                    continue;   // compiler-generated statics (switch tables, assertion flags) have no counterpart in the translation
                 }
                 if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
                     if (!originalValues.containsKey(field.getName())) {

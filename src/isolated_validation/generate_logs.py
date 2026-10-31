@@ -48,11 +48,14 @@ def run_cmd(
     print(f"Running command: {cmd}")
 
     # start_new_session creates a new process group
+    quiet = (not run_script) and os.environ.get("MOCKGEN_QUIET", "1") == "1"   # surefire output of huge-array tests made shard logs tens of GB
     proc = subprocess.Popen(
         cmd,
         cwd=cwd,
         start_new_session=True,
         stdin=subprocess.DEVNULL,  # we never need to send ENTER
+        stdout=(subprocess.DEVNULL if quiet else None),
+        stderr=(subprocess.DEVNULL if quiet else None),
     )
 
     try:
@@ -88,10 +91,10 @@ def ensure_sdk(java_version: str = "8.0.432-kona") -> None:
     os.environ["JAVA_HOME"] = str(java_candidate)
     os.environ["PATH"] = str(java_candidate / "bin") + os.pathsep + os.environ.get("PATH", "")
 
-def copy_project_tree(project: str) -> None:
-    """Re-create a fresh working copy of the Java project."""
+def copy_project_tree(project: str, workdir: str | None = None) -> None:
+    """Re-create a fresh working copy of the Java project (optionally under a shard-specific directory name)."""
     src = Path("../../java_projects/cleaned_final_projects") / project
-    dst = Path(project)
+    dst = Path(workdir or project)
     if dst.exists():
         shutil.rmtree(dst)
     shutil.copytree(src, dst)
@@ -101,6 +104,51 @@ def save_state(project: str, executed_tests: dict, args) -> None:
     path = Path(f"{args.json_fname}") / f"{project}.json"
     with open(path, "w") as f:
         json.dump(executed_tests, f, indent=4)
+
+STABILITY_RUNS = int(os.environ.get("MOCKINGBIRD_STABILITY_RUNS", "2"))
+
+def drop_unstable(actual_class: str, test_method: str, project: Path, py_dir: Path, args) -> int:
+    """Execute the test a second time and keep a mock test only when both runs recorded the same behavior (stability.py
+    canonical form: memory addresses, identity hashes and enumeration order are ignored). Returns the number of mock tests
+    dropped. When the second run produces no log at all the check is skipped."""
+    sys.path.insert(0, str(Path(__file__).parent))
+    from stability import normalize
+    prefix = f"{actual_class.split('.')[-1]}_{test_method}_decomposed_mocker_"
+    first = {q.name: q for q in py_dir.glob(f"src/**/{prefix}*.py")}
+    if not first:
+        return 0
+    scratch = py_dir.parent / f"{py_dir.name}__stability"
+    shutil.rmtree(scratch, ignore_errors=True)
+    scratch.mkdir()
+    for q in project.glob("*.log"):
+        q.unlink()
+    try:
+        run_cmd(actual_class, test_method, project, timeout=args.timeout)
+    except (TimeoutExpired, CalledProcessError):
+        pass
+    logs = list(project.glob("*.log"))
+    if not logs:
+        shutil.rmtree(scratch, ignore_errors=True)
+        return 0
+    for log_path in logs:
+        shutil.copy(log_path, scratch)
+        log_path.unlink()
+    for helper in ("mock_helper.py", "log_parser.py", "script.py"):
+        shutil.copy(helper, scratch)
+    for log_file in scratch.glob("*.log"):
+        try:
+            run_cmd("", log_file, scratch, run_script=True, timeout=args.timeout)
+        except (TimeoutExpired, CalledProcessError):
+            pass
+    second = {q.name: q for q in scratch.glob(f"src/**/{prefix}*.py")}
+    dropped = 0
+    for name, q in first.items():
+        other = second.get(name)
+        if other is None or normalize(q) != normalize(other):
+            q.unlink()
+            dropped += 1
+    shutil.rmtree(scratch, ignore_errors=True)
+    return dropped
 
 # ───────────────────────── main workflow ──────────────────────────
 
@@ -112,45 +160,77 @@ def main() -> None:
     parser.add_argument("timeout", type=int, default=100, help="Timeout for each test method")
     parser.add_argument("json_fname", help="JSON file with executed tests")
     parser.add_argument("mock_evosuite", type=bool, default=False, help="Whether to mock evosuite tests")
+    parser.add_argument("--shards", type=int, default=1, help="split the test classes of the project across N independent workers")
+    parser.add_argument("--shard", type=int, default=0, help="index of this worker (0-based)")
     args = parser.parse_args()
 
     project = args.project
-    state_path = Path(f'{args.json_fname}') / f"{project}.json"
+    # each shard works in its own copy of the project so maven runs do not interfere; shard 0 keeps the shared layout
+    workdir = project if args.shards <= 1 else f"{project}__s{args.shard}"
+    state_path = Path(f'{args.json_fname}') / f"{workdir}.json"
 
     # 1.  Activate the right Java once
     ensure_sdk("8.0.432-kona")
 
     # reset project
-    copy_project_tree(project)
+    copy_project_tree(project, workdir)
 
     # clean project and extract executed tests
-    run(["python3", "clean_evosuite_tests.py", f"../../java_projects/cleaned_final_projects_evosuite/{project}", project])
+    run(["python3", "clean_evosuite_tests.py", f"../../java_projects/cleaned_final_projects_evosuite/{project}", workdir])
     cleaned_base = Path("../../java_projects/cleaned_final_projects_evosuite_cleaned")
     cleaned_base.mkdir(parents=True, exist_ok=True)
-    src_dir = Path(project)
+    src_dir = Path(workdir)
     dst_dir = cleaned_base / project
-    if dst_dir.exists():
-        shutil.rmtree(dst_dir)
     shutil.copy("modify_pom.py", src_dir)
     run(["python3", "modify_pom.py"], cwd=src_dir)
     shutil.copy("remove_benchmark.py", src_dir)
     run(["python3", "remove_benchmark.py"], cwd=src_dir)
-    shutil.copytree(src_dir, dst_dir)
+    if args.shard == 0:
+        if dst_dir.exists():
+            shutil.rmtree(dst_dir)
+        shutil.copytree(src_dir, dst_dir)
     subprocess.run(["mvn", "clean", "install", "-Drat.skip", "-Dgpg.skip", "-Dmoditect.skip", "-Dcheckstyle.skip", "-Dmaven.javadoc.skip"], cwd=src_dir, check=False)
-    run(["python3", "extract_executed_tests.py", src_dir])
+    prev_state = json.loads(state_path.read_text()) if (state_path.exists() and os.environ.get("MOCKINGBIRD_RESUME", "1") == "1") else {}
+    run(["python3", "extract_executed_tests.py", str(src_dir)])
     executed_tests = json.loads(state_path.read_text())
+    if args.shards > 1:
+        # deterministic split of test classes across shards
+        selected = sorted(executed_tests.keys())[args.shard::args.shards]
+        executed_tests = {k: executed_tests[k] for k in selected}
+    if prev_state:
+        # resume an interrupted run: carry over per-test flags; a test flagged mocked whose mock tests are absent on disk
+        # (e.g. the run died with a full disk) is queued again
+        py_dir_prev = Path(f"{project}-python" if args.shards <= 1 else f"{project}-python__s{args.shard}")
+        carried = requeued = 0
+        for cls, methods in prev_state.items():
+            if cls not in executed_tests or not isinstance(methods, dict): continue
+            parts = cls.split("."); short = parts[-1][4:] + "Test" if parts[-1].startswith("Test") else parts[-1]
+            for m, info in methods.items():
+                if m not in executed_tests[cls] or not isinstance(info, dict): continue
+                if info.get("mocked") and not any(py_dir_prev.glob(f"src/**/{short}_{m}_decomposed_mocker_*.py")):
+                    requeued += 1; continue
+                for k in ("mocked", "timeout", "mock_duration", "unstable_dropped", "oversized_log"):
+                    if k in info: executed_tests[cls][m][k] = info[k]
+                carried += 1
+        print(f"[resume] carried {carried} test records from the previous state, re-queued {requeued} without mock files")
+    save_state(workdir, executed_tests, args)
     
     # inject our patchers
     for helper in ("modify_pom.py", "add_java_files.py"):
-        shutil.copy(helper, project)
+        shutil.copy(helper, workdir)
 
-    run(["python3", "add_java_files.py"], cwd=Path(project))
+    run(["python3", "add_java_files.py"], cwd=Path(workdir))
+
+    # rebuild once with the logging aspect and the serializer in place; the per-test runs below only execute the test phase
+    # on this woven build (a full clean+install per test method is what made log generation so slow)
+    subprocess.run(["mvn", "-q", "clean", "test-compile", "-Drat.skip", "-Dgpg.skip", "-Dmoditect.skip", "-Dcheckstyle.skip", "-Dmaven.javadoc.skip"], cwd=Path(workdir), check=False)
 
     # clean out any stale logs
-    for p in Path(project).glob("*.log"):
+    for p in Path(workdir).glob("*.log"):
         p.unlink()
 
-    py_dir = Path(f"{project}-python")
+    py_dir = Path(f"{project}-python" if args.shards <= 1 else f"{project}-python__s{args.shard}")
+    project = workdir   # all per-test work below happens in this shard's copy
 
     # For each test class, we start from a _fresh_ workspace:
     for test_class, methods in executed_tests.items():
@@ -192,6 +272,21 @@ def main() -> None:
                     p.unlink()
                 continue
 
+            if not list(Path(project).glob("*.log")):
+                # surefire runs nothing for `Class#method` when the method is inherited from an abstract test base class;
+                # a class-level run still produces one log file per test method, so run the class once and keep every log
+                try:
+                    run_cmd(actual_class, "", Path(project), timeout=2 * args.timeout)
+                except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
+                    pass
+
+            # 5b. cap: an aspect log above MAX_LOG_MB (default 2048) cannot yield a usable mock test and fills the disk
+            max_log_mb = float(os.environ.get("MAX_LOG_MB", "2048"))
+            for log_path in Path(project).glob("*.log"):
+                if log_path.stat().st_size > max_log_mb * 1e6:
+                    log_path.unlink(); info["oversized_log"] = int(info.get("oversized_log") or 0) + 1
+                    print(f"[log cap] dropped {log_path.name}: above {max_log_mb:.0f} MB")
+
             # 6. Collect any new .log files into our python dir
             py_dir.mkdir(exist_ok=True)
             for log_path in Path(project).glob(f"*.log"):
@@ -207,6 +302,19 @@ def main() -> None:
                     run_cmd("", log_file, py_dir, run_script=True, timeout=args.timeout)
                 except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
                     pass
+
+            # 8b. a mock test whose recorded payload is tens of megabytes (huge arrays) cannot be validated meaningfully and
+            #     only slows pytest: set it aside (env MAX_MOCK_TEST_MB, default 10)
+            max_mb = float(os.environ.get("MAX_MOCK_TEST_MB", "10"))
+            for t in py_dir.glob("src/**/*_mocker_*.py"):
+                if t.stat().st_size > max_mb * 1e6:
+                    aside = py_dir.parent / f"{py_dir.name}__oversized" / t.relative_to(py_dir)
+                    aside.parent.mkdir(parents=True, exist_ok=True); shutil.move(str(t), str(aside))
+
+            # 8c. Java-side stability: a generated (EvoSuite) test is executed a second time and each of its mock tests is
+            #     kept only when both runs recorded the same behavior (env MOCKINGBIRD_STABILITY_RUNS, default 2)
+            if STABILITY_RUNS >= 2 and actual_class.endswith("_ESTest"):
+                info["unstable_dropped"] = drop_unstable(actual_class, test_method, Path(project), py_dir, args)
 
             # 9. Clean up logs everywhere
             for p in py_dir.glob("*.log"):

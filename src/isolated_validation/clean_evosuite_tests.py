@@ -79,6 +79,16 @@ def remove_invalid_content(content):
                 continue
             if not in_string and not in_block_comment and char == '/' and next_char == '/':
                 break
+            if not in_string and not in_block_comment and char == "'":
+                # char literal: skip to the closing quote (handles '\x' and '\uXXXX')
+                j = i + 1
+                if j < len(line) and line[j] == '\\':
+                    j += 2
+                    while j < len(line) and line[j] != "'": j += 1
+                else:
+                    j += 1
+                i = j + 1
+                continue
             if not in_block_comment and char == '"' and not escaped:
                 in_string = not in_string
             if not in_string and not in_block_comment:
@@ -170,7 +180,7 @@ def remove_invalid_content(content):
                 "synchronizedMutableGraph0.hashCode();",
                 "lvm *:l{s",
                 "C43#%t)g0",
-                "OSInfo.getHardwareName()"
+                "OSInfo.getHardwareName()",
                 "WindowsAnsiProcessor((OutputStream) null, 15L)",
                 "Predicate.not(",
                 "setCurrentTimeMillis(",
@@ -197,6 +207,10 @@ def remove_invalid_content(content):
                 in_test_method = False
         else:
             cleaned_lines.append(line)
+
+    if in_test_method and method_buffer:
+        # brace depth never returned to 0 (parser miss): keep the buffered tail rather than truncating the class
+        cleaned_lines.extend(method_buffer)
 
     return ''.join(cleaned_lines)
 

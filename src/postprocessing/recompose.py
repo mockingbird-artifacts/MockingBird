@@ -272,7 +272,9 @@ def main(args):
                 if '@Ignore' in [x.split('(')[0] for x in data['classes'][class_]['methods'][method]['annotations']] or '@ParameterizedTest' in [x.split('(')[0] for x in data['classes'][class_]['methods'][method]['annotations']]:
                     recomposed_file += '\n    @pytest.mark.skip(reason="Ignore")\n'
 
-                if data['classes'][class_]['methods'][method]['translation'] == []:
+                # a translation that failed the syntax check must not be written into the module: it would make the whole
+                # file unimportable and fail every other fragment of the class; emit the signature stub instead
+                if data['classes'][class_]['methods'][method]['translation'] == [] or data['classes'][class_]['methods'][method].get('syntactic_validation') == 'non-parseable':
                     if '@Test' in [x.split('(')[0] for x in data['classes'][class_]['methods'][method]['annotations']]:
                         recomposed_file += '\n'.join([''] + data['classes'][class_]['methods'][method]['partial_translation']).replace('    pass', '    pytest.fail("LLM could not translate this method")')
                     else:

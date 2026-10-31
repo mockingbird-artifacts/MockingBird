@@ -121,80 +121,81 @@ def match_nested_braces(s: str) -> str:
             return s[:i+1]
     return None
 
-def get_side_effect_and_end_line(start_line_index: int, lines: list) -> list:
-    counter = 1
-    for line_index in range(start_line_index + 1, len(lines)):
-        line = lines[line_index].strip()
-        if line.startswith("==========START OF"):
-            counter += 1
-        elif line.startswith("==========END OF"):
-            counter -= 1
-            if counter == 0:
-                return [process_side_effect(lines[line_index - 1]), line_index]
+
+START_MARK = "==========START OF"
+END_MARK = "==========END OF"
+
+
+def index_calls(lines: list) -> tuple:
+    """One pass over the log: for every START line, the index of its matching END line (calls are properly nested, so a
+    stack pairs them) and the list of START indices of its direct callees. A START whose END is missing (the JVM died
+    inside that call) gets no entry, and neither do its still-open ancestors."""
+    end_of = {}
+    children = {}
+    stack = []
+    for index, raw in enumerate(lines):
+        line = raw.strip()
+        if line.startswith(START_MARK):
+            if stack:
+                children.setdefault(stack[-1], []).append(index)
+            stack.append(index)
+        elif line.startswith(END_MARK):
+            if stack:
+                end_of[stack.pop()] = index
+    return end_of, children
+
+
+def method_name_of(line: str) -> str:
+    return line.strip().split("==========START OF ")[1].split("==========")[0]
+
 
 def parse_logs(input_log_file: str) -> dict:
     with open(input_log_file, 'r') as file:
         lines = file.readlines()
+    end_of, children = index_calls(lines)
     all_mock_workflows = []
     for start_line_index in range(len(lines)):
         start_line = lines[start_line_index].strip()
-        if start_line.startswith("==========START OF"):
+        if start_line.startswith(START_MARK):
+            if start_line_index not in end_of:   # the log was cut inside this call: nothing to recover for it
+                continue
             methods_to_mock = []
             mock_indices = {}
-            retrieve_mocking_info_for_one_method(methods_to_mock, mock_indices, 0, len(lines) - 1, start_line_index, lines)
-            all_mock_workflows.append(methods_to_mock)
+            retrieve_mocking_info_for_one_method(methods_to_mock, mock_indices, start_line_index, lines, end_of, children)
+            if any(m.get("note") == "skip" for m in methods_to_mock):   # a complete focal-method record exists
+                all_mock_workflows.append(methods_to_mock)
     return all_mock_workflows
-            
 
 
-def retrieve_mocking_info_for_one_method(methods_to_mock: list, mock_indices: dict, start: int, end: int, method_index: int, lines: list) -> None:
-    chunk_start = start
-    while chunk_start <= end:
-        line = lines[chunk_start].strip()
-        if line.startswith("==========START OF"):
-            method_name = line.split("==========START OF ")[1].split("==========")[0]
-            chunk_side_effect, chunk_end = get_side_effect_and_end_line(chunk_start, lines)
-            if chunk_start == method_index:
-                if not method_name in mock_indices:
-                    mock_indices[method_name] = 0
-                mock_indices[method_name] += 1
-                modifier = lines[chunk_end - 1].split(':', 1)[0].split("[")[1].strip()
-                chunk_side_effect.update({
-                    "occurrence_idx": mock_indices[method_name],
-                    "note": "skip",
-                    "modifier": modifier
-                })
-                methods_to_mock.append(chunk_side_effect)
-                find_mocks_in_call_chain(methods_to_mock, mock_indices, chunk_start + 1, chunk_end - 1, lines)
-                break
-            elif chunk_end < method_index:
-                chunk_start = chunk_end + 1
-            else:
-                chunk_start += 1
-        else:
+def retrieve_mocking_info_for_one_method(methods_to_mock: list, mock_indices: dict, method_index: int, lines: list, end_of: dict, children: dict) -> None:
+    method_name = method_name_of(lines[method_index])
+    chunk_end = end_of[method_index]
+    chunk_side_effect = process_side_effect(lines[chunk_end - 1])
+    if not method_name in mock_indices:
+        mock_indices[method_name] = 0
+    mock_indices[method_name] += 1
+    modifier = lines[chunk_end - 1].split(':', 1)[0].split("[")[1].strip()
+    chunk_side_effect.update({
+        "occurrence_idx": mock_indices[method_name],
+        "note": "skip",
+        "modifier": modifier
+    })
+    methods_to_mock.append(chunk_side_effect)
+    find_mocks_in_call_chain(methods_to_mock, mock_indices, children.get(method_index, []), lines, end_of)
+
+
+def find_mocks_in_call_chain(methods_to_mock: list, mock_indices: dict, callee_starts: list, lines: list, end_of: dict) -> None:
+    for chunk_start in callee_starts:
+        if chunk_start not in end_of:
             break
-
-def find_mocks_in_call_chain(methods_to_mock: list, mock_indices: dict, start: int, end: int, lines: list) -> None:
-    chunk_start = start
-    while chunk_start <= end:
-        line = lines[chunk_start].strip()
-        if line.startswith("==========START OF"):
-            method_name = line.split("==========START OF ")[1].split("==========")[0]
-            chunk_side_effect, chunk_end = get_side_effect_and_end_line(chunk_start, lines)
-            if method_name not in mock_indices:
-                mock_indices[method_name] = -1
-            mock_indices[method_name] += 1
-            chunk_side_effect["occurrence_idx"] = mock_indices[method_name]
-            methods_to_mock.append(chunk_side_effect)
-            chunk_start = chunk_end + 1
-        else:
-            break
-
-
-
-
-
-             
+        method_name = method_name_of(lines[chunk_start])
+        chunk_end = end_of[chunk_start]
+        chunk_side_effect = process_side_effect(lines[chunk_end - 1])
+        if method_name not in mock_indices:
+            mock_indices[method_name] = -1
+        mock_indices[method_name] += 1
+        chunk_side_effect["occurrence_idx"] = mock_indices[method_name]
+        methods_to_mock.append(chunk_side_effect)
 
 
 if __name__ == "__main__":

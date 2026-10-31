@@ -23,6 +23,12 @@ class Class:
                 for subchild in child.children:
                     if subchild.type == 'type_identifier':
                         extend_classes.append(extract_text_by_bytes(code, subchild.start_byte, subchild.end_byte))
+                    elif subchild.type == 'generic_type':   # Base<T>: keep the raw type name
+                        for g in subchild.children:
+                            if g.type in ('type_identifier', 'scoped_type_identifier'):
+                                extend_classes.append(extract_text_by_bytes(code, g.start_byte, g.end_byte).split('.')[-1])
+                    elif subchild.type == 'scoped_type_identifier':   # Outer.Inner
+                        extend_classes.append(extract_text_by_bytes(code, subchild.start_byte, subchild.end_byte).split('.')[-1])
             if child.type == 'extends_interfaces':
                 for subchild in child.children:
                     if subchild.type == 'type_list':

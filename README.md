@@ -71,6 +71,44 @@ bash scripts/recompose.sh commons-fileupload 0.0 deepseek-coder-33b-instruct _ev
 
 ---
 
+### Test Coverage Top-Up, Sharded Mock Generation and Run Controls
+
+The mock-test generation stage has three additions over the initial release.
+
+**Sharded generation.** `scripts/generate_mock_tests_sharded.sh` runs `SHARDS` independent workers (default 4), each on its own copy of the project, and merges their mock tests into `data/mock_tests/<project>`:
+
+```bash
+SHARDS=4 bash scripts/generate_mock_tests_sharded.sh commons-fileupload
+```
+
+**EvoSuite top-up.** After a first generation pass, `scripts/augment_evosuite.sh` lists the classes that still have public or protected methods without any mock test (`src/isolated_validation/evosuite_targets.py`), runs EvoSuite 1.2.0 on them with runtime mocking and the sandbox disabled so that the tests survive `clean_evosuite_tests.py`, renames the new classes to `<X>ES2_ESTest` and places the ones that compile next to the archive's EvoSuite tests (`src/isolated_validation/evosuite_place_tests.py`). Re-run the generation script afterwards so the new tests are cleaned, built and recorded. The script needs Java 8 and downloads `misc/evosuite-1.2.0.jar` and `misc/evosuite-standalone-runtime-1.2.0.jar` from the EvoSuite release when they are missing.
+
+```bash
+BUDGET=180 PAR=8 bash scripts/augment_evosuite.sh commons-fileupload deepseek-coder-33b-instruct 0.0 _evosuite_cleaned
+bash scripts/generate_mock_tests.sh commons-fileupload
+```
+
+**Run controls.** Environment variables read by the generation scripts and `src/isolated_validation/generate_logs.py`:
+
+| Variable | Default | Effect |
+|---|---|---|
+| `TEST_TIMEOUT` | 900 | seconds allowed per Java test method |
+| `MOCKINGBIRD_STABILITY_RUNS` | 2 | each EvoSuite test is executed this many times; a mock test is kept only when every run recorded the same behavior (canonical form in `src/isolated_validation/stability.py`) |
+| `MAX_MOCK_TEST_MB` | 10 | mock tests above this size are set aside in `<project>-python__oversized` instead of slowing validation |
+| `MAX_LOG_MB` | 2048 | aspect logs above this size are discarded; they cannot yield a usable mock test and fill the disk |
+| `MOCKINGBIRD_RESUME` | 1 | an interrupted generation run resumes from its recorded state and re-queues tests whose files are missing |
+| `MOCKGEN_QUIET` | 1 | drop Maven's per-test stdout (huge-array tests otherwise produce logs of tens of GB) |
+
+**Changes to the validation pipeline since the initial release.**
+- `CustomToStringConverter.java` serializes more JDK types (paths, charsets, NIO buffers, readers and writers, processes, atomics, locks, optionals and map entries), and `LoggingAspect.java` always writes the END record, also when the focal method throws an `Error`, and skips compiler-synthetic static fields. Truncated log chunks are skipped by `log_parser.py` instead of aborting the whole test.
+- `mock_helper.py` (identical copies in `src/isolated_validation` and `src/mocking`) consults the per-project context-aware type map `data/type_resolution/<project>/type_mapping.json` first and falls back to the fixed map; `validate_by_mocking.py` exports the map location to the test process (`MOCKINGBIRD_TYPE_MAP`, `MOCKINGBIRD_PROJECT`, `MOCKINGBIRD_ROOT`). Failed comparisons report the mismatching path and both values, Java exception families map to the Python exceptions translations actually raise, and recorded stream positions and non-numeric float payloads no longer crash the helper itself.
+- `print_results.py` counts interface methods as non-validatable rather than as successes and reports success both over all methods and over validatable methods; `print_results.sh` writes to stderr so it also works without a terminal.
+- `create_schema.py` keeps generic and scoped superclasses; `create_skeleton.py` is idempotent across repeated skeleton passes and emits adapters for library base classes that have no Python counterpart; `recompose.py` substitutes a stub for a non-parseable fragment so one bad translation no longer breaks the import of the whole module; `calculate_coverage.py` skips helper modules that have no schema.
+- `run_maven.sh` runs `mvn test` on the build already woven by `generate_logs.py` instead of a full `clean install` per test method, and runs the whole class when the test method is inherited.
+- `clean_evosuite_tests.py` handles brace characters inside character literals.
+
+---
+
 ## Reproduce Results in the MockingBird Paper
 
 ### RQ1: Effectiveness of MockingBird

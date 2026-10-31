@@ -41,7 +41,7 @@ def main(args):
     mocking_failure = set()
     test_outcome_details = {}
     main_method_graal_count = {'pending': 0, 'not-exercised': 0, 'success': 0, 'error': 0, 'failed': 0, 'failure': 0}
-    main_method_mock_count = {'pending': 0, 'success': 0, 'failed': 0}
+    main_method_mock_count = {'pending': 0, 'success': 0, 'failed': 0, 'non_validatable': 0}
     test_method_count = {'pending': 0, 'out_of_context': 0, 'attempted': 0}
     test_method_syntactic_count = {'pending': 0, 'parseable': 0, 'non-parseable': 0}
     
@@ -127,16 +127,19 @@ def main(args):
                     
                     if data['classes'][class_]['is_interface']:
                         total_interface_methods += 1
-                    if isinstance(data['classes'][class_]['methods'][method_]['mocking_validation'], dict):
+                    if data['classes'][class_]['is_interface']:
+                        # Interface methods have no body to exercise and EvoSuite cannot instantiate them, so no mock test
+                        # covers them: count them as non-validatable (as AlphaTrans does), never as a validation success.
+                        main_method_mock_count['non_validatable'] += 1
+                        mocking_failure.add(f'{class_}|{method_}')
+                        if not isinstance(data['classes'][class_]['methods'][method_].get('mocking_validation'), dict):
+                            data['classes'][class_]['methods'][method_]['mocking_validation'] = {}
+                        data['classes'][class_]['methods'][method_]['mocking_validation']['outcome'] = 'non_validatable'
+                    elif isinstance(data['classes'][class_]['methods'][method_]['mocking_validation'], dict):
                         if data['classes'][class_]['methods'][method_]['mocking_validation']['outcome'] in ['pending', 'failed']:
                             mocking_failure.add(f'{class_}|{method_}')
+                        main_method_mock_count.setdefault(data['classes'][class_]['methods'][method_]['mocking_validation']['outcome'], 0)
                         main_method_mock_count[data['classes'][class_]['methods'][method_]['mocking_validation']['outcome']] += 1
-                    elif data['classes'][class_]['is_interface']:
-                        if data['classes'][class_]['methods'][method_]['syntactic_validation'] == 'parseable':
-                            main_method_mock_count['success'] += 1
-                            if 'mocking_validation' not in data['classes'][class_]['methods'][method_] or not isinstance(data['classes'][class_]['methods'][method_]['mocking_validation'], dict):
-                                data['classes'][class_]['methods'][method_]['mocking_validation'] = {}
-                            data['classes'][class_]['methods'][method_]['mocking_validation']['outcome'] = 'success'
                     else:
                         main_method_mock_count[data['classes'][class_]['methods'][method_]['mocking_validation']] += 1
                         if data['classes'][class_]['methods'][method_]['mocking_validation'] in ['pending', 'failed']:
@@ -200,6 +203,10 @@ def main(args):
     print('main_method_syntactic_count:', main_method_syntactic_count)
     print('main_method_graal_count:', main_method_graal_count)
     print('main_method_mock_count:', main_method_mock_count)
+    validatable_main_methods = total_main_methods - main_method_mock_count['non_validatable'] - main_method_mock_count['pending']
+    print(f"mock validation: success {main_method_mock_count['success']} / {total_main_methods} AMFs = {round(main_method_mock_count['success'] / total_main_methods * 100, 2) if total_main_methods else 0.0}% "
+          f"(non-validatable: {main_method_mock_count['non_validatable']} interface methods + {main_method_mock_count['pending']} uncovered; "
+          f"success over validatable {validatable_main_methods}: {round(main_method_mock_count['success'] / validatable_main_methods * 100, 2) if validatable_main_methods else 0.0}%)")
     print('main_method_test_exec_count:', main_method_test_exec_count)
 
     all_test_pass, one_test_fail_other, one_test_fail_assertion, many_test_fail_other, many_test_fail_assertion, all_test_fail_other, all_test_fail_assertion = 0, 0, 0, 0, 0, 0, 0
@@ -286,6 +293,8 @@ def main(args):
             data = json.load(f)
 
         for class_ in data['classes']:
+            if data['classes'][class_]['is_interface']:
+                continue   # interface methods are non-validatable, never mock successes
             for method_ in data['classes'][class_]['methods']:
                 if data['classes'][class_]['methods'][method_]['is_overload']:
                     continue

@@ -1,4 +1,5 @@
 #!/bin/bash
+# env: TEST_TIMEOUT (seconds per test method, default 900), MAX_MOCK_TEST_MB (mock tests above this size are set aside, default 10)
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <project_name>"
@@ -16,7 +17,7 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 # Use Java 8 for mock test generation
 sdk use java 8.0.432-kona
 
-python3 generate_logs.py "$PROJECT" 400 executed_tests True
+python3 generate_logs.py "$PROJECT" "${TEST_TIMEOUT:-900}" executed_tests True
 mkdir -p "$DATA_DIR/$PROJECT"
 rsync -a --ignore-existing "${PROJECT}-python/" "$DATA_DIR/$PROJECT/"
 

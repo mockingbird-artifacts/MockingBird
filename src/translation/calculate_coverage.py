@@ -49,7 +49,11 @@ def calculate_method_coverage(args, project_root):
                 assert class_name is not None
 
                 covered_method_schema_data = {}
-                with open(f'{args.schemas_dir}/{py_file_path[py_file_path.index(args.project_name):].replace(".py", "").replace("/", ".")}.json', 'r') as f:
+                schema_path = f'{args.schemas_dir}/{py_file_path[py_file_path.index(args.project_name):].replace(".py", "").replace("/", ".")}.json'
+                if not os.path.exists(schema_path):
+                    # helper modules written by recompose.py (src/main/java_adapters.py) have no schema: they are not translation targets
+                    continue
+                with open(schema_path, 'r') as f:
                     covered_method_schema_data = json.load(f)
 
                 class_name_key = ''
