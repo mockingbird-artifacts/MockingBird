@@ -105,6 +105,7 @@ bash scripts/generate_mock_tests.sh commons-fileupload
 - `print_results.py` counts interface methods as non-validatable rather than as successes and reports success both over all methods and over validatable methods; `print_results.sh` writes to stderr so it also works without a terminal.
 - `create_schema.py` keeps generic and scoped superclasses; `create_skeleton.py` is idempotent across repeated skeleton passes and emits adapters for library base classes that have no Python counterpart; `recompose.py` substitutes a stub for a non-parseable fragment so one bad translation no longer breaks the import of the whole module; `calculate_coverage.py` skips helper modules that have no schema.
 - `run_maven.sh` runs `mvn test` on the build already woven by `generate_logs.py` instead of a full `clean install` per test method, and runs the whole class when the test method is inherited.
+- `generate_logs.py` kills whatever is left in a run's process group after Maven returns or times out, since a test's non-daemon threads can keep the surefire-forked JVM alive indefinitely; `scripts/orphan_reaper.sh` is an optional loop that does the same for JVMs left behind by generation runs started with an older generator.
 - `clean_evosuite_tests.py` handles brace characters inside character literals.
 
 ---
