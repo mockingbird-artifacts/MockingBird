@@ -69,10 +69,23 @@ def run_cmd(
             # force‐kill
             os.killpg(proc.pid, signal.SIGKILL)
             proc.wait()
+        _reap_group(proc.pid)
         raise
+
+    # Maven can return while the surefire-forked test JVM is still alive (non-daemon threads of a test keep it running
+    # after surefire stops waiting for it); such JVMs are reparented to init and keep their cores and heap for hours.
+    _reap_group(proc.pid)
 
     if proc.returncode != 0:
         raise CalledProcessError(proc.returncode, cmd)
+
+
+def _reap_group(pgid: int) -> None:
+    """Kill whatever is left in the process group of a finished run (the wrapper, Maven and the forked test JVM share it)."""
+    try:
+        os.killpg(pgid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass   # nothing left, the normal case
 
 
 def ensure_sdk(java_version: str = "8.0.432-kona") -> None:
