@@ -26,6 +26,10 @@ mkdir -p "$DATA_DIR/$PROJECT"
 for ((i=0; i<SHARDS; i++)); do
   [ -d "${PROJECT}-python__s${i}" ] && rsync -a --ignore-existing "${PROJECT}-python__s${i}/" "$DATA_DIR/$PROJECT/"
 done
+# the merged mock tests now live in data/mock_tests/<project>; the per-shard project copies, outputs and set-aside
+# directories are no longer needed (the resume state is in executed_tests/, so a later pass re-creates what it needs)
+# and would otherwise double the project's disk footprint
+[ "${KEEP_SHARD_DIRS:-0}" = "1" ] || rm -rf "${PROJECT}-python__s"[0-9]* "${PROJECT}__s"[0-9]*
 rm -rf "$DEST_DIR/$PROJECT/evosuite-tests"
 sdk use java 21.0.3-graal
 cd ../../

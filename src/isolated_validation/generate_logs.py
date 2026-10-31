@@ -214,15 +214,17 @@ def main() -> None:
         # resume an interrupted run: carry over per-test flags; a test flagged mocked whose mock tests are absent on disk
         # (e.g. the run died with a full disk) is queued again
         py_dir_prev = Path(f"{project}-python" if args.shards <= 1 else f"{project}-python__s{args.shard}")
+        merged_prev = Path("../../data/mock_tests") / project   # where generate_mock_tests*.sh merge the shard outputs
         carried = requeued = 0
         for cls, methods in prev_state.items():
             if cls not in executed_tests or not isinstance(methods, dict): continue
             parts = cls.split("."); short = parts[-1][4:] + "Test" if parts[-1].startswith("Test") else parts[-1]
             for m, info in methods.items():
                 if m not in executed_tests[cls] or not isinstance(info, dict): continue
-                if info.get("mocked") and not any(py_dir_prev.glob(f"src/**/{short}_{m}_decomposed_mocker_*.py")):
+                if info.get("mocked") and not any(py_dir_prev.glob(f"src/**/{short}_{m}_decomposed_mocker_*.py")) \
+                        and not any(merged_prev.glob(f"src/**/{short}_{m}_decomposed_mocker_*.py")):
                     requeued += 1; continue
-                for k in ("mocked", "timeout", "mock_duration", "unstable_dropped", "oversized_log"):
+                for k in ("mocked", "timeout", "mock_duration", "unstable_dropped", "oversized_log", "oversized_dropped"):
                     if k in info: executed_tests[cls][m][k] = info[k]
                 carried += 1
         print(f"[resume] carried {carried} test records from the previous state, re-queued {requeued} without mock files")
@@ -317,12 +319,17 @@ def main() -> None:
                     pass
 
             # 8b. a mock test whose recorded payload is tens of megabytes (huge arrays) cannot be validated meaningfully and
-            #     only slows pytest: set it aside (env MAX_MOCK_TEST_MB, default 10)
-            max_mb = float(os.environ.get("MAX_MOCK_TEST_MB", "10"))
+            #     only slows pytest: drop it (env MAX_MOCK_TEST_MB, default 10; MOCKINGBIRD_KEEP_OVERSIZED=1 sets it aside
+            #     under <py_dir>__oversized instead, which costs disk and is never read by the pipeline)
+            max_mb = float(os.environ.get("MAX_MOCK_TEST_MB", "10")); keep_oversized = os.environ.get("MOCKINGBIRD_KEEP_OVERSIZED", "0") == "1"
             for t in py_dir.glob("src/**/*_mocker_*.py"):
                 if t.stat().st_size > max_mb * 1e6:
-                    aside = py_dir.parent / f"{py_dir.name}__oversized" / t.relative_to(py_dir)
-                    aside.parent.mkdir(parents=True, exist_ok=True); shutil.move(str(t), str(aside))
+                    info["oversized_dropped"] = int(info.get("oversized_dropped") or 0) + 1
+                    if keep_oversized:
+                        aside = py_dir.parent / f"{py_dir.name}__oversized" / t.relative_to(py_dir)
+                        aside.parent.mkdir(parents=True, exist_ok=True); shutil.move(str(t), str(aside))
+                    else:
+                        t.unlink()
 
             # 8c. Java-side stability: a generated (EvoSuite) test is executed a second time and each of its mock tests is
             #     kept only when both runs recorded the same behavior (env MOCKINGBIRD_STABILITY_RUNS, default 2)
