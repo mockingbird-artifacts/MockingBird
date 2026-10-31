@@ -95,7 +95,7 @@ bash scripts/generate_mock_tests.sh commons-fileupload
 | `TEST_TIMEOUT` | 900 | seconds allowed per Java test method |
 | `MOCKINGBIRD_STABILITY_RUNS` | 2 | each EvoSuite test is executed this many times; a mock test is kept only when every run recorded the same behavior (canonical form in `src/isolated_validation/stability.py`) |
 | `MAX_MOCK_TEST_MB` | 10 | mock tests above this size are set aside in `<project>-python__oversized` instead of slowing validation |
-| `MAX_LOG_MB` | 2048 | aspect logs above this size are discarded; they cannot yield a usable mock test and fill the disk |
+| `MAX_LOG_MB` | 2048 | aspect logs above this size are discarded after the test and, while it runs, truncated every 20 s by `scripts/log_cap_guard.sh` (started by the generation scripts); a runaway test otherwise writes several GB per minute until `TEST_TIMEOUT` |
 | `MOCKINGBIRD_RESUME` | 1 | an interrupted generation run resumes from its recorded state and re-queues tests whose files are missing |
 | `MOCKGEN_QUIET` | 1 | drop Maven's per-test stdout (huge-array tests otherwise produce logs of tens of GB) |
 

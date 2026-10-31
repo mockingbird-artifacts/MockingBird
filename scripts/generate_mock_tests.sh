@@ -1,5 +1,6 @@
 #!/bin/bash
-# env: TEST_TIMEOUT (seconds per test method, default 900), MAX_MOCK_TEST_MB (mock tests above this size are set aside, default 10)
+# env: TEST_TIMEOUT (seconds per test method, default 900), MAX_MOCK_TEST_MB (mock tests above this size are set aside, default 10),
+#      MAX_LOG_MB (aspect logs above this size are truncated in flight and discarded, default 2048)
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <project_name>"
@@ -10,6 +11,8 @@ PROJECT="$1"
 DATA_DIR="../../data/mock_tests"
 DEST_DIR="../../java_projects/cleaned_final_projects_evosuite_cleaned"
 
+bash scripts/log_cap_guard.sh "$PROJECT" > /dev/null 2>&1 &   # keeps aspect logs under MAX_LOG_MB while tests run
+GUARD_PID=$!; trap 'kill $GUARD_PID 2>/dev/null' EXIT
 cd src/isolated_validation || exit 1
 
 source "$HOME/.sdkman/bin/sdkman-init.sh"
