@@ -98,6 +98,7 @@ bash scripts/generate_mock_tests.sh commons-fileupload
 | `MAX_LOG_MB` | 2048 | aspect logs above this size are discarded after the test and, while it runs, truncated every 20 s by `scripts/log_cap_guard.sh` (started by the generation scripts); a runaway test otherwise writes several GB per minute until `TEST_TIMEOUT` |
 | `MOCKINGBIRD_RESUME` | 1 | an interrupted generation run resumes from its recorded state and re-queues tests whose files are missing |
 | `MOCKGEN_QUIET` | 1 | drop Maven's per-test stdout (huge-array tests otherwise produce logs of tens of GB) |
+| `SUREFIRE_XMX` | 16g | maximum heap of each forked test JVM (set through `JAVA_TOOL_OPTIONS` in `run_maven.sh`); size it so that concurrent shards fit in RAM |
 | `KEEP_SHARD_DIRS` | 0 | keep the per-shard project copies and outputs after `generate_mock_tests_sharded.sh` has merged them into `data/mock_tests/<project>` (they double the footprint) |
 
 **Changes to the validation pipeline since the initial release.**

@@ -5,6 +5,10 @@ set -euo pipefail
 # $2 = test method
 # the project was fully built (and woven with the logging aspect) once by generate_logs.py; per-test runs only need the
 # test phase on the existing build, which avoids a full clean+compile for each of the thousands of test methods
+# cap the heap of the surefire-forked test JVM (and of Maven itself): the projects set no -Xmx, so each fork defaults to a
+# quarter of the machine's RAM and a few concurrent huge-array tests can exhaust it; an explicit -Xmx in a project's own
+# argLine still wins over this default
+export JAVA_TOOL_OPTIONS="-Xmx${SUREFIRE_XMX:-16g} ${JAVA_TOOL_OPTIONS:-}"
 mvn test \
     -q \
     -Drat.skip \
