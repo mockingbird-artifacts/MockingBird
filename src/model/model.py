@@ -40,9 +40,11 @@ class Model:
             
             if self.total_tokens > token_threshold:
                 for chunk in completion:
-                    generation += chunk.choices[0].delta.content
+                    # the final streamed chunk (and role-only chunks) carry no content: delta.content is None
+                    if chunk.choices and chunk.choices[0].delta is not None and chunk.choices[0].delta.content:
+                        generation += chunk.choices[0].delta.content
             else:
-                generation = completion.choices[0].message.content
+                generation = completion.choices[0].message.content or ''
             
         except openai.BadRequestError as e:
             return False, e.message
