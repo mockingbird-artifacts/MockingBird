@@ -13,7 +13,7 @@ ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd); cd "$ROOT"; mkdir -p logs
 for c in /root/miniconda3 "$HOME/miniconda3" "$HOME/anaconda3" /opt/conda; do [ -f "$c/etc/profile.d/conda.sh" ] && { source "$c/etc/profile.d/conda.sh"; break; }; done
 conda activate mockingbird 2>/dev/null || true
 set +u; [ -f "$HOME/.sdkman/bin/sdkman-init.sh" ] && source "$HOME/.sdkman/bin/sdkman-init.sh"; set -u
-export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH=":$ROOT${PYTHONPATH:+:$PYTHONPATH}"   # leading empty entry = cwd: validation executes translated files from inside the recomposed project, which imports its own src.main.* modules
 export MOCKINGBIRD_ROOT="$ROOT" MOCKINGBIRD_PROJECT="$P"
 export MOCKINGBIRD_TYPE_MAP_LOG="$ROOT/data/type_resolution/$P/mock_type_resolution_log.jsonl"
 export TOKENIZERS_PARALLELISM=false
