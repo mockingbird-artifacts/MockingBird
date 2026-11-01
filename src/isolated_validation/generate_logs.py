@@ -224,6 +224,8 @@ def main() -> None:
                 if info.get("mocked") and not any(py_dir_prev.glob(f"src/**/{short}_{m}_decomposed_mocker_*.py")) \
                         and not any(merged_prev.glob(f"src/**/{short}_{m}_decomposed_mocker_*.py")):
                     requeued += 1; continue
+                if info.get("timeout") and not info.get("mocked") and (info.get("mock_duration") or 0) < 60:
+                    requeued += 1; continue   # failed within a minute: a build or harness error, not a real timeout
                 for k in ("mocked", "timeout", "mock_duration", "unstable_dropped", "oversized_log", "oversized_dropped"):
                     if k in info: executed_tests[cls][m][k] = info[k]
                 carried += 1

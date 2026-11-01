@@ -17,4 +17,7 @@ mvn test \
     -Dcheckstyle.skip \
     -Dmaven.javadoc.skip \
     -DfailIfNoTests=false \
+    -Djacoco.skip=true \
     "-Dtest=${1}${2:+#${2}}"   # an empty method runs the whole class (inherited test methods)
+# -Djacoco.skip: coverage instrumentation is not needed for mock-test generation, and a test JVM killed by the timeout
+# leaves a truncated target/jacoco.exec that makes the jacoco report goal fail every later Maven run of the shard
