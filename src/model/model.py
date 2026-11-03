@@ -52,6 +52,10 @@ class Model:
             return False, e.message
         except openai.APIConnectionError as e:
             return False, e.message
+        except openai.APIError as e:   # any other API-level failure (server 5xx, rate limit, malformed stream): let the caller re-prompt
+            return False, getattr(e, 'message', str(e))
+        except Exception as e:         # transport errors surfaced by the HTTP client (e.g. a dropped stream) must not kill the whole run
+            return False, str(e)
 
         return True, generation
 
