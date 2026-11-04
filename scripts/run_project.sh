@@ -15,7 +15,7 @@ conda activate mockingbird 2>/dev/null || true
 set +u; [ -f "$HOME/.sdkman/bin/sdkman-init.sh" ] && source "$HOME/.sdkman/bin/sdkman-init.sh"; set -u
 export PYTHONPATH=":$ROOT${PYTHONPATH:+:$PYTHONPATH}"   # leading empty entry = cwd: validation executes translated files from inside the recomposed project, which imports its own src.main.* modules
 export MOCKINGBIRD_ROOT="$ROOT" MOCKINGBIRD_PROJECT="$P"
-export MOCKINGBIRD_TYPE_MAP_LOG="$ROOT/data/type_resolution/$P/mock_type_resolution_log.jsonl"
+export MOCKINGBIRD_TYPE_MAP_LOG="${MOCKINGBIRD_TYPE_MAP_LOG:-/dev/null}"   # per-resolution jsonl diagnostic (set a path to keep it; it reached 15 GB on one project)
 export TOKENIZERS_PARALLELISM=false
 LOG=logs/pipeline_$P.log; MARK=logs/stages_$P.txt
 mark () { echo "$(date -u +%FT%TZ) $P $1" | tee -a "$MARK"; }

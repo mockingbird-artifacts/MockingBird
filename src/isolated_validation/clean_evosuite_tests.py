@@ -229,7 +229,11 @@ def clean_content(content):
     content = re.sub(r'extends\s+[\w\$]+_scaffolding\b', '', content)
     content = re.sub(r'\n{3,}', '\n\n', content)
     content = re.sub(r'import\s+static\s+org\.evosuite\.runtime\.\w+\..*?;\n', '', content)
-    content = content.replace("@Test(timeout = 4000)", "@Test")
+    # EvoSuite emits @Test(timeout = 4000); under the logging aspect tests run far slower than that, so the original cleaner
+    # dropped the timeout entirely. A generated test can then loop forever (observed: a CSVPrinter test printing an enum
+    # constant in an endless loop, 84 GB of console output per shard). Keep a generous bound instead (CLEAN_TEST_TIMEOUT_MS,
+    # default 5 minutes): JUnit 4 enforces it without any EvoSuite runtime dependency.
+    content = content.replace("@Test(timeout = 4000)", f"@Test(timeout = {os.environ.get('CLEAN_TEST_TIMEOUT_MS', '300000')})")
     content = remove_invalid_content(content)
 
     content = re.sub(r'^\s*.*verifyException\s*\([^)]*\);\s*\n?', '', content, flags=re.MULTILINE)

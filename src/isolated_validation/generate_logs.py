@@ -202,7 +202,9 @@ def main() -> None:
         if dst_dir.exists():
             shutil.rmtree(dst_dir)
         shutil.copytree(src_dir, dst_dir)
-    subprocess.run(["mvn", "clean", "install", "-Drat.skip", "-Dgpg.skip", "-Dmoditect.skip", "-Dcheckstyle.skip", "-Dmaven.javadoc.skip"], cwd=src_dir, check=False)
+    quiet_build = os.environ.get("MOCKGEN_QUIET", "1") == "1"   # the full-suite build only needs to produce surefire reports; a looping test printed 84 GB here
+    subprocess.run(["mvn", "clean", "install", "-Drat.skip", "-Dgpg.skip", "-Dmoditect.skip", "-Dcheckstyle.skip", "-Dmaven.javadoc.skip"], cwd=src_dir, check=False,
+                   stdout=(subprocess.DEVNULL if quiet_build else None), stderr=(subprocess.DEVNULL if quiet_build else None))
     prev_state = json.loads(state_path.read_text()) if (state_path.exists() and os.environ.get("MOCKINGBIRD_RESUME", "1") == "1") else {}
     run(["python3", "extract_executed_tests.py", str(src_dir)])
     executed_tests = json.loads(state_path.read_text())

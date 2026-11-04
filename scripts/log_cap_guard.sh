@@ -12,5 +12,9 @@ while true; do
   find "$ISO" -maxdepth 2 -path "$ISO/${1:-}*/*.log" -size +"${CAP}"M 2>/dev/null | while read -r f; do
     echo "$(date -u +%FT%TZ) truncated $(du -m "$f" | cut -f1)MB $f" >> "$L"; : > "$f"
   done
+  # surefire spools a test's console output to <tmpdir>/surefire/stdout-*deferred when it grows large; a looping test fills the disk there
+  find "${TMPDIR:-/tmp}/surefire" -maxdepth 1 -type f -size +"${CAP}"M 2>/dev/null | while read -r f; do
+    echo "$(date -u +%FT%TZ) truncated $(du -m "$f" | cut -f1)MB $f" >> "$L"; : > "$f"
+  done
   sleep "$INTERVAL"
 done
