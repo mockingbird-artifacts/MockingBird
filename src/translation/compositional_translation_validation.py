@@ -1,5 +1,6 @@
 import argparse
 import json
+from src.utils.atomic_json import dump_json_atomic
 import tqdm
 import os
 import time
@@ -170,10 +171,7 @@ def update_labels(args, fragment, translation, translation_status, syntactic_val
     if fixed_by_advanced_reprompt:
         schema_data['classes'][fragment['class_name']][f'{fragment["fragment_type"]}s'][fragment['fragment_name']]['fixed_by_advanced_reprompt'] = True
 
-    with open(f'{args.schemas_dir}/{fragment["schema_name"]}.json', 'w') as f:
-        json.dump(schema_data, f, indent=4)
-        f.flush()
-        os.fsync(f.fileno())
+    dump_json_atomic(schema_data, f'{args.schemas_dir}/{fragment["schema_name"]}.json')
 
 
 def get_adaptive_budget(fragment, args, feedback=False):
@@ -281,8 +279,13 @@ def add_local_imports(args, fragment, generation, is_enum_constant=False):
             continue
 
         schema_data = {}
-        with open(f'{args.schemas_dir}/{schema_file}', 'r') as f:
-            schema_data = json.load(f)
+        try:
+            with open(f'{args.schemas_dir}/{schema_file}', 'r') as f:
+                schema_data = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            # a damaged schema of another class must not abort the translation of this fragment
+            print(f'[add_local_imports] skipping unreadable schema {schema_file}: {e}', flush=True)
+            continue
 
         if schema_file == f'{fragment["schema_name"]}.json':
             current_global_imports = schema_data['python_imports']
@@ -431,8 +434,31 @@ def translate(fragment, args, processed_fragments, budget={}, feedback=None, rec
             interaction_history.pop()
             continue
         
-        # if prompt size exceeds model token limit, mark translation out_of_context and move on to next fragment
-        if total_input_tokens >= model_info[args.model_name]['total']:
+        # The prompt must leave room for the answer. When the conversation no longer fits, shrink it before giving up:
+        # (1) keep only the system message and the latest prompt (it restates the source, the partial translation, the last
+        # incorrect translation and the feedback, so earlier turns are redundant), (2) shorten the feedback it carries,
+        # (3) drop the in-context example. Only a fragment whose bare prompt still does not fit is out of context.
+        token_limit = model_info[args.model_name]['total'] - int(os.environ.get('MOCKINGBIRD_GEN_RESERVE', '1024'))
+        if total_input_tokens >= token_limit and len(interaction_history) > 2:
+            interaction_history = [interaction_history[0], interaction_history[-1]]
+            messages = model.get_messages(interaction_history)
+            total_input_tokens = model.tokenize(messages)
+            print(f'[fit] dropped earlier turns: {total_input_tokens} tokens', flush=True)
+        if total_input_tokens >= token_limit:
+            for feedback_chars, with_icl in ((4000, True), (1500, True), (1500, False)):
+                if not feedback and with_icl:
+                    continue
+                prompt_gen = PromptGenerator(is_feedback=True if feedback else False, args=args, fragment_details=fragment,
+                                             feedback=(feedback[-feedback_chars:] if feedback else ''), use_icl_pool=with_icl)
+                interaction_history[-1] = Interaction(role='user', content=prompt_gen.generate_prompt())
+                messages = model.get_messages(interaction_history)
+                total_input_tokens = model.tokenize(messages)
+                print(f'[fit] feedback<={feedback_chars} chars, icl={with_icl}: {total_input_tokens} tokens', flush=True)
+                if total_input_tokens < token_limit:
+                    break
+
+        # if the prompt still exceeds the model token limit, mark translation out_of_context and move on to next fragment
+        if total_input_tokens >= token_limit:
             update_labels(args=args, fragment=fragment, translation=[], translation_status='out_of_context', syntactic_validation='pending', field_exercise='pending', graal_validation='pending', mocking_validation='pending', test_execution='pending', elapsed_time=0)
             break
 
@@ -482,10 +508,7 @@ def translate(fragment, args, processed_fragments, budget={}, feedback=None, rec
             for local_import in potential_local_imports:
                 if local_import not in schema_data['python_imports']:
                     schema_data['python_imports'].append(local_import)
-            with open(f'{args.schemas_dir}/{fragment["schema_name"]}.json', 'w') as f:
-                json.dump(schema_data, f, indent=4)
-                f.flush()
-                os.fsync(f.fileno())
+            dump_json_atomic(schema_data, f'{args.schemas_dir}/{fragment["schema_name"]}.json')
 
         update_labels(args=args, fragment=fragment, translation=generation, translation_status='attempted', syntactic_validation='parseable', field_exercise='pending', graal_validation='pending', mocking_validation='pending', test_execution='pending', elapsed_time=time.time() - start_time)
         ############################ </SYNTACTIC VALIDATION> ############################

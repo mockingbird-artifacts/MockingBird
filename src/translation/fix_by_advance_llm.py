@@ -1,5 +1,6 @@
 import yaml
 import json
+from src.utils.atomic_json import dump_json_atomic
 import jinja2
 import os
 import dotenv
@@ -296,8 +297,7 @@ def fix_by_advance_llm(args, test_exec_report):
             fragment_name = identifier.split('|')[2]
             schema_data['classes'][class_name]['methods'][fragment_name]['translation'] = fixed_python_translation
             
-            with open(f"{args.schemas_dir}/{identifier.split('|')[0]}.json", 'w') as f:
-                json.dump(schema_data, f, indent=4)
+            dump_json_atomic(schema_data, f"{args.schemas_dir}/{identifier.split('|')[0]}.json")
 
             print(f"Fixed translation for {identifier}:\n")
             print('\n'.join(fixed_python_translation))

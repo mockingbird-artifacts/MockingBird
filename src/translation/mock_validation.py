@@ -1,5 +1,6 @@
 import argparse
 import json
+from src.utils.atomic_json import dump_json_atomic
 import tqdm
 import os
 import time
@@ -51,10 +52,7 @@ def update_labels(args, fragment, translation, translation_status, syntactic_val
     if fixed_by_advanced_reprompt:
         schema_data['classes'][fragment['class_name']][f'{fragment["fragment_type"]}s'][fragment['fragment_name']]['fixed_by_advanced_reprompt'] = True
 
-    with open(f'{args.schemas_dir}/{fragment["schema_name"]}.json', 'w') as f:
-        json.dump(schema_data, f, indent=4)
-        f.flush()
-        os.fsync(f.fileno())
+    dump_json_atomic(schema_data, f'{args.schemas_dir}/{fragment["schema_name"]}.json')
 
 
 def get_processed_translation(args, fragment):
