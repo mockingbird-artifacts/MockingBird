@@ -9,6 +9,7 @@ MAXC=${MAXC:-2}; M=${MODEL:-deepseek-coder-33b-instruct}/${TEMP:-0.0}; ISO=src/i
 export MOCKINGBIRD_STABILITY_RUNS=${MOCKINGBIRD_STABILITY_RUNS:-2} SHARDS=${SHARDS:-4} MAX_LOG_MB=${MAX_LOG_MB:-1024} MOCKGEN_QUIET=${MOCKGEN_QUIET:-1} MOCKINGBIRD_RESUME=${MOCKINGBIRD_RESUME:-1}
 PROJECTS=("$@"); [ ${#PROJECTS[@]} -eq 0 ] && PROJECTS=(commons-codec JavaFastPFOR commons-validator commons-graph commons-csv commons-pool jansi commons-cli commons-exec commons-fileupload)
 pgrep -f "scripts/orphan_reape[r].sh" > /dev/null || { nohup bash scripts/orphan_reaper.sh > /dev/null 2>&1 < /dev/null & }
+pgrep -f "scripts/disk_guar[d].sh" > /dev/null || { nohup bash scripts/disk_guard.sh > /dev/null 2>&1 < /dev/null & }
 for P in "${PROJECTS[@]}"; do
   while [ "$(pgrep -fc "run_project[.]sh")" -ge "$MAXC" ]; do sleep 120; done
   raw=java_projects/cleaned_final_projects_evosuite/$P/src/test/java
