@@ -86,5 +86,7 @@ for f in sorted(glob.glob(f'{sd}/*.json')):
                     r['translation_status'] = 'pending'; r['translation'] = []
     print(f'  {os.path.basename(f)}: {len(text)} bytes, prefix {cut} bytes kept {kept}/{total} fragment records')
     if not a.dry_run:
-        shutil.copy(f, f + f'.damaged_{stamp}'); dump_json_atomic(merged, f); repaired += 1
+        # keep the damaged original outside the schema directory: every stage lists that directory and parses each entry
+        bdir = os.path.join('data', 'schema_backups', a.project); os.makedirs(bdir, exist_ok=True)
+        shutil.copy(f, os.path.join(bdir, os.path.basename(f) + f'.damaged_{stamp}')); dump_json_atomic(merged, f); repaired += 1
 print(f'{a.project}: {repaired} files repaired' + (' (dry run)' if a.dry_run else ''))
