@@ -57,7 +57,9 @@ def overlay(base, prefix):
 
 
 ap = argparse.ArgumentParser(); ap.add_argument('project'); ap.add_argument('base_dir')
-ap.add_argument('--schemas-dir', default=None); ap.add_argument('--dry-run', action='store_true'); a = ap.parse_args()
+ap.add_argument('--schemas-dir', default=None); ap.add_argument('--dry-run', action='store_true')
+ap.add_argument('--reset-repaired', action='store_true', help='return every fragment of a repaired file to pending (the per-file import list follows the fragment records and is lost at any cut)')
+a = ap.parse_args()
 sd = a.schemas_dir or f'data/schemas_evosuite_cleaned/deepseek-coder-33b-instruct/0.0/{a.project}'
 stamp = time.strftime('%Y%m%dT%H%M%S'); repaired = 0
 for f in sorted(glob.glob(f'{sd}/*.json')):
@@ -77,6 +79,11 @@ for f in sorted(glob.glob(f'{sd}/*.json')):
     kept = sum(len(c.get(k, {})) for c in (prefix or {}).get('classes', {}).values() for k in ('methods', 'fields'))
     total = sum(len(c.get(k, {})) for c in base.get('classes', {}).values() for k in ('methods', 'fields'))
     merged = overlay(base, prefix) if prefix else base
+    if a.reset_repaired:
+        for cls in merged.get('classes', {}).values():
+            for kind in ('methods', 'fields'):
+                for r in cls.get(kind, {}).values():
+                    r['translation_status'] = 'pending'; r['translation'] = []
     print(f'  {os.path.basename(f)}: {len(text)} bytes, prefix {cut} bytes kept {kept}/{total} fragment records')
     if not a.dry_run:
         shutil.copy(f, f + f'.damaged_{stamp}'); dump_json_atomic(merged, f); repaired += 1
