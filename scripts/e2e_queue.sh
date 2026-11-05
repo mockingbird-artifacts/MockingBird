@@ -11,7 +11,7 @@ PROJECTS=("$@"); [ ${#PROJECTS[@]} -eq 0 ] && PROJECTS=(commons-codec JavaFastPF
 pgrep -f "scripts/orphan_reape[r].sh" > /dev/null || { nohup bash scripts/orphan_reaper.sh > /dev/null 2>&1 < /dev/null & }
 pgrep -f "scripts/disk_guar[d].sh" > /dev/null || { nohup bash scripts/disk_guard.sh > /dev/null 2>&1 < /dev/null & }
 for P in "${PROJECTS[@]}"; do
-  while [ "$(pgrep -fc "run_project[.]sh")" -ge "$MAXC" ]; do sleep 120; done
+  while [ "$(pgrep -fc "^bash scripts/run_project[.]sh")" -ge "$MAXC" ]; do sleep 120; done   # the driver processes only, not launcher wrappers that mention the script
   raw=java_projects/cleaned_final_projects_evosuite/$P/src/test/java
   find "$raw" -name '*DrivenTest.java' -delete 2>/dev/null
   echo "$(date -u +%FT%TZ) $P: raw EvoSuite tree has $(find "$raw" -name '*_ESTest.java' 2>/dev/null | wc -l) *_ESTest classes ($(find "$raw" -name '*ES[0-9]_ESTest.java' 2>/dev/null | wc -l) topped up)" >> $L/e2e_launches.txt
