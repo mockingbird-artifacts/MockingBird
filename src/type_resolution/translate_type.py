@@ -1,5 +1,6 @@
 import argparse
 import json
+from src.utils.atomic_json import dump_json_atomic
 import os
 import re
 import yaml
@@ -115,10 +116,34 @@ def append_result(data, class_, fragment_type, fragment, type_variation, type_, 
     return data
 
 def save_results(data, schema_dir, schema_file):
-    with open(f'{schema_dir}/{schema_file}', 'w') as f:
-        json.dump(data, f, indent=4)
+    dump_json_atomic(data, f'{schema_dir}/{schema_file}')
 
-def is_type_loadable(import_stmt, type_name, custom_classes=None):
+def is_type_loadable(import_stmt, type_name, custom_classes=None, timeout=10.0):
+    """Run the type check in a child process with a time limit: the expression comes from the model and may block
+    forever when evaluated (observed: `threading.Event().wait()` proposed as a type)."""
+    import multiprocessing
+    ctx = multiprocessing.get_context('fork')
+    q = ctx.Queue()
+
+    def _child(q, import_stmt, type_name, custom_classes):
+        try:
+            q.put(_is_type_loadable_inline(import_stmt, type_name, custom_classes))
+        except BaseException as e:
+            q.put((False, f'Error evaluating type: {e!r}'))
+
+    proc = ctx.Process(target=_child, args=(q, import_stmt, type_name, custom_classes), daemon=True)
+    proc.start()
+    proc.join(timeout)
+    if proc.is_alive():
+        proc.kill(); proc.join(5)
+        return False, f'Error evaluating type: evaluation of {type_name!r} did not finish within {timeout:.0f}s (blocking expression)'
+    try:
+        return q.get(timeout=5)
+    except Exception:
+        return False, f'Error evaluating type: {type_name!r} could not be checked'
+
+
+def _is_type_loadable_inline(import_stmt, type_name, custom_classes=None):
     """
     Validates if a type can be loaded or used in the Python type system.
     
