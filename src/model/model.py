@@ -1,3 +1,4 @@
+import os
 import openai
 import requests
 import tiktoken
@@ -12,7 +13,10 @@ class Model:
         self.context_window = model_info['total']
         self.model_info = model_info
         self.total_tokens = 4096
-        self.client = OpenAI(**{k: v for k, v in model_info.items() if k in ['api_key', 'base_url', 'default_headers']})
+        # a request that stalls (e.g. a streamed response whose connection dies) must fail instead of blocking a stage
+        # forever; the caller treats a timeout as a retryable call failure
+        self.client = OpenAI(**{k: v for k, v in model_info.items() if k in ['api_key', 'base_url', 'default_headers']},
+                             timeout=float(os.environ.get('MOCKINGBIRD_REQUEST_TIMEOUT', '900')))
         try:
             self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-33b-instruct")
         except BaseException:
