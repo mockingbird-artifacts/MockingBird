@@ -1,7 +1,8 @@
 #!/bin/bash
 # Full MockingBird pipeline for one project with stage markers, run from the repository root (or anywhere: the script
 # locates the root itself). usage: scripts/run_project.sh <project> [start_stage] [end_stage]
-#   stages: mock schema augment mock2 types typemap infer skeleton translate results
+#   stages: mock schema augment mock2 types typemap infer skeleton translate validate results
+#   validate mock-validates translated fragments that have no verdict yet (tests become eligible only once all their focal methods are translated)
 #   mock     sharded mock-test generation from the EvoSuite + developer tests (SHARDS, TEST_TIMEOUT, MAX_LOG_MB, MOCKINGBIRD_STABILITY_RUNS)
 #   augment  EvoSuite top-up for classes still without mock tests (ES_BUDGET seconds per class, ES_PAR parallel runs)
 #   mock2    second generation pass that records the topped-up tests (resume keeps everything from the first pass)
@@ -19,7 +20,7 @@ export MOCKINGBIRD_TYPE_MAP_LOG="${MOCKINGBIRD_TYPE_MAP_LOG:-/dev/null}"   # per
 export TOKENIZERS_PARALLELISM=false
 LOG=logs/pipeline_$P.log; MARK=logs/stages_$P.txt
 mark () { echo "$(date -u +%FT%TZ) $P $1" | tee -a "$MARK"; }
-ORDER="mock schema augment mock2 types typemap infer skeleton translate results"
+ORDER="mock schema augment mock2 types typemap infer skeleton translate validate results"
 stage_on () { local s started=0; for s in $ORDER; do [ "$s" = "$START" ] && started=1; if [ "$s" = "$1" ]; then [ $started = 1 ] && return 0 || return 1; fi; [ "$s" = "$END" ] && [ $started = 1 ] && [ "$s" != "$1" ] && return 1; done; return 1; }
 mock_count () { find "data/mock_tests/$P" -name '*_mocker_*.py' 2>/dev/null | wc -l; }
 
@@ -50,6 +51,10 @@ if stage_on skeleton; then
 fi
 if stage_on translate; then
   mark "translate START"; bash scripts/translate_fragment.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "translate DONE rc=$?"
+fi
+if stage_on validate; then
+  # mock-validate translated fragments that still have no verdict (their tests were not yet eligible when they were translated)
+  mark "validate START"; MOCKINGBIRD_VALIDATE_ONLY_PENDING=${MOCKINGBIRD_VALIDATE_ONLY_PENDING:-1} bash scripts/validate_fragments.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "validate DONE rc=$?"
 fi
 if stage_on results; then
   mark "results START"; bash scripts/print_results.sh "$P" "$TEMP" "$MODEL" "data/schemas$SUFFIX" "$SUFFIX" > "logs/results_$P.txt" 2>&1; mark "results DONE rc=$?"

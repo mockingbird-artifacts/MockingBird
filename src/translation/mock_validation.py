@@ -191,7 +191,22 @@ def main(args):
 
     # extract all pending fragments which require translation
     processed_fragments = get_processed_fragments(fragment_traversal, args)
-    
+
+    # A mock test is only eligible once every focal method it touches has been translated, so a fragment translated
+    # before its co-focal methods (resumed or out-of-order runs) may hold no verdict although its tests exist. By default
+    # this pass validates exactly those fragments; MOCKINGBIRD_VALIDATE_ONLY_PENDING=0 re-validates every translated one.
+    if os.environ.get('MOCKINGBIRD_VALIDATE_ONLY_PENDING', '1') == '1':
+        selected = []
+        for fragment in processed_fragments:
+            with open(f'{args.schemas_dir}/{fragment["schema_name"]}.json', 'r') as f:
+                record = json.load(f)['classes'][fragment['class_name']][f'{fragment["fragment_type"]}s'][fragment['fragment_name']]
+            mv = record.get('mocking_validation', 'pending')
+            outcome = mv.get('outcome', 'pending') if isinstance(mv, dict) else mv
+            if outcome not in ('success', 'failed'):
+                selected.append(fragment)
+        print(f'[validate] {len(selected)} of {len(processed_fragments)} translated fragments have no mock verdict yet', flush=True)
+        processed_fragments = selected
+
     for fragment in tqdm.tqdm(processed_fragments):
 
         validate(fragment, args, recursion_depth=args.recursion_depth)
