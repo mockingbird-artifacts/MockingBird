@@ -1,7 +1,8 @@
 #!/bin/bash
 # Full MockingBird pipeline for one project with stage markers, run from the repository root (or anywhere: the script
 # locates the root itself). usage: scripts/run_project.sh <project> [start_stage] [end_stage]
-#   stages: mock schema augment mock2 types typemap infer skeleton translate validate results
+#   stages: mock schema augment mock2 types typemap infer skeleton static translate validate results
+#   static   static mock tests for bodyless methods (interface/abstract/empty), see src/isolated_validation/generate_static_mock_tests.py
 #   validate re-translates fragments whose mock tests were not yet eligible on the first pass (and one-shot verdicts of validation-only passes) with the full harness
 #   mock     sharded mock-test generation from the EvoSuite + developer tests (SHARDS, TEST_TIMEOUT, MAX_LOG_MB, MOCKINGBIRD_STABILITY_RUNS)
 #   augment  EvoSuite top-up for classes still without mock tests (ES_BUDGET seconds per class, ES_PAR parallel runs)
@@ -20,7 +21,7 @@ export MOCKINGBIRD_TYPE_MAP_LOG="${MOCKINGBIRD_TYPE_MAP_LOG:-/dev/null}"   # per
 export TOKENIZERS_PARALLELISM=false
 LOG=logs/pipeline_$P.log; MARK=logs/stages_$P.txt
 mark () { echo "$(date -u +%FT%TZ) $P $1" | tee -a "$MARK"; }
-ORDER="mock schema augment mock2 types typemap infer skeleton translate validate results"
+ORDER="mock schema augment mock2 types typemap infer skeleton static translate validate results"
 stage_on () { local s started=0; for s in $ORDER; do [ "$s" = "$START" ] && started=1; if [ "$s" = "$1" ]; then [ $started = 1 ] && return 0 || return 1; fi; [ "$s" = "$END" ] && [ $started = 1 ] && [ "$s" != "$1" ] && return 1; done; return 1; }
 mock_count () { find "data/mock_tests/$P" -name '*_mocker_*.py' 2>/dev/null | wc -l; }
 
@@ -49,6 +50,10 @@ fi
 if stage_on skeleton; then
   mark "skeleton START"; bash scripts/create_project_skeleton.sh "$SUFFIX" "$MODEL" "$TEMP" "$P" >> "$LOG" 2>&1; mark "skeleton DONE rc=$?"
 fi
+if stage_on static; then
+  # static mock tests for bodyless methods (interface, abstract, empty body): derived from the schemas and the skeleton, no Java run
+  mark "static START"; python3 src/isolated_validation/generate_static_mock_tests.py "$P" --model "$MODEL" --temperature "$TEMP" --suffix "$SUFFIX" >> "$LOG" 2>&1; mark "static DONE rc=$? $(tail -n 1 "$LOG" | grep -o -E 'wrote [0-9]+ static mock tests' )"
+fi
 if stage_on translate; then
   mark "translate START"; bash scripts/translate_fragment.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "translate DONE rc=$?"
 fi
@@ -58,6 +63,7 @@ if stage_on validate; then
   # by a validation-only pass (one attempt, no feedback). They are re-queued and re-translated with the full harness now that
   # every other fragment is processed. Translation-free verification of existing translations is not what the harness offers.
   mark "validate START"
+  python3 src/isolated_validation/generate_static_mock_tests.py "$P" --model "$MODEL" --temperature "$TEMP" --suffix "$SUFFIX" >> "$LOG" 2>&1   # (re)generate static tests: the skeleton exists by now
   python3 scripts/requeue_fragments.py "$P" --deferred --one-shot-validate --model "$MODEL" --temperature "$TEMP" --suffix "$SUFFIX" >> "$LOG" 2>&1; rq=$?
   if [ "$rq" = 3 ]; then
     bash scripts/translate_fragment.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "validate DONE rc=$? (re-translated deferred fragments)"

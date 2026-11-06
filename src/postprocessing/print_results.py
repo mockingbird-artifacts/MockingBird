@@ -1,3 +1,4 @@
+import re
 import os
 import json
 import argparse
@@ -42,6 +43,7 @@ def main(args):
     test_outcome_details = {}
     main_method_graal_count = {'pending': 0, 'not-exercised': 0, 'success': 0, 'error': 0, 'failed': 0, 'failure': 0}
     main_method_mock_count = {'pending': 0, 'success': 0, 'failed': 0, 'non_validatable': 0}
+    bodyless_count = {'total': 0, 'success': 0, 'failed': 0, 'no_verdict': 0}   # interface / abstract / empty-body methods (checked by static mock tests)
     test_method_count = {'pending': 0, 'out_of_context': 0, 'attempted': 0}
     test_method_syntactic_count = {'pending': 0, 'parseable': 0, 'non-parseable': 0}
     
@@ -127,9 +129,17 @@ def main(args):
                     
                     if data['classes'][class_]['is_interface']:
                         total_interface_methods += 1
-                    if data['classes'][class_]['is_interface']:
-                        # Interface methods have no body to exercise and EvoSuite cannot instantiate them, so no mock test
-                        # covers them: count them as non-validatable (as AlphaTrans does), never as a validation success.
+                    _mv = data['classes'][class_]['methods'][method_].get('mocking_validation')
+                    _has_verdict = (_mv.get('outcome') if isinstance(_mv, dict) else _mv) in ('success', 'failed')
+                    _body = ' '.join(l.strip() for l in (data['classes'][class_]['methods'][method_].get('body') or []))
+                    _body = re.sub(r'@\w+(\([^)]*\))?', '', _body).strip()
+                    _bodyless = bool(_body) and ((_body.endswith(';') and '{' not in _body) or re.search(r'\)\s*(throws\s+[\w.,\s]+)?\s*\{\s*\}\s*$', _body) is not None)
+                    if _bodyless:
+                        bodyless_count['total'] += 1
+                        bodyless_count[(_mv.get('outcome') if isinstance(_mv, dict) else _mv) if _has_verdict else 'no_verdict'] += 1
+                    if data['classes'][class_]['is_interface'] and not _has_verdict:
+                        # Interface methods have no body to exercise and EvoSuite cannot instantiate them; without a static mock
+                        # test (generate_static_mock_tests.py) they are non-validatable, never a validation success.
                         main_method_mock_count['non_validatable'] += 1
                         mocking_failure.add(f'{class_}|{method_}')
                         if not isinstance(data['classes'][class_]['methods'][method_].get('mocking_validation'), dict):
@@ -208,6 +218,7 @@ def main(args):
           f"(non-validatable: {main_method_mock_count['non_validatable']} interface methods + {main_method_mock_count['pending']} uncovered; "
           f"success over validatable {validatable_main_methods}: {round(main_method_mock_count['success'] / validatable_main_methods * 100, 2) if validatable_main_methods else 0.0}%)")
     print('main_method_test_exec_count:', main_method_test_exec_count)
+    print(f"bodyless methods (interface/abstract/empty, static mock tests): total {bodyless_count['total']}, success {bodyless_count['success']}, failed {bodyless_count['failed']}, no verdict {bodyless_count['no_verdict']}")
 
     all_test_pass, one_test_fail_other, one_test_fail_assertion, many_test_fail_other, many_test_fail_assertion, all_test_fail_other, all_test_fail_assertion = 0, 0, 0, 0, 0, 0, 0
     total_one_test_fail, total_many_test_fail, total_all_test_fail = 0, 0, 0

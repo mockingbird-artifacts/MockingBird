@@ -9,6 +9,7 @@ pgrep -f "scripts/disk_guar[d].sh" > /dev/null || { nohup bash scripts/disk_guar
 for spec in "$@"; do
   IFS=: read -r P START END <<< "$spec"; END=${END:-results}
   while [ "$(pgrep -fc "^bash scripts/run_project[.]sh")" -ge "$MAXC" ]; do sleep 120; done   # the driver processes only, not launcher wrappers that mention the script
+  while pgrep -f "^bash scripts/run_project[.]sh $P " > /dev/null; do sleep 120; done           # one pipeline per project at a time (they share the project's schema files)
   nohup bash scripts/run_project.sh "$P" "$START" "$END" > "logs/run_resume_${P}_${START}.out" 2>&1 < /dev/null &
   echo "$(date -u +%FT%TZ) $P: resumed at stage $START (to $END), pid $!" >> $L
   sleep 60

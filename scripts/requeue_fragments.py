@@ -24,7 +24,7 @@ sd = f'data/schemas{a.suffix}/{a.model}/{a.temperature}/{a.project}'
 # focal methods that have mock tests on disk (mock test files end in _<Class>_<method>.py)
 have_tests = set()
 for f in glob.glob(f'data/mock_tests/{a.project}/src/**/*_mocker_*.py', recursive=True):
-    m = re.search(r'_decomposed_mocker_\d+_(.+)\.py$', os.path.basename(f))
+    m = re.search(r'_mocker_\d+_(.+)\.py$', os.path.basename(f))   # dynamic (…_decomposed_mocker_) and static (…_static_mocker_) tests
     if m: have_tests.add(m.group(1))
 
 # windows of validation-only passes
