@@ -2,7 +2,7 @@
 # Full MockingBird pipeline for one project with stage markers, run from the repository root (or anywhere: the script
 # locates the root itself). usage: scripts/run_project.sh <project> [start_stage] [end_stage]
 #   stages: mock schema augment mock2 types typemap infer skeleton translate validate results
-#   validate mock-validates translated fragments that have no verdict yet (tests become eligible only once all their focal methods are translated)
+#   validate re-translates fragments whose mock tests were not yet eligible on the first pass (and one-shot verdicts of validation-only passes) with the full harness
 #   mock     sharded mock-test generation from the EvoSuite + developer tests (SHARDS, TEST_TIMEOUT, MAX_LOG_MB, MOCKINGBIRD_STABILITY_RUNS)
 #   augment  EvoSuite top-up for classes still without mock tests (ES_BUDGET seconds per class, ES_PAR parallel runs)
 #   mock2    second generation pass that records the topped-up tests (resume keeps everything from the first pass)
@@ -53,8 +53,17 @@ if stage_on translate; then
   mark "translate START"; bash scripts/translate_fragment.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "translate DONE rc=$?"
 fi
 if stage_on validate; then
-  # mock-validate translated fragments that still have no verdict (their tests were not yet eligible when they were translated)
-  mark "validate START"; MOCKINGBIRD_VALIDATE_ONLY_PENDING=${MOCKINGBIRD_VALIDATE_ONLY_PENDING:-1} bash scripts/validate_fragments.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "validate DONE rc=$?"
+  # Second translation pass for fragments the first pass could not validate: those whose mock tests were not yet eligible when
+  # they were translated (a test is eligible only once every focal method it touches is translated) and any verdict written
+  # by a validation-only pass (one attempt, no feedback). They are re-queued and re-translated with the full harness now that
+  # every other fragment is processed. Translation-free verification of existing translations is not what the harness offers.
+  mark "validate START"
+  python3 scripts/requeue_fragments.py "$P" --deferred --one-shot-validate --model "$MODEL" --temperature "$TEMP" --suffix "$SUFFIX" >> "$LOG" 2>&1; rq=$?
+  if [ "$rq" = 3 ]; then
+    bash scripts/translate_fragment.sh "$P" "$TEMP" "$MODEL" "$SUFFIX" >> "$LOG" 2>&1; mark "validate DONE rc=$? (re-translated deferred fragments)"
+  else
+    mark "validate DONE rc=0 (nothing deferred)"
+  fi
 fi
 if stage_on results; then
   mark "results START"; bash scripts/print_results.sh "$P" "$TEMP" "$MODEL" "data/schemas$SUFFIX" "$SUFFIX" > "logs/results_$P.txt" 2>&1; mark "results DONE rc=$?"

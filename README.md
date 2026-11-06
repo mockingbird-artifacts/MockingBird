@@ -109,7 +109,7 @@ bash scripts/generate_mock_tests.sh commons-fileupload
 - `run_maven.sh` runs `mvn test` on the build already woven by `generate_logs.py` instead of a full `clean install` per test method, and runs the whole class when the test method is inherited.
 - `generate_logs.py` kills whatever is left in a run's process group after Maven returns or times out, since a test's non-daemon threads can keep the surefire-forked JVM alive indefinitely; `scripts/orphan_reaper.sh` is an optional loop that does the same for JVMs left behind by generation runs started with an older generator.
 - `clean_evosuite_tests.py` handles brace characters inside character literals.
-- `scripts/run_project.sh` runs the pipeline stages for a project with stage markers and resume; its `validate` stage (`scripts/validate_fragments.sh`, now limited by default to translated fragments without a mock verdict) gives a verdict to fragments whose mock tests were not yet eligible when they were translated.
+- `scripts/run_project.sh` runs the pipeline stages for a project with stage markers and resume. Its `validate` stage re-queues (`scripts/requeue_fragments.py`) and re-translates, with the full harness, the fragments whose mock tests were not yet eligible when they were first translated (a test is eligible only once every focal method it touches is translated, so resumed or out-of-order runs leave such fragments without a verdict); `scripts/validate_fragments.sh` remains the translation-free, single-attempt check and is not used by the driver.
 
 ---
 
