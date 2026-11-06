@@ -39,7 +39,11 @@ if a.one_shot_validate and os.path.exists(stages):
         try: t = datetime.strptime(ts, '%Y-%m-%dT%H:%M:%SZ')
         except ValueError: continue
         if evt == 'validate START': start = t
-        elif evt.startswith('validate DONE') and start: windows.append((start - timedelta(minutes=2), t + timedelta(minutes=2))); start = None
+        elif evt.startswith('validate DONE') and start:
+            # only validation-ONLY passes count; the driver's re-translation pass marks its DONE line with a parenthetical
+            if '(re-translated' not in line and '(nothing deferred)' not in line:
+                windows.append((start - timedelta(minutes=2), t + timedelta(minutes=2)))
+            start = None
     if start: windows.append((start - timedelta(minutes=2), datetime.utcnow() + timedelta(minutes=2)))
 
 def in_window(stamp):
