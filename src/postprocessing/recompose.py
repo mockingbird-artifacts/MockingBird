@@ -44,7 +44,14 @@ def main(args):
             for field in data['classes'][class_]['fields']:
                 translation = data['classes'][class_]['fields'][field]['translation']
                 if translation == []:
-                    translation = ('\n'.join(data['classes'][class_]['fields'][field]['partial_translation']).rstrip() + 'None # LLM could not translate this field').split('\n')
+                    # untranslated field: keep the skeleton's declaration; it ends in '= ' (no value) for most fields but already
+                    # carries a default for primitives ('= False', '= 0'), in which case appending None would glue 'FalseNone'
+                    partial = '\n'.join(data['classes'][class_]['fields'][field]['partial_translation']).rstrip()
+                    if partial.endswith('='):
+                        partial += ' None'
+                    elif '=' not in partial.split('\n')[-1]:
+                        partial += ' = None'
+                    translation = (partial + '  # LLM could not translate this field').split('\n')
                 translation = '\n'.join(translation).strip()
                 field_name = translation[:translation.find(':')].strip()
                 field_value = ''.join(translation.split('=')[1:]).strip()
