@@ -416,6 +416,24 @@ def translate(fragment, args, processed_fragments, budget={}, feedback=None, rec
         if fragment['fragment_type'] == 'method' and not prompt_gen.requires_translation:
             translation = prompt_gen.schema_data['classes'][fragment['class_name']]['methods'][fragment['fragment_name']]['partial_translation']
             update_labels(args=args, fragment=fragment, translation=translation, translation_status='attempted', syntactic_validation='parseable', field_exercise='pending', graal_validation='pending', mocking_validation='pending', test_execution='not-exercised', elapsed_time=time.time() - start_time)
+            # Bodyless stubs (interface/abstract/empty methods) skip generation, but their static mock tests
+            # (generate_static_mock_tests.py) still need a verdict: recompose this fragment and run the same
+            # mocking validator as the main path. Without this they keep translation_status='attempted' with
+            # mocking_validation='pending' forever and the results stage counts them non-validatable.
+            if args.validate_by_mocking and 'src.main' in fragment['schema_name']:
+                os.system(f"python3 src/postprocessing/recompose.py --project_name={args.project_name} \
+                                                                    --model_name={args.model_name} \
+                                                                    --output_dir=data/recomposed_projects \
+                                                                    --temperature={args.temperature} \
+                                                                    --fragment_name={fragment['fragment_name']} \
+                                                                    --suffix={args.suffix}")
+                validation_result = ValidateByMocking(args, fragment).validate()
+                mocking_status = 'pending'
+                if validation_result['outcome'] == 'success':
+                    mocking_status = 'success'
+                elif validation_result['outcome'] == 'failed':
+                    mocking_status = validation_result
+                update_labels(args=args, fragment=fragment, translation=translation, translation_status='attempted', syntactic_validation='parseable', field_exercise='pending', graal_validation='pending', mocking_validation=mocking_status, test_execution='not-exercised', elapsed_time=time.time() - start_time)
             break
 
         interaction = Interaction(role='user', content=prompt)
