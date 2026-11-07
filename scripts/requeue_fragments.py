@@ -57,11 +57,14 @@ for f in sorted(glob.glob(f'{sd}/*.json')):
     if '.src.main.' not in os.path.basename(f): continue
     d = json.load(open(f)); changed = False
     for cname, cls in d.get('classes', {}).items():
-        if cls.get('is_interface'): continue
+        iface = cls.get('is_interface')
         short = cname.split(':')[-1]
         for kind in ('methods',):
             for name, r in cls.get(kind, {}).items():
                 if r.get('is_overload'): continue
+                # interface methods are requeued only when a (static) mock test exists for them;
+                # otherwise re-translation can never produce a verdict
+                if iface and f"{short}_{name.split(':')[-1]}" not in have_tests: continue
                 st = r.get('translation_status', 'pending'); mv = r.get('mocking_validation', 'pending')
                 out = mv.get('outcome', 'pending') if isinstance(mv, dict) else mv
                 why = None
