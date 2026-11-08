@@ -80,7 +80,7 @@ PROJECTS=(
 VARIANTS=(cleaned_final_projects cleaned_final_projects_evosuite)
 if [[ -n "${PROJECTS_OVERRIDE:-}" ]]; then PROJECTS=($PROJECTS_OVERRIDE); fi
 if [[ -n "${VARIANTS_OVERRIDE:-}" ]]; then VARIANTS=($VARIANTS_OVERRIDE); fi
-JDK_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+JDK_HOME="${JDK_HOME:-/usr/lib/jvm/java-11-openjdk-amd64}"
 
 MVN_FLAGS=(
   -Drat.skip=true
