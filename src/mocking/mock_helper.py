@@ -1789,6 +1789,27 @@ class MockConversionGap(BaseException):
     pass
 
 
+class UnresolvedRef:
+    """Placeholder for a recorded reference whose full definition never materialized.
+    Inert until the test actually touches it; any use surfaces as a reconstruction gap,
+    so unused gaps cost nothing and used ones make the test inconclusive, never a false failure."""
+    __slots__ = ("_ref_type", "_ref_addr")
+    def __init__(self, ref_type, ref_addr):
+        object.__setattr__(self, "_ref_type", ref_type)
+        object.__setattr__(self, "_ref_addr", ref_addr)
+    def _gap(self):
+        raise MockConversionGap(f"unresolved recorded reference: {self._ref_type}@{self._ref_addr}")
+    def __getattr__(self, name): self._gap()
+    def __setattr__(self, name, value): self._gap()
+    def __call__(self, *a, **k): self._gap()
+    def __iter__(self): self._gap()
+    def __len__(self): self._gap()
+    def __bool__(self): self._gap()
+    def __eq__(self, other): self._gap()
+    def __hash__(self): return object.__hash__(self)
+    def __repr__(self): return f"<UnresolvedRef {object.__getattribute__(self, '_ref_type')}>"
+
+
 class UnmodifiableView(list):
     """Recorded Java value was an unmodifiable wrapper (Collections$Unmodifiable*)."""
     pass
@@ -1832,6 +1853,8 @@ class java_equivalent_raises:
 def recursive_equal(obj1, obj2, _path=""):
     if isinstance(obj2, str) and obj2 == UNSERIALIZABLE_SENTINEL:
         return True   # recorded Java value could not be serialized; nothing to compare against
+    if isinstance(obj1, UnresolvedRef) or isinstance(obj2, UnresolvedRef):
+        raise MockConversionGap("comparison touches an unresolved recorded reference")
     _unmod_violation = (_path == "" and isinstance(obj2, UnmodifiableView)
                         and not isinstance(obj1, (UnmodifiableView, tuple, frozenset)))
     """
@@ -2129,7 +2152,7 @@ def create_python_object(python_type, json_obj, force_new_object=False):
         try:
             return reference_dict[memory_address]
         except Exception:
-            return None
+            return UnresolvedRef(json_obj.get("type"), memory_address)
     if issubclass(clazz, BaseException):  # Ensure safe instantiation of exceptions
         try:
             obj = Exception.__new__(clazz)
