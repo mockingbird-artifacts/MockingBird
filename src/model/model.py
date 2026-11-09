@@ -89,8 +89,16 @@ class Model:
             "add_special_tokens": True
         }
 
-        response = requests.post(self.model_info['base_url'].replace('/v1', '/tokenize'), json=data, headers=headers)
-        self.total_tokens = response.json()['count']
+        try:
+            response = requests.post(self.model_info['base_url'].replace('/v1', '/tokenize'), json=data, headers=headers, timeout=30)
+            self.total_tokens = response.json()['count']
+        except Exception:
+            # endpoint absent (e.g. Ollama has no /tokenize): approximate with the local tokenizer, else chars/3.
+            # The count only sizes max_new_tokens, so an approximation is safe.
+            if self.tokenizer is not None:
+                self.total_tokens = len(self.tokenizer.encode(prompt))
+            else:
+                self.total_tokens = max(1, len(prompt) // 3)
         return self.total_tokens
 
     def get_messages(self, interaction_history):
