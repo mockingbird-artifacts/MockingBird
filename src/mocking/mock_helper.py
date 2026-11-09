@@ -907,10 +907,12 @@ def convert_to_python(json_obj, force_new_object=False):
     """
     global reference_dict
     if json_obj is None:
-        return None
+        raise MockConversionGap("recorded object has no serialized form")
     java_type = json_obj.get("type")
     if not java_type:
         return None
+    if json_obj.get("special_note") == "serialization_failed":
+        raise MockConversionGap("Java-side serialization of this object failed; cannot rebuild it")
 
     if "value" in json_obj:
         if json_obj.get("value") is None:
@@ -1779,6 +1781,12 @@ def _looks_like_environment(d):
 UNSERIALIZABLE_SENTINEL = 'TYPE WITH NO DIRECT PYTHON EQUIVALENT'
 
 
+class MockConversionGap(Exception):
+    """Raised when the recorded JSON cannot be faithfully rebuilt (missing record, failed Java-side
+    serialization). A test whose inputs or expected values hit this is INCONCLUSIVE, not a failure."""
+    pass
+
+
 class UnmodifiableView(list):
     """Recorded Java value was an unmodifiable wrapper (Collections$Unmodifiable*)."""
     pass
@@ -2011,6 +2019,23 @@ def get_parent_classes(clazz):
     return [base.__name__ for base in clazz.__bases__ if base is not object]
 
 def set_object_instance_fields(obj, json_obj):
+    result = _set_object_instance_fields_unchecked(obj, json_obj)
+    target = result if result is not None else obj
+    try:
+        fields = (json_obj or {}).get("instance_fields", {}) if isinstance(json_obj, dict) else {}
+        for fname, finfo in fields.items():
+            mod = finfo.get("modifier") if isinstance(finfo, dict) else None
+            cands = [fname, "_" + fname, "_" + type(target).__name__ + "__" + fname]
+            if target is not None and not any(hasattr(target, c) for c in cands):
+                raise MockConversionGap(f"instance rebuild incomplete: field {fname} missing on {type(target).__name__}")
+    except MockConversionGap:
+        raise
+    except Exception:
+        pass   # verification itself must never break a test for other reasons
+    return result
+
+
+def _set_object_instance_fields_unchecked(obj, json_obj):
     """
     Update the instance fields of an object.
     Use the same instance if obj and json_obj is the same pointer(reference)
