@@ -2026,10 +2026,16 @@ def set_object_instance_fields(obj, json_obj):
     try:
         fields = (json_obj or {}).get("instance_fields", {}) if isinstance(json_obj, dict) else {}
         for fname, finfo in fields.items():
-            mod = finfo.get("modifier") if isinstance(finfo, dict) else None
-            cands = [fname, "_" + fname, "_" + type(target).__name__ + "__" + fname]
+            base = fname.split("_HIDDEN_FIELD___")[0]
+            cands = [base, "_" + base, "_" + type(target).__name__ + "__" + base]
+            if isinstance(finfo, dict):
+                decl = str(finfo.get("declaring_class", "")).rsplit(".", 1)[-1]
+                if decl:
+                    cands.append("_" + decl + "__" + base)   # shadowed/private field under its declaring class
+            for klass in type(target).__mro__ if target is not None else ():
+                cands.append("_" + klass.__name__ + "__" + base)
             if target is not None and not any(hasattr(target, c) for c in cands):
-                raise MockConversionGap(f"instance rebuild incomplete: field {fname} missing on {type(target).__name__}")
+                raise MockConversionGap(f"instance rebuild incomplete: field {base} missing on {type(target).__name__}")
     except MockConversionGap:
         raise
     except Exception:

@@ -195,7 +195,7 @@ class ValidateByMocking:
             test_feedback = f'Timeout expired: {e}'
         except subprocess.CalledProcessError as e:
             test_outcome = 'failed'
-            test_feedback = e.stderr
+            test_feedback = (e.stderr or "") + "\n" + (e.stdout or "")   # pytest INTERNALERROR tracebacks go to stdout
 
         if not os.path.exists(full_test_report_path):
             # pytest died before writing a report (collection crash): classify from captured stderr
