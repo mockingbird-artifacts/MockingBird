@@ -906,6 +906,8 @@ def convert_to_python(json_obj, force_new_object=False):
     Flag `force_new_object` only set to `True` when creating dummy objects for equivalence check.
     """
     global reference_dict
+    if json_obj is None:
+        return None
     java_type = json_obj.get("type")
     if not java_type:
         return None
@@ -1150,7 +1152,7 @@ def convert_to_python(json_obj, force_new_object=False):
                 byte_array = convert_to_python(json_obj.get("sink_details").get("byte_array"))
         else:
             byte_array = convert_to_python(byte_array_json)
-        byte_buffer = bytes([x & 0xFF for x in byte_array])
+        byte_buffer = bytes([int(x) & 0xFF for x in byte_array])
         if java_type == "java.io.ByteArrayInputStream":
             bytes_io_object = BytesIO(byte_buffer)
             # EvoSuite can leave a ByteArrayInputStream with pos < 0 (or beyond buf); BytesIO.seek rejects negatives, so clamp
@@ -1584,7 +1586,10 @@ def convert_to_python(json_obj, force_new_object=False):
             if reference_dict[memory_address] is None:
                 reference_dict[memory_address] = callable_obj
                 return reference_dict[memory_address]
-            reference_dict[memory_address].__call__ = callable_obj.__call__
+            if hasattr(callable_obj, "__call__"):
+                reference_dict[memory_address].__call__ = callable_obj.__call__
+            elif hasattr(callable_obj, "compare"):
+                reference_dict[memory_address].__call__ = callable_obj.compare   # Comparator translated without __call__ (e.g. AlphaTrans output)
         else:
             reference_dict[memory_address] = callable_obj
         return reference_dict[memory_address]
@@ -1769,7 +1774,11 @@ def _looks_like_environment(d):
     """A process-environment snapshot (System.getenv() / os.environ): string keys including PATH and HOME/USER/PWD."""
     return isinstance(d, dict) and len(d) >= 5 and all(isinstance(k, str) for k in d) and "PATH" in d and any(k in d for k in ("HOME", "USER", "PWD", "LANG"))
 
+UNSERIALIZABLE_SENTINEL = 'TYPE WITH NO DIRECT PYTHON EQUIVALENT'
+
 def recursive_equal(obj1, obj2, _path=""):
+    if isinstance(obj2, str) and obj2 == UNSERIALIZABLE_SENTINEL:
+        return True   # recorded Java value could not be serialized; nothing to compare against
     """
     Recursively checks equality of two Python objects by comparing their attributes and values.
     `obj1` is the value produced by the translated Python code, `obj2` the value recorded from the Java execution.
