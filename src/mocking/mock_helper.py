@@ -1781,7 +1781,9 @@ def _looks_like_environment(d):
 UNSERIALIZABLE_SENTINEL = 'TYPE WITH NO DIRECT PYTHON EQUIVALENT'
 
 
-class MockConversionGap(Exception):
+class MockConversionGap(BaseException):
+    # BaseException on purpose: translated code may catch Exception broadly; a reconstruction gap
+    # must reach the harness unswallowed so the test can be classified inconclusive.
     """Raised when the recorded JSON cannot be faithfully rebuilt (missing record, failed Java-side
     serialization). A test whose inputs or expected values hit this is INCONCLUSIVE, not a failure."""
     pass

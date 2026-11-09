@@ -73,7 +73,10 @@ class ValidateByMocking:
                     elif test_outcome == 'success':
                         validation_result['outcome'] = 'success'
                 
-                except Exception as exc:
+                except BaseException as exc:
+                    if classify_error(str(type(exc).__name__) + ": " + str(exc)) == 'inconclusive':
+                        pbar.update(1)
+                        continue
                     validation_result['outcome'] = 'failed'
                     validation_result['feedback'].append({test: str(exc)})
                     # Cancel remaining futures
