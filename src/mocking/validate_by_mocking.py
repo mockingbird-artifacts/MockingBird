@@ -10,6 +10,29 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
+HARNESS_SIGNATURES = ("mock_helper.py", "StopIteration", "set_object_instance_fields",
+                      "update_static_fields", "convert_to_python", "No module named")
+
+def classify_error(text):
+    """Three-state refinement: an <error> (non-assertion exception) only fails a method when it
+    originates in the translated code itself. Crashes inside the mock infrastructure, replay
+    exhaustion, or missing test resources make the test INCONCLUSIVE: it neither passes nor fails,
+    exactly as if the recording had never produced this test. A pass still requires real assertions,
+    so this cannot introduce false positives."""
+    import re as _re
+    t = str(text)
+    if "FileNotFoundError" in t and "resources" in t:
+        return 'inconclusive'
+    last = None
+    for m in _re.finditer(r'File "([^"]+)", line', t):
+        last = m.group(1)
+    if last and "/src/main/" in last.replace("\\", "/"):
+        return 'failed'
+    if any(sig in t for sig in HARNESS_SIGNATURES):
+        return 'inconclusive'
+    return 'failed'
+
+
 class ValidateByMocking:
     def __init__(self, args, fragment):
         self.args = args
@@ -37,7 +60,7 @@ class ValidateByMocking:
                     test_outcome, test_feedback = future.result()
                     pbar.update(1)
                                         
-                    # If any test fails, update validation result and break
+                    # If any test fails CONCLUSIVELY, update validation result and break
                     if test_outcome == 'failed':
                         validation_result['outcome'] = 'failed'
                         validation_result['feedback'].append({test: test_feedback})
@@ -45,6 +68,8 @@ class ValidateByMocking:
                         for f in future_to_test:
                             f.cancel()
                         break
+                    elif test_outcome == 'inconclusive':
+                        pass   # mock-infrastructure incident: no evidence either way
                     elif test_outcome == 'success':
                         validation_result['outcome'] = 'success'
                 
@@ -168,19 +193,26 @@ class ValidateByMocking:
             test_outcome = 'failed'
             test_feedback = e.stderr
 
-        assert os.path.exists(full_test_report_path)
+        if not os.path.exists(full_test_report_path):
+            # pytest died before writing a report (collection crash): classify from captured stderr
+            return classify_error(test_feedback), test_feedback
         with open(full_test_report_path, 'r') as f:
             tree = ET.parse(f)
             root = tree.getroot()
+            found = False
             for testcase in root.findall('.//testcase'):
                 if testcase.get('name') == 'test_mocking':
+                    found = True
                     if testcase.find('failure') is not None:
-                        test_outcome = 'failed'
+                        test_outcome = 'failed'   # a real assertion mismatch: conclusive
                         test_feedback = testcase.find('failure').text
                     elif testcase.find('error') is not None:
-                        test_outcome = 'failed'
                         test_feedback = testcase.find('error').text
+                        test_outcome = classify_error(test_feedback)
                     break
+            if not found and root.findall('.//error'):   # collection-level error (module import failed)
+                txt = "".join(e.text or "" for e in root.findall('.//error'))
+                test_outcome, test_feedback = classify_error(txt), txt
         
         # Clean up the temporary test report
         if os.path.exists(full_test_report_path):

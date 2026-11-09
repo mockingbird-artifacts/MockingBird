@@ -985,6 +985,8 @@ def convert_to_python(json_obj, force_new_object=False):
     elif python_type == 'list' or python_type.endswith("[]"):
         lst = json_obj.get("collection_elements", [])
         list_object = [convert_to_python(elem, force_new_object=force_new_object) for elem in lst]
+        if "Unmodifiable" in str(java_type):
+            list_object = UnmodifiableView(list_object)
         memory_address = json_obj.get("memory_address")
         if force_new_object or not memory_address:
             return list_object
@@ -1776,9 +1778,52 @@ def _looks_like_environment(d):
 
 UNSERIALIZABLE_SENTINEL = 'TYPE WITH NO DIRECT PYTHON EQUIVALENT'
 
+
+class UnmodifiableView(list):
+    """Recorded Java value was an unmodifiable wrapper (Collections$Unmodifiable*)."""
+    pass
+
+
+_JAVA_EXC_EQUIV = {
+    'NullPointer': (AttributeError, TypeError),
+    'IndexOutOfBounds': (IndexError,),
+    'ArrayIndexOutOfBounds': (IndexError,),
+    'IllegalArgument': (ValueError,),
+    'NumberFormat': (ValueError,),
+    'ClassCast': (TypeError,),
+    'UnsupportedOperation': (NotImplementedError, TypeError, AttributeError),
+    'Arithmetic': (ZeroDivisionError,),
+    'IllegalState': (RuntimeError, ValueError),
+    'NoSuchElement': (StopIteration, KeyError, IndexError),
+    'ConcurrentModification': (RuntimeError,),
+}
+
+
+class java_equivalent_raises:
+    """assertRaises that also accepts the Python-idiomatic equivalent of a recorded Java exception type.
+    A translation that raises AttributeError where Java threw NullPointerException on the same path is faithful."""
+    def __init__(self, testcase, expected):
+        self.testcase = testcase
+        self.expected = expected
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc, tb):
+        if exc_type is None:
+            self.testcase.fail(f"{type(self.expected).__name__} not raised")
+            return False
+        if isinstance(exc, type(self.expected)):
+            return True
+        name = type(self.expected).__name__
+        for frag, equivs in _JAVA_EXC_EQUIV.items():
+            if frag in name and isinstance(exc, equivs):
+                return True
+        return False   # let the unexpected exception propagate (error, classified by origin)
+
 def recursive_equal(obj1, obj2, _path=""):
     if isinstance(obj2, str) and obj2 == UNSERIALIZABLE_SENTINEL:
         return True   # recorded Java value could not be serialized; nothing to compare against
+    _unmod_violation = (_path == "" and isinstance(obj2, UnmodifiableView)
+                        and not isinstance(obj1, (UnmodifiableView, tuple, frozenset)))
     """
     Recursively checks equality of two Python objects by comparing their attributes and values.
     `obj1` is the value produced by the translated Python code, `obj2` the value recorded from the Java execution.
@@ -1786,6 +1831,11 @@ def recursive_equal(obj1, obj2, _path=""):
     """
     def fail(reason, a=obj1, b=obj2, path=_path):
         return Mismatch(path, reason, a, b)
+
+    if _unmod_violation:
+        # Java returned a read-only view; a translation handing back the mutable backing collection drops that contract.
+        # Enforced only at the top level of a comparison (the returned value), never deep inside recorded object graphs.
+        return fail("Java returns an unmodifiable view; the translation returns a mutable collection")
 
     if isinstance(obj1, str) and isinstance(obj2, str):
         if obj1 == "TYPE WITH NO DIRECT PYTHON EQUIVALENT" or obj2 == "TYPE WITH NO DIRECT PYTHON EQUIVALENT":

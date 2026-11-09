@@ -31,7 +31,7 @@ def process_test_log(log_path, parse_logs):
         with open(mock_test_path, 'w') as mock_test_file:
             mock_test_file.write(
                 "from unittest.mock import patch, MagicMock\n"
-                "from mock_helper import update_static_fields, set_object_instance_fields, convert_to_python, recursive_equal, side_effect_is_correct, clear_reference_dict\n"
+                "from mock_helper import update_static_fields, set_object_instance_fields, convert_to_python, recursive_equal, side_effect_is_correct, clear_reference_dict, java_equivalent_raises\n"
                 "import unittest, importlib, pkgutil, os, json, sys, inspect\n"
                 "import sys\n"
                 "import inspect\n"
@@ -208,7 +208,7 @@ def process_mocking(method_dict, file_path, clear_reference_dict_line_added):
                 if 'Exception thrown' in method_dict:
                     exception_str = json.dumps(method_dict.get('Exception thrown'))
                     method_body.append(f"{leading_spaces}e = convert_to_python(json.loads({exception_str}))\n")
-                    method_body.append(f"{leading_spaces}with self.assertRaises(type(e)):\n")
+                    method_body.append(f"{leading_spaces}with java_equivalent_raises(self, e):\n")
                     method_body.append(f"{leading_spaces_inner_inner}{orig_constructor}(obj, *method_args)\n")
                 else:
                     method_body.append(f"{leading_spaces}method_ret = {orig_constructor}(obj, *method_args)\n")
@@ -217,7 +217,7 @@ def process_mocking(method_dict, file_path, clear_reference_dict_line_added):
                 if 'Exception thrown' in method_dict:
                     exception_str = json.dumps(method_dict.get('Exception thrown'))
                     method_body.append(f"{leading_spaces}e = convert_to_python(json.loads({exception_str}))\n")
-                    method_body.append(f"{leading_spaces}with self.assertRaises(type(e)):\n")
+                    method_body.append(f"{leading_spaces}with java_equivalent_raises(self, e):\n")
                     method_body.append(f"{leading_spaces_inner_inner}method_ret = {orig_constructor}(obj)\n")
                 else:
                     method_body.append(f"{leading_spaces}method_ret = {orig_constructor}(obj)\n")
@@ -319,7 +319,7 @@ def process_mocking(method_dict, file_path, clear_reference_dict_line_added):
                     if 'Exception thrown' in method_dict:
                         exception_str = json.dumps(method_dict.get('Exception thrown'))
                         method_body.append(f"{leading_spaces}e = convert_to_python(json.loads({exception_str}))\n")
-                        method_body.append(f"{leading_spaces}with self.assertRaises(type(e)):\n")
+                        method_body.append(f"{leading_spaces}with java_equivalent_raises(self, e):\n")
                         method_body.append(f"{leading_spaces_inner_inner}method_ret = {instance_additional_str}{orig_method}(*method_args)\n")
                     else:
                         method_body.append(f"{leading_spaces}method_ret = {instance_additional_str}{orig_method}(*method_args)\n")
@@ -328,7 +328,7 @@ def process_mocking(method_dict, file_path, clear_reference_dict_line_added):
                     if 'Exception thrown' in method_dict:
                         exception_str = json.dumps(method_dict.get('Exception thrown'))
                         method_body.append(f"{leading_spaces}e = convert_to_python(json.loads({exception_str}))\n")
-                        method_body.append(f"{leading_spaces}with self.assertRaises(type(e)):\n")
+                        method_body.append(f"{leading_spaces}with java_equivalent_raises(self, e):\n")
                         method_body.append(f"{leading_spaces_inner_inner}method_ret = {instance_additional_str}{orig_method}()\n")
                     else:
                         method_body.append(f"{leading_spaces}method_ret = {instance_additional_str}{orig_method}()\n")
@@ -338,7 +338,7 @@ def process_mocking(method_dict, file_path, clear_reference_dict_line_added):
                     if 'Exception thrown' in method_dict:
                         exception_str = json.dumps(method_dict.get('Exception thrown'))
                         method_body.append(f"{leading_spaces}e = convert_to_python(json.loads({exception_str}))\n")
-                        method_body.append(f"{leading_spaces}with self.assertRaises(type(e)):\n")
+                        method_body.append(f"{leading_spaces}with java_equivalent_raises(self, e):\n")
                         method_body.append(f"{leading_spaces_inner_inner}{instance_additional_str}{orig_method}(*method_args)\n")
                     else:
                         method_body.append(f"{leading_spaces}{instance_additional_str}{orig_method}(*method_args)\n")
@@ -346,7 +346,7 @@ def process_mocking(method_dict, file_path, clear_reference_dict_line_added):
                     if 'Exception thrown' in method_dict:
                         exception_str = json.dumps(method_dict.get('Exception thrown'))
                         method_body.append(f"{leading_spaces}e = convert_to_python(json.loads({exception_str}))\n")
-                        method_body.append(f"{leading_spaces}with self.assertRaises(type(e)):\n")
+                        method_body.append(f"{leading_spaces}with java_equivalent_raises(self, e):\n")
                         method_body.append(f"{leading_spaces_inner_inner}{instance_additional_str}{orig_method}()\n")
                     else:
                         method_body.append(f"{leading_spaces}{instance_additional_str}{orig_method}()\n")
