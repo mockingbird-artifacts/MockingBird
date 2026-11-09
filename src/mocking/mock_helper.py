@@ -1935,6 +1935,10 @@ def recursive_equal(obj1, obj2, _path=""):
             return True
     elif isinstance(obj1, type({}.values())) and isinstance(obj2, type({}.values())):
         return recursive_equal(list(obj1), list(obj2), _path)
+    elif isinstance(obj1, (type({}.values()), type({}.keys()))) and isinstance(obj2, list):
+        # a dict view is the Python-idiomatic return for a Java Collection the recorder stored as a list;
+        # contents and order are still compared element-wise
+        return recursive_equal(list(obj1), obj2, _path)
     elif hasattr(obj1, '__dict__') and hasattr(obj2, '__dict__'):
         obj1_dict_excluding_transient = {k: v for k, v in obj1.__dict__.items() if k in obj2.__dict__}
         missing = [k for k in obj2.__dict__ if k not in obj1.__dict__]
