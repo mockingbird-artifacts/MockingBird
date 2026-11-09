@@ -11,7 +11,8 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 HARNESS_SIGNATURES = ("MockConversionGap", "mock_helper.py", "StopIteration", "set_object_instance_fields",
-                      "update_static_fields", "convert_to_python", "No module named")
+                      "update_static_fields", "convert_to_python", "No module named",
+                      "partially initialized module", "cannot import name")
 
 def classify_error(text):
     """Three-state refinement: an <error> (non-assertion exception) only fails a method when it
