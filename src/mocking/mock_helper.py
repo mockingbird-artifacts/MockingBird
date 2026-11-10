@@ -913,6 +913,11 @@ def convert_to_python(json_obj, force_new_object=False):
         return None
     if json_obj.get("special_note") == "serialization_failed":
         raise MockConversionGap("Java-side serialization of this object failed; cannot rebuild it")
+    _v = json_obj.get("value")
+    if isinstance(_v, dict) and _v.get("type") and ("memory_address" in _v or "note" in _v or "instance_fields" in _v):
+        # field records wrap the object under 'value' (metadata outside): resolve the inner record,
+        # so value-nested circular references and bare references reach the reference dict
+        return convert_to_python(_v, force_new_object=force_new_object)
 
     if "value" in json_obj:
         if json_obj.get("value") is None:
