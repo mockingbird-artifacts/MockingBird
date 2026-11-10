@@ -2043,8 +2043,15 @@ def get_parent_classes(clazz):
     """
     return [base.__name__ for base in clazz.__bases__ if base is not object]
 
+_SIF_DEPTH = 0
+
 def set_object_instance_fields(obj, json_obj):
-    result = _set_object_instance_fields_unchecked(obj, json_obj)
+    global _SIF_DEPTH
+    _SIF_DEPTH += 1
+    try:
+        result = _set_object_instance_fields_unchecked(obj, json_obj)
+    finally:
+        _SIF_DEPTH -= 1
     target = result if result is not None else obj
     try:
         fields = (json_obj or {}).get("instance_fields", {}) if isinstance(json_obj, dict) else {}
@@ -2066,6 +2073,19 @@ def set_object_instance_fields(obj, json_obj):
         raise
     except Exception:
         pass   # verification itself must never break a test for other reasons
+    if _SIF_DEPTH == 0 and isinstance(json_obj, dict) and json_obj.get("instance_fields"):
+        # Post-setup self-check (top level only): if the aliased rebuild does not match a fresh
+        # reference built from the same recording, the pre-state is corrupt and any later
+        # mismatch would blame the translation for the harness's reconstruction. Inconclusive.
+        try:
+            ref = convert_to_python(json_obj, force_new_object=True)
+            ok = recursive_equal(target, ref)
+        except MockConversionGap:
+            raise
+        except Exception:
+            ok = True   # the self-check must not invent new failure modes
+        if not ok:
+            raise MockConversionGap(f"setup self-check: rebuilt instance diverges from its own recording: {ok}")
     return result
 
 
