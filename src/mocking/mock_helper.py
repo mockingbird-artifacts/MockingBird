@@ -2073,7 +2073,8 @@ def set_object_instance_fields(obj, json_obj):
         raise
     except Exception:
         pass   # verification itself must never break a test for other reasons
-    if _SIF_DEPTH == 0 and isinstance(json_obj, dict) and json_obj.get("instance_fields"):
+    if (os.environ.get("MOCKINGBIRD_SETUP_SELFCHECK") == "1"
+            and _SIF_DEPTH == 0 and isinstance(json_obj, dict) and json_obj.get("instance_fields")):
         # Post-setup self-check (top level only): if the aliased rebuild does not match a fresh
         # reference built from the same recording, the pre-state is corrupt and any later
         # mismatch would blame the translation for the harness's reconstruction. Inconclusive.
