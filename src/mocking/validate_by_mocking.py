@@ -51,6 +51,17 @@ class ValidateByMocking:
     def validate(self):
         validation_result = {'outcome': 'pending', 'feedback': []}
         
+        # pre-flight: if the fragment's own module cannot import, no test can execute it;
+        # the fragment is pending without burning one doomed pytest per eligible test
+        mod = "src." + ".".join(self.fragment['schema_name'].split(".src.")[1].split(".")[:-1]) \
+              + "." + self.fragment['schema_name'].split(".")[-1]
+        cwd = f"{os.getcwd()}/data/recomposed_projects/{self.args.model_name}/{self.args.temperature}/{self.args.project_name}"
+        probe = subprocess.run(["python3", "-c", f"import {mod}"], capture_output=True, text=True,
+                               cwd=cwd, timeout=60,
+                               env={**os.environ, "PYTHONPATH": cwd + ":" + os.getcwd() + "/src/mocking"})
+        if probe.returncode != 0:
+            return validation_result   # pending: module import fails independent of this fragment
+        
         eligible_tests = self.get_eligible_tests()
         self.copy_tests(eligible_tests)
         
