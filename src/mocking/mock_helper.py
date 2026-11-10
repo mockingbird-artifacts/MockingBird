@@ -2087,7 +2087,9 @@ def _set_object_instance_fields_unchecked(obj, json_obj):
         obj.truncate(0)
         converted_json_obj = convert_to_python(json_obj)
         if not converted_json_obj is obj:
-            obj.write(converted_json_obj.getvalue())
+            if hasattr(converted_json_obj, "getvalue") and hasattr(obj, "write"):
+                obj.write(converted_json_obj.getvalue())
+            # else: a live stream (e.g. captured stdout) cannot replay recorded content; skip
             obj.seek(converted_json_obj.tell())
     elif isinstance(obj, BufferedReader) or isinstance(obj, BufferedWriter):
         converted_json_obj = convert_to_python(json_obj)

@@ -10,7 +10,7 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
-HARNESS_SIGNATURES = ("MockConversionGap", "mock_helper.py", "StopIteration", "set_object_instance_fields",
+HARNESS_SIGNATURES = ("MockConversionGap", "mock_helper.py", "set_object_instance_fields",
                       "update_static_fields", "convert_to_python", "No module named",
                       "partially initialized module", "cannot import name")
 
@@ -22,6 +22,9 @@ def classify_error(text):
     so this cannot introduce false positives."""
     import re as _re
     t = str(text)
+    final = [l for l in t.strip().splitlines() if l.strip()][-1] if t.strip() else ""
+    if final.strip().startswith("AssertionError"):
+        return 'failed'   # a real assertion verdict is conclusive no matter whose frames appear mid-trace
     if "FileNotFoundError" in t and "resources" in t:
         return 'inconclusive'
     last = None
