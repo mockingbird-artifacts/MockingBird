@@ -208,8 +208,11 @@ class ValidateByMocking:
                 if testcase.get('name') == 'test_mocking':
                     found = True
                     if testcase.find('failure') is not None:
-                        test_outcome = 'failed'   # a real assertion mismatch: conclusive
+                        # pytest's junit writer files uncaught exceptions from unittest-protocol tests
+                        # under <failure> too, so origin-classify: real assertion mismatches carry no
+                        # harness signature and stay conclusive
                         test_feedback = testcase.find('failure').text
+                        test_outcome = classify_error(test_feedback)
                     elif testcase.find('error') is not None:
                         test_feedback = testcase.find('error').text
                         test_outcome = classify_error(test_feedback)
