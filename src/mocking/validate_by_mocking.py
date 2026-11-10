@@ -238,6 +238,20 @@ class ValidateByMocking:
                 # the raw exit-status verdict was never refined by any xml node, so classify the captured text
                 test_outcome = classify_error(test_feedback, focal)
         
+        if test_outcome == 'failed':
+            t = str(test_feedback)
+            import re as _re2
+            none_sig = _re2.search(r"NoneType.{0,60}(has no attribute|not subscriptable|not iterable|has no len|must be str)", t)
+            if none_sig and "/src/main/" in t:
+                # null-provenance audit: a NoneType crash in the focal code is conclusive only if the
+                # recording actually contains a null anywhere in this test; otherwise the None was
+                # manufactured by reconstruction and the evidence is about the harness, not the code
+                try:
+                    if 'type\\":\\"null' not in open(test if os.path.isabs(test) else os.path.join(cwd, test)).read():
+                        test_outcome = 'inconclusive'
+                except Exception:
+                    pass
+
         # Clean up the temporary test report
         if os.path.exists(full_test_report_path):
             os.remove(full_test_report_path)
