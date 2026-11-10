@@ -2048,8 +2048,11 @@ def set_object_instance_fields(obj, json_obj):
     target = result if result is not None else obj
     try:
         fields = (json_obj or {}).get("instance_fields", {}) if isinstance(json_obj, dict) else {}
+        THROWABLE_INTERNALS = {"cause", "stackTrace", "suppressedExceptions", "detailMessage", "backtrace"}
         for fname, finfo in fields.items():
             base = fname.split("_HIDDEN_FIELD___")[0]
+            if base in THROWABLE_INTERNALS and isinstance(target, BaseException):
+                continue   # represented by __cause__/__traceback__/args in Python, not attributes
             cands = [base, "_" + base, "_" + type(target).__name__ + "__" + base]
             if isinstance(finfo, dict):
                 decl = str(finfo.get("declaring_class", "")).rsplit(".", 1)[-1]
@@ -2152,6 +2155,13 @@ def create_python_object(python_type, json_obj, force_new_object=False):
         try:
             return reference_dict[memory_address]
         except Exception:
+            return UnresolvedRef(json_obj.get("type"), memory_address)
+    if (memory_address and "instance_fields" not in json_obj and "collection_elements" not in json_obj
+            and "value" not in json_obj and "enum_value" not in json_obj and "static_fields" not in json_obj):
+        # a bare reference: resolve it if its definition was seen, else an inert placeholder
+        if memory_address in reference_dict and reference_dict[memory_address] is not None:
+            return reference_dict[memory_address]
+        if not force_new_object:
             return UnresolvedRef(json_obj.get("type"), memory_address)
     if issubclass(clazz, BaseException):  # Ensure safe instantiation of exceptions
         try:
