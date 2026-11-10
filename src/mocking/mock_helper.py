@@ -1856,7 +1856,8 @@ def recursive_equal(obj1, obj2, _path=""):
     if isinstance(obj1, UnresolvedRef) or isinstance(obj2, UnresolvedRef):
         raise MockConversionGap("comparison touches an unresolved recorded reference")
     _unmod_violation = (_path == "" and isinstance(obj2, UnmodifiableView)
-                        and not isinstance(obj1, (UnmodifiableView, tuple, frozenset)))
+                        and not isinstance(obj1, (UnmodifiableView, tuple, frozenset,
+                                                  type({}.keys()), type({}.values()))))   # dict views are read-only views too
     """
     Recursively checks equality of two Python objects by comparing their attributes and values.
     `obj1` is the value produced by the translated Python code, `obj2` the value recorded from the Java execution.
