@@ -229,8 +229,10 @@ class ValidateByMocking:
                         test_outcome = classify_error(test_feedback, focal)
                     break
             if not found and root.findall('.//error'):   # collection-level error (module import failed)
+                # the focal method never ran: whatever broke the import (even a defect in another
+                # fragment of the same module) is not evidence about this fragment
                 txt = "".join(e.text or "" for e in root.findall('.//error'))
-                test_outcome, test_feedback = classify_error(txt, focal), txt
+                test_outcome, test_feedback = 'inconclusive', txt
             elif not found and test_outcome == 'failed':
                 # pytest aborted (e.g. INTERNALERROR from a BaseException) leaving a truncated report:
                 # the raw exit-status verdict was never refined by any xml node, so classify the captured text
