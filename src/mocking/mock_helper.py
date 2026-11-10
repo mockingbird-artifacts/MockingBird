@@ -2018,7 +2018,9 @@ def recursive_equal(obj1, obj2, _path=""):
             return True
     elif isinstance(obj1, type({}.values())) and isinstance(obj2, type({}.values())):
         return recursive_equal(list(obj1), list(obj2), _path)
-    elif isinstance(obj1, (type({}.values()), type({}.keys()))) and isinstance(obj2, list):
+    elif isinstance(obj1, (type({}.values()), type({}.keys()))) and isinstance(obj2, (type({}.values()), type({}.keys()))):
+        return recursive_equal(list(obj1), list(obj2), _path)
+    elif isinstance(obj1, (list, type({}.values()), type({}.keys()))) and isinstance(obj2, (list, type({}.values()), type({}.keys()))):
         # a dict view is the Python-idiomatic return for a Java Collection the recorder stored as a list;
         # contents and order are still compared element-wise
         return recursive_equal(list(obj1), obj2, _path)
