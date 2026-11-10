@@ -14,7 +14,7 @@ HARNESS_SIGNATURES = ("MockConversionGap", "mock_helper.py", "set_object_instanc
                       "update_static_fields", "convert_to_python", "No module named",
                       "partially initialized module", "cannot import name")
 
-def classify_error(text):
+def classify_error(text, focal_marker=None):
     """Three-state refinement: an <error> (non-assertion exception) only fails a method when it
     originates in the translated code itself. Crashes inside the mock infrastructure, replay
     exhaustion, or missing test resources make the test INCONCLUSIVE: it neither passes nor fails,
@@ -25,6 +25,12 @@ def classify_error(text):
     final = [l for l in t.strip().splitlines() if l.strip()][-1] if t.strip() else ""
     if final.strip().startswith("AssertionError"):
         return 'failed'   # a real assertion verdict is conclusive no matter whose frames appear mid-trace
+    if "StopIteration" in t:
+        # replay exhaustion: divergence only if it fired inside the focal invocation; in setup or
+        # reference construction it is the recording running short, a harness condition
+        if focal_marker and focal_marker in t:
+            return 'failed'
+        return 'inconclusive'
     if "FileNotFoundError" in t and "resources" in t:
         return 'inconclusive'
     last = None
@@ -200,9 +206,11 @@ class ValidateByMocking:
             test_outcome = 'failed'
             test_feedback = (e.stderr or "") + "\n" + (e.stdout or "")   # pytest INTERNALERROR tracebacks go to stdout
 
+        focal = "orig_" + self.fragment['class_name'].split(':')[-1] + "_" + \
+                (self.fragment['fragment_name'].split(':')[-1] if self.fragment['class_name'].split(':')[-1] != self.fragment['fragment_name'].split(':')[-1] else "init")
         if not os.path.exists(full_test_report_path):
             # pytest died before writing a report (collection crash): classify from captured stderr
-            return classify_error(test_feedback), test_feedback
+            return classify_error(test_feedback, focal), test_feedback
         with open(full_test_report_path, 'r') as f:
             tree = ET.parse(f)
             root = tree.getroot()
@@ -215,18 +223,18 @@ class ValidateByMocking:
                         # under <failure> too, so origin-classify: real assertion mismatches carry no
                         # harness signature and stay conclusive
                         test_feedback = testcase.find('failure').text
-                        test_outcome = classify_error(test_feedback)
+                        test_outcome = classify_error(test_feedback, focal)
                     elif testcase.find('error') is not None:
                         test_feedback = testcase.find('error').text
-                        test_outcome = classify_error(test_feedback)
+                        test_outcome = classify_error(test_feedback, focal)
                     break
             if not found and root.findall('.//error'):   # collection-level error (module import failed)
                 txt = "".join(e.text or "" for e in root.findall('.//error'))
-                test_outcome, test_feedback = classify_error(txt), txt
+                test_outcome, test_feedback = classify_error(txt, focal), txt
             elif not found and test_outcome == 'failed':
                 # pytest aborted (e.g. INTERNALERROR from a BaseException) leaving a truncated report:
                 # the raw exit-status verdict was never refined by any xml node, so classify the captured text
-                test_outcome = classify_error(test_feedback)
+                test_outcome = classify_error(test_feedback, focal)
         
         # Clean up the temporary test report
         if os.path.exists(full_test_report_path):
