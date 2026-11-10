@@ -158,10 +158,9 @@ class ValidateByMocking:
             if test.endswith(f'_{class_name}_{method_name}.py') or test.endswith(f'${class_name}_{method_name}.py'):
                 eligible_tests.append(test)
         
-        # randomly select 1000 tests from eligible_tests
-        import random
-        random.shuffle(eligible_tests)        
-        return eligible_tests[:1000]
+        # deterministic selection: sorted by filename, capped; a random subset made verdicts
+        # irreproducible between sweeps for methods with more than 1000 eligible tests
+        return sorted(eligible_tests)[:1000]
     
     def get_all_tests(self):
         all_tests = []
