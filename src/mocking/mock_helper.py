@@ -1956,10 +1956,13 @@ def recursive_equal(obj1, obj2, _path=""):
             # point at the first differing character to make long-string diffs actionable
             idx = next((i for i, (c1, c2) in enumerate(zip(obj1, obj2)) if c1 != c2), min(len(obj1), len(obj2)))
             return fail(f"strings differ at index {idx} (lengths {len(obj1)} vs {len(obj2)}): ...{obj1[max(0, idx-20):idx+40]!r} vs ...{obj2[max(0, idx-20):idx+40]!r}")
+    _seqviews = (list, type({}.keys()), type({}.values()))
     if not isinstance(obj1, Iterator) and type(obj1) != type(obj2):
         if obj1 is None or obj2 is None:
             return fail("the translated code produced None (no value) where the Java execution produced a value" if obj1 is None
                         else "the translated code produced a value where the Java execution produced null")
+        if isinstance(obj1, _seqviews) and isinstance(obj2, _seqviews):
+            return recursive_equal(list(obj1), list(obj2), _path)   # a dict view is the idiomatic return for a recorded Collection
         return fail(f"types differ ({type(obj1).__name__} vs {type(obj2).__name__})")
     if isinstance(obj1, (BytesIO, StringIO)):
         if obj1.getvalue() == obj2.getvalue():
