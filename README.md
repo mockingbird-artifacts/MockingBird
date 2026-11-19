@@ -38,11 +38,35 @@ ollama pull deepseek-coder:33b
 
 ### Translating Java Projects with Isolated Method-Level Validation
 
-We provide ten preprocessed Java projects from [AlphaTrans](https://github.com/Intelligent-CAT-Lab/AlphaTrans).  
-To translate a project (e.g., `commons-fileupload`) using `deepseek-coder-33b-instruct` at `temperature=0.0`, run:
+We provide ten preprocessed Java projects from [AlphaTrans](https://github.com/Intelligent-CAT-Lab/AlphaTrans).
+Translating a project end to end has three steps: generate the mock-test oracles from the Java project, translate it fragment by fragment with isolated validation, and report the results.
+
+**Step 1 — generate mock tests.** For a project (e.g., `commons-fileupload`):
 
 ```bash
 bash scripts/generate_mock_tests.sh commons-fileupload
+```
+
+For large projects, `scripts/generate_mock_tests_sharded.sh` runs `SHARDS` independent workers (default 4), each on its own copy of the project, and merges their mock tests into `data/mock_tests/<project>`:
+
+```bash
+SHARDS=4 bash scripts/generate_mock_tests_sharded.sh commons-fileupload
+```
+
+If classes still have public or protected methods without any mock test after the first pass, `scripts/augment_evosuite.sh` tops up coverage: it runs EvoSuite 1.2.0 on exactly those classes (with runtime mocking and the sandbox disabled so the tests survive `clean_evosuite_tests.py`), names the new classes `<X>ES2_ESTest`, and places the ones that compile next to the archive's EvoSuite tests. Re-run the generation script afterwards so the new tests are cleaned, built and recorded (needs Java 8; the EvoSuite jars are downloaded on demand):
+
+```bash
+BUDGET=180 PAR=8 bash scripts/augment_evosuite.sh commons-fileupload deepseek-coder-33b-instruct 0.0 _evosuite_cleaned
+bash scripts/generate_mock_tests.sh commons-fileupload
+```
+
+Bodyless Java methods (interface, abstract, empty body) get one *static* mock test each, written from the schema alone (`src/isolated_validation/generate_static_mock_tests.py`, driver stage `static`): it checks that the translated module imports, the class defines the method under the skeleton's name with the same arity, the body stays trivial, and calling the stub does nothing. These follow the same `…_mocker_<n>_<Class>_<method>.py` convention, so the validator treats them like dynamic mock tests and `print_results.py` reports them separately.
+
+Generation honors these environment variables (defaults in parentheses): `TEST_TIMEOUT` (900) seconds per Java test method; `MOCKINGBIRD_STABILITY_RUNS` (2) runs per EvoSuite test, keeping a mock test only when every run recorded the same behavior; `MAX_MOCK_TEST_MB` (10) discards oversized mock tests (`MOCKINGBIRD_KEEP_OVERSIZED=1` keeps them aside); `MAX_LOG_MB` (2048) caps aspect logs, truncated while the test runs by `scripts/log_cap_guard.sh`; `MOCKINGBIRD_RESUME` (1) resumes an interrupted run and re-queues tests whose files are missing; `MOCKGEN_QUIET` (1) drops Maven's per-test stdout; `SUREFIRE_XMX` (16g) sizes each forked test JVM so concurrent shards fit in RAM; `KEEP_SHARD_DIRS` (0) keeps per-shard copies after the merge.
+
+**Step 2 — translate with isolated method-level validation.** To translate the project using `deepseek-coder-33b-instruct` at `temperature=0.0`:
+
+```bash
 bash scripts/create_project_schema.sh deepseek-coder-33b-instruct 0.0 java_projects/cleaned_final_projects_evosuite_cleaned _evosuite_cleaned commons-fileupload
 bash scripts/translate_types.sh commons-fileupload deepseek-coder-33b-instruct 0.0 _evosuite_cleaned description Java Python
 bash scripts/create_project_type_map.sh deepseek-coder-33b-instruct 0.0 _evosuite_cleaned commons-fileupload
@@ -51,13 +75,15 @@ bash scripts/create_project_skeleton.sh _evosuite_cleaned deepseek-coder-33b-ins
 bash scripts/translate_fragment.sh commons-fileupload 0.0 deepseek-coder-33b-instruct _evosuite_cleaned
 ```
 
+Alternatively, `scripts/run_project.sh` drives all stages for a project with stage markers and resume; its `validate` stage re-queues and re-translates, with the full harness, fragments whose mock tests were not yet eligible when they were first translated (a test is eligible only once every focal method it touches is translated, so resumed or out-of-order runs would otherwise leave such fragments without a verdict).
+
 > [!NOTE]
-> To translate **new projects**, follow [AlphaTrans’s preprocessing pipeline](https://github.com/Intelligent-CAT-Lab/AlphaTrans?tab=readme-ov-file#translate-new-java-projects),  
+> To translate **new projects**, follow [AlphaTrans's preprocessing pipeline](https://github.com/Intelligent-CAT-Lab/AlphaTrans?tab=readme-ov-file#translate-new-java-projects),
 > then place the resulting project folder under `java_projects/cleaned_final_projects_evosuite`.
 
 `generate_mock_tests.sh` can be CPU-intensive for large projects, while `translate_types.sh` and `translate_fragment.sh` may be GPU-intensive depending on the chosen LLM.
 
-To evaluate translation effectiveness for `commons-fileupload`:
+**Step 3 — evaluate and recompose.** To evaluate translation effectiveness:
 
 ```bash
 bash scripts/print_results.sh commons-fileupload 0.0 deepseek-coder-33b-instruct data/schemas_evosuite_cleaned _evosuite_cleaned
@@ -68,49 +94,6 @@ To generate standalone translated Python projects, recompose all translations wi
 ```bash
 bash scripts/recompose.sh commons-fileupload 0.0 deepseek-coder-33b-instruct _evosuite_cleaned
 ```
-
----
-
-### Test Coverage Top-Up, Sharded Mock Generation and Run Controls
-
-The mock-test generation stage has three additions over the initial release.
-
-**Sharded generation.** `scripts/generate_mock_tests_sharded.sh` runs `SHARDS` independent workers (default 4), each on its own copy of the project, and merges their mock tests into `data/mock_tests/<project>`:
-
-```bash
-SHARDS=4 bash scripts/generate_mock_tests_sharded.sh commons-fileupload
-```
-
-**EvoSuite top-up.** After a first generation pass, `scripts/augment_evosuite.sh` lists the classes that still have public or protected methods without any mock test (`src/isolated_validation/evosuite_targets.py`), runs EvoSuite 1.2.0 on them with runtime mocking and the sandbox disabled so that the tests survive `clean_evosuite_tests.py`, renames the new classes to `<X>ES2_ESTest` and places the ones that compile next to the archive's EvoSuite tests (`src/isolated_validation/evosuite_place_tests.py`). Re-run the generation script afterwards so the new tests are cleaned, built and recorded. The script needs Java 8 and downloads `misc/evosuite-1.2.0.jar` and `misc/evosuite-standalone-runtime-1.2.0.jar` from the EvoSuite release when they are missing.
-
-```bash
-BUDGET=180 PAR=8 bash scripts/augment_evosuite.sh commons-fileupload deepseek-coder-33b-instruct 0.0 _evosuite_cleaned
-bash scripts/generate_mock_tests.sh commons-fileupload
-```
-
-**Run controls.** Environment variables read by the generation scripts and `src/isolated_validation/generate_logs.py`:
-
-| Variable | Default | Effect |
-|---|---|---|
-| `TEST_TIMEOUT` | 900 | seconds allowed per Java test method |
-| `MOCKINGBIRD_STABILITY_RUNS` | 2 | each EvoSuite test is executed this many times; a mock test is kept only when every run recorded the same behavior (canonical form in `src/isolated_validation/stability.py`) |
-| `MAX_MOCK_TEST_MB` | 10 | mock tests above this size are discarded (set `MOCKINGBIRD_KEEP_OVERSIZED=1` to keep them in `<project>-python__oversized`); they would only slow validation |
-| `MAX_LOG_MB` | 2048 | aspect logs above this size are discarded after the test and, while it runs, truncated every 20 s by `scripts/log_cap_guard.sh` (started by the generation scripts); a runaway test otherwise writes several GB per minute until `TEST_TIMEOUT` |
-| `MOCKINGBIRD_RESUME` | 1 | an interrupted generation run resumes from its recorded state and re-queues tests whose files are missing |
-| `MOCKGEN_QUIET` | 1 | drop Maven's per-test stdout (huge-array tests otherwise produce logs of tens of GB) |
-| `SUREFIRE_XMX` | 16g | maximum heap of each forked test JVM (set through `JAVA_TOOL_OPTIONS` in `run_maven.sh`); size it so that concurrent shards fit in RAM |
-| `KEEP_SHARD_DIRS` | 0 | keep the per-shard project copies and outputs after `generate_mock_tests_sharded.sh` has merged them into `data/mock_tests/<project>` (they double the footprint) |
-
-**Changes to the validation pipeline since the initial release.**
-- `CustomToStringConverter.java` serializes more JDK types (paths, charsets, NIO buffers, readers and writers, processes, atomics, locks, optionals and map entries), and `LoggingAspect.java` always writes the END record, also when the focal method throws an `Error`, and skips compiler-synthetic static fields. Truncated log chunks are skipped by `log_parser.py` instead of aborting the whole test.
-- `mock_helper.py` (identical copies in `src/isolated_validation` and `src/mocking`) consults the per-project context-aware type map `data/type_resolution/<project>/type_mapping.json` first and falls back to the fixed map; `validate_by_mocking.py` exports the map location to the test process (`MOCKINGBIRD_TYPE_MAP`, `MOCKINGBIRD_PROJECT`, `MOCKINGBIRD_ROOT`). Failed comparisons report the mismatching path and both values, Java exception families map to the Python exceptions translations actually raise, and recorded stream positions and non-numeric float payloads no longer crash the helper itself.
-- `print_results.py` counts interface methods as non-validatable rather than as successes and reports success both over all methods and over validatable methods; `print_results.sh` writes to stderr so it also works without a terminal.
-- `create_schema.py` keeps generic and scoped superclasses; `create_skeleton.py` is idempotent across repeated skeleton passes and emits adapters for library base classes that have no Python counterpart; `recompose.py` substitutes a stub for a non-parseable fragment so one bad translation no longer breaks the import of the whole module; `calculate_coverage.py` skips helper modules that have no schema.
-- `run_maven.sh` runs `mvn test` on the build already woven by `generate_logs.py` instead of a full `clean install` per test method, and runs the whole class when the test method is inherited.
-- `generate_logs.py` kills whatever is left in a run's process group after Maven returns or times out, since a test's non-daemon threads can keep the surefire-forked JVM alive indefinitely; `scripts/orphan_reaper.sh` is an optional loop that does the same for JVMs left behind by generation runs started with an older generator.
-- `clean_evosuite_tests.py` handles brace characters inside character literals.
-- `src/isolated_validation/generate_static_mock_tests.py` (driver stage `static`) writes one static mock test per bodyless Java method (interface, abstract, empty body) from the schema alone: it checks that the translated module imports, that the class defines the method under the skeleton's name with the same number of parameters, that the body stays trivial (no logic invented for a method that has none in Java), and that calling the stub does nothing. The files follow the `…_mocker_<n>_<Class>_<method>.py` convention, so the validator treats them like dynamic mock tests, and `print_results.py` counts such methods as validatable once they have a verdict (and reports them separately).
-- `scripts/run_project.sh` runs the pipeline stages for a project with stage markers and resume. Its `validate` stage re-queues (`scripts/requeue_fragments.py`) and re-translates, with the full harness, the fragments whose mock tests were not yet eligible when they were first translated (a test is eligible only once every focal method it touches is translated, so resumed or out-of-order runs leave such fragments without a verdict); `scripts/validate_fragments.sh` remains the translation-free, single-attempt check and is not used by the driver.
 
 ---
 
@@ -173,13 +156,34 @@ bash scripts/print_results.sh {project_name} 0.0 devstral-24b data/schemas_evosu
 
 ### RQ4: Ablation Studies
 
-Ablation study results are also included in this repository.  
-To reproduce **Table 5**, run:
+Each ablation arm removes one component of the pipeline and re-translates the ten projects from scratch; the arms differ from the full pipeline only in the switches below, so they always run the current workflow.
+
+**w/o RAG-TR** (no retrieval-augmented translation): set `MOCKINGBIRD_NO_ICL=1` so the translation prompts are built without the in-context retrieval pool, and use AlphaTrans's fixed type mapping (skip `automated_project_type_inference.sh`):
 
 ```bash
-bash scripts/print_results.sh {project_name} 0.0 deepseek-coder-33b-instruct data/schemas_evosuite_cleaned_no_RAG # w/o RAG-based type resolution
-bash scripts/print_results.sh {project_name} 0.0 deepseek-coder-33b-instruct data/schemas_evosuite_cleaned_no_mock     # w/o mocking on-the-fly
-bash scripts/print_results.sh commons-cli 0.0 deepseek-coder-33b-instruct data/schemas_no_evosuite_cleaned     # w/o Evosuite
+export MOCKINGBIRD_NO_ICL=1
+bash scripts/translate_fragment.sh {project_name} 0.0 {model} _evosuite_cleaned
+```
+
+**w/o OTF** (no mocking during iterative refinement): translate with `scripts/translate_fragment_nootf.sh` (syntax checks only in the loop), then apply mock validation once as the final verdict:
+
+```bash
+bash scripts/translate_fragment_nootf.sh {project_name} 0.0 {model} _evosuite_cleaned
+python3 scripts/revalidate_fragments_isolated.py {project_name} {model}
+```
+
+**w/o ES** (no EvoSuite-generated tests): set `MOCKINGBIRD_NO_ES_TESTS=1` so validation only uses mock tests recorded from developer-written tests. Methods covered solely by EvoSuite tests become non-validatable:
+
+```bash
+export MOCKINGBIRD_NO_ES_TESTS=1
+bash scripts/translate_fragment.sh {project_name} 0.0 {model} _evosuite_cleaned
+```
+
+The translated ablation schemas are included in this repository; to recompute an arm's verdicts with the current validator without re-translating, run the final-verdict pass over the stored schemas (set `MOCKINGBIRD_NO_ES_TESTS=1` first for the w/o-ES arm) and print the results:
+
+```bash
+python3 scripts/revalidate_fragments_isolated.py {project_name} {arm_model_dir}
+bash scripts/print_results.sh {project_name} 0.0 {arm_model_dir} data/schemas_evosuite_cleaned _evosuite_cleaned
 ```
 
 ---

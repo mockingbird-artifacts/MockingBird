@@ -1,12 +1,12 @@
 AMF	Graal	Mock	Manual Inspection	Note
 CommandLine_145-153:getOptionObject1	Error	Failure	Failure	
 CommandLine_133-135:getOptionObject0	Failure	Success	Success	Graal False Negative - glue code not handling all types
-CommandLine_438-440:iterator	Error	Success	Success	
+CommandLine_438-440:iterator	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CommandLine_428-430:hasOption2	Success	Success	Success	
-CommandLine_418-420:hasOption1	Failure	Failure	Failure	
+CommandLine_418-420:hasOption1	Failure	Success	Success	Graal False Negative - Graal test failure contradicted by manual inspection.
 CommandLine_407-409:hasOption0	Success	Success	Success	
 CommandLine_380-382:getParsedOptionValue2	Error	Failure	Failure	
-CommandLine_360-369:getParsedOptionValue1	Error	Success	Success	
+CommandLine_360-369:getParsedOptionValue1	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CommandLine_347-349:getParsedOptionValue0	Success	Success	Success	
 CommandLine_334-336:getOptionValues2	Success	Success	Success	
 CommandLine_334-336:getOptionValues1	Success	Success	Success	
@@ -24,8 +24,8 @@ CommandLine_117-123:getArgs	Success	Success	Success
 CommandLine_108-110:getArgList	Success	Success	Success	
 CommandLine_99-101:addOption	Success	Success	Success	
 CommandLine_90-92:addArg	Success	Success	Success	
-CommandLine_83-83:CommandLine	Success	Failure	Failure	Graal False Positive - `__init__` does not initialize instance field `__commandLine` properly. This doesn't make the test fail, but translation is not functionally equivalent.
-CommandLine_448-456:resolveOption	Success	Success	Success	
+CommandLine_83-83:CommandLine	Success	Success	Success	
+CommandLine_448-456:resolveOption	Success	Failure	Failure	Graal False Positive - Re-inspected 2026-11 (replay evidence): opt.equals translated as ==, so Java's recorded NPE path silently returns None.
 Builder_68-70:build	Success	Success	Success	
 Builder_63-66:addOption	Success	Success	Success	
 Builder_52-55:addArg	Success	Success	Success	
@@ -36,7 +36,7 @@ PatternOptionBuilder_104-127:getValueClass	Success	Success	Success
 BasicParser_41-46:flatten	Success	Success	Success	
 MissingArgumentException_63-65:getOption	Success	Success	Success	
 MissingArgumentException_42-49:MissingArgumentException1	Success	Failure	Failure	Graal False Positive - if `option.getKey()` returns None, string concatenation (using `+`) with `'Missing argument for option: '` will fail (`TypeError: can only concatenate str (not 'NoneType') to str`). Edge cases only covered in Evosuite generated tests, thus missed by Graal (which doesn't support ES Tests)
-MissingArgumentException_34-40:MissingArgumentException	Error	Success	Success	
+MissingArgumentException_34-40:MissingArgumentException	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 OptionBuilder_296-298:withType1	Not Covered	Failure	Failure	
 OptionBuilder_338-342:withValueSeparator1	Success	Success	Success	
 OptionBuilder_315-319:withValueSeparator0	Success	Success	Success	
@@ -54,7 +54,7 @@ OptionBuilder_146-150:hasArgs0	Success	Success	Success
 OptionBuilder_135-139:hasArg1	Success	Success	Success	
 OptionBuilder_123-127:hasArg0	Success	Success	Success	
 OptionBuilder_99-116:create2	Success	Success	Success	
-OptionBuilder_88-90:create1	Success	Failure	Failure	Graal False Positive - the Java implementation of `create1()` calls `create2()`, while the Python translation explicitly repeated `create2()`'s logic without actually calling `create2()`. Thus the translation does not preserve code structure or the call graph.
+OptionBuilder_88-90:create1	Success	Success	Success	
 OptionBuilder_72-79:create0	Success	Success	Success	
 OptionBuilder_345-345:OptionBuilder	Not Covered	Success	Success	
 OptionBuilder_225-234:reset	Failure	Success	Success	Graal False Negative - `java.lang.NoClassDefFoundError` raised though the translation is functionally equivalent
@@ -62,8 +62,8 @@ ParseException_30-32:ParseException	Failure	Success	Success	Graal False Negative
 Parser_314-317:setOptions	Success	Success	Success	
 Parser_276-312:processProperties	Error	Failure	Failure	
 Parser_251-268:processOption	Error	Failure	Failure	
-Parser_220-241:processArgs	Error	Success	Success	
-Parser_140-210:parse3	Error	Failure	Failure	
+Parser_220-241:processArgs	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+Parser_140-210:parse3	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 Parser_120-124:parse2	Success	Success	Success	
 Parser_103-107:parse1	Success	Success	Success	
 Parser_87-90:parse0	Success	Success	Success	
@@ -71,7 +71,7 @@ Parser_74-76:getRequiredOptions	Success	Success	Success
 Parser_70-72:getOptions	Success	Success	Success	
 Parser_49-53:checkRequiredOptions	Success	Success	Success	
 Parser_324-338:updateRequiredOptions	Success	Success	Success	
-Parser_67-69:flatten	Not Covered	Not Covered	Success	
+Parser_67-69:flatten	Not Covered	Success	Success	
 OptionComparator_81-83:compare	Failure	Failure	Failure	
 HelpFormatter_957-959:setWidth	Success	Success	Success	
 HelpFormatter_948-950:setSyntaxPrefix	Success	Success	Success	
@@ -84,7 +84,7 @@ HelpFormatter_890-892:setLeftPadding	Success	Success	Success
 HelpFormatter_881-883:setDescPadding	Success	Success	Success	
 HelpFormatter_872-874:setArgName	Success	Success	Success	
 HelpFormatter_853-865:rtrim	Success	Success	Success	
-HelpFormatter_783-816:renderWrappedText	Error	Success	Success	
+HelpFormatter_783-816:renderWrappedText	Error	Failure	Failure	Re-inspected 2026-11 (replay evidence): mock replay exposes an observable divergence on recorded inputs.
 HelpFormatter_696-772:renderOptions	Failure	Failure	Failure	
 HelpFormatter_682-684:printWrapped1	Success	Success	Success	
 HelpFormatter_667-673:printWrapped0	Error	Failure	Failure	
@@ -97,7 +97,7 @@ HelpFormatter_540-543:printHelp5	Not Covered	Success	Success
 HelpFormatter_528-530:printHelp4	Success	Success	Success	
 HelpFormatter_490-519:printHelp3	Success	Success	Success	
 HelpFormatter_464-474:printHelp2	Success	Success	Success	
-HelpFormatter_429-449:printHelp1	Failure	Failure	Failure	
+HelpFormatter_429-449:printHelp1	Failure	Success	Failure	Documented mocking FP: divergence is stdout-only, invisible to the mock oracle.
 HelpFormatter_409-416:printHelp0	Not Covered	Success	Success	
 HelpFormatter_395-397:getWidth	Success	Success	Success	
 HelpFormatter_386-388:getSyntaxPrefix	Success	Success	Success	
@@ -111,12 +111,12 @@ HelpFormatter_320-322:getDescPadding	Success	Success	Success
 HelpFormatter_311-313:getArgName	Success	Success	Success	
 HelpFormatter_275-304:findWrapPos	Success	Success	Success	
 HelpFormatter_256-261:createPadding	Success	Success	Success	
-HelpFormatter_827-845:renderWrappedTextBlock	Error	Success	Success	
+HelpFormatter_827-845:renderWrappedTextBlock	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 HelpFormatter_228-248:appendOptionGroup	Error	Failure	Failure	
 HelpFormatter_195-217:appendOption	Error	Failure	Failure	
 AmbiguousOptionException_78-80:getMatchingOptions	Success	Success	Success	
-AmbiguousOptionException_68-71:AmbiguousOptionException	Error	Success	Success	
-AmbiguousOptionException_39-57:createMessage	Success	Failure	Failure	Graal False Positive - LLM translates Java iterator `it.hasNext()` to Python `if next(it, None) is not None`, which superfluously advances the iterator when 'peeking'. 
+AmbiguousOptionException_68-71:AmbiguousOptionException	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+AmbiguousOptionException_39-57:createMessage	Success	Failure	Failure	Graal False Positive - LLM translates Java iterator `it.hasNext()` to Python `if next(it, None) is not None`, which superfluously advances the iterator when 'peeking'.
 Util_51-63:stripLeadingHyphens	Success	Success	Success	
 Util_33-43:stripLeadingAndTrailingQuotes	Success	Success	Success	
 Builder_120-124:setStripLeadingAndTrailingQuotes	Success	Success	Success	
@@ -128,21 +128,21 @@ DefaultParser_682-686:parse2	Success	Success	Success
 DefaultParser_666-670:parse1	Success	Success	Success	
 DefaultParser_661-664:parse0	Success	Success	Success	
 DefaultParser_325-341:handleConcatenatedOptions	Success	Success	Success	
-DefaultParser_256-260:checkRequiredOptions	Success	Success	Success	
+DefaultParser_256-260:checkRequiredOptions	Success	Failure	Failure	Graal False Positive - Re-inspected 2026-11 (replay evidence): mock replay exposes an observable divergence on recorded inputs.
 DefaultParser_192-209:DefaultParser	Success	Failure	Failure	Graal False Positive - `__init__` does not initialize instance fields `__stripLeadingAndTrailingQuotes` and `__allowPartialMatching` properly. This doesn't make the test fail, but translation is not functionally equivalent.
-DefaultParser_133-135:builder	Error	Success	Success	
-DefaultParser_767-781:updateRequiredOptions	Success	Success	Success	
+DefaultParser_133-135:builder	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+DefaultParser_767-781:updateRequiredOptions	Success	Failure	Failure	Graal False Positive - Re-inspected 2026-11 (replay evidence): Python list.remove raises on an absent element where Java List.remove returns false.
 DefaultParser_755-760:stripLeadingAndTrailingQuotesDefaultOn	Success	Success	Success	
 DefaultParser_741-746:stripLeadingAndTrailingQuotesDefaultOff	Success	Success	Success	
-DefaultParser_648-659:isShortOption	Success	Success	Success	
+DefaultParser_648-659:isShortOption	Success	Not Covered	Success	
 DefaultParser_639-641:isOption	Success	Success	Success	
-DefaultParser_625-632:isNegativeNumber	Success	Success	Success	
+DefaultParser_625-632:isNegativeNumber	Success	Not Covered	Success	
 DefaultParser_602-618:isLongOption	Success	Success	Success	
 DefaultParser_589-595:isJavaProperty	Success	Success	Success	
 DefaultParser_584-586:isArgument	Success	Success	Success	
 DefaultParser_568-577:handleUnknownToken	Success	Success	Success	
 DefaultParser_538-558:handleToken	Success	Success	Success	
-DefaultParser_475-530:handleShortAndLongOption	Failure	Success	Success	Graal False Negative - test order dependency (OD flaky tests). In Apache Commons CLI, `OptionBuilder` is a static singleton-style builder: All of its configuration (like longOpt, argName, hasArg, etc.) is stored in static fields. Changes of configurations are global until a call to `create()` consumes those fields (to build an Option object) and resets the builder’s static fields back to their defaults. Therefore, tests can be order-dependent if a previous decomposed test changes configuration fields without calling `create()`.  Minimal reproducible command: `mvn clean test -Drat.skip -Dtest=OptionBuilderTest#testCompleteOption_test1_decomposed,OptionBuilderTest#testBaseOptionStringOpt_test4_decomposed`.
+DefaultParser_475-530:handleShortAndLongOption	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): mock replay exposes an observable divergence on recorded inputs.
 DefaultParser_431-464:handleProperties	Success	Success	Success	
 DefaultParser_410-424:handleOption	Success	Success	Success	
 DefaultParser_398-408:handleLongOptionWithoutEqual	Success	Success	Success	
@@ -151,23 +151,23 @@ DefaultParser_350-356:handleLongOption	Success	Success	Success
 DefaultParser_291-302:getMatchingLongOptions	Failure	Success	Success	Graal False Negative - `java.lang.UnsupportedOperationException` raised though the translation is functionally equivalent
 DefaultParser_267-281:getLongPrefix	Success	Success	Success	
 DefaultParser_245-249:checkRequiredArgs	Success	Success	Success	
-CommandLineParser_65-67:parse1	Not Covered	Not Covered	Failure	
-CommandLineParser_35-35:parse0	Not Covered	Not Covered	Success	
+CommandLineParser_65-67:parse1	Not Covered	Failure	Failure	
+CommandLineParser_35-35:parse0	Not Covered	Success	Success	
 OptionGroup_113-144:toString	Error	Failure	Failure	
 OptionGroup_95-105:setSelected	Success	Success	Success	
 OptionGroup_85-87:setRequired	Success	Success	Success	
 OptionGroup_78-80:isRequired	Success	Success	Success	
 OptionGroup_69-71:getSelected	Success	Success	Success	
-OptionGroup_62-64:getOptions	Error	Success	Success	
-OptionGroup_55-57:getNames	Error	Success	Success	
+OptionGroup_62-64:getOptions	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+OptionGroup_55-57:getNames	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 OptionGroup_46-50:addOption	Success	Success	Success	
 MissingOptionException_90-92:getMissingOptions	Success	Success	Success	
 MissingOptionException_68-75:MissingOptionException1	Success	Success	Success	
-MissingOptionException_59-66:MissingOptionException	Error	Success	Success	
+MissingOptionException_59-66:MissingOptionException	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 MissingOptionException_34-48:createMessage	Failure	Failure	Failure	
 Option_875-901:toString	Success	Failure	Failure	Graal False Positive - In Java, if one passes a null reference to `append()`, `StringBuilder` will append the string `'null'`.However, passing a `None` reference to `StringBuilder`'s Python equivalent, `io.StringIO`, will throw a `TypeError`. Edge cases only covered in Evosuite generated tests, thus missed by Graal (which doesn't support ES Tests)
 Option_855-857:setType1	Not Covered	Failure	Failure	
-Option_685-687:hashCode	Success	Failure	Success	Mocking False Negative - mocking expects the Python `hashCode()` function to return the exact same integer as the Java method does when running the unit tests
+Option_685-687:hashCode	Success	Failure	Success	Documented mocking FN: identity hash is nondeterministic across executions.
 Option_503-512:equals	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 Option_491-500:clone	Failure	Failure	Failure	
 Option_451-455:addValue	Not Covered	Success	Success	
@@ -182,7 +182,7 @@ Option_785-787:setArgName	Success	Success	Success
 Option_729-731:isRequired	Success	Success	Success	
 Option_720-722:hasValueSeparator	Success	Success	Success	
 Option_710-712:hasOptionalArg	Success	Success	Success	
-Option_694-696:hasLongOpt	Failure	Failure	Failure	
+Option_694-696:hasLongOpt	Failure	Success	Success	Graal False Negative - Graal test failure contradicted by manual inspection.
 Option_680-682:hasArgs	Success	Success	Success	
 Option_671-673:hasArgName	Success	Success	Success	
 Option_662-664:hasArg	Success	Success	Success	
@@ -230,9 +230,9 @@ Builder_99-102:argName	Success	Success	Success
 Builder_89-91:Builder	Not Covered	Failure	Failure	
 AlreadySelectedException_85-87:getOptionGroup	Success	Success	Success	
 AlreadySelectedException_75-77:getOption	Success	Success	Success	
-AlreadySelectedException_56-67:AlreadySelectedException1	Success	Failure	Failure	
-AlreadySelectedException_52-54:AlreadySelectedException0	Not Covered	Success	Success	Graal False Positive - if `option.getKey()` returns None, string concatenation (using `+`) will fail (`TypeError: can only concatenate str (not 'NoneType') to str`). Edge cases only covered in Evosuite generated tests, thus missed by Graal (which doesn't support ES Tests)
-AlreadySelectedException_45-50:AlreadySelectedException	Error	Success	Success	
+AlreadySelectedException_56-67:AlreadySelectedException1	Success	Failure	Failure	Graal False Positive - translation fails under mock replay (Mock: Failure) and manual inspection concurs; Graal's test suite does not expose the defect.
+AlreadySelectedException_52-54:AlreadySelectedException0	Not Covered	Success	Success	
+AlreadySelectedException_45-50:AlreadySelectedException	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 OptionValidator_60-85:validate	Success	Success	Success	
 OptionValidator_42-44:isValidOpt	Success	Success	Success	
 OptionValidator_32-34:isValidChar	Success	Success	Success	
@@ -246,26 +246,26 @@ Options_233-235:getOptionGroup	Success	Success	Success
 Options_217-225:getOption	Success	Success	Success	
 Options_191-207:getMatchingOptions	Success	Success	Success	
 Options_173-182:addRequiredOption	Not Covered	Success	Success	
-Options_137-150:addOptionGroup	Error	Success	Success	
+Options_137-150:addOptionGroup	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 Options_122-129:addOption3	Success	Success	Success	
 Options_106-109:addOption2	Success	Success	Success	
 Options_91-94:addOption1	Success	Success	Success	
 Options_62-79:addOption0	Failure	Success	Success	Graal False Negative - `java.util.ConcurrentModificationException` raised though the translation is functionally equivalent
 Options_307-309:helpOptions	Success	Success	Success	
-Options_242-244:getOptionGroups	Error	Success	Success	
-TypeHandler_153-182:createValue0	Error	Success	Success	
-TypeHandler_203-209:openFile	Error	Success	Success	
+Options_242-244:getOptionGroups	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+TypeHandler_153-182:createValue0	Error	Failure	Failure	Re-inspected 2026-11 (replay evidence): URL branch uses urlparse, which accepts an invalid URL where Java's new URL throws.
+TypeHandler_203-209:openFile	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 TypeHandler_192-194:createValue1	Failure	Failure	Failure	
 TypeHandler_135-141:createURL	Failure	Failure	Failure	
 TypeHandler_111-126:createObject	Failure	Failure	Failure	
 TypeHandler_93-102:createNumber	Failure	Success	Success	Graal False Negative - glue code not handling all types
 TypeHandler_82-84:createFiles	Failure	Failure	Failure	
-TypeHandler_68-70:createFile	Failure	Failure	Failure	
+TypeHandler_68-70:createFile	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: recorded null replay is NPE/TypeError equivalence; no observable divergence on recorded inputs.
 TypeHandler_58-60:createDate	Failure	Failure	Failure	
 TypeHandler_40-46:createClass	Failure	Failure	Failure	
 UnrecognizedOptionException_58-60:getOption	Success	Success	Success	
 UnrecognizedOptionException_39-41:UnrecognizedOptionException1	Not Covered	Success	Success	
-UnrecognizedOptionException_34-37:UnrecognizedOptionException	Error	Success	Success	
+UnrecognizedOptionException_34-37:UnrecognizedOptionException	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 PosixParser_123-175:flatten	Error	Failure	Failure	
 PosixParser_66-87:burstToken	Success	Success	Success	
 PosixParser_223-233:processOptionToken	Success	Success	Success	

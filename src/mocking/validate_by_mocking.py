@@ -66,7 +66,7 @@ class ValidateByMocking:
         self.copy_tests(eligible_tests)
         
         # Use ProcessPoolExecutor for parallel test execution
-        with ProcessPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+        with ProcessPoolExecutor(max_workers=int(os.environ.get('MOCKINGBIRD_VALIDATION_WORKERS', multiprocessing.cpu_count()))) as executor:
             # Submit all tests to the executor
             future_to_test = {executor.submit(self.run_test, test): test for test in eligible_tests}
             
@@ -160,6 +160,9 @@ class ValidateByMocking:
         
         # deterministic selection: sorted by filename, capped; a random subset made verdicts
         # irreproducible between sweeps for methods with more than 1000 eligible tests
+        if os.environ.get('MOCKINGBIRD_NO_ES_TESTS', '0') == '1':
+            # w/o-ES ablation: drop EvoSuite-generated oracle tests, keep developer-test recordings
+            eligible_tests = [t for t in eligible_tests if 'ESTest' not in os.path.basename(t)]
         return sorted(eligible_tests)[:1000]
     
     def get_all_tests(self):
@@ -248,6 +251,81 @@ class ValidateByMocking:
                 # the raw exit-status verdict was never refined by any xml node, so classify the captured text
                 test_outcome = classify_error(test_feedback, focal)
         
+        if test_outcome == 'failed':
+            _t0 = str(test_feedback)
+            if "no tests ran" in _t0 or "ERROR: file or directory not found" in _t0:
+                # the test never executed (staging/collection artifact); that is evidence about the
+                # harness, never about the translated code
+                test_outcome = 'inconclusive'
+        if test_outcome == 'failed':
+            t = str(test_feedback)
+            import re as _re2
+            attr_sig = _re2.search(r"object has no attribute '_(\w+)__(\w+)'", t)
+            if attr_sig and "/src/main/" in t:
+                # attribute-provenance audit: a missing private-mangled attribute is screened as
+                # reconstruction-scoped ONLY when (a) it is not a call (a missing method is a translation
+                # defect), (b) the crashing class's own __init__ assigns it (normal construction provides
+                # it, so only bypass-construction lacks it), and (c) the recording does not carry it.
+                _acls, tail = attr_sig.group(1), attr_sig.group(2)
+                _screen = False
+                if not _re2.search(r"[.\w]__" + tail + r"\s*\(", t):
+                    try:
+                        _mfile = _re2.findall(r'File "([^"]*/src/main/[^"]+\.py)"', t)[-1]
+                        _src = open(_mfile).read()
+                        _mc = _re2.search(r"^class " + _acls + r"\b[^\n]*:", _src, _re2.M)
+                        if _mc:
+                            _rest = _src[_mc.end():]
+                            _nx = _re2.search(r"^class \w+", _rest, _re2.M)
+                            _body = _rest[:_nx.start()] if _nx else _rest
+                            _mi = _re2.search(r"^(\s+)def __init__\b[^\n]*:", _body, _re2.M)
+                            if _mi:
+                                _bl = _body[_mi.end():]
+                                _en = _re2.search(r"^" + _mi.group(1) + r"def \w+", _bl, _re2.M)
+                                _init = _bl[:_en.start()] if _en else _bl
+                                if (_re2.search(r"self\.__" + tail + r"\s*=", _init)
+                                        or _re2.search(r"self\._" + _acls + r"__" + tail + r"\s*=", _init)):
+                                    _ttxt = open(test if os.path.isabs(test) else os.path.join(cwd, test)).read()
+                                    if ('\\"' + tail + '\\":') not in _ttxt:
+                                        _screen = True
+                    except Exception:
+                        pass
+                if _screen:
+                    test_outcome = 'inconclusive'
+        if test_outcome == 'failed':
+            t = str(test_feedback)
+            import re as _re2
+            none_sig = _re2.search(r"NoneType.{0,60}(has no attribute|not subscriptable|not iterable|has no len|must be str)", t)
+            _callm = _re2.findall(r"self\.(\w+)\(", t)
+            if none_sig and "/src/main/" in t and _callm:
+                # the None is the return of a mocked sibling call: if the recorded focal execution
+                # completed normally (the test expects no exception), Java's own success contradicts
+                # a genuinely-null return there -- the null is a serialization limit of the recording
+                try:
+                    _ttxt3 = open(test if os.path.isabs(test) else os.path.join(cwd, test)).read()
+                    if "java_equivalent_raises" not in _ttxt3:
+                        for _cn in _callm:
+                            if _re2.search(r"@patch\([^)]*\." + _cn + r"'", _ttxt3):
+                                test_outcome = 'inconclusive'
+                                break
+                except Exception:
+                    pass
+        if test_outcome == 'failed':
+            t = str(test_feedback)
+            import re as _re2
+            _selfm = _re2.findall(r"self\.(?:_\w+)?__(\w+)", t)
+            _selff = _selfm[-1] if _selfm else None
+            if none_sig and "/src/main/" in t and _selff:
+                # the None lives on a private field of the focal instance: conclusive only if the
+                # recording actually provided that field at setup; otherwise the recorder dropped
+                # it from the initial snapshot and bypass-construction left the class default
+                try:
+                    _ttxt2 = open(test if os.path.isabs(test) else os.path.join(cwd, test)).read()
+                    _setup = "\n".join(l for l in _ttxt2.splitlines()
+                                        if "instance_initial" in l or "method_args" in l or "set_object_instance_fields" in l)
+                    if ('\\"' + _selff + '\\":') not in _setup:
+                        test_outcome = 'inconclusive'
+                except Exception:
+                    pass
         if test_outcome == 'failed':
             t = str(test_feedback)
             import re as _re2

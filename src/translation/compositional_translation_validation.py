@@ -410,7 +410,7 @@ def translate(fragment, args, processed_fragments, budget={}, feedback=None, rec
             interaction_history.append(initial_interaction)
 
         ############################ <TRANSLATION> ############################
-        prompt_gen = PromptGenerator(is_feedback=True if feedback else False, args=args, fragment_details=fragment, feedback=feedback, use_icl_pool=True)
+        prompt_gen = PromptGenerator(is_feedback=True if feedback else False, args=args, fragment_details=fragment, feedback=feedback, use_icl_pool=(os.environ.get('MOCKINGBIRD_NO_ICL', '0') != '1'))
         prompt = prompt_gen.generate_prompt()
 
         if fragment['fragment_type'] == 'method' and not prompt_gen.requires_translation:
@@ -463,7 +463,10 @@ def translate(fragment, args, processed_fragments, budget={}, feedback=None, rec
             total_input_tokens = model.tokenize(messages)
             print(f'[fit] dropped earlier turns: {total_input_tokens} tokens', flush=True)
         if total_input_tokens >= token_limit:
-            for feedback_chars, with_icl in ((4000, True), (1500, True), (1500, False)):
+            _icl_choices = ((4000, True), (1500, True), (1500, False))
+            if os.environ.get('MOCKINGBIRD_NO_ICL', '0') == '1':
+                _icl_choices = ((4000, False), (1500, False))
+            for feedback_chars, with_icl in _icl_choices:
                 if not feedback and with_icl:
                     continue
                 prompt_gen = PromptGenerator(is_feedback=True if feedback else False, args=args, fragment_details=fragment,

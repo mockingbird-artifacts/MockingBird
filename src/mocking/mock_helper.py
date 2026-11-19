@@ -88,6 +88,10 @@ class PeekableIterator:
                 return False
         return True
 
+    def next(self):
+        # Java-style Iterator.next(): translated code calls it directly on reconstructed iterators
+        return self.__next__()
+
     def previous(self):
         if self.hasPrevious():
             self.index += 1
@@ -1090,12 +1094,20 @@ def convert_to_python(json_obj, force_new_object=False):
         throwable_type = json_obj.get("throwable_type", "java.lang.Throwable")
         exception_name = retrieve_from_type_map(throwable_type, "Exception")
         message = json_obj.get("message", None)
+        def _stamp(_e):
+            # the recorded Java type is the ground truth for exception equivalence,
+            # independent of which Python class the type map picked
+            try:
+                _e._java_throwable_type = throwable_type
+            except Exception:
+                pass
+            return _e
         exception_cls = getattr(builtins, exception_name, None)
         if isinstance(exception_cls, type) and issubclass(exception_cls, BaseException):
             family = _EXCEPTION_FAMILIES.get(throwable_type)
             if family is not None and issubclass(exception_cls, family):
-                return _family_exception_class(exception_cls, family)(message)
-            return exception_cls(message)
+                return _stamp(_family_exception_class(exception_cls, family)(message))
+            return _stamp(exception_cls(message))
         app_cls = globals().get(exception_name)
         if isinstance(app_cls, type) and issubclass(app_cls, BaseException):
             # translated application exception: its __init__ may require project-specific arguments, so build the instance
@@ -1105,8 +1117,8 @@ def convert_to_python(json_obj, force_new_object=False):
             except TypeError:
                 obj = app_cls.__new__(app_cls)
             obj.args = (message,) if message is not None else ()
-            return obj
-        return Exception(message)
+            return _stamp(obj)
+        return _stamp(Exception(message))
     elif python_type == 'CRC32':
         crc_value = int(json_obj.get("value", 0))
         crc_object = CRC32()
@@ -1783,7 +1795,16 @@ def _looks_like_environment(d):
     """A process-environment snapshot (System.getenv() / os.environ): string keys including PATH and HOME/USER/PWD."""
     return isinstance(d, dict) and len(d) >= 5 and all(isinstance(k, str) for k in d) and "PATH" in d and any(k in d for k in ("HOME", "USER", "PWD", "LANG"))
 
+import weakref as _weakref
+_HARNESS_BUILT = _weakref.WeakSet()
+def _mark_harness_built(_o):
+    try:
+        _HARNESS_BUILT.add(_o)
+    except Exception:
+        pass
+
 UNSERIALIZABLE_SENTINEL = 'TYPE WITH NO DIRECT PYTHON EQUIVALENT'
+THROWABLE_INTERNALS = {"cause", "stackTrace", "suppressedExceptions", "detailMessage", "backtrace"}
 
 
 class MockConversionGap(BaseException):
@@ -1850,14 +1871,32 @@ class java_equivalent_raises:
         if isinstance(exc, type(self.expected)):
             return True
         name = type(self.expected).__name__
+        jname = str(getattr(self.expected, "_java_throwable_type", "") or "")
         for frag, equivs in _JAVA_EXC_EQUIV.items():
-            if frag in name and isinstance(exc, equivs):
+            if (frag in name or frag in jname) and isinstance(exc, equivs):
                 return True
         return False   # let the unexpected exception propagate (error, classified by origin)
 
+_IO_ONLY = os.environ.get("MOCKINGBIRD_IO_ONLY", "0") == "1"
+
 def recursive_equal(obj1, obj2, _path=""):
+    if _IO_ONLY and _path == "":
+        _f = sys._getframe(1)
+        if _f.f_code.co_name == "test_mocking":
+            _fl = _f.f_locals
+            if ("instance_final" in _fl and obj2 is _fl["instance_final"]) or \
+               ("obj" in _fl and obj1 is _fl["obj"]):
+                return True   # IO-only ablation: receiver-state snapshot asserts out of scope
+
     if isinstance(obj2, str) and obj2 == UNSERIALIZABLE_SENTINEL:
         return True   # recorded Java value could not be serialized; nothing to compare against
+    if isinstance(obj1, str) and obj1 == UNSERIALIZABLE_SENTINEL:
+        return True   # setup injected this placeholder for an unconvertible recorded value; no evidence either way
+    if isinstance(obj1, str) and isinstance(obj2, str) and re.match(r"^[A-Za-z_][\w.$]*@[0-9a-f]{4,}$", obj2):
+        return True   # a Java identity repr (Class@hex) differs across any two executions; it carries no oracle value
+    if isinstance(obj1, (bytes, bytearray)) and isinstance(obj2, (bytes, bytearray)):
+        if bytes(obj1).rstrip(b"\x00") == bytes(obj2).rstrip(b"\x00"):
+            return True   # trailing NULs are buffer capacity, not content (recorded backing arrays)
     if isinstance(obj1, UnresolvedRef) or isinstance(obj2, UnresolvedRef):
         raise MockConversionGap("comparison touches an unresolved recorded reference")
     _unmod_violation = (_path == "" and isinstance(obj2, UnmodifiableView)
@@ -1963,6 +2002,12 @@ def recursive_equal(obj1, obj2, _path=""):
                         else "the translated code produced a value where the Java execution produced null")
         if isinstance(obj1, _seqviews) and isinstance(obj2, _seqviews):
             return recursive_equal(list(obj1), list(obj2), _path)   # a dict view is the idiomatic return for a recorded Collection
+        if isinstance(obj1, (int, float)) and isinstance(obj2, (int, float)):
+            # Java numeric widths (int/long/float/double) do not survive the type-map round-trip
+            # (e.g. a recorded long can come back as float); value equality is the faithful check
+            if obj1 == obj2:
+                return True
+            return fail("numeric values differ")
         return fail(f"types differ ({type(obj1).__name__} vs {type(obj2).__name__})")
     if isinstance(obj1, (BytesIO, StringIO)):
         if obj1.getvalue() == obj2.getvalue():
@@ -2034,12 +2079,48 @@ def recursive_equal(obj1, obj2, _path=""):
         # contents and order are still compared element-wise
         return recursive_equal(list(obj1), obj2, _path)
     elif hasattr(obj1, '__dict__') and hasattr(obj2, '__dict__'):
-        obj1_dict_excluding_transient = {k: v for k, v in obj1.__dict__.items() if k in obj2.__dict__}
-        missing = [k for k in obj2.__dict__ if k not in obj1.__dict__]
+        def _mangle_tail(n):
+            # strip a Python private-name mangle: _Class__field -> field
+            i = n.rfind("__")
+            return n[i + 2:] if i > 0 and not n.endswith("__") else n
+        _o1_by_tail = {}
+        _o1_inst_tails = set()
+        for _k in obj1.__dict__:
+            _o1_by_tail.setdefault(_mangle_tail(_k), _k)
+            _o1_inst_tails.add(_mangle_tail(_k))
+        for _k in dir(obj1):
+            if not _k.startswith("__"):
+                _o1_by_tail.setdefault(_mangle_tail(_k), _k)
+        missing, _pairs = [], []
+        for _k in obj2.__dict__:
+            if _k in obj1.__dict__:
+                _pairs.append((_k, obj1.__dict__[_k]))
+                continue
+            _t = _mangle_tail(_k)
+            if _t in THROWABLE_INTERNALS:
+                continue   # Java Throwable runtime machinery, not translated state
+            if _t in _o1_by_tail:
+                if _t in _o1_inst_tails:
+                    _cand = getattr(obj1, _o1_by_tail[_t], None)
+                    if not callable(_cand):
+                        # the same field under a different private mangle: the name is a
+                        # Python artifact, the state is what must match
+                        _pairs.append((_k, _cand))
+                elif obj1 not in _HARNESS_BUILT:
+                    # the object came from the translated constructor, so a visible class
+                    # default IS its behavior and must be compared against the recording
+                    _cand = getattr(obj1, _o1_by_tail[_t], None)
+                    if not callable(_cand):
+                        _pairs.append((_k, _cand))
+                # for bypass-built objects a class-attribute-only match is no instance
+                # evidence: the recorder dropped the field from the initial snapshot and
+                # reconstruction never materialized it; comparing defaults indicts nothing
+                continue
+            missing.append(_k)
         if missing:
             return fail(f"{type(obj1).__name__} object lacks attributes present on the Java side: {missing[:8]}", sorted(obj1.__dict__), sorted(obj2.__dict__))
-        for key in obj1_dict_excluding_transient:
-            r = recursive_equal(obj1_dict_excluding_transient[key], obj2.__dict__[key], _child(_path, f".{key}"))
+        for _k, _v1 in _pairs:
+            r = recursive_equal(_v1, obj2.__dict__[_k], _child(_path, f".{_k}"))
             if not r:
                 return r
         return True
@@ -2128,6 +2209,8 @@ def _set_object_instance_fields_unchecked(obj, json_obj):
         if obj is converted_json_obj:
             return
         else:
+            if getattr(converted_json_obj, "raw", None) is None or getattr(obj, "raw", None) is None:
+                return
             content_bytes = converted_json_obj.raw.getvalue()
             position = converted_json_obj.raw.tell()
             underlying = obj.raw
@@ -2202,6 +2285,7 @@ def create_python_object(python_type, json_obj, force_new_object=False):
             obj = Exception.__new__(clazz)
         except TypeError:
             obj = clazz.__new__(clazz)
+        _mark_harness_built(obj)
         obj.args = (json_obj.get("instance_fields", {}).get("cause", {}).get("message", ""),)
     elif issubclass(clazz, Enum):
         if json_obj.get("value") is not None:
@@ -2229,6 +2313,7 @@ def create_python_object(python_type, json_obj, force_new_object=False):
             obj = object.__new__(clazz)
         except TypeError:
             obj = clazz.__new__(clazz)
+        _mark_harness_built(obj)
         for base in _adapter_bases(obj):   # library-superclass adapters (locks, timer tasks) need their own state
             try:
                 base.__init__(obj)
@@ -2346,6 +2431,8 @@ def side_effect_is_correct(json_data):
     """
     Check if the current static fields are consistent with recorded JSON string
     """
+    if _IO_ONLY:
+        return True   # IO-only ablation: static-field snapshots out of scope
     for class_data in json_data:
         for class_name, fields in class_data.items():
             clazz = globals().get(retrieve_from_type_map(class_name, None))

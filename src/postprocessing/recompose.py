@@ -185,6 +185,8 @@ def main(args):
 
                 for method in static_methods:
                     field_translation = field_translation.replace(f'self.{method}', method)
+                    if '=' not in field_translation:
+                        continue
                     if f'{method}(' in field_translation.split('=')[1].strip() or \
                         f'({method}' in field_translation.split('=')[1].strip() or \
                         f'{method})' in field_translation.split('=')[1].strip() or \
@@ -312,9 +314,11 @@ def main(args):
                             if line.strip().startswith('from '):
                                 import_lines.append(line)
                             else:
-                                assignment = line.split('=')[1].strip()
-                                if assignment in [x.split(':')[1].strip() for x in static_fields]:
-                                    line = line.replace(assignment, f'{class_name}.{assignment}')
+                                _parts = line.split('=')
+                                if len(_parts) > 1:
+                                    assignment = _parts[1].strip()
+                                    if assignment in [x.split(':')[1].strip() for x in static_fields]:
+                                        line = line.replace(assignment, f'{class_name}.{assignment}')
                                 translation_lines.append(line)
                         
                         partial_field_translation = field.split(':')[1].strip()

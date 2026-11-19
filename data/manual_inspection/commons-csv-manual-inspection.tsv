@@ -1,10 +1,10 @@
 AMF	Graal	Mock	Manual Inspection	Note
-CSVRecord_321-329:toString	Not Covered	Not Covered	Success	
-CSVRecord_245-247:iterator	Error	Success	Success	
+CSVRecord_321-329:toString	Not Covered	Failure	Failure	Re-inspected 2026-11 (replay evidence): prints 'None' where Java prints 'null'.
+CSVRecord_245-247:iterator	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVRecord_337-339:values	Failure	Success	Success	Graal False Negative - `java.lang.UnsupportedOperationException` raised though the translation is functionally equivalent
 CSVRecord_309-311:toMap	Failure	Failure	Failure	
-CSVRecord_298-300:toList	Error	Success	Success	
-CSVRecord_286-288:stream	Error	Success	Success	
+CSVRecord_298-300:toList	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+CSVRecord_286-288:stream	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVRecord_276-278:size	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVRecord_257-269:putIn	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVRecord_235-237:isSet1	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
@@ -17,7 +17,7 @@ CSVRecord_166-168:getParser	Failure	Success	Success	Graal False Negative - `java
 CSVRecord_149-151:getComment	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVRecord_138-140:getCharacterPosition	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVRecord_109-130:get2	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
-CSVRecord_86-88:get1	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
+CSVRecord_86-88:get1	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): negative index returns an element silently where Java throws ArrayIndexOutOfBounds.
 CSVRecord_76-78:get0	Not Covered	Not Covered	Success	
 CSVRecord_153-155:getHeaderMapRaw	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVRecord_57-68:CSVRecord	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
@@ -26,14 +26,14 @@ IOUtils_128-130:rethrow	Success	Success	Success
 IOUtils_108-117:copyLarge1	Success	Failure	Failure	Graal False Positive - First, read(buffer) in Python does not exist like it does in Java. In Python, `TextIOWrapper.read(size)` returns a string of length ≤ `size`, not a buffer filled in-place. It also causes bugs when EOF handling: Python `read(size)` returns `''` at EOF, not `-1`. So `IOUtils.__EOF` logic doesn’t match Python’s behavior.
 IOUtils_91-93:copyLarge0	Success	Success	Success	
 IOUtils_64-74:copy1	Success	Failure	Failure	Graal False Positive - First, read(buffer) in Python does not exist like it does in Java. In Python, `TextIOWrapper.read(size)` returns a string of length ≤ `size`, not a buffer filled in-place. It also causes bugs when EOF handling: Python `read(size)` returns `''` at EOF, not `-1`. So `IOUtils.__EOF` logic doesn’t match Python’s behavior.
-IOUtils_47-49:copy0	Success	Failure	Failure	Graal False Positive - In the Python translation, the equivalence of a `CharBuffer` is just a Python list of `None`s. But this raises bugs in edge cases, since unlike `CharBuffer`, Python’s `list` has no concept of position/limit, and cannot be passed directly to `read()` (Python’s `TextIOWrapper.readinto()` requires a `bytearray`/`memoryview`.
+IOUtils_47-49:copy0	Success	Success	Success	Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 IOUtils_133-133:IOUtils	Not Covered	Not Covered	Success	
 Lexer_85-87:close	Success	Success	Success	
 Lexer_386-423:parseSimpleToken	Error	Failure	Failure	
-Lexer_310-366:parseEncapsulatedToken	Error	Success	Success	
+Lexer_310-366:parseEncapsulatedToken	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 Lexer_209-211:mapNullToDisabled	Success	Success	Success	
 Lexer_190-192:isMetaChar	Success	Success	Success	
-Lexer_488-496:trimTrailingSpaces	Failure	Not Covered	Failure	
+Lexer_488-496:trimTrailingSpaces	Failure	Failure	Failure	
 Lexer_459-486:readEscape	Failure	Failure	Failure	
 Lexer_431-447:readEndOfLine	Success	Success	Success	
 Lexer_223-285:nextToken	Error	Failure	Failure	
@@ -50,21 +50,21 @@ Lexer_103-105:getCurrentLineNumber	Failure	Failure	Failure
 Lexer_94-96:getCharacterPosition	Success	Success	Success	
 Lexer_67-77:Lexer	Error	Failure	Failure	
 CSVPrinter_136-140:flush	Error	Failure	Failure	
-CSVPrinter_106-108:close	Error	Success	Success	
+CSVPrinter_106-108:close	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVPrinter_365-367:printRecords1	Success	Success	Success	
-CSVPrinter_327-331:printRecords0	Success	Success	Success	
+CSVPrinter_327-331:printRecords0	Success	Failure	Failure	Graal False Positive - Re-inspected 2026-11 (replay evidence): iterates a CSVParser, which is not Python-iterable.
 CSVPrinter_273-283:printRecord2	Success	Failure	Failure	Graal False Positive - the method shall call the repository level `print_()` function (with underscore to escape Python `print()` function), not `print()`
-CSVPrinter_257-259:printRecord1	Error	Success	Success	
-CSVPrinter_239-244:printRecord0	Error	Success	Success	
+CSVPrinter_257-259:printRecord1	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+CSVPrinter_239-244:printRecord0	Error	Failure	Failure	Re-inspected 2026-11 (replay evidence): iterates a CSVRecord, which is not Python-iterable.
 CSVPrinter_223-226:println	Error	Failure	Failure	
 CSVPrinter_179-206:printComment	Error	Failure	Failure	
 CSVPrinter_158-161:print	Error	Failure	Failure	
 CSVPrinter_147-149:getOut	Not Covered	Success	Success	
-CSVPrinter_121-128:close1	Error	Success	Success	
+CSVPrinter_121-128:close1	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVPrinter_110-112:close0	Not Covered	Success	Success	
 CSVPrinter_88-103:CSVPrinter	Error	Failure	Failure	
-CSVPrinter_285-293:printRecordObject	Success	Failure	Failure	Graal False Positive - LLM superfluously translates `value` to `[value]`
-Builder_265-271:setAllowDuplicateHeaderNames	Not Covered	Not Covered	Success	
+CSVPrinter_285-293:printRecordObject	Success	Success	Success	Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
+Builder_265-271:setAllowDuplicateHeaderNames	Not Covered	Success	Success	
 Builder_672-675:setTrim	Success	Success	Success	
 Builder_661-664:setTrailingDelimiter	Success	Success	Success	
 Builder_650-653:setSkipHeaderRecord	Success	Success	Success	
@@ -73,17 +73,17 @@ Builder_625-628:setRecordSeparator0	Success	Success	Success
 Builder_611-614:setQuoteMode	Success	Success	Success	
 Builder_597-603:setQuote1	Error	Failure	Failure	
 Builder_586-589:setQuote0	Failure	Failure	Failure	
-Builder_574-578:setNullString	Not Covered	Failure	Failure	
+Builder_574-578:setNullString	Not Covered	Not Covered	Failure	
 Builder_554-557:setIgnoreSurroundingSpaces	Success	Success	Success	
 Builder_541-544:setIgnoreHeaderCase	Success	Success	Success	
 Builder_528-531:setIgnoreEmptyLines	Success	Success	Success	
 Builder_514-517:setHeaderComments1	Not Covered	Not Covered	Success	
 Builder_497-500:setHeaderComments0	Failure	Success	Success	Graal False Negative - class casting error though translation is fully functionally equivalent
 Builder_390-396:setEscape1	Error	Failure	Failure	
-Builder_378-381:setEscape0	Not Covered	Failure	Failure	
+Builder_378-381:setEscape0	Not Covered	Not Covered	Failure	
 Builder_365-369:setDuplicateHeaderMode	Success	Success	Success	
 Builder_347-356:setDelimiter1	Error	Failure	Failure	
-Builder_337-339:setDelimiter0	Not Covered	Failure	Failure	
+Builder_337-339:setDelimiter0	Not Covered	Not Covered	Failure	
 Builder_322-329:setCommentMarker1	Error	Failure	Failure	
 Builder_308-311:setCommentMarker0	Failure	Failure	Failure	
 Builder_294-297:setAutoFlush	Success	Success	Success	
@@ -94,7 +94,7 @@ Builder_171-173:create0	Success	Success	Success
 Builder_223-243:Builder	Not Covered	Failure	Failure	
 CSVFormat_2915-2917:withTrim1	Success	Success	Success	
 CSVFormat_2901-2903:withTrim0	Success	Success	Success	
-CSVFormat_2888-2890:withTrailingDelimiter1	Success	Not Covered	Success	
+CSVFormat_2888-2890:withTrailingDelimiter1	Success	Success	Success	
 CSVFormat_2874-2876:withTrailingDelimiter0	Success	Success	Success	
 CSVFormat_2861-2863:withSystemRecordSeparator	Success	Success	Success	
 CSVFormat_2843-2845:withSkipHeaderRecord1	Success	Success	Success	
@@ -107,7 +107,7 @@ CSVFormat_2753-2755:withQuote0	Success	Success	Success
 CSVFormat_2739-2741:withNullString	Failure	Failure	Failure	
 CSVFormat_2718-2720:withIgnoreSurroundingSpaces1	Success	Success	Success	
 CSVFormat_2704-2706:withIgnoreSurroundingSpaces0	Success	Success	Success	
-CSVFormat_2688-2690:withIgnoreHeaderCase1	Success	Not Covered	Success	
+CSVFormat_2688-2690:withIgnoreHeaderCase1	Success	Success	Success	
 CSVFormat_2674-2676:withIgnoreHeaderCase0	Success	Success	Success	
 CSVFormat_2660-2662:withIgnoreEmptyLines1	Success	Success	Success	
 CSVFormat_2645-2647:withIgnoreEmptyLines0	Success	Success	Success	
@@ -117,29 +117,29 @@ CSVFormat_2479-2481:withEscape0	Success	Success	Success
 CSVFormat_2464-2466:withDelimiter	Success	Success	Success	
 CSVFormat_2450-2452:withCommentMarker1	Failure	Failure	Failure	
 CSVFormat_2433-2435:withCommentMarker0	Failure	Failure	Failure	
-CSVFormat_2416-2418:withAutoFlush	Success	Not Covered	Success	
-CSVFormat_2403-2405:withAllowMissingColumnNames1	Success	Not Covered	Success	
-CSVFormat_2387-2389:withAllowMissingColumnNames0	Not Covered	Not Covered	Success	
-CSVFormat_2367-2373:withAllowDuplicateHeaderNames1	Success	Not Covered	Success	
-CSVFormat_2353-2355:withAllowDuplicateHeaderNames0	Not Covered	Not Covered	Success	
+CSVFormat_2416-2418:withAutoFlush	Success	Success	Success	
+CSVFormat_2403-2405:withAllowMissingColumnNames1	Success	Success	Success	
+CSVFormat_2387-2389:withAllowMissingColumnNames0	Not Covered	Success	Success	
+CSVFormat_2367-2373:withAllowDuplicateHeaderNames1	Success	Success	Success	
+CSVFormat_2353-2355:withAllowDuplicateHeaderNames0	Not Covered	Success	Success	
 CSVFormat_2218-2264:toString	Failure	Failure	Failure	
-CSVFormat_1899-1901:print4	Success	Failure	Failure	Graal False Positive - in `io.open()`, the LLM translation does not set `newline=''` option to disable newline translation, so printer may produce unexpected extra carriage returns ('\r\r\n').
+CSVFormat_1899-1901:print4	Success	Success	Success	Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVFormat_1827-1829:print1	Not Covered	Not Covered	Failure	
 CSVFormat_1694-1718:hashCode	Failure	Failure	Failure	
-CSVFormat_1537-1539:getDelimiter	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
+CSVFormat_1537-1539:getDelimiter	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): returns the string where Java's charAt(0) throws on the recorded empty delimiter.
 CSVFormat_1497-1499:getAllowDuplicateHeaderNames	Success	Success	Success	
 CSVFormat_1439-1466:equals	Success	Success	Success	
-CSVFormat_1143-1145:clone	Error	Success	Success	
+CSVFormat_1143-1145:clone	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVFormat_1961-1967:printRecord	Failure	Success	Success	Graal False Negative - `java.lang.ClassCastException` raised though the translation is functionally equivalent
-CSVFormat_1939-1946:println	Error	Success	Success	
+CSVFormat_1939-1946:println	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVFormat_1928-1930:printer	Not Covered	Success	Success	
 CSVFormat_1842-1863:print2	Error	Failure	Failure	
 CSVFormat_1811-1813:print0	Success	Success	Success	
 CSVFormat_1798-1800:parse	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
-CSVFormat_1785-1787:isQuoteCharacterSet	Failure	Failure	Failure	
-CSVFormat_1776-1778:isNullStringSet	Failure	Failure	Failure	
-CSVFormat_1767-1769:isEscapeCharacterSet	Failure	Failure	Failure	
-CSVFormat_1727-1729:isCommentMarkerSet	Failure	Failure	Failure	
+CSVFormat_1785-1787:isQuoteCharacterSet	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
+CSVFormat_1776-1778:isNullStringSet	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
+CSVFormat_1767-1769:isEscapeCharacterSet	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
+CSVFormat_1727-1729:isCommentMarkerSet	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVFormat_1689-1691:getTrim	Success	Success	Success	
 CSVFormat_1679-1681:getTrailingDelimiter	Success	Success	Success	
 CSVFormat_1669-1671:getSkipHeaderRecord	Success	Success	Success	
@@ -158,14 +158,14 @@ CSVFormat_1547-1549:getDelimiterString	Success	Success	Success
 CSVFormat_1526-1528:getCommentMarker	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVFormat_1517-1519:getAutoFlush	Not Covered	Success	Success	
 CSVFormat_1507-1509:getAllowMissingColumnNames	Success	Success	Success	
-CSVFormat_1474-1487:format	Failure	Success	Success	Graal False Negative - `java.lang.UnsupportedOperationException` raised though the translation is functionally equivalent
+CSVFormat_1474-1487:format	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): formatted output content mismatch on recorded inputs.
 CSVFormat_1425-1427:builder	Success	Success	Success	
 CSVFormat_1317-1383:CSVFormat	Error	Failure	Failure	
-CSVFormat_1274-1276:valueOf	Failure	Failure	Failure	
+CSVFormat_1274-1276:valueOf	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVFormat_1250-1265:trim0	Failure	Failure	Failure	
 CSVFormat_1241-1248:toStringArray	Success	Success	Success	
 CSVFormat_1217-1239:newFormat	Failure	Success	Success	Graal False Negative - `org.opentest4j.AssertionFailedError` raised though the translation is functionally equivalent
-CSVFormat_1168-1170:isBlank	Not Covered	Not Covered	Success	
+CSVFormat_1168-1170:isBlank	Not Covered	Success	Success	
 CSVFormat_2281-2342:validate	Success	Failure	Failure	Graal False Positive - several branch translations are not correct - covered by Evosuite tests
 CSVFormat_2179-2215:printWithQuotes1	Error	Failure	Failure	
 CSVFormat_2076-2170:printWithQuotes0	Error	Failure	Failure	
@@ -174,7 +174,7 @@ CSVFormat_1972-2015:printWithEscapes0	Error	Failure	Failure
 CSVFormat_1903-1917:print5	Failure	Failure	Failure	
 CSVFormat_1865-1885:print3	Error	Failure	Failure	
 CSVFormat_1741-1760:isDelimiter	Success	Success	Success	
-CSVFormat_1416-1418:append1	Error	Success	Success	
+CSVFormat_1416-1418:append1	Error	Failure	Failure	Re-inspected 2026-11 (replay evidence): read-only buffer contract lost: appends where Java throws ReadOnlyBufferException.
 CSVFormat_1412-1414:append0	Error	Failure	Failure	
 CSVFormat_1198-1200:isTrimChar1	Failure	Failure	Failure	
 CSVFormat_1193-1195:isTrimChar0	Success	Success	Success	
@@ -185,37 +185,37 @@ CSVFormat_1154-1156:contains	Success	Success	Success
 CSVFormat_2266-2268:trim1	Success	Success	Success	
 CSVFormat_1434-1436:copy	Failure	Failure	Failure	
 Predefined_761-763:getFormat	Error	Failure	Failure	
-Predefined_752-754:Predefined	Error	Not Covered	Success	
-CSVParser_689-691:iterator	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
+Predefined_752-754:Predefined	Error	Not Covered	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+CSVParser_689-691:iterator	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): returns None where Java returns the iterator object.
 CSVParser_413-417:close	Success	Success	Success	
-CSVParser_313-320:parse5	Error	Failure	Failure	
+CSVParser_313-320:parse5	Error	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVParser_256-261:parse2	Error	Failure	Failure	
 CSVParser_235-241:parse1	Error	Failure	Failure	
 CSVParser_399-405:addRecordValue	Failure	Success	Success	Graal False Negative - `AttributeError` raised though the translation is functionally equivalent
-CSVParser_763-766:stream	Failure	Not Covered	Success	Graal False Negative - `TypeError` raised though the translation is functionally equivalent
+CSVParser_763-766:stream	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): iter(self.iterator()) crashes: translated CSVRecordIterator is not Python-iterable.
 CSVParser_658-660:isClosed	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
-CSVParser_649-651:hasTrailerComment	Not Covered	Failure	Failure	
-CSVParser_637-639:hasHeaderComment	Not Covered	Failure	Failure	
+CSVParser_649-651:hasTrailerComment	Not Covered	Success	Success	Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
+CSVParser_637-639:hasHeaderComment	Not Covered	Success	Success	Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVParser_607-609:getTrailerComment	Not Covered	Success	Success	
-CSVParser_596-598:getRecords	Error	Not Covered	Success	
+CSVParser_596-598:getRecords	Error	Failure	Failure	Re-inspected 2026-11 (replay evidence): recorded Java exception not raised.
 CSVParser_583-585:getRecordNumber	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVParser_571-573:getHeaderNames	Not Covered	Failure	Failure	
 CSVParser_542-549:getHeaderMap	Success	Success	Success	
 CSVParser_528-530:getHeaderComment	Not Covered	Success	Success	
 CSVParser_518-520:getFirstEndOfLine	Success	Success	Success	
 CSVParser_508-510:getCurrentLineNumber	Failure	Failure	Failure	
-CSVParser_377-380:CSVParser1	Error	Success	Success	
-CSVParser_360-375:CSVParser	Error	Failure	Failure	
+CSVParser_377-380:CSVParser1	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
+CSVParser_360-375:CSVParser	Error	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVParser_291-296:parse4	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
-CSVParser_277-279:parse3	Error	Success	Success	
+CSVParser_277-279:parse3	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVParser_213-217:parse0	Error	Failure	Failure	
 CSVParser_669-672:isStrictQuoteMode	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
 CSVParser_617-625:handleNull	Failure	Success	Success	Graal False Negative - `java.lang.NullPointerException` raised though the translation is functionally equivalent
-CSVParser_431-498:createHeaders	Failure	Failure	Failure	
+CSVParser_431-498:createHeaders	Failure	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 CSVParser_419-423:createEmptyHeaderMap	Not Covered	Not Covered	Failure	
 CSVParser_700-752:nextRecord	Error	Failure	Failure	
 CSVParser_556-558:getHeaderMapRaw	Not Covered	Success	Success	
-CSVRecordIterator_182-184:remove	Error	Success	Success	
+CSVRecordIterator_182-184:remove	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
 CSVRecordIterator_164-179:next	Error	Failure	Failure	
 CSVRecordIterator_152-161:hasNext	Error	Failure	Failure	
 CSVRecordIterator_142-149:getNextRecord	Error	Failure	Failure	
@@ -223,7 +223,7 @@ Headers_196-199:Headers	Not Covered	Success	Success
 ExtendedBufferedReader_212-231:readLine	Success	Success	Success	
 ExtendedBufferedReader_60-64:close	Failure	Success	Success	Graal False Negative - `java.lang.ClassCastException` raised though the translation is functionally equivalent
 ExtendedBufferedReader_170-198:read1	Error	Failure	Failure	
-ExtendedBufferedReader_155-168:read0	Failure	Success	Success	Graal False Negative - `java.lang.ClassCastException` raised though the translation is functionally equivalent
+ExtendedBufferedReader_155-168:read0	Failure	Failure	Failure	Re-inspected 2026-11 (replay evidence): slice semantics clamp silently where Java's bounds check throws.
 ExtendedBufferedReader_104-106:isClosed	Success	Success	Success	
 ExtendedBufferedReader_150-153:lookAhead2	Error	Failure	Failure	
 ExtendedBufferedReader_132-139:lookAhead1	Error	Failure	Failure	
@@ -231,6 +231,6 @@ ExtendedBufferedReader_115-121:lookAhead0	Error	Failure	Failure
 ExtendedBufferedReader_100-102:getPosition	Success	Success	Success	
 ExtendedBufferedReader_90-92:getLastChar	Success	Success	Success	
 ExtendedBufferedReader_71-79:getCurrentLineNumber	Failure	Failure	Failure	
-ExtendedBufferedReader_50-52:ExtendedBufferedReader	Error	Failure	Failure	
+ExtendedBufferedReader_50-52:ExtendedBufferedReader	Error	Success	Success	Graal False Negative - Re-inspected 2026-11: paper-era mock failure was a harness comparison artifact; behavior matches recordings on the recorded corpus.
 Token_73-75:toString	Not Covered	Success	Success	
-Token_60-65:reset	Error	Success	Success	
+Token_60-65:reset	Error	Success	Success	Graal False Negative - Graal run errored (no verdict reached); manual inspection confirms the translation.
