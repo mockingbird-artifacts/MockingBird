@@ -145,8 +145,8 @@ python3 data/manual_inspection/venn_analysis.py
 
 ### RQ3: Generalizability Across Different Models
 
-Results for `Devstral-24B` experiments are included in this repository.  
-To reproduce **Table 4**, run:
+Results for `Devstral-24B` experiments are included in the artifact image.  
+To reproduce **Table 6**, run:
 
 ```bash
 bash scripts/print_results.sh {project_name} 0.0 devstral-24b data/schemas_evosuite_cleaned _evosuite_cleaned
