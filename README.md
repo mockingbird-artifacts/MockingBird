@@ -114,8 +114,8 @@ To reproduce **Table 1** (effectiveness) and **Table 3** (test translation), run
 
 ```bash
 wget https://zenodo.org/record/24457168/files/mockingbird.tar.gz
-sudo docker load -i mockingbird.tar.gz  # Docker prints the image name and tag after loading
-sudo docker run -it -w /home/tmp/MockingBird/ <image_name> /bin/bash  # <image_name> shall be mockingbird:latest
+sudo bash scripts/load_image.sh mockingbird.tar.gz   # docker-imports the flattened image as mockingbird:latest
+sudo docker run -it -w /home/tmp/MockingBird/ mockingbird:latest /bin/bash
 bash scripts/print_results.sh {project_name} 0.0 deepseek-coder-33b-instruct data/schemas_evosuite_cleaned _evosuite_cleaned
 ```
 
