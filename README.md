@@ -113,7 +113,8 @@ The image also ships the RQ4 ablation schema trees (`rq4-noRAG`, `rq4-noOTF`, `r
 To reproduce **Table 1** (effectiveness) and **Table 3** (test translation), run:
 
 ```bash
-wget https://zenodo.org/record/24457168/files/mockingbird.tar.gz
+for p in aa ab ac ad ae; do wget "https://zenodo.org/record/24457168/files/mockingbird.tar.gz.part-$p"; done
+cat mockingbird.tar.gz.part-* > mockingbird.tar.gz && rm mockingbird.tar.gz.part-*
 sudo bash scripts/load_image.sh mockingbird.tar.gz   # docker-imports the flattened image as mockingbird:latest
 sudo docker run -it -w /home/tmp/MockingBird/ mockingbird:latest /bin/bash
 bash scripts/print_results.sh {project_name} 0.0 deepseek-coder-33b-instruct data/schemas_evosuite_cleaned _evosuite_cleaned
